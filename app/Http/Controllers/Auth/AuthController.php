@@ -37,7 +37,7 @@ class AuthController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'message' => 'Registrasi berhasil. Selamat datang di KreatiLink!',
+            'message' => 'Registrasi berhasil. Selamat datang di SnapFit!',
             'user'    => new UserResource($user->load('profile')),
             'token'   => $token,
         ], 201);

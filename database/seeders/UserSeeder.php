@@ -14,19 +14,19 @@ class UserSeeder extends Seeder
         $users = [
             // Admin (untuk demo juri)
             [
-                'name'     => 'Admin KreatiLink',
-                'email'    => 'admin@kreatilink.id',
+                'name'     => 'Admin SnapFit',
+                'email'    => 'admin@snapfit.id',
                 'password' => Hash::make('password'),
                 'role'     => 'admin',
                 'profile'  => [
-                    'full_name'  => 'Admin KreatiLink',
-                    'bio'        => 'Administrator platform KreatiLink.',
+                    'full_name' => 'Admin SnapFit',
+                    'bio'       => 'Administrator platform SnapFit.',
                 ],
             ],
-            // UMKM Kreator
+            // UMKM Kreator 1
             [
                 'name'     => 'Sari Batik Malang',
-                'email'    => 'sari@umkm.id',
+                'email'    => 'sari@snapfit.id',
                 'password' => Hash::make('password'),
                 'role'     => 'umkm',
                 'profile'  => [
@@ -37,9 +37,10 @@ class UserSeeder extends Seeder
                     'bio'           => 'Pengrajin batik tulis asli Malang dengan motif khas Arema.',
                 ],
             ],
+            // UMKM Kreator 2
             [
                 'name'     => 'Kerajinan Tangan Budi',
-                'email'    => 'budi@umkm.id',
+                'email'    => 'budi@snapfit.id',
                 'password' => Hash::make('password'),
                 'role'     => 'umkm',
                 'profile'  => [
@@ -53,7 +54,7 @@ class UserSeeder extends Seeder
             // Desainer
             [
                 'name'     => 'Reza Designer',
-                'email'    => 'reza@desainer.id',
+                'email'    => 'reza@snapfit.id',
                 'password' => Hash::make('password'),
                 'role'     => 'desainer',
                 'profile'  => [
@@ -64,12 +65,12 @@ class UserSeeder extends Seeder
             ],
             // Pembeli
             [
-                'name'     => 'Pembeli Demo',
-                'email'    => 'pembeli@demo.id',
+                'name'     => 'Andi Pembeli',
+                'email'    => 'pembeli@snapfit.id',
                 'password' => Hash::make('password'),
                 'role'     => 'pembeli',
                 'profile'  => [
-                    'full_name' => 'Andi Pembeli',
+                    'full_name' => 'Andi Wicaksono',
                     'phone'     => '084567890123',
                     'address'   => 'Jl. Raya No. 5, Malang',
                 ],

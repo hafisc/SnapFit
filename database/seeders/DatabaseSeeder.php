@@ -65,11 +65,11 @@ class DatabaseSeeder extends Seeder
         $this->command->table(
             ['Role', 'Email', 'Password'],
             [
-                ['Admin',   'admin@kreatilink.id', 'password'],
-                ['UMKM',    'sari@umkm.id',        'password'],
-                ['UMKM',    'budi@umkm.id',        'password'],
-                ['Desainer','reza@desainer.id',    'password'],
-                ['Pembeli', 'pembeli@demo.id',     'password'],
+                ['Admin',   'admin@snapfit.id',   'password'],
+                ['UMKM',    'sari@snapfit.id',     'password'],
+                ['UMKM',    'budi@snapfit.id',     'password'],
+                ['Desainer','reza@snapfit.id',     'password'],
+                ['Pembeli', 'pembeli@snapfit.id',  'password'],
             ]
         );
     }

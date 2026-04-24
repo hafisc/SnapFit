@@ -79,7 +79,7 @@ class OrderController extends Controller
                 'buyer_id'           => $request->user()->id,
                 'total_amount'       => $totalAmount,
                 'status'             => 'pending',
-                'midtrans_order_id'  => 'KREATI-' . strtoupper(Str::random(10)),
+                'midtrans_order_id'  => 'SNAPFIT-' . strtoupper(Str::random(10)),
             ]);
 
             // Buat order items
