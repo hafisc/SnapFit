@@ -4,7 +4,7 @@
     <header class="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">
       <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-6">
         <div>
-          <h1 class="text-3xl font-bold text-black">KreatiLink</h1>
+          <h1 class="text-3xl font-bold text-black">SnapFir</h1>
           <p class="text-xs uppercase tracking-[0.2em] text-gray-500">
             Next-Gen Creative Commerce
           </p>
