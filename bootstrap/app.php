@@ -17,8 +17,13 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);
 
-        // Stateful API untuk Sanctum (SPA)
+        // Sanctum SPA stateful API
         $middleware->statefulApi();
+
+        // CORS untuk semua request API
+        $middleware->use([
+            \Illuminate\Http\Middleware\HandleCors::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

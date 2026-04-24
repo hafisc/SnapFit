@@ -9,16 +9,18 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UploadController;
+use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
 | API Routes - SnapFit
 |--------------------------------------------------------------------------
-| Prefix: /api
+| Prefix: /api/v1
 */
 
-// ─── PUBLIC ROUTES (no auth required) ────────────────────────────────────────
+// ─── PUBLIC ROUTES ────────────────────────────────────────────────────────────
 Route::prefix('v1')->group(function () {
 
     // Auth
@@ -27,7 +29,7 @@ Route::prefix('v1')->group(function () {
         Route::post('login',    [AuthController::class, 'login']);
     });
 
-    // Marketplace publik (guest bisa browse)
+    // Marketplace publik (guest bisa browse tanpa login)
     Route::get('products',           [ProductController::class, 'index']);
     Route::get('products/{product}', [ProductController::class, 'show']);
 
@@ -45,19 +47,45 @@ Route::prefix('v1')->group(function () {
         Route::get('profile', [ProfileController::class, 'show']);
         Route::put('profile', [ProfileController::class, 'update']);
 
-        // Notifications
-        Route::get('notifications',             [NotificationController::class, 'index']);
-        Route::patch('notifications/{id}/read', [NotificationController::class, 'markAsRead']);
-        Route::patch('notifications/read-all',  [NotificationController::class, 'markAllAsRead']);
+        // ─── UPLOAD ──────────────────────────────────────────────────────────
+        Route::prefix('upload')->group(function () {
+            Route::post('avatar',        [UploadController::class, 'uploadAvatar']);
+            Route::post('product-image', [UploadController::class, 'uploadProductImage']);
+            Route::post('ai-source',     [UploadController::class, 'uploadAiSource']);
+            Route::post('ar-model',      [UploadController::class, 'uploadArModel']);
+        });
 
-        // Payment (Midtrans)
+        // ─── WISHLIST ─────────────────────────────────────────────────────────
+        Route::prefix('wishlist')->group(function () {
+            Route::get('/',                    [WishlistController::class, 'index']);
+            Route::post('{productId}/toggle',  [WishlistController::class, 'toggle']);
+            Route::get('{productId}/check',    [WishlistController::class, 'check']);
+            Route::delete('clear',             [WishlistController::class, 'clearAll']);
+        });
+
+        // ─── NOTIFICATIONS ────────────────────────────────────────────────────
+        Route::prefix('notifications')->group(function () {
+            Route::get('/',             [NotificationController::class, 'index']);
+            Route::patch('{id}/read',   [NotificationController::class, 'markAsRead']);
+            Route::patch('read-all',    [NotificationController::class, 'markAllAsRead']);
+        });
+
+        // ─── PAYMENT (MIDTRANS) ───────────────────────────────────────────────
         Route::prefix('payment')->group(function () {
             Route::post('orders/{order}/snap-token', [PaymentController::class, 'createSnapToken']);
             Route::get('orders/{order}/status',      [PaymentController::class, 'checkStatus']);
         });
 
-        // ─── UMKM ROUTES ─────────────────────────────────────────────────────
+        // ─── ORDERS (semua role bisa beli) ────────────────────────────────────
+        Route::middleware('role:pembeli,umkm,desainer,admin')->prefix('orders')->group(function () {
+            Route::get('/',        [OrderController::class, 'index']);
+            Route::get('/{order}', [OrderController::class, 'show']);
+            Route::post('/',       [OrderController::class, 'store']);
+        });
+
+        // ─── UMKM ONLY ────────────────────────────────────────────────────────
         Route::middleware('role:umkm')->prefix('umkm')->group(function () {
+            // Produk UMKM
             Route::get('products',                         [ProductController::class, 'myProducts']);
             Route::post('products',                        [ProductController::class, 'store']);
             Route::put('products/{product}',               [ProductController::class, 'update']);
@@ -70,7 +98,7 @@ Route::prefix('v1')->group(function () {
             Route::delete('ai-generations/{aiGeneration}', [AiGenerationController::class, 'destroy']);
         });
 
-        // ─── UMKM + DESAINER ROUTES ───────────────────────────────────────────
+        // ─── UMKM + DESAINER (Co-Create Room) ────────────────────────────────
         Route::middleware('role:umkm,desainer')->prefix('cocreate')->group(function () {
             Route::get('rooms',                [CocreateRoomController::class, 'index']);
             Route::get('rooms/{room}',         [CocreateRoomController::class, 'show']);
@@ -79,21 +107,14 @@ Route::prefix('v1')->group(function () {
             Route::patch('rooms/{room}/close', [CocreateRoomController::class, 'close']);
         });
 
-        // ─── BUYER / SEMUA ROLE (Order) ───────────────────────────────────────
-        Route::middleware('role:pembeli,umkm,desainer,admin')->prefix('orders')->group(function () {
-            Route::get('/',        [OrderController::class, 'index']);
-            Route::get('/{order}', [OrderController::class, 'show']);
-            Route::post('/',       [OrderController::class, 'store']);
-        });
-
-        // ─── ADMIN ROUTES ─────────────────────────────────────────────────────
+        // ─── ADMIN ONLY ───────────────────────────────────────────────────────
         Route::middleware('role:admin')->prefix('admin')->group(function () {
-            Route::get('stats',                    [AdminDashboardController::class, 'stats']);
-            Route::get('users',                    [AdminDashboardController::class, 'users']);
-            Route::get('orders',                   [AdminDashboardController::class, 'orders']);
-            Route::get('products',                 [AdminDashboardController::class, 'products']);
-            Route::patch('orders/{order}/status',  [OrderController::class, 'updateStatus']);
-            Route::delete('products/{product}',    [ProductController::class, 'destroy']);
+            Route::get('stats',                   [AdminDashboardController::class, 'stats']);
+            Route::get('users',                   [AdminDashboardController::class, 'users']);
+            Route::get('orders',                  [AdminDashboardController::class, 'orders']);
+            Route::get('products',                [AdminDashboardController::class, 'products']);
+            Route::patch('orders/{order}/status', [OrderController::class, 'updateStatus']);
+            Route::delete('products/{product}',   [ProductController::class, 'destroy']);
         });
     });
 });
