@@ -4,7 +4,7 @@
     <header class="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">
       <nav class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-6">
         <div>
-          <h1 class="text-3xl font-bold text-black">SnapFir</h1>
+          <h1 class="text-3xl font-bold text-black">SnapFit</h1>
           <p class="text-xs uppercase tracking-[0.2em] text-gray-500">
             Next-Gen Creative Commerce
           </p>
@@ -167,7 +167,7 @@
     <section class="py-20 bg-white">
       <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-4xl font-bold text-center mb-14">
-          Why Modern Brands Choose KreatiLink
+          Why Modern Brands Choose SnapFit
         </h2>
 
         <div class="grid lg:grid-cols-3 gap-8">
@@ -200,10 +200,10 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-100 py-14">
       <div class="max-w-7xl mx-auto px-6 text-center">
-        <h2 class="text-2xl font-bold mb-2">KreatiLink</h2>
+        <h2 class="text-2xl font-bold mb-2">SnapFit</h2>
         <p class="text-gray-500 mb-3">Modern Marketplace for Premium Creative Brands</p>
         <p class="text-sm text-gray-400">
-          © 2026 KreatiLink — Built for the Future of Digital Commerce
+          © 2026 SnapFit — Built for the Future of Digital Commerce
         </p>
       </div>
     </footer>
