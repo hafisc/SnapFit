@@ -10,9 +10,4 @@ export default defineConfig({
         }),
         vue(),
     ],
-    resolve: {
-        alias: {
-            '@': '/resources/js',
-        },
-    },
 });
