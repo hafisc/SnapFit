@@ -3,12 +3,14 @@
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\AiGenerationController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\CocreateRoomController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
@@ -25,23 +27,27 @@ Route::prefix('v1')->group(function () {
 
     // Auth
     Route::prefix('auth')->group(function () {
-        Route::post('register', [AuthController::class, 'register']);
-        Route::post('login',    [AuthController::class, 'login']);
+        Route::post('register',        [AuthController::class, 'register']);
+        Route::post('login',           [AuthController::class, 'login']);
+        Route::post('forgot-password', [PasswordResetController::class, 'forgotPassword']);
+        Route::post('reset-password',  [PasswordResetController::class, 'resetPassword']);
     });
 
-    // Marketplace publik (guest bisa browse tanpa login)
-    Route::get('products',           [ProductController::class, 'index']);
-    Route::get('products/{product}', [ProductController::class, 'show']);
+    // Marketplace publik
+    Route::get('products',                        [ProductController::class, 'index']);
+    Route::get('products/{product}',              [ProductController::class, 'show']);
+    Route::get('products/{product}/reviews',      [ReviewController::class, 'index']);
 
-    // Midtrans Webhook (public, diverifikasi internal via signature)
+    // Midtrans Webhook (public, verified via signature)
     Route::post('payment/webhook', [PaymentController::class, 'webhook']);
 
     // ─── AUTHENTICATED ROUTES ─────────────────────────────────────────────────
     Route::middleware('auth:sanctum')->group(function () {
 
         // Auth
-        Route::post('auth/logout', [AuthController::class, 'logout']);
-        Route::get('auth/me',      [AuthController::class, 'me']);
+        Route::post('auth/logout',          [AuthController::class, 'logout']);
+        Route::get('auth/me',               [AuthController::class, 'me']);
+        Route::post('auth/change-password', [PasswordResetController::class, 'changePassword']);
 
         // Profile
         Route::get('profile', [ProfileController::class, 'show']);
@@ -57,17 +63,24 @@ Route::prefix('v1')->group(function () {
 
         // ─── WISHLIST ─────────────────────────────────────────────────────────
         Route::prefix('wishlist')->group(function () {
-            Route::get('/',                    [WishlistController::class, 'index']);
-            Route::post('{productId}/toggle',  [WishlistController::class, 'toggle']);
-            Route::get('{productId}/check',    [WishlistController::class, 'check']);
-            Route::delete('clear',             [WishlistController::class, 'clearAll']);
+            Route::get('/',                   [WishlistController::class, 'index']);
+            Route::post('{productId}/toggle', [WishlistController::class, 'toggle']);
+            Route::get('{productId}/check',   [WishlistController::class, 'check']);
+            Route::delete('clear',            [WishlistController::class, 'clearAll']);
+        });
+
+        // ─── REVIEWS ─────────────────────────────────────────────────────────
+        Route::prefix('products/{product}/reviews')->group(function () {
+            Route::post('/',               [ReviewController::class, 'store']);
+            Route::put('{review}',         [ReviewController::class, 'update']);
+            Route::delete('{review}',      [ReviewController::class, 'destroy']);
         });
 
         // ─── NOTIFICATIONS ────────────────────────────────────────────────────
         Route::prefix('notifications')->group(function () {
-            Route::get('/',             [NotificationController::class, 'index']);
-            Route::patch('{id}/read',   [NotificationController::class, 'markAsRead']);
-            Route::patch('read-all',    [NotificationController::class, 'markAllAsRead']);
+            Route::get('/',           [NotificationController::class, 'index']);
+            Route::patch('{id}/read', [NotificationController::class, 'markAsRead']);
+            Route::patch('read-all',  [NotificationController::class, 'markAllAsRead']);
         });
 
         // ─── PAYMENT (MIDTRANS) ───────────────────────────────────────────────
@@ -85,7 +98,6 @@ Route::prefix('v1')->group(function () {
 
         // ─── UMKM ONLY ────────────────────────────────────────────────────────
         Route::middleware('role:umkm')->prefix('umkm')->group(function () {
-            // Produk UMKM
             Route::get('products',                         [ProductController::class, 'myProducts']);
             Route::post('products',                        [ProductController::class, 'store']);
             Route::put('products/{product}',               [ProductController::class, 'update']);
@@ -115,6 +127,7 @@ Route::prefix('v1')->group(function () {
             Route::get('products',                [AdminDashboardController::class, 'products']);
             Route::patch('orders/{order}/status', [OrderController::class, 'updateStatus']);
             Route::delete('products/{product}',   [ProductController::class, 'destroy']);
+            Route::delete('reviews/{review}',     [ReviewController::class, 'destroy']);
         });
     });
 });

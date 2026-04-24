@@ -19,6 +19,8 @@ class ProductResource extends JsonResource
             'ar_model_url' => $this->ar_model_url,
             'is_published' => $this->is_published,
             'views'        => $this->views,
+            'avg_rating'   => round($this->avg_rating ?? 0, 1),
+            'reviews_count'=> $this->reviews_count ?? 0,
             'created_at'   => $this->created_at->toDateTimeString(),
             'owner'        => $this->whenLoaded('owner', fn() => [
                 'id'   => $this->owner->id,

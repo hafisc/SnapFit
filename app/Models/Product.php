@@ -14,12 +14,15 @@ class Product extends Model
     protected $fillable = [
         'user_id', 'name', 'description', 'price', 'category',
         'images', 'ar_model_url', 'is_published', 'views',
+        'avg_rating', 'reviews_count',
     ];
 
     protected $casts = [
-        'images' => 'array',
-        'is_published' => 'boolean',
-        'price' => 'decimal:2',
+        'images'        => 'array',
+        'is_published'  => 'boolean',
+        'price'         => 'decimal:2',
+        'avg_rating'    => 'float',
+        'reviews_count' => 'integer',
     ];
 
     public function owner(): BelongsTo
@@ -30,5 +33,15 @@ class Product extends Model
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function wishlists(): HasMany
+    {
+        return $this->hasMany(Wishlist::class);
     }
 }
