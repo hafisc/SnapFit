@@ -479,17 +479,17 @@ snapfit/
     <td align="center">
       <img src="https://ui-avatars.com/api/?name=Hafis&background=7c3aed&color=fff&size=100&bold=true&rounded=true" width="100" /><br />
       <b>Hafis</b><br />
-      <img src="https://img.shields.io/badge/Fullstack-Developer-7c3aed?style=flat-square" />
+      <img src="https://img.shields.io/badge/Backend-Developer-7c3aed?style=flat-square" />
     </td>
     <td align="center">
       <img src="https://ui-avatars.com/api/?name=Adid&background=db2777&color=fff&size=100&bold=true&rounded=true" width="100" /><br />
       <b>Adid</b><br />
-      <img src="https://img.shields.io/badge/Fullstack-Developer-db2777?style=flat-square" />
+      <img src="https://img.shields.io/badge/Frontend-Developer-db2777?style=flat-square" />
     </td>
     <td align="center">
       <img src="https://ui-avatars.com/api/?name=Vanesa&background=0891b2&color=fff&size=100&bold=true&rounded=true" width="100" /><br />
       <b>Vanesa</b><br />
-      <img src="https://img.shields.io/badge/Fullstack-Developer-0891b2?style=flat-square" />
+      <img src="https://img.shields.io/badge/Frontend-Developer-0891b2?style=flat-square" />
     </td>
   </tr>
 </table>
