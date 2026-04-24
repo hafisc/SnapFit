@@ -1,6 +1,3 @@
-<<<<<<< Updated upstream
-
-=======
 <template>
   <div class="min-h-screen bg-gray-50 text-gray-900">
     <!-- Top Navbar -->
@@ -287,4 +284,3 @@ html {
   scroll-behavior: smooth;
 }
 </style>
->>>>>>> Stashed changes
