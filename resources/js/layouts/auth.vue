@@ -1,22 +1,24 @@
 <template>
   <div class="min-h-screen bg-gray-50 flex items-center justify-center px-6 py-12">
+
     <div class="w-full max-w-6xl grid lg:grid-cols-2 bg-white rounded-[2rem] shadow-xl overflow-hidden border border-gray-100">
-      <!-- Left Side -->
+
+      <!-- LEFT SIDE -->
       <div class="bg-black text-white p-12 flex flex-col justify-between">
+
         <div>
           <p class="text-sm uppercase tracking-[0.25em] text-gray-400 mb-4">
-            KreatiLink
+            SnapFit
           </p>
 
           <h1 class="text-5xl font-bold leading-tight mb-6">
-            Welcome Back to
+            {{ isLogin ? 'Welcome Back to' : 'Join SnapFit' }}<br />
             Creative Commerce
           </h1>
 
           <p class="text-gray-300 text-lg leading-relaxed max-w-lg">
             Platform premium untuk UMKM kreatif, desainer, dan pembeli modern.
-            Kelola produk, kolaborasi desain, dan pengalaman belanja digital
-            dalam satu ekosistem.
+            Kelola produk, kolaborasi desain, dan pengalaman belanja digital dalam satu ekosistem.
           </p>
         </div>
 
@@ -31,19 +33,39 @@
             🤝 Realtime Co-Create Room
           </div>
         </div>
+
       </div>
 
-      <!-- Right Side -->
+      <!-- RIGHT SIDE -->
       <div class="p-10 lg:p-14 flex items-center">
+
         <div class="w-full max-w-md mx-auto">
+
           <div class="mb-8">
-            <h2 class="text-3xl font-bold mb-2">Sign In</h2>
+            <h2 class="text-3xl font-bold mb-2">
+              {{ isLogin ? 'Sign In' : 'Create Account' }}
+            </h2>
+
             <p class="text-gray-500">
-              Login untuk melanjutkan ke dashboard KreatiLink
+              {{ isLogin
+                ? 'Login untuk melanjutkan ke dashboard SnapFit'
+                : 'Daftar untuk mulai menggunakan SnapFit'
+              }}
             </p>
           </div>
 
           <form class="space-y-5">
+
+            <!-- NAME (ONLY REGISTER) -->
+            <div v-if="!isLogin">
+              <label class="block text-sm font-medium mb-2">Full Name</label>
+              <input
+                type="text"
+                placeholder="Your name"
+                class="w-full border border-gray-200 rounded-2xl px-5 py-4 outline-none focus:ring-2 focus:ring-black"
+              />
+            </div>
+
             <div>
               <label class="block text-sm font-medium mb-2">Email Address</label>
               <input
@@ -62,22 +84,12 @@
               />
             </div>
 
-            <div class="flex items-center justify-between text-sm">
-              <label class="flex items-center gap-2">
-                <input type="checkbox" />
-                Remember me
-              </label>
-
-              <a href="#" class="font-medium hover:underline">
-                Forgot Password?
-              </a>
-            </div>
-
+            <!-- LOGIN BUTTON -->
             <button
               type="submit"
               class="w-full bg-black text-white py-4 rounded-2xl font-semibold hover:scale-[1.01] transition"
             >
-              Login
+              {{ isLogin ? 'Login' : 'Register' }}
             </button>
 
             <button
@@ -86,18 +98,37 @@
             >
               Continue with Google
             </button>
+
           </form>
 
+          <!-- TOGGLE -->
           <p class="text-center text-sm text-gray-500 mt-8">
-            Belum punya akun?
-            <a href="#" class="font-semibold text-black">Register sekarang</a>
+            <span v-if="isLogin">
+              Belum punya akun?
+              <button @click="isLogin = false" class="font-semibold text-black">
+                Register sekarang
+              </button>
+            </span>
+
+            <span v-else>
+              Sudah punya akun?
+              <button @click="isLogin = true" class="font-semibold text-black">
+                Login
+              </button>
+            </span>
           </p>
+
         </div>
+
       </div>
+
     </div>
+
   </div>
 </template>
 
 <script setup>
-// Login Page UI
+import { ref } from 'vue'
+
+const isLogin = ref(true)
 </script>
