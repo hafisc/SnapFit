@@ -122,7 +122,13 @@ Route::prefix('v1')->group(function () {
         // ─── ADMIN ONLY ───────────────────────────────────────────────────────
         Route::middleware('role:admin')->prefix('admin')->group(function () {
             Route::get('stats',                   [AdminDashboardController::class, 'stats']);
+            
+            // User Management
             Route::get('users',                   [AdminDashboardController::class, 'users']);
+            Route::post('users',                  [AdminDashboardController::class, 'storeUser']);
+            Route::put('users/{user}',            [AdminDashboardController::class, 'updateUser']);
+            Route::delete('users/{user}',         [AdminDashboardController::class, 'destroyUser']);
+            
             Route::get('orders',                  [AdminDashboardController::class, 'orders']);
             Route::get('products',                [AdminDashboardController::class, 'products']);
             Route::patch('orders/{order}/status', [OrderController::class, 'updateStatus']);
