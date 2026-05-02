@@ -189,7 +189,12 @@ const submit = async () => {
     const data = await res.json();
 
     if (!res.ok) {
-      errorMessage.value = data.message || 'Authentication failed.';
+      if (data.errors) {
+        const firstError = Object.values(data.errors)[0][0];
+        errorMessage.value = firstError;
+      } else {
+        errorMessage.value = data.message || 'Authentication failed.';
+      }
       return;
     }
 

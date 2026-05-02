@@ -131,6 +131,7 @@ Route::prefix('v1')->group(function () {
             
             Route::get('orders',                  [AdminDashboardController::class, 'orders']);
             Route::get('products',                [AdminDashboardController::class, 'products']);
+            Route::get('reviews',                 [AdminDashboardController::class, 'reviews']);
             Route::patch('orders/{order}/status', [OrderController::class, 'updateStatus']);
             Route::delete('products/{product}',   [ProductController::class, 'destroy']);
             Route::delete('reviews/{review}',     [ReviewController::class, 'destroy']);

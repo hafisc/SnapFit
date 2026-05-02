@@ -171,4 +171,23 @@ class AdminDashboardController extends Controller
             ],
         ]);
     }
+
+    /**
+     * List semua review (admin view).
+     */
+    public function reviews(Request $request): JsonResponse
+    {
+        $reviews = \App\Models\Review::with(['user', 'product'])
+            ->latest()
+            ->paginate(15);
+
+        return response()->json([
+            'data'       => \App\Http\Resources\ReviewResource::collection($reviews),
+            'pagination' => [
+                'total'        => $reviews->total(),
+                'current_page' => $reviews->currentPage(),
+                'last_page'    => $reviews->lastPage(),
+            ],
+        ]);
+    }
 }

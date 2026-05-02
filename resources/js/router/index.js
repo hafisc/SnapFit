@@ -34,17 +34,18 @@ const routes = [
   // ─── UMKM ───────────────────────────────────────
   {
     path: '/umkm',
+    component: () => import('@/layouts/UmkmLayout.vue'),
     meta: { requiresAuth: true, role: 'umkm' },
     children: [
       {
         path: 'dashboard',
         name: 'umkm.dashboard',
-        component: () => import('@/pages/umkm/dashboard.vue'),
+        component: () => import('@/pages/umkm/dashboard/index.vue'),
       },
       {
         path: 'studio',
         name: 'umkm.studio',
-        component: () => import('@/pages/umkm/studio.vue'),
+        component: () => import('@/pages/umkm/studio/index.vue'),
       },
       {
         path: 'products',
@@ -57,9 +58,24 @@ const routes = [
         component: () => import('@/pages/umkm/products/create.vue'),
       },
       {
+        path: 'products/edit/:id',
+        name: 'umkm.products.edit',
+        component: () => import('@/pages/umkm/products/edit/[id].vue'),
+      },
+      {
+        path: 'cocreate',
+        name: 'umkm.cocreate.index',
+        component: () => import('@/pages/umkm/cocreate/index.vue'),
+      },
+      {
         path: 'cocreate/:id',
         name: 'umkm.cocreate',
         component: () => import('@/pages/umkm/cocreate/[id].vue'),
+      },
+      {
+        path: 'orders',
+        name: 'umkm.orders',
+        component: () => import('@/pages/umkm/orders/index.vue'),
       },
     ],
   },
@@ -67,12 +83,13 @@ const routes = [
   // ─── DESIGNER ───────────────────────────────────
   {
     path: '/designer',
+    component: () => import('@/layouts/DesignerLayout.vue'),
     meta: { requiresAuth: true, role: 'desainer' },
     children: [
       {
         path: 'dashboard',
         name: 'designer.dashboard',
-        component: () => import('@/pages/designer/dashboard.vue'),
+        component: () => import('@/pages/designer/dashboard/index.vue'),
       },
       {
         path: 'cocreate/:id',
@@ -85,17 +102,48 @@ const routes = [
   // ─── ADMIN ──────────────────────────────────────
   {
     path: '/admin',
+    component: () => import('@/layouts/AdminLayout.vue'),
     meta: { requiresAuth: true, role: 'admin' },
     children: [
       {
         path: 'dashboard',
         name: 'admin.dashboard',
-        component: () => import('@/pages/admin/dashboard.vue'),
+        component: () => import('@/pages/admin/dashboard/index.vue'),
       },
       {
         path: 'users',
         name: 'admin.users',
-        component: () => import('@/pages/admin/users.vue'),
+        component: () => import('@/pages/admin/users/index.vue'),
+      },
+      {
+        path: 'users/create',
+        name: 'admin.users.create',
+        component: () => import('@/pages/admin/users/create.vue'),
+      },
+      {
+        path: 'users/edit/:id',
+        name: 'admin.users.edit',
+        component: () => import('@/pages/admin/users/edit/[id].vue'),
+      },
+      {
+        path: 'products',
+        name: 'admin.products',
+        component: () => import('@/pages/admin/products/index.vue'),
+      },
+      {
+        path: 'orders',
+        name: 'admin.orders',
+        component: () => import('@/pages/admin/orders/index.vue'),
+      },
+      {
+        path: 'reviews',
+        name: 'admin.reviews',
+        component: () => import('@/pages/admin/reviews/index.vue'),
+      },
+      {
+        path: 'analytics',
+        name: 'admin.analytics',
+        component: () => import('@/pages/admin/analytics/index.vue'),
       },
     ],
   },
@@ -118,27 +166,27 @@ const router = createRouter({
 });
 
 /* ── Navigation Guard ─────────────────────────── */
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from) => {
   const user  = JSON.parse(localStorage.getItem('user') ?? 'null');
   const token = localStorage.getItem('token');
   const isAuthenticated = !!(token && user);
 
   // Redirect logged-in user away from guest-only pages
   if (to.meta.guestOnly && isAuthenticated) {
-    return next('/');
+    return '/';
   }
 
   // Require authentication
   if (to.meta.requiresAuth && !isAuthenticated) {
-    return next('/login');
+    return '/login';
   }
 
   // Require specific role
   if (to.meta.role && user?.role !== to.meta.role) {
-    return next('/');
+    return '/';
   }
 
-  next();
+  return true;
 });
 
 export default router;
