@@ -1,5 +1,8 @@
 <template>
   <div class="min-h-screen bg-white text-gray-900 font-sans selection:bg-orange-100 overflow-x-hidden">
+    <!-- Welcome Modal -->
+    <WelcomeModal />
+
     <!-- Navbar -->
     <Navbar
       :user="user"
@@ -10,17 +13,14 @@
     />
 
     <main class="pt-16">
-      <!-- Hero Section -->
-      <HeroSection />
-
-      <!-- Features Section -->
-      <!-- <FeaturesSection /> -->
-
       <!-- Marketplace / Product Grid -->
       <ProductGrid
         :products="products"
         :isLoading="isLoading"
       />
+
+      <!-- Features Section (Innovation Showcase) -->
+      <!-- <FeaturesSection /> -->
 
       <!-- Testimonials + CTA -->
       <!-- <StatsSection /> -->
@@ -38,9 +38,9 @@ import { useRouter } from 'vue-router';
 // Layout components
 import Navbar   from '@/components/common/Navbar.vue';
 import Footer   from '@/components/common/Footer.vue';
+import WelcomeModal from '@/components/common/WelcomeModal.vue';
 
 // Landing sections
-import HeroSection     from '@/components/landing/HeroSection.vue';
 import FeaturesSection from '@/components/landing/FeaturesSection.vue';
 import ProductGrid     from '@/components/landing/ProductGrid.vue';
 import StatsSection    from '@/components/landing/StatsSection.vue';
