@@ -9,12 +9,12 @@
       @goToOrders="goToOrders"
     />
 
-    <main>
+    <main class="pt-16">
       <!-- Hero Section -->
       <HeroSection />
 
       <!-- Features Section -->
-      <FeaturesSection />
+      <!-- <FeaturesSection /> -->
 
       <!-- Marketplace / Product Grid -->
       <ProductGrid
@@ -23,11 +23,11 @@
       />
 
       <!-- Testimonials + CTA -->
-      <StatsSection />
+      <!-- <StatsSection /> -->
     </main>
 
     <!-- Footer -->
-    <Footer />
+    <!-- <Footer /> -->
   </div>
 </template>
 

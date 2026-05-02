@@ -1,62 +1,77 @@
 <template>
-  <section class="max-w-7xl mx-auto px-6 py-24">
-    <div class="grid lg:grid-cols-2 gap-16 items-center">
-      <!-- Left Content -->
-      <div class="animate-in fade-in slide-in-from-left-8 duration-1000">
-        <div class="inline-flex items-center gap-3 bg-orange-50 text-orange-600 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-8">
-          <span class="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span>
-          Indonesian Creative Economy 4.0
+  <section class="relative bg-white border-b border-gray-100 pt-20">
+    <!-- Compact Hero Banner -->
+    <div class="max-w-[1600px] mx-auto px-6 py-8">
+      <div class="bg-orange-600 rounded-3xl overflow-hidden shadow-xl relative">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-10">
+          <div class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+          <div class="absolute bottom-0 left-0 w-48 h-48 bg-white rounded-full blur-2xl"></div>
         </div>
 
-        <h1 class="text-6xl md:text-7xl font-black leading-[0.95] mb-8 text-gray-900 tracking-tighter">
-          Empowering <br/>
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-amber-500">Indonesian Artisans</span><br/>
-          Nationwide.
-        </h1>
-
-        <p class="text-gray-500 text-xl mb-10 max-w-lg leading-relaxed font-medium">
-          SnapFit menjembatani UMKM kreatif Malang dengan teknologi
-          <span class="text-gray-900 font-bold underline decoration-orange-300">AI, AR, dan Real-time Collaboration</span>.
-        </p>
-
-        <div class="flex flex-wrap gap-5">
-          <button class="bg-gray-900 text-white px-10 py-5 rounded-2xl shadow-2xl hover:bg-orange-600 hover:-translate-y-1 transition duration-300 font-black uppercase tracking-widest text-xs">
-            Explore Marketplace
-          </button>
-          <button class="bg-white border-2 border-gray-100 text-gray-900 px-10 py-5 rounded-2xl hover:bg-gray-50 transition duration-300 font-black uppercase tracking-widest text-xs">
-            Join as Creator
-          </button>
-        </div>
-      </div>
-
-      <!-- Right Visual -->
-      <div class="relative animate-in fade-in zoom-in duration-1000">
-        <div class="aspect-square bg-gradient-to-br from-orange-50 to-amber-50 rounded-[4rem] border-2 border-white shadow-inner flex items-center justify-center relative overflow-hidden">
-          <!-- AI Studio Badge -->
-          <div class="absolute top-10 left-10 bg-white/90 backdrop-blur-md p-6 rounded-3xl shadow-xl border border-white z-20 animate-bounce-slow">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center text-white text-xs font-bold italic">AI</div>
-              <p class="text-[10px] font-black uppercase tracking-tighter">AI Studio Active</p>
+        <div class="relative grid lg:grid-cols-2 gap-8 items-center p-8 lg:p-12">
+          <!-- Left: Main Message -->
+          <div class="text-white space-y-4">
+            <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <span class="text-xs font-black uppercase tracking-wider">Platform Inovatif untuk UMKM Indonesia</span>
             </div>
-            <div class="w-32 h-2 bg-gray-100 rounded-full overflow-hidden">
-              <div class="w-2/3 h-full bg-orange-500"></div>
+
+            <h1 class="text-4xl lg:text-5xl font-black leading-tight">
+              Marketplace Batik & Kerajinan Lokal dengan Teknologi AI & AR
+            </h1>
+
+            <p class="text-lg text-white/90 font-medium max-w-xl">
+              Temukan produk batik, kerajinan tangan, dan karya UMKM Indonesia dengan pengalaman belanja yang diperkaya teknologi modern.
+            </p>
+
+            <div class="flex flex-wrap gap-3 pt-2">
+              <button class="bg-white text-orange-600 px-6 py-3 rounded-xl font-black text-sm uppercase tracking-wider hover:bg-orange-50 transition-all shadow-lg flex items-center gap-2">
+                <span>Belanja Sekarang</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </button>
             </div>
           </div>
 
-          <!-- AR Badge -->
-          <div class="absolute bottom-20 right-10 bg-gray-900 text-white p-5 rounded-3xl shadow-2xl z-20">
-            <p class="text-[9px] font-bold text-orange-400 uppercase tracking-widest mb-1">Live Preview</p>
-            <p class="text-sm font-black italic">Web AR Try-On ✨</p>
-          </div>
+          <!-- Right: Innovation Badges -->
+          <div class="grid grid-cols-3 gap-4">
+            <!-- AI Studio -->
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 hover:bg-white/20 transition-all">
+              <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-3">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+              </div>
+              <p class="text-white font-black text-sm mb-1">AI Studio</p>
+              <p class="text-white/70 text-xs font-bold">Foto Produk Otomatis</p>
+            </div>
 
-          <!-- Main Image -->
-          <div class="w-64 h-64 bg-white rounded-[3rem] shadow-2xl flex items-center justify-center relative group overflow-hidden">
-            <img
-              src="https://images.unsplash.com/photo-1590736961958-51fd161031f3?q=80&w=1000&auto=format&fit=crop"
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80"
-              alt="SnapFit Product Preview"
-            />
-            <div class="absolute inset-0 bg-orange-600/10 group-hover:bg-transparent transition-colors"></div>
+            <!-- AR Try-On -->
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 hover:bg-white/20 transition-all">
+              <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-3">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+              </div>
+              <p class="text-white font-black text-sm mb-1">AR Try-On</p>
+              <p class="text-white/70 text-xs font-bold">Coba Virtual</p>
+            </div>
+
+            <!-- Co-Create -->
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 hover:bg-white/20 transition-all">
+              <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-3">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </div>
+              <p class="text-white font-black text-sm mb-1">Co-Create</p>
+              <p class="text-white/70 text-xs font-bold">Kolaborasi Real-time</p>
+            </div>
           </div>
         </div>
       </div>
@@ -65,26 +80,9 @@
 </template>
 
 <script setup>
-// Props can be added later for dynamic hero content
+// Compact hero banner for e-commerce style
 </script>
 
 <style scoped>
-@keyframes bounce-slow {
-  0%, 100% { transform: translateY(-5%); }
-  50%       { transform: translateY(0); }
-}
-
-.animate-bounce-slow {
-  animation: bounce-slow 4s infinite ease-in-out;
-}
-
-.animate-in { animation-duration: 0.8s; animation-fill-mode: both; }
-
-@keyframes fadeIn       { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideInLeft  { from { transform: translateX(-30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-@keyframes zoomIn       { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-.fade-in              { animation-name: fadeIn; }
-.slide-in-from-left-8 { animation-name: slideInLeft; }
-.zoom-in              { animation-name: zoomIn; }
+/* Minimal animations */
 </style>
