@@ -61,6 +61,7 @@
           v-for="product in filteredProducts"
           :key="product.id"
           class="group cursor-pointer transform hover:-translate-y-2 transition-all duration-500"
+          @click="viewProductDetail(product)"
         >
           <!-- Product Card -->
           <div class="bg-white rounded-3xl overflow-hidden shadow-lg shadow-gray-200/50 hover:shadow-2xl hover:shadow-orange-200/50 transition-all duration-500 border border-gray-100">
@@ -111,7 +112,7 @@
 
               <!-- Quick Add to Cart (Bottom Overlay) -->
               <div class="absolute bottom-0 left-0 right-0 p-4 z-20 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                <button class="w-full bg-orange-600 text-white py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-orange-700 hover:shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2">
+                <button @click.stop="addToCart(product)" class="w-full bg-orange-600 text-white py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-orange-700 hover:shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
@@ -182,6 +183,11 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useCartStore } from '@/stores/cartStore';
+
+const router = useRouter();
+const cartStore = useCartStore();
 
 const props = defineProps({
   products:  { type: Array,   default: () => [] },
@@ -191,17 +197,12 @@ const props = defineProps({
 const activeCategory = ref('all');
 const categories = ['all', 'batik', 'kerajinan', 'aksesoris', 'dekorasi', 'fashion'];
 
-const toggleWishlist = (product) => {
-  product.inWishlist = !product.inWishlist;
-  
-  // Optional: Show toast notification
-  const action = product.inWishlist ? 'ditambahkan ke' : 'dihapus dari';
-  console.log(`${product.name} ${action} wishlist`);
+const addToCart = async (product) => {
+  await cartStore.addItem(product);
 };
 
-const quickView = (product) => {
-  // TODO: Implement quick view modal
-  console.log('Quick view:', product);
+const viewProductDetail = (product) => {
+  router.push({ name: 'marketplace.product.detail', params: { id: product.id } });
 };
 
 const filteredProducts = computed(() => {

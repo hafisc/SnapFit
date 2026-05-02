@@ -51,6 +51,16 @@
               <span class="absolute top-0.5 right-0.5 w-1.5 h-1.5 bg-red-500 rounded-full border border-white"></span>
             </button>
 
+            <!-- Cart Button -->
+            <button @click="goToCart" class="relative p-1.5 rounded-lg hover:bg-gray-100 transition-colors group">
+              <svg class="w-4 h-4 text-gray-600 group-hover:text-orange-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              <span v-if="cartCount > 0" class="absolute -top-1 -right-1 w-5 h-5 bg-orange-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border border-white">
+                {{ cartCount > 99 ? '99+' : cartCount }}
+              </span>
+            </button>
+
             <!-- User Info -->
             <div class="text-right hidden sm:block">
               <p class="text-[11px] font-black text-gray-900 leading-none">{{ user.name }}</p>
@@ -112,6 +122,18 @@
                     <span>My Orders</span>
                   </button>
 
+                  <button @click="goToCart" class="w-full flex items-center gap-3 px-6 py-3 text-sm font-bold text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-all group">
+                    <div class="w-8 h-8 rounded-xl bg-gray-100 group-hover:bg-orange-100 flex items-center justify-center transition-colors">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                    </div>
+                    <span>Cart</span>
+                    <span v-if="cartCount > 0" class="ml-auto bg-orange-500 text-white text-xs font-black px-2 py-1 rounded-full">
+                      {{ cartCount }}
+                    </span>
+                  </button>
+
                   <button class="w-full flex items-center gap-3 px-6 py-3 text-sm font-bold text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-all group">
                     <div class="w-8 h-8 rounded-xl bg-gray-100 group-hover:bg-orange-100 flex items-center justify-center transition-colors">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -167,6 +189,11 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { useRouter } from 'vue-router';
+import { useCartStore } from '@/stores/cartStore';
+
+const router = useRouter();
+const cartStore = useCartStore();
 
 const props = defineProps({
   user: {
@@ -180,6 +207,7 @@ const emit = defineEmits(['logout', 'goToLogin', 'goToProfile', 'goToOrders']);
 const showUserMenu  = ref(false);
 const showMobileMenu = ref(false);
 const isLoggedIn    = computed(() => !!props.user);
+const cartCount     = computed(() => cartStore.itemCount);
 
 const toggleUserMenu  = () => { showUserMenu.value  = !showUserMenu.value; };
 const toggleMobileMenu = () => { showMobileMenu.value = !showMobileMenu.value; };
@@ -187,6 +215,7 @@ const toggleMobileMenu = () => { showMobileMenu.value = !showMobileMenu.value; }
 const goToLogin   = () => emit('goToLogin');
 const goToProfile = () => { showUserMenu.value = false; emit('goToProfile'); };
 const goToOrders  = () => { showUserMenu.value = false; emit('goToOrders'); };
+const goToCart    = () => router.push('/marketplace/cart');
 const logout      = () => emit('logout');
 
 // Close dropdown when clicking outside

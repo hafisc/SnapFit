@@ -1,0 +1,226 @@
+<template>
+  <section class="min-h-screen bg-slate-50 text-slate-900 p-6 lg:p-10">
+    <div class="max-w-5xl mx-auto">
+      <div class="mb-8">
+        <div class="flex items-center gap-3 mb-4">
+          <router-link to="/marketplace" class="text-slate-500 hover:text-slate-900 transition">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </router-link>
+          <div>
+            <h1 class="text-3xl font-black text-slate-900">Pesanan Saya</h1>
+            <p class="text-slate-600">Lihat semua pesanan dan status pengiriman Anda.</p>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="loading" class="rounded-[2rem] bg-white p-8 shadow-sm border border-slate-200 text-center">
+        <p class="text-slate-600">Memuat pesanan...</p>
+      </div>
+
+      <div v-else-if="!orders.length" class="rounded-[2rem] bg-white p-8 shadow-sm border border-slate-200 text-center">
+        <div class="py-10">
+          <svg class="mx-auto mb-4 h-16 w-16 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+          </svg>
+          <h2 class="text-xl font-black text-slate-900 mb-2">Belum ada pesanan</h2>
+          <p class="text-slate-600 mb-6">Anda belum membuat pesanan apapun. Mulai berbelanja sekarang!</p>
+          <router-link to="/marketplace" class="inline-flex items-center justify-center rounded-3xl bg-orange-600 px-6 py-3 text-sm font-black text-white hover:bg-orange-700 transition-all">
+            Lihat Produk
+          </router-link>
+        </div>
+      </div>
+
+      <div v-else class="space-y-4">
+        <div v-for="order in orders" :key="order.id" class="rounded-[2rem] bg-white p-6 shadow-sm border border-slate-200">
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <div>
+              <div class="flex items-baseline gap-2 mb-2">
+                <p class="text-sm text-slate-500">Order ID:</p>
+                <p class="font-black text-slate-900">{{ order.midtrans_order_id }}</p>
+              </div>
+              <div class="flex items-baseline gap-2 mb-2">
+                <p class="text-sm text-slate-500">Tanggal:</p>
+                <p class="text-sm text-slate-600">{{ formatDate(order.created_at) }}</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-2xl font-black text-orange-600">{{ formatCurrency(order.total_amount) }}</p>
+              <span :class="statusBadge(order.status)" class="inline-block mt-2 rounded-full px-4 py-1 text-xs font-black uppercase tracking-wider">
+                {{ statusLabel(order.status) }}
+              </span>
+            </div>
+          </div>
+
+          <div class="border-t border-slate-200 pt-4">
+            <p class="text-sm text-slate-500 mb-3">Produk yang dipesan:</p>
+            <div class="space-y-3">
+              <div v-for="item in order.items" :key="item.id" class="flex items-center gap-4 rounded-[1.5rem] bg-slate-50 p-4">
+                <img v-if="item.product?.image_url" :src="item.product.image_url" class="h-16 w-16 rounded-2xl object-cover" :alt="item.product?.name" />
+                <div v-else class="h-16 w-16 rounded-2xl bg-slate-200"></div>
+                <div class="flex-1 min-w-0">
+                  <p class="font-semibold text-slate-900 truncate">{{ item.product?.name || 'Produk' }}</p>
+                  <p class="text-sm text-slate-500">Jumlah: {{ item.quantity }}</p>
+                </div>
+                <p class="font-black text-slate-900">{{ formatCurrency(item.price * item.quantity) }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t border-slate-200 mt-4 pt-4">
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div>
+                <p class="text-xs text-slate-500 uppercase tracking-[0.1em] font-black mb-2">Status Pembayaran</p>
+                <p class="text-sm font-semibold text-slate-900">
+                  {{ paymentStatus(order.status) }}
+                </p>
+              </div>
+              <div>
+                <p class="text-xs text-slate-500 uppercase tracking-[0.1em] font-black mb-2">Status Pengiriman</p>
+                <p class="text-sm font-semibold text-slate-900">
+                  {{ shippingStatus(order.status) }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t border-slate-200 mt-4 pt-4 flex gap-3">
+            <button @click="viewOrderDetail(order.id)" class="flex-1 rounded-3xl border border-slate-200 bg-white px-4 py-3 text-sm font-black uppercase tracking-widest text-slate-900 hover:bg-slate-100 transition-all">
+              Lihat Detail
+            </button>
+            <button v-if="order.status === 'pending'" @click="goToPayment(order.id)" class="flex-1 rounded-3xl bg-orange-600 px-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:bg-orange-700 transition-all">
+              Bayar Sekarang
+            </button>
+            <button v-else class="flex-1 rounded-3xl bg-slate-200 px-4 py-3 text-sm font-black uppercase tracking-widest text-slate-500 cursor-not-allowed">
+              {{ order.status === 'paid' ? 'Sedang Dikirim' : 'Pesanan Selesai' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const orders = ref([]);
+const loading = ref(true);
+
+const apiHeaders = () => {
+  const token = localStorage.getItem('token');
+  const headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  return headers;
+};
+
+const fetchOrders = async () => {
+  loading.value = true;
+  try {
+    const res = await fetch('/api/v1/orders', {
+      headers: apiHeaders(),
+    });
+
+    if (!res.ok) {
+      console.error('Failed to fetch orders:', res.status);
+      orders.value = [];
+      return;
+    }
+
+    const data = await res.json();
+    orders.value = data.data || [];
+  } catch (err) {
+    console.error('Fetch orders error:', err);
+    orders.value = [];
+  } finally {
+    loading.value = false;
+  }
+};
+
+const formatDate = (dateString) => {
+  try {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('id-ID', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    }).format(date);
+  } catch {
+    return dateString;
+  }
+};
+
+const formatCurrency = (amount) => {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+  }).format(amount);
+};
+
+const statusLabel = (status) => {
+  const labels = {
+    pending: '⏳ Menunggu Pembayaran',
+    paid: '✓ Sudah Dibayar',
+    shipped: '📦 Sedang Dikirim',
+    completed: '✓ Selesai',
+  };
+  return labels[status] || status;
+};
+
+const statusBadge = (status) => {
+  const badges = {
+    pending: 'bg-yellow-100 text-yellow-700',
+    paid: 'bg-blue-100 text-blue-700',
+    shipped: 'bg-purple-100 text-purple-700',
+    completed: 'bg-emerald-100 text-emerald-700',
+  };
+  return badges[status] || 'bg-slate-100 text-slate-700';
+};
+
+const paymentStatus = (status) => {
+  const statuses = {
+    pending: 'Belum dibayar',
+    paid: 'Sudah dibayar',
+    shipped: 'Sudah dibayar',
+    completed: 'Sudah dibayar',
+  };
+  return statuses[status] || 'Belum diketahui';
+};
+
+const shippingStatus = (status) => {
+  const statuses = {
+    pending: 'Belum dikirim',
+    paid: 'Sedang diproses',
+    shipped: 'Dalam perjalanan',
+    completed: 'Sudah diterima',
+  };
+  return statuses[status] || 'Belum diketahui';
+};
+
+const viewOrderDetail = (orderId) => {
+  console.log('View order detail:', orderId);
+  // TODO: Implement order detail page
+};
+
+const goToPayment = (orderId) => {
+  console.log('Go to payment:', orderId);
+  // TODO: Implement payment navigation
+};
+
+onMounted(() => {
+  fetchOrders();
+});
+</script>
+
+<style scoped>
+/* Additional styles if needed */
+</style>

@@ -30,6 +30,30 @@ const routes = [
     name: 'marketplace',
     component: () => import('@/pages/marketplace/index.vue'),
   },
+  {
+    path: '/marketplace/product/:id',
+    name: 'marketplace.product.detail',
+    component: () => import('@/pages/marketplace/product-detail.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/marketplace/cart',
+    name: 'marketplace.cart',
+    component: () => import('@/pages/marketplace/cart.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/marketplace/checkout',
+    name: 'marketplace.checkout',
+    component: () => import('@/pages/marketplace/checkout.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/marketplace/orders',
+    name: 'marketplace.orders',
+    component: () => import('@/pages/marketplace/orders.vue'),
+    meta: { requiresAuth: true },
+  },
 
   // ─── UMKM ───────────────────────────────────────
   {
