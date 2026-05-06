@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\AiGenerationController;
+use App\Http\Controllers\ArTryOnController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\CocreateRoomController;
@@ -52,6 +53,9 @@ Route::prefix('v1')->group(function () {
         // Profile
         Route::get('profile', [ProfileController::class, 'show']);
         Route::put('profile', [ProfileController::class, 'update']);
+
+        // ─── AR TRY ON ────────────────────────────────────────────────────────
+        Route::post('ar-try-on/analyze', [ArTryOnController::class, 'analyze']);
 
         // ─── UPLOAD ──────────────────────────────────────────────────────────
         Route::prefix('upload')->group(function () {

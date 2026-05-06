@@ -1,6 +1,16 @@
 <template>
-  <main class="min-h-screen bg-slate-50 text-slate-900">
-    <section class="relative overflow-hidden bg-white pb-16">
+  <div class="min-h-screen bg-slate-50 text-slate-900 overflow-x-hidden">
+    <!-- Navbar -->
+    <Navbar
+      :user="user"
+      @logout="logout"
+      @goToLogin="goToLogin"
+      @goToProfile="goToProfile"
+      @goToOrders="goToOrders"
+    />
+
+    <main class="pt-16">
+      <section class="relative overflow-hidden bg-white pb-16">
       <div class="absolute inset-x-0 top-0 h-80 bg-orange-50"></div>
       <div class="relative max-w-[1400px] mx-auto px-6 py-16 lg:py-24">
         <div class="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] items-center">
@@ -53,13 +63,18 @@
         <ProductGrid :products="products" :isLoading="isLoading" />
       </div>
     </section>
-  </main>
+    </main>
+  </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import ProductGrid from '@/components/landing/ProductGrid.vue';
+import Navbar from '@/components/common/Navbar.vue';
 
+const router = useRouter();
+const user = ref(null);
 const products = ref([]);
 const isLoading = ref(true);
 const productSection = ref(null);
@@ -109,7 +124,23 @@ const scrollToProducts = () => {
   productSection.value?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 
-fetchProducts();
+/* ── Navigation ───────────────────────────────────────── */
+const goToLogin   = () => router.push('/login');
+const goToProfile = () => console.log('Navigate to profile');
+const goToOrders  = () => router.push('/marketplace/orders');
+
+const logout = () => {
+  localStorage.removeItem('user');
+  localStorage.removeItem('token');
+  user.value = null;
+  router.push('/');
+};
+
+onMounted(() => {
+  const stored = localStorage.getItem('user');
+  if (stored) user.value = JSON.parse(stored);
+  fetchProducts();
+});
 </script>
 
 <style scoped>

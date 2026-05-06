@@ -1,37 +1,45 @@
 <template>
-  <section class="min-h-screen bg-slate-50 text-slate-900 p-6 lg:p-10">
-    <div class="max-w-7xl mx-auto">
-      <div class="mb-6 text-sm text-slate-500">
-        <router-link to="/" class="hover:text-slate-900 transition">Home</router-link>
-        <span class="px-2">/</span>
-        <router-link to="/marketplace" class="hover:text-slate-900 transition">Marketplace</router-link>
-        <span class="px-2">/</span>
-        <span class="font-semibold">Detail Produk</span>
+  <section class="min-h-screen bg-slate-50 text-slate-900 pb-10">
+    <!-- Navbar -->
+    <Navbar
+      :user="user"
+      @logout="logout"
+      @goToLogin="goToLogin"
+      @goToProfile="goToProfile"
+      @goToOrders="goToOrders"
+    />
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-20 sm:pt-24">
+      <div class="mb-4 sm:mb-6 flex items-center gap-2 text-sm font-semibold text-slate-500">
+        <button @click="router.push('/')" class="hover:text-slate-900 transition flex items-center gap-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+          Kembali ke Beranda
+        </button>
       </div>
 
-      <div class="grid gap-8 lg:grid-cols-[1.3fr_0.9fr]">
-        <div class="space-y-6">
-          <div class="bg-white rounded-[2rem] p-4 shadow-sm border border-slate-200 overflow-hidden">
+      <div class="flex flex-col lg:grid gap-6 lg:gap-8 lg:grid-cols-[1.3fr_0.9fr] lg:items-start">
+        <div class="contents lg:block lg:space-y-6">
+          <div class="order-1 lg:order-none bg-white rounded-[2rem] p-3 sm:p-4 shadow-sm border border-slate-200 overflow-hidden">
             <div class="grid gap-4 lg:grid-cols-[1fr_80px]">
               <div class="relative overflow-hidden rounded-[2rem] bg-slate-100">
                 <img
                   v-if="activeImage"
                   :src="activeImage"
                   :alt="product?.name ?? 'Product image'"
-                  class="w-full h-[520px] object-cover transition duration-300 ease-out hover:scale-105"
+                  class="w-full h-[380px] sm:h-[520px] object-cover transition duration-300 ease-out hover:scale-105"
                 />
                 <div class="absolute right-4 top-4 rounded-full bg-white/80 px-3 py-2 text-xs font-semibold text-slate-700 backdrop-blur">
                   {{ currentImageLabel }}
                 </div>
               </div>
 
-              <div class="flex flex-col gap-3 overflow-hidden rounded-[2rem] bg-slate-50 p-3">
+              <div class="flex flex-row lg:flex-col gap-3 overflow-x-auto hide-scrollbar rounded-[2rem] bg-slate-50 p-2 sm:p-3">
                 <button
                   v-for="(image, index) in galleryImages"
                   :key="index"
                   type="button"
                   @click="activeImageIndex = index"
-                  class="group flex h-20 items-center justify-center overflow-hidden rounded-3xl border transition-all duration-200"
+                  class="group flex-shrink-0 w-20 h-20 lg:w-full flex items-center justify-center overflow-hidden rounded-2xl sm:rounded-3xl border transition-all duration-200"
                   :class="index === activeImageIndex ? 'border-orange-500 ring-2 ring-orange-200' : 'border-slate-200 hover:border-slate-300'"
                 >
                   <img :src="image" :alt="`Gallery ${index + 1}`" class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
@@ -40,24 +48,25 @@
             </div>
           </div>
 
-          <div class="grid gap-3 lg:grid-cols-[1fr_1fr]">
-            <div v-if="product?.description" class="rounded-[2rem] bg-white p-6 shadow-sm border border-slate-200">
-              <h3 class="text-lg font-black text-slate-900 mb-3">Deskripsi Produk</h3>
-              <p class="text-slate-600 leading-7 whitespace-pre-line">{{ product.description }}</p>
+          <div class="order-3 lg:order-none grid gap-3 lg:grid-cols-[1.2fr_0.8fr]">
+            <div v-if="product?.description" class="rounded-3xl bg-white p-5 sm:p-6 shadow-sm border border-slate-100">
+              <h3 class="text-base sm:text-lg font-bold tracking-tight text-slate-900 mb-3">Deskripsi Produk</h3>
+              <p class="text-slate-600 text-sm leading-relaxed whitespace-pre-line">{{ product.description }}</p>
             </div>
 
-            <div class="rounded-[2rem] bg-white p-6 shadow-sm border border-slate-200">
-              <h3 class="text-lg font-black text-slate-900 mb-3">Info Penjual</h3>
-              <div class="space-y-3 text-slate-700">
-                <div>
-                  <p class="text-sm uppercase tracking-[0.18em] text-slate-400">UMKM</p>
-                  <p class="font-semibold text-slate-900">{{ product?.seller?.name ?? product?.seller_name ?? 'UMKM Lokal' }}</p>
+            <div class="rounded-3xl bg-white p-5 sm:p-6 shadow-sm border border-slate-100">
+              <h3 class="text-base sm:text-lg font-bold tracking-tight text-slate-900 mb-4">Info Penjual</h3>
+              <div class="space-y-4 text-slate-700">
+                <div class="flex items-start gap-3">
+                  <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                  </div>
+                  <div>
+                    <p class="font-semibold text-slate-900">{{ product?.seller?.name ?? product?.seller_name ?? 'UMKM Lokal' }}</p>
+                    <p class="text-xs text-slate-500 mt-0.5">{{ product?.seller?.location ?? product?.seller_location ?? 'Indonesia' }}</p>
+                  </div>
                 </div>
-                <div>
-                  <p class="text-sm uppercase tracking-[0.18em] text-slate-400">Lokasi</p>
-                  <p>{{ product?.seller?.location ?? product?.seller_location ?? 'Indonesia' }}</p>
-                </div>
-                <div class="flex items-center gap-2 text-sm text-slate-600">
+                <div class="pt-2 border-t border-slate-50 flex items-center gap-2 text-sm text-slate-600">
                   <span class="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-3 py-1 font-semibold text-emerald-700">
                     <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                       <path d="M2.5 10a7.5 7.5 0 1115 0 7.5 7.5 0 01-15 0zm10.894-1.356L9 13.038l-2.394-2.394.848-.848L9 11.342l4.546-4.546.848.848z" />
@@ -69,9 +78,9 @@
             </div>
           </div>
 
-          <div class="rounded-[2rem] bg-white p-6 shadow-sm border border-slate-200">
+          <div class="order-5 lg:order-none rounded-3xl bg-white p-5 sm:p-6 shadow-sm border border-slate-100">
             <div class="flex items-center justify-between mb-4">
-              <h3 class="text-lg font-black text-slate-900">Produk Terkait</h3>
+              <h3 class="text-base sm:text-lg font-bold tracking-tight text-slate-900">Produk Terkait</h3>
               <button
                 type="button"
                 @click="refreshRelated"
@@ -96,40 +105,38 @@
           </div>
         </div>
 
-        <div class="space-y-6">
-          <div class="rounded-[2rem] bg-white p-8 shadow-sm border border-slate-200">
+        <div class="contents lg:block lg:space-y-6">
+          <div class="order-2 lg:order-none rounded-[2rem] bg-white p-5 sm:p-6 lg:p-8 shadow-sm border border-slate-100">
             <div class="mb-5">
-              <p class="text-xs uppercase tracking-[0.3em] text-orange-500">Marketplace</p>
-              <h1 class="mt-3 text-3xl font-black text-slate-900 leading-tight">{{ product?.name ?? 'Loading produk...' }}</h1>
-              <div class="mt-4 flex flex-wrap items-center gap-3 text-sm text-slate-500">
-                <div class="inline-flex items-center gap-1">
-                  <span class="font-semibold text-slate-900">{{ product?.rating?.toFixed(1) ?? product?.average_rating?.toFixed(1) ?? '0.0' }}</span>
-                  <span>/ 5</span>
+              <p class="text-xs font-bold uppercase tracking-[0.25em] text-orange-500">Marketplace</p>
+              <h1 class="mt-3 text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 leading-tight">{{ product?.name ?? 'Loading produk...' }}</h1>
+              <div class="mt-3 flex flex-wrap items-center gap-3 text-sm text-slate-500">
+                <div class="flex items-center gap-1.5">
+                  <svg class="w-4 h-4 text-amber-400" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.95a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.388 2.46a1 1 0 00-.363 1.118l1.287 3.95c.3.921-.755 1.688-1.54 1.118l-3.388-2.46a1 1 0 00-1.175 0l-3.388 2.46c-.784.57-1.838-.197-1.539-1.118l1.287-3.95a1 1 0 00-.363-1.118L2.098 9.377c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.95z"/></svg>
+                  <span class="font-bold text-slate-900">{{ product?.rating?.toFixed(1) ?? product?.average_rating?.toFixed(1) ?? '0.0' }}</span>
                 </div>
-                <div class="inline-flex items-center gap-1">
-                  <span class="text-slate-400">|</span>
-                  <span>{{ reviewCount }} ulasan</span>
-                </div>
+                <span class="text-slate-300">•</span>
+                <span class="text-slate-500 hover:text-slate-900 cursor-pointer underline-offset-4 hover:underline transition">{{ reviewCount }} ulasan</span>
               </div>
             </div>
 
-            <div class="flex flex-wrap gap-2 items-center text-sm text-slate-500 mb-6">
-              <span class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-2 text-slate-700">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M4 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" /></svg>
+            <div class="flex flex-wrap gap-2 items-center text-xs font-medium text-slate-600 mb-6 pb-6 border-b border-slate-100">
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-50 border border-slate-200 px-3 py-1.5">
+                <svg class="w-3.5 h-3.5 text-slate-400" fill="currentColor" viewBox="0 0 20 20"><path d="M4 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" /></svg>
                 {{ product?.category ?? 'Batik & Kerajinan' }}
               </span>
-              <span class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-2 text-slate-700">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4h12v12H4V4z" /></svg>
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-50 border border-slate-200 px-3 py-1.5">
+                <svg class="w-3.5 h-3.5 text-slate-400" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4h12v12H4V4z" /></svg>
                 SKU: {{ product?.sku ?? 'N/A' }}
               </span>
             </div>
 
-            <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p class="text-sm uppercase tracking-[0.2em] text-slate-400">Harga</p>
-                <p class="text-4xl font-black text-slate-900">Rp {{ formatCurrency(displayPrice) }}</p>
+                <p class="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-1">Harga</p>
+                <p class="text-3xl sm:text-4xl font-extrabold tracking-tight text-orange-600">Rp {{ formatCurrency(displayPrice) }}</p>
               </div>
-              <div class="rounded-3xl bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-700">Stok tersedia: {{ selectedStock }}</div>
+              <div class="rounded-2xl bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-600 border border-emerald-100">Stok: {{ selectedStock }}</div>
             </div>
 
             <div class="space-y-4">
@@ -148,13 +155,16 @@
                 </div>
               </div>
 
-              <div class="grid gap-4 sm:grid-cols-[1fr_auto] items-end">
-                <div class="flex items-center gap-3 rounded-3xl border border-slate-200 bg-slate-100 p-3">
-                  <button type="button" @click="decrementQuantity" class="rounded-2xl bg-white p-2 text-slate-700 transition hover:bg-slate-200">-</button>
-                  <input type="number" v-model.number="quantity" min="1" :max="selectedStock" class="w-20 rounded-3xl border border-slate-200 bg-white px-4 py-3 text-center text-slate-900" />
-                  <button type="button" @click="incrementQuantity" class="rounded-2xl bg-white p-2 text-slate-700 transition hover:bg-slate-200">+</button>
+              <div class="grid gap-4 sm:grid-cols-[auto_1fr] items-end pb-6">
+                <div>
+                  <label class="block text-xs font-bold text-slate-500 mb-2 uppercase tracking-wider">Kuantitas</label>
+                  <div class="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white p-1.5 shadow-sm">
+                    <button type="button" @click="decrementQuantity" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-slate-600 transition hover:bg-slate-100 font-medium">-</button>
+                    <input type="number" v-model.number="quantity" min="1" :max="selectedStock" class="w-12 border-none bg-transparent text-center text-sm font-bold text-slate-900 p-0 focus:ring-0" />
+                    <button type="button" @click="incrementQuantity" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-slate-600 transition hover:bg-slate-100 font-medium">+</button>
+                  </div>
                 </div>
-                <div class="text-sm text-slate-500">Max {{ selectedStock }} pcs</div>
+                <div class="text-xs text-slate-400 pb-3">Max {{ selectedStock }} pcs</div>
               </div>
 
               <div class="grid gap-3 sm:grid-cols-2">
@@ -162,7 +172,7 @@
                   type="button"
                   @click="addToCart"
                   :disabled="!canAddToCart"
-                  class="rounded-3xl bg-slate-900 px-5 py-4 text-sm font-black text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-60"
+                  class="rounded-2xl bg-slate-900 px-5 py-3.5 text-sm font-bold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60 shadow-lg shadow-slate-200"
                 >
                   Tambah ke Keranjang
                 </button>
@@ -170,7 +180,7 @@
                   type="button"
                   @click="buyNow"
                   :disabled="!canAddToCart"
-                  class="rounded-3xl bg-orange-500 px-5 py-4 text-sm font-black text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
+                  class="rounded-2xl bg-orange-600 px-5 py-3.5 text-sm font-bold text-white transition hover:bg-orange-700 disabled:cursor-not-allowed disabled:opacity-60 shadow-lg shadow-orange-200"
                 >
                   Beli Sekarang
                 </button>
@@ -180,15 +190,19 @@
                 <button
                   type="button"
                   @click="toggleWishlist"
-                  class="rounded-3xl border border-slate-200 bg-white px-5 py-4 text-sm font-black text-slate-900 transition hover:bg-slate-100"
+                  class="rounded-2xl border border-slate-200 bg-white px-5 py-3.5 text-sm font-bold text-slate-700 transition hover:bg-slate-50 hover:border-slate-300"
                 >
-                  {{ isWishlisted ? 'Hapus dari Wishlist' : 'Tambah ke Wishlist' }}
+                  <span class="flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" :class="isWishlisted ? 'fill-red-500 text-red-500' : 'fill-none text-slate-400'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    {{ isWishlisted ? 'Tersimpan' : 'Wishlist' }}
+                  </span>
                 </button>
                 <button
                   type="button"
-                  @click="showArModal = true"
-                  class="rounded-3xl border border-orange-200 bg-orange-50 px-5 py-4 text-sm font-black text-orange-700 transition hover:bg-orange-100"
+                  @click="openArModal"
+                  class="rounded-2xl border border-orange-200 bg-orange-50 px-5 py-3.5 text-sm font-bold text-orange-700 transition hover:bg-orange-100 flex justify-center items-center gap-2 group"
                 >
+                  <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                   AR Try-On
                 </button>
               </div>
@@ -203,26 +217,30 @@
             </div>
           </div>
 
-          <div class="rounded-[2rem] bg-white p-6 shadow-sm border border-slate-200">
-            <div class="mb-4 flex items-center gap-3">
-              <div class="flex items-center gap-1">
-                <template v-for="i in 5" :key="i">
-                  <svg class="w-4 h-4" fill="currentColor" :class="i <= Math.round(product?.rating ?? product?.average_rating ?? 0) ? 'text-amber-400' : 'text-slate-200'" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.95a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.388 2.46a1 1 0 00-.363 1.118l1.287 3.95c.3.921-.755 1.688-1.54 1.118l-3.388-2.46a1 1 0 00-1.175 0l-3.388 2.46c-.784.57-1.838-.197-1.539-1.118l1.287-3.95a1 1 0 00-.363-1.118L2.098 9.377c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.95z"/></svg>
-                </template>
-              </div>
+          <div class="order-4 lg:order-none rounded-3xl bg-white p-5 sm:p-6 shadow-sm border border-slate-100">
+            <div class="mb-5 flex items-center justify-between">
               <div>
-                <p class="text-sm font-semibold text-slate-900">Rating & Ulasan</p>
-                <p class="text-sm text-slate-500">{{ reviewCount }} ulasan pelanggan</p>
+                <h3 class="text-base sm:text-lg font-bold tracking-tight text-slate-900">Ulasan Pelanggan</h3>
+                <p class="text-sm text-slate-500 mt-1">{{ reviewCount }} ulasan terverifikasi</p>
+              </div>
+              <div class="flex items-center gap-1 bg-amber-50 px-3 py-1.5 rounded-full border border-amber-100">
+                <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.95a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.388 2.46a1 1 0 00-.363 1.118l1.287 3.95c.3.921-.755 1.688-1.54 1.118l-3.388-2.46a1 1 0 00-1.175 0l-3.388 2.46c-.784.57-1.838-.197-1.539-1.118l1.287-3.95a1 1 0 00-.363-1.118L2.098 9.377c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.95z"/></svg>
+                <span class="font-bold text-amber-700 text-sm">{{ product?.rating?.toFixed(1) ?? product?.average_rating?.toFixed(1) ?? '0.0' }}</span>
               </div>
             </div>
             <div v-if="reviews.length" class="space-y-4">
-              <div v-for="review in reviews.slice(0, 3)" :key="review.id" class="rounded-3xl border border-slate-200 bg-slate-50 p-4">
-                <div class="flex items-center justify-between gap-4 mb-3">
-                  <div>
-                    <p class="font-semibold text-slate-900">{{ review.author ?? review.user_name ?? 'Pembeli' }}</p>
-                    <p class="text-xs text-slate-500">{{ formatDate(review.date ?? review.created_at) }}</p>
+              <div v-for="review in reviews.slice(0, 3)" :key="review.id" class="rounded-2xl border border-slate-100 bg-slate-50 p-4">
+                <div class="flex items-center justify-between gap-4 mb-2">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-500 uppercase">
+                      {{ (review.author ?? review.user_name ?? 'P')[0] }}
+                    </div>
+                    <div>
+                      <p class="text-sm font-bold text-slate-900">{{ review.author ?? review.user_name ?? 'Pembeli' }}</p>
+                      <p class="text-[10px] text-slate-400">{{ formatDate(review.date ?? review.created_at) }}</p>
+                    </div>
                   </div>
-                  <div class="inline-flex items-center gap-1 text-amber-400">
+                  <div class="flex items-center gap-0.5 text-amber-400">
                     <template v-for="i in 5" :key="i">
                       <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor" :class="i <= (review.rating ?? 0) ? 'text-amber-400' : 'text-slate-200'"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.95a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.388 2.46a1 1 0 00-.363 1.118l1.287 3.95c.3.921-.755 1.688-1.54 1.118l-3.388-2.46a1 1 0 00-1.175 0l-3.388 2.46c-.784.57-1.838-.197-1.539-1.118l1.287-3.95a1 1 0 00-.363-1.118L2.098 9.377c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.95z"/></svg>
                     </template>
@@ -237,38 +255,129 @@
       </div>
     </div>
 
-    <div v-if="showArModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4">
-      <div class="w-full max-w-2xl rounded-[2rem] bg-white p-8 shadow-2xl">
-        <div class="flex items-start justify-between gap-4">
-          <div>
-            <h2 class="text-2xl font-black text-slate-900">AR Try-On</h2>
-            <p class="mt-2 text-slate-600">Coba produk secara virtual dengan pengalaman AR. Aktifkan kamera dan lihat tampilan produk di ruangan Anda.</p>
+    <div v-if="showArModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 overflow-y-auto">
+      <div class="w-full max-w-4xl rounded-[2rem] bg-white shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[500px]">
+        
+        <!-- Left Side: Camera & AR -->
+        <div class="w-full md:w-1/2 bg-slate-900 relative flex flex-col justify-center items-center p-6 border-r border-slate-200">
+          <div class="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-black shadow-inner">
+            <!-- Video Feed (Hidden, used as source for MediaPipe) -->
+            <video ref="videoElement" autoplay playsinline class="hidden"></video>
+            
+            <!-- Canvas (Shows video + AR filter real-time) -->
+            <canvas ref="canvasElement" class="absolute inset-0 w-full h-full object-cover" :class="{'opacity-50': isCapturing || capturedImage}"></canvas>
+
+            <!-- Captured Image Overlay (When Paused) -->
+            <img v-if="capturedImage" :src="capturedImage" class="absolute inset-0 w-full h-full object-cover z-10" />
+
+            <!-- Loading State -->
+            <div v-if="isAnalyzing || isInitializingAR" class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm text-white">
+              <svg class="w-10 h-10 animate-spin text-orange-500 mb-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+              <p class="font-bold">{{ isInitializingAR ? 'Memuat Model AR...' : 'AI Sedang Menganalisis...' }}</p>
+              <p class="text-xs text-slate-300 mt-1">{{ isInitializingAR ? 'Mendeteksi postur tubuh' : 'Mencocokkan warna & gaya' }}</p>
+            </div>
+            
+            <div v-if="!isCameraReady && !isCameraDenied && !capturedImage && !isInitializingAR" class="absolute inset-0 flex items-center justify-center">
+              <p class="text-white text-sm font-semibold animate-pulse">Menyiapkan Kamera...</p>
+            </div>
+            
+            <div v-if="isCameraDenied" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+              <div class="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center text-red-500 mb-3">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+              </div>
+              <p class="text-white font-bold mb-1">Akses Kamera Ditolak</p>
+              <p class="text-slate-400 text-xs">Mohon izinkan akses kamera pada browser Anda untuk menggunakan fitur ini.</p>
+            </div>
           </div>
-          <button type="button" @click="showArModal = false" class="rounded-full bg-slate-100 p-3 text-slate-700 hover:bg-slate-200">
-            ✕
+
+          <!-- Camera Controls -->
+          <div class="mt-6 flex justify-center w-full gap-3 z-30 relative">
+            <button v-if="!capturedImage && isCameraReady" @click="captureAndAnalyze" :disabled="isAnalyzing" class="bg-orange-600 hover:bg-orange-700 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg transition-transform active:scale-95 border-4 border-white">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            </button>
+            <button v-if="capturedImage" @click="retake" :disabled="isAnalyzing" class="bg-slate-700 hover:bg-slate-600 text-white rounded-full px-6 py-3 font-semibold text-sm transition-colors shadow-lg">
+              Coba Lagi
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Side: Analysis & Details -->
+        <div class="w-full md:w-1/2 p-8 flex flex-col bg-slate-50 relative h-[500px] overflow-y-auto">
+          <!-- Close Button -->
+          <button type="button" @click="closeArModal" class="absolute top-4 right-4 rounded-full bg-slate-200 p-2 text-slate-700 hover:bg-slate-300 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
           </button>
+
+          <h2 class="text-2xl font-black text-slate-900 mb-1">AI AR Try-On</h2>
+          <p class="text-slate-500 text-sm mb-6">Analisis kecocokan secara virtual</p>
+
+          <div v-if="!analysisResult && !isAnalyzing" class="flex-1 flex flex-col items-center justify-center text-center p-6 border-2 border-dashed border-slate-300 rounded-3xl bg-white">
+            <div class="w-16 h-16 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mb-4">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            </div>
+            <h3 class="font-bold text-slate-800 mb-2">Siap untuk Analisis</h3>
+            <p class="text-sm text-slate-500">Ambil foto Anda menggunakan kamera, AI akan menganalisis kecocokan produk ini dengan Anda.</p>
+          </div>
+
+          <div v-if="isAnalyzing" class="flex-1 flex flex-col items-center justify-center">
+            <div class="w-64 h-2 bg-slate-200 rounded-full overflow-hidden mb-4">
+              <div class="h-full bg-orange-500 rounded-full animate-pulse" style="width: 100%"></div>
+            </div>
+            <p class="text-slate-500 text-sm animate-pulse">Menghubungkan ke Groq AI...</p>
+          </div>
+
+          <div v-if="analysisResult" class="flex-1 flex flex-col gap-4 animate-fade-in">
+            <!-- Score Card -->
+            <div class="bg-gradient-to-br from-orange-500 to-amber-500 rounded-3xl p-5 text-white shadow-lg shadow-orange-200">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-orange-100 text-xs uppercase tracking-widest font-bold mb-1">Tingkat Kecocokan</p>
+                  <h3 class="text-4xl font-black">{{ analysisResult.match_score }}<span class="text-2xl text-orange-200">%</span></h3>
+                </div>
+                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md">
+                  <span class="text-2xl">{{ analysisResult.match_score >= 80 ? '🔥' : (analysisResult.match_score >= 60 ? '✨' : '👍') }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Analysis Content -->
+            <div class="space-y-4 mt-2">
+              <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+                <h4 class="text-sm font-bold text-slate-900 mb-2 flex items-center gap-2">
+                  <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  Tampilan & Gaya
+                </h4>
+                <p class="text-sm text-slate-600 leading-relaxed">{{ analysisResult.how_it_looks }}</p>
+              </div>
+
+              <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+                <h4 class="text-sm font-bold text-slate-900 mb-2 flex items-center gap-2">
+                  <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  Rekomendasi Styling
+                </h4>
+                <p class="text-sm text-slate-600 leading-relaxed">{{ analysisResult.styling_recommendation }}</p>
+              </div>
+
+              <div v-if="analysisResult.pairing_suggestions?.length" class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+                <h4 class="text-sm font-bold text-slate-900 mb-2 flex items-center gap-2">
+                  <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                  Paduan yang Cocok
+                </h4>
+                <ul class="list-disc list-inside text-sm text-slate-600 space-y-1">
+                  <li v-for="(tip, idx) in analysisResult.pairing_suggestions" :key="idx">{{ tip }}</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-6 pt-4 border-t border-slate-200 flex gap-3">
+              <button @click="addToCart" class="flex-1 bg-slate-900 text-white rounded-2xl py-3 font-bold text-sm hover:bg-black transition-colors">
+                Tambah Keranjang
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div class="mt-6 grid gap-4 sm:grid-cols-2">
-          <div class="rounded-3xl border border-slate-200 bg-slate-50 p-6 text-center">
-            <div class="inline-flex h-16 w-16 items-center justify-center rounded-full bg-orange-100 text-orange-700 text-2xl">AR</div>
-            <p class="mt-4 text-sm font-semibold text-slate-900">Live preview</p>
-            <p class="mt-2 text-sm text-slate-500">Aktifkan kamera perangkat untuk melihat produk secara virtual.</p>
-          </div>
-          <div class="rounded-3xl border border-slate-200 bg-white p-6">
-            <p class="text-sm font-semibold text-slate-900">Petunjuk</p>
-            <ol class="mt-3 space-y-2 text-sm text-slate-600 list-decimal list-inside">
-              <li>Buka kamera perangkat</li>
-              <li>Arahkan ke permukaan rata</li>
-              <li>Tempatkan produk di visualisasi</li>
-            </ol>
-          </div>
-        </div>
-
-        <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
-          <button type="button" @click="showArModal = false" class="rounded-3xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-100">Tutup</button>
-          <button type="button" class="rounded-3xl bg-orange-500 px-5 py-3 text-sm font-bold text-white hover:bg-orange-600">Mulai AR Try-On</button>
-        </div>
       </div>
     </div>
   </section>
@@ -279,12 +388,14 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useCartStore } from '@/stores/cartStore';
 import { useNotificationStore } from '@/stores/notificationStore';
+import Navbar from '@/components/common/Navbar.vue';
 
 const route = useRoute();
 const router = useRouter();
 const cartStore = useCartStore();
 const notificationStore = useNotificationStore();
 
+const user = ref(null);
 const product = ref(null);
 const isLoading = ref(true);
 const error = ref('');
@@ -295,6 +406,23 @@ const isWishlisted = ref(false);
 const relatedProducts = ref([]);
 const variantOptions = ref([]);
 const selectedVariantId = ref(null);
+
+// AR Try-On State
+const videoElement = ref(null);
+const canvasElement = ref(null);
+const stream = ref(null);
+const isCameraReady = ref(false);
+const isCameraDenied = ref(false);
+const isCapturing = ref(false);
+const capturedImage = ref(null);
+const isAnalyzing = ref(false);
+const analysisResult = ref(null);
+const isInitializingAR = ref(false);
+
+// MediaPipe State
+let pose = null;
+let camera = null;
+let productImgObj = null;
 
 const fetchJson = async (url) => {
   const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
@@ -475,6 +603,341 @@ const refreshRelated = async () => {
   await loadProduct();
 };
 
+/* ── Navigation ───────────────────────────────────────── */
+const goToLogin   = () => router.push('/login');
+const goToProfile = () => console.log('Navigate to profile');
+const goToOrders  = () => router.push('/marketplace/orders');
+
+const logout = () => {
+  localStorage.removeItem('user');
+  localStorage.removeItem('token');
+  user.value = null;
+  router.push('/');
+};
+
+// AR Try-On Functions
+const openArModal = async () => {
+  showArModal.value = true;
+  await initProductImage();
+  await loadMediaPipe();
+  await startCamera();
+};
+
+const closeArModal = () => {
+  stopCamera();
+  showArModal.value = false;
+  capturedImage.value = null;
+  analysisResult.value = null;
+  isAnalyzing.value = false;
+  isInitializingAR.value = false;
+};
+
+const initProductImage = () => {
+  return new Promise((resolve) => {
+    if (!product.value?.images?.[0]) {
+      resolve();
+      return;
+    }
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      // Basic Background Removal (Light Gray/White Keying)
+      const tempCanvas = document.createElement('canvas');
+      const ctx = tempCanvas.getContext('2d');
+      tempCanvas.width = img.width;
+      tempCanvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+      
+      try {
+        const imageData = ctx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+        const data = imageData.data;
+        
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          
+          const max = Math.max(r, g, b);
+          const min = Math.min(r, g, b);
+          const diff = max - min;
+          
+          // Make light gray/white background pixels transparent
+          if (r > 190 && g > 190 && b > 190 && diff < 30) {
+            data[i + 3] = 0; // Fully transparent
+          } else if (r > 150 && g > 150 && b > 150 && diff < 20) {
+            // Smooth edge transition
+            data[i + 3] = 120;
+          }
+        }
+        ctx.putImageData(imageData, 0, 0);
+        productImgObj = tempCanvas;
+      } catch(e) {
+        // Fallback if CORS issue
+        productImgObj = img;
+      }
+      resolve();
+    };
+    img.src = product.value.images[0];
+  });
+};
+
+const loadScript = (src) => {
+  return new Promise((resolve, reject) => {
+    if (document.querySelector(`script[src="${src}"]`)) {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = src;
+    script.crossOrigin = 'anonymous';
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+};
+
+const loadMediaPipe = async () => {
+  isInitializingAR.value = true;
+  try {
+    await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js');
+    await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js');
+  } catch (err) {
+    console.error('Failed to load MediaPipe:', err);
+  }
+};
+
+const onPoseResults = (results) => {
+  const canvas = canvasElement.value;
+  if (!canvas || isCapturing.value || capturedImage.value) return;
+  
+  const ctx = canvas.getContext('2d');
+  
+  // Set canvas dimension matching video only once or when changed
+  if (canvas.width !== results.image.width) {
+    canvas.width = results.image.width;
+    canvas.height = results.image.height;
+  }
+  
+  ctx.save();
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // Mirror the canvas for selfie view
+  ctx.translate(canvas.width, 0);
+  ctx.scale(-1, 1);
+  
+  // Draw video frame
+  ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
+  
+  // Draw clothes if landmarks exist
+  if (results.poseLandmarks && productImgObj) {
+    // In mirrored view, left and right are flipped
+    // MediaPipe landmarks: 11 = user's left shoulder, 12 = user's right shoulder
+    const leftShoulder = results.poseLandmarks[11];
+    const rightShoulder = results.poseLandmarks[12];
+    
+    // Check if shoulders are visible
+    if (leftShoulder.visibility > 0.5 && rightShoulder.visibility > 0.5) {
+      const lSx = leftShoulder.x * canvas.width;
+      const lSy = leftShoulder.y * canvas.height;
+      const rSx = rightShoulder.x * canvas.width;
+      const rSy = rightShoulder.y * canvas.height;
+      
+      // Calculate width and center point between shoulders
+      const shoulderWidth = Math.hypot(lSx - rSx, lSy - rSy);
+      const centerX = (lSx + rSx) / 2;
+      const centerY = (lSy + rSy) / 2;
+      
+      // Calculate angle
+      const angle = Math.atan2(lSy - rSy, lSx - rSx);
+      
+      // Image scale factor (seberapa lebar baju dibanding bahu asli)
+      const scaleFactor = 2.4; 
+      const imgWidth = shoulderWidth * scaleFactor; 
+      
+      const aspect = productImgObj.height / productImgObj.width;
+      const imgHeight = imgWidth * aspect;
+      
+      ctx.translate(centerX, centerY);
+      
+      // We don't rotate because shoulders naturally tilt, but shirts hang straight down mostly.
+      ctx.rotate(angle * 0.5); 
+      
+      // Karena gambar baju biasanya memiliki ruang kosong/hanger di bagian atas,
+      // kita perlu menggeser gambar ke ATAS agar posisi kerah pas di leher/bahu user.
+      // Semakin besar nilai minusnya, semakin naik posisinya.
+      const drawY = -imgHeight * 0.22;
+      
+      // Draw the processed image with transparent background normally
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.drawImage(productImgObj, -imgWidth/2, drawY, imgWidth, imgHeight);
+    }
+  }
+  
+  ctx.restore();
+};
+
+const startCamera = async () => {
+  isCameraReady.value = false;
+  isCameraDenied.value = false;
+  
+  if (window.Pose && window.Camera) {
+    try {
+      if (!pose) {
+        pose = new window.Pose({
+          locateFile: (file) => {
+            return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
+          }
+        });
+        pose.setOptions({
+          modelComplexity: 1,
+          smoothLandmarks: true,
+          enableSegmentation: false,
+          smoothSegmentation: false,
+          minDetectionConfidence: 0.5,
+          minTrackingConfidence: 0.5
+        });
+        pose.onResults(onPoseResults);
+      }
+
+      const video = videoElement.value;
+      
+      camera = new window.Camera(video, {
+        onFrame: async () => {
+          if (!isCapturing.value && !capturedImage.value) {
+            await pose.send({image: video});
+          }
+        },
+        width: 640,
+        height: 480,
+        facingMode: 'user'
+      });
+      
+      await camera.start();
+      isCameraReady.value = true;
+      isInitializingAR.value = false;
+    } catch (err) {
+      console.error('Error starting AR Camera:', err);
+      isCameraDenied.value = true;
+      isInitializingAR.value = false;
+      notificationStore.error('Gagal memulai modul AR.');
+    }
+  } else {
+    // Fallback if MediaPipe failed to load
+    try {
+      const mediaStream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: 'user', width: 640, height: 480 } 
+      });
+      stream.value = mediaStream;
+      if (videoElement.value) {
+        videoElement.value.srcObject = mediaStream;
+        videoElement.value.onplaying = () => {
+          isCameraReady.value = true;
+          isInitializingAR.value = false;
+          
+          // Simple loop to draw to canvas without AR if MediaPipe fails
+          const drawFallback = () => {
+            if (isCapturing.value || capturedImage.value) return;
+            const canvas = canvasElement.value;
+            const ctx = canvas.getContext('2d');
+            canvas.width = videoElement.value.videoWidth;
+            canvas.height = videoElement.value.videoHeight;
+            ctx.save();
+            ctx.translate(canvas.width, 0);
+            ctx.scale(-1, 1);
+            ctx.drawImage(videoElement.value, 0, 0, canvas.width, canvas.height);
+            // Draw static product overlay
+            if (productImgObj) {
+              ctx.globalCompositeOperation = 'multiply';
+              ctx.drawImage(productImgObj, canvas.width/4, canvas.height/4, canvas.width/2, (canvas.width/2) * (productImgObj.height/productImgObj.width));
+            }
+            ctx.restore();
+            requestAnimationFrame(drawFallback);
+          };
+          drawFallback();
+        };
+      }
+    } catch (err) {
+      console.error('Error accessing camera:', err);
+      isCameraDenied.value = true;
+      isInitializingAR.value = false;
+      notificationStore.error('Akses kamera ditolak atau perangkat tidak mendukung.');
+    }
+  }
+};
+
+const stopCamera = () => {
+  if (camera) {
+    camera.stop();
+  }
+  if (stream.value) {
+    stream.value.getTracks().forEach(track => track.stop());
+    stream.value = null;
+  }
+};
+
+const retake = () => {
+  capturedImage.value = null;
+  analysisResult.value = null;
+  startCamera();
+};
+
+const captureAndAnalyze = async () => {
+  if (!canvasElement.value) return;
+  
+  isCapturing.value = true;
+  const canvas = canvasElement.value;
+  
+  // Get base64 image (JPEG format)
+  // The canvas already contains the mirrored video + multiply-blended clothing filter!
+  const base64Image = canvas.toDataURL('image/jpeg', 0.8);
+  capturedImage.value = base64Image;
+  
+  // Stop camera feed to freeze image
+  stopCamera();
+  isCapturing.value = false;
+  
+  // Send to AI
+  await analyzeWithAI(base64Image);
+};
+
+const analyzeWithAI = async (base64Image) => {
+  isAnalyzing.value = true;
+  analysisResult.value = null;
+  
+  try {
+    const token = localStorage.getItem('token');
+    
+    // We send base64 data to backend
+    const response = await fetch('/api/v1/ar-try-on/analyze', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        user_photo: base64Image,
+        product_name: product.value.name,
+        product_category: product.value.category,
+        product_description: product.value.description
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Terjadi kesalahan (${response.status})`);
+    }
+    
+    const resData = await response.json();
+    analysisResult.value = resData.analysis;
+    notificationStore.success('Analisis selesai!');
+  } catch (err) {
+    console.error('AR Try-On Analysis error:', err);
+    notificationStore.error('Gagal menganalisis gambar. Pastikan server AI berjalan.');
+  } finally {
+    isAnalyzing.value = false;
+  }
+};
+
 watch(
   () => route.params.id,
   async () => {
@@ -482,7 +945,11 @@ watch(
   }
 );
 
-onMounted(loadProduct);
+onMounted(() => {
+  const stored = localStorage.getItem('user');
+  if (stored) user.value = JSON.parse(stored);
+  loadProduct();
+});
 </script>
 
 <style scoped>
@@ -491,5 +958,12 @@ onMounted(loadProduct);
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 </style>

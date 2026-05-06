@@ -1,5 +1,5 @@
 <template>
-  <section id="marketplace" class="py-24 bg-white relative overflow-hidden">
+  <section id="marketplace" class="pt-10 pb-24 bg-white relative overflow-hidden">
     <!-- Background Decoration -->
     <div class="absolute top-0 right-0 w-96 h-96 bg-orange-50 rounded-full blur-[120px] opacity-40 -z-10"></div>
     <div class="absolute bottom-0 left-0 w-96 h-96 bg-orange-50 rounded-full blur-[120px] opacity-40 -z-10"></div>
