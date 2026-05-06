@@ -1,100 +1,139 @@
 <template>
-  <div class="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
-      <div>
-        <h2 class="text-xl font-black text-slate-800 tracking-tight">Data Produk</h2>
-        <p class="text-xs text-slate-400 font-medium mt-1">Pantau produk yang dipublikasikan oleh UMKM.</p>
+  <div class="space-y-5 max-w-[1400px]">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div class="flex items-center gap-3">
+        <div class="flex bg-slate-100 rounded-lg p-0.5">
+          <button v-for="t in statusTabs" :key="t.key" @click="activeTab = t.key"
+            class="px-3.5 py-2 text-[11px] font-semibold rounded-md transition-all"
+            :class="activeTab === t.key ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-400 hover:text-slate-600'">
+            {{ t.label }}
+            <span v-if="t.count" class="ml-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md"
+              :class="activeTab === t.key ? (t.key === 'pending' ? 'bg-amber-50 text-amber-600' : 'bg-slate-100 text-slate-500') : 'bg-slate-200/60 text-slate-400'">{{ t.count }}</span>
+          </button>
+        </div>
+      </div>
+      <div class="flex items-center gap-2.5 w-full md:w-auto">
+        <div class="flex-1 md:w-56 flex items-center bg-white rounded-lg px-3.5 py-2.5 gap-2 border border-slate-200/60">
+          <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+          <input v-model="searchQuery" type="text" placeholder="Cari produk..." class="bg-transparent outline-none text-[12px] font-medium text-slate-600 w-full placeholder:text-slate-400" />
+        </div>
+        <select v-model="categoryFilter" class="bg-white border border-slate-200/60 rounded-lg px-3.5 py-2.5 text-[11px] font-semibold text-slate-600 outline-none cursor-pointer">
+          <option value="">Semua Kategori</option>
+          <option v-for="c in ['Batik','Kerajinan','Aksesoris','Fashion','Dekorasi']" :key="c" :value="c">{{ c }}</option>
+        </select>
       </div>
     </div>
 
-    <div class="bg-white rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden">
-      <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-          <thead>
-            <tr class="bg-slate-50/50 border-b border-slate-100">
-              <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Produk</th>
-              <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Harga</th>
-              <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">UMKM</th>
-              <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Status</th>
-              <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400 text-right">Aksi</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-50">
-            <tr v-if="loading" class="animate-pulse">
-              <td colspan="5" class="px-6 py-10 text-center text-slate-400 text-sm font-bold">Memuat data...</td>
-            </tr>
-            <tr v-else-if="products.length === 0">
-              <td colspan="5" class="px-6 py-10 text-center text-slate-400 text-sm font-bold">Tidak ada produk.</td>
-            </tr>
-            <tr v-else v-for="item in products" :key="item.id" class="hover:bg-slate-50/50 transition-colors group">
-              <td class="px-6 py-4 flex items-center gap-4">
-                <img :src="item.image_url" class="w-12 h-12 rounded-xl object-cover bg-slate-100" />
-                <div>
-                  <p class="text-sm font-bold text-slate-800">{{ item.name }}</p>
-                  <p class="text-[10px] text-slate-400 font-medium">{{ item.category }}</p>
-                </div>
-              </td>
-              <td class="px-6 py-4">
-                <span class="text-sm font-bold text-slate-700">Rp {{ Number(item.price).toLocaleString('id-ID') }}</span>
-              </td>
-              <td class="px-6 py-4">
-                <span class="text-xs font-bold text-slate-500">{{ item.owner.name }}</span>
-              </td>
-              <td class="px-6 py-4">
-                <span v-if="item.is_published" class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black tracking-widest uppercase">Published</span>
-                <span v-else class="px-3 py-1 bg-slate-100 text-slate-500 rounded-full text-[10px] font-black tracking-widest uppercase">Draft</span>
-              </td>
-              <td class="px-6 py-4 text-right">
-                <button @click="deleteProduct(item.id)" class="w-8 h-8 rounded-lg bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-100 transition-colors inline-flex opacity-0 group-hover:opacity-100">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <!-- Products Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      <div v-for="p in filteredProducts" :key="p.id"
+        class="bg-white rounded-2xl border border-slate-200/60 overflow-hidden group hover:shadow-md transition-all duration-300">
+        <!-- Image -->
+        <div class="relative h-44 bg-slate-100 overflow-hidden">
+          <img :src="p.image" :alt="p.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          <div class="absolute top-3 left-3">
+            <span class="px-2.5 py-1 text-[9px] font-bold uppercase tracking-wide rounded-md bg-white/90 backdrop-blur-sm"
+              :class="p.status === 'pending' ? 'text-amber-600' : p.status === 'approved' ? 'text-emerald-600' : 'text-red-500'">
+              {{ p.status === 'pending' ? '⏳ Pending' : p.status === 'approved' ? '✓ Approved' : '✕ Rejected' }}
+            </span>
+          </div>
+          <div class="absolute top-3 right-3">
+            <span class="px-2 py-1 text-[9px] font-bold uppercase tracking-wide rounded-md bg-slate-800/70 text-white backdrop-blur-sm">{{ p.category }}</span>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="p-4">
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <div class="min-w-0">
+              <h4 class="text-[13px] font-bold text-slate-800 truncate">{{ p.name }}</h4>
+              <p class="text-[11px] text-slate-400 font-medium">oleh {{ p.seller }}</p>
+            </div>
+            <p class="text-[13px] font-bold text-orange-500 whitespace-nowrap">Rp {{ p.price.toLocaleString('id-ID') }}</p>
+          </div>
+
+          <p class="text-[11px] text-slate-500 leading-relaxed line-clamp-2 mb-3">{{ p.description }}</p>
+
+          <div class="flex items-center justify-between pt-3 border-t border-slate-100">
+            <span class="text-[10px] text-slate-400 font-medium">{{ p.date }}</span>
+            <div class="flex items-center gap-1.5">
+              <template v-if="p.status === 'pending'">
+                <button @click="approveProduct(p.id)" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white text-[10px] font-bold rounded-md transition-colors">Approve</button>
+                <button @click="rejectProduct(p.id)" class="px-3 py-1.5 bg-white hover:bg-red-50 text-red-500 text-[10px] font-bold rounded-md transition-colors border border-slate-200 hover:border-red-200">Reject</button>
+              </template>
+              <template v-else>
+                <button class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-500 text-[10px] font-bold rounded-md transition-colors">Detail</button>
+              </template>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+
+    <!-- Empty State -->
+    <div v-if="filteredProducts.length === 0" class="bg-white rounded-2xl border border-slate-200/60 p-12 text-center">
+      <p class="text-slate-400 text-[13px]">Tidak ada produk ditemukan.</p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+
+const activeTab = ref('all');
+const searchQuery = ref('');
+const categoryFilter = ref('');
+
+const statusTabs = ref([
+  { key: 'all', label: 'Semua', count: 0 },
+  { key: 'pending', label: 'Draft', count: 0 },
+  { key: 'approved', label: 'Published', count: 0 },
+]);
 
 const products = ref([]);
-const loading = ref(true);
 
 const fetchProducts = async () => {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token') || '';
     const res = await fetch('/api/v1/admin/products', {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     if (res.ok) {
       const data = await res.json();
-      products.value = data.data;
-    }
-  } finally {
-    loading.value = false;
-  }
-};
-
-const deleteProduct = async (id) => {
-  if (!confirm('Hapus produk ini? Tindakan ini tidak dapat dibatalkan.')) return;
-  try {
-    const token = localStorage.getItem('token');
-    const res = await fetch(`/api/v1/admin/products/${id}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    if (res.ok) {
-      fetchProducts();
+      products.value = data.data.map(p => ({
+        id: p.id,
+        name: p.name,
+        seller: p.owner?.name || 'Unknown',
+        category: p.category || 'General',
+        price: p.price,
+        status: p.is_published ? 'approved' : 'pending',
+        date: new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(p.created_at)),
+        description: p.description,
+        image: p.image_url || 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&fit=crop'
+      }));
+      
+      statusTabs.value[0].count = products.value.length;
+      statusTabs.value[1].count = products.value.filter(p => p.status === 'pending').length;
+      statusTabs.value[2].count = products.value.filter(p => p.status === 'approved').length;
     }
   } catch (e) {
-    console.error(e);
+    console.error('Failed to fetch products:', e);
   }
 };
 
 onMounted(() => {
   fetchProducts();
 });
+
+const filteredProducts = computed(() => {
+  let r = products.value;
+  if (activeTab.value !== 'all') r = r.filter(p => p.status === activeTab.value);
+  if (searchQuery.value) r = r.filter(p => p.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
+  if (categoryFilter.value) r = r.filter(p => p.category === categoryFilter.value);
+  return r;
+});
+
+const approveProduct = (id) => { const p = products.value.find(p => p.id === id); if (p) p.status = 'approved'; };
+const rejectProduct = (id) => { const p = products.value.find(p => p.id === id); if (p) p.status = 'rejected'; };
 </script>

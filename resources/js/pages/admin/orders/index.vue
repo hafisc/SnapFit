@@ -1,117 +1,176 @@
 <template>
-  <div class="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
-      <div>
-        <h2 class="text-xl font-black text-slate-800 tracking-tight">Data Transaksi</h2>
-        <p class="text-xs text-slate-400 font-medium mt-1">Pantau seluruh riwayat transaksi di platform.</p>
+  <div class="space-y-5 max-w-[1400px]">
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div v-for="s in orderStats" :key="s.label" class="bg-white rounded-2xl border border-slate-200/60 p-5">
+        <p class="text-[11px] text-slate-400 font-medium mb-2">{{ s.label }}</p>
+        <p class="text-[20px] font-bold text-slate-800 leading-none">{{ s.value }}</p>
+        <p class="text-[10px] font-semibold mt-1" :class="s.changeClass">{{ s.change }}</p>
       </div>
     </div>
 
-    <div class="bg-white rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden">
-      <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-          <thead>
-            <tr class="bg-slate-50/50 border-b border-slate-100">
-              <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Order ID</th>
-              <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Pembeli</th>
-              <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Total Harga</th>
-              <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400">Status</th>
-              <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-400 text-right">Tanggal</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-50">
-            <tr v-if="loading" class="animate-pulse">
-              <td colspan="5" class="px-6 py-10 text-center text-slate-400 text-sm font-bold">Memuat data...</td>
-            </tr>
-            <tr v-else-if="orders.length === 0">
-              <td colspan="5" class="px-6 py-10 text-center text-slate-400 text-sm font-bold">Tidak ada transaksi.</td>
-            </tr>
-            <tr v-else v-for="order in orders" :key="order.id" class="hover:bg-slate-50/50 transition-colors">
-              <td class="px-6 py-4">
-                <span class="text-xs font-bold text-slate-800">#{{ order.id.substring(0,8).toUpperCase() }}</span>
-              </td>
-              <td class="px-6 py-4">
-                <span class="text-xs font-bold text-slate-600">{{ order.buyer.name }}</span>
-              </td>
-              <td class="px-6 py-4">
-                <span class="text-sm font-bold text-indigo-600">Rp {{ Number(order.total_amount).toLocaleString('id-ID') }}</span>
-              </td>
-              <td class="px-6 py-4">
-                <select v-model="order.status" @change="updateStatus(order.id, order.status)" class="px-3 py-1 rounded-full text-[10px] font-black tracking-widest uppercase cursor-pointer border-none outline-none focus:ring-2 focus:ring-indigo-100" :class="{
-                  'bg-orange-50 text-orange-600': order.status === 'pending',
-                  'bg-blue-50 text-blue-600': order.status === 'paid',
-                  'bg-purple-50 text-purple-600': order.status === 'shipped',
-                  'bg-emerald-50 text-emerald-600': order.status === 'completed',
-                  'bg-red-50 text-red-600': order.status === 'cancelled'
-                }">
-                  <option value="pending">PENDING</option>
-                  <option value="paid">PAID</option>
-                  <option value="shipped">SHIPPED</option>
-                  <option value="completed">COMPLETED</option>
-                  <option value="cancelled">CANCELLED</option>
-                </select>
-              </td>
-              <td class="px-6 py-4 text-right">
-                <span class="text-[10px] font-bold text-slate-400 uppercase">{{ formatDate(order.created_at) }}</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <!-- Filters -->
+    <div class="flex flex-col md:flex-row items-start md:items-center gap-3">
+      <div class="flex bg-slate-100 rounded-lg p-0.5">
+        <button v-for="t in statusTabs" :key="t.key" @click="statusFilter = t.key"
+          class="px-3 py-2 text-[11px] font-semibold rounded-md transition-all"
+          :class="statusFilter === t.key ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-400 hover:text-slate-600'">
+          {{ t.label }}
+        </button>
+      </div>
+      <div class="flex-1"></div>
+      <div class="flex items-center bg-white rounded-lg px-3.5 py-2.5 gap-2 border border-slate-200/60">
+        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+        <input v-model="search" type="text" placeholder="Cari order..." class="bg-transparent outline-none text-[12px] font-medium text-slate-600 w-44 placeholder:text-slate-400" />
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="bg-white rounded-2xl border border-slate-200/60 overflow-hidden">
+      <table class="w-full text-left">
+        <thead>
+          <tr class="border-b border-slate-100">
+            <th class="px-5 py-3.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">Order</th>
+            <th class="px-5 py-3.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">Pembeli</th>
+            <th class="px-5 py-3.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 hidden md:table-cell">Produk</th>
+            <th class="px-5 py-3.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">Total</th>
+            <th class="px-5 py-3.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">Status</th>
+            <th class="px-5 py-3.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 text-right hidden lg:table-cell">Tanggal</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-50">
+          <tr v-for="o in filteredOrders" :key="o.id" class="hover:bg-slate-50/60 transition-colors group">
+            <td class="px-5 py-3.5">
+              <span class="text-[12px] font-bold text-slate-800 font-mono">{{ o.orderId }}</span>
+            </td>
+            <td class="px-5 py-3.5">
+              <div class="flex items-center gap-2.5">
+                <div class="w-7 h-7 rounded-md bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-500 flex-shrink-0">{{ o.buyer.charAt(0) }}</div>
+                <span class="text-[12px] font-medium text-slate-700 truncate">{{ o.buyer }}</span>
+              </div>
+            </td>
+            <td class="px-5 py-3.5 hidden md:table-cell">
+              <span class="text-[11px] text-slate-500 truncate block max-w-[200px]">{{ o.product }}</span>
+            </td>
+            <td class="px-5 py-3.5">
+              <span class="text-[12px] font-bold text-slate-800">Rp {{ o.total.toLocaleString('id-ID') }}</span>
+            </td>
+            <td class="px-5 py-3.5">
+              <select v-model="o.status" @change="updateStatus(o.id, o.status)" class="text-[10px] font-bold uppercase tracking-wide rounded-md px-2.5 py-1 border-none outline-none cursor-pointer" :class="statusClass(o.status)">
+                <option value="pending">Pending</option>
+                <option value="paid">Paid</option>
+                <option value="shipped">Shipped</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </td>
+            <td class="px-5 py-3.5 text-right hidden lg:table-cell">
+              <span class="text-[11px] text-slate-400 font-medium">{{ o.date }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="px-5 py-3.5 border-t border-slate-100 flex items-center justify-between">
+        <p class="text-[11px] text-slate-400 font-medium">{{ filteredOrders.length }} pesanan</p>
+        <div class="flex items-center gap-1">
+          <button class="w-8 h-8 rounded-md bg-slate-800 text-white text-[11px] font-bold">1</button>
+          <button class="w-8 h-8 rounded-md text-slate-400 hover:bg-slate-100 text-[11px] font-bold">2</button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed } from 'vue';
+
+const search = ref('');
+const statusFilter = ref('all');
+const statusTabs = [
+  { key: 'all', label: 'Semua' },
+  { key: 'pending', label: 'Pending' },
+  { key: 'paid', label: 'Paid' },
+  { key: 'shipped', label: 'Shipped' },
+  { key: 'completed', label: 'Completed' },
+];
+
+const orderStats = ref([
+  { label: 'Total Pesanan', value: '0', change: '', changeClass: 'text-emerald-500' },
+  { label: 'Pending', value: '0', change: '', changeClass: 'text-amber-500' },
+  { label: 'Revenue', value: 'Rp 0', change: '', changeClass: 'text-emerald-500' },
+]);
 
 const orders = ref([]);
-const loading = ref(true);
 
 const fetchOrders = async () => {
   try {
-    const token = localStorage.getItem('token');
-    const res = await fetch('/api/v1/admin/orders', {
+    const token = localStorage.getItem('token') || '';
+    const url = new URL(window.location.origin + '/api/v1/admin/orders');
+    if (statusFilter.value !== 'all') url.searchParams.append('status', statusFilter.value);
+    
+    const res = await fetch(url, {
       headers: { 'Authorization': `Bearer ${token}` }
     });
+    
     if (res.ok) {
       const data = await res.json();
-      orders.value = data.data;
+      orders.value = data.data.map(o => ({
+        id: o.id,
+        orderId: `#SF-${1000 + o.id}`,
+        buyer: o.buyer?.name || 'Unknown',
+        product: o.items?.[0]?.product?.name ? `${o.items[0].product.name} ${o.items.length > 1 ? `(+${o.items.length - 1} lainnya)` : ''}` : 'Produk Custom',
+        total: o.total_amount,
+        status: o.status,
+        date: new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(o.created_at))
+      }));
     }
-  } finally {
-    loading.value = false;
-  }
-};
-
-const updateStatus = async (id, newStatus) => {
-  try {
-    const token = localStorage.getItem('token');
-    const res = await fetch(`/api/v1/admin/orders/${id}/status`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({ status: newStatus })
-    });
     
-    if (!res.ok) {
-      alert('Gagal mengupdate status transaksi.');
-      fetchOrders(); // Revert back
+    // Also fetch stats just for orders if possible, or use stats API
+    const statRes = await fetch('/api/v1/admin/stats', { headers: { 'Authorization': `Bearer ${token}` }});
+    if (statRes.ok) {
+        const sdata = await statRes.json();
+        orderStats.value[0].value = sdata.orders.total.toString();
+        orderStats.value[1].value = sdata.orders.pending.toString();
+        const rev = Number(sdata.orders.revenue || 0);
+        orderStats.value[2].value = 'Rp ' + (rev > 1000000 ? (rev/1000000).toFixed(1) + 'M' : rev.toLocaleString('id-ID'));
     }
   } catch (e) {
-    alert('Terjadi kesalahan jaringan.');
-    fetchOrders(); // Revert back
+    console.error('Failed to fetch orders:', e);
   }
-};
-
-const formatDate = (dateString) => {
-  if (!dateString) return '-';
-  return new Intl.DateTimeFormat('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(dateString));
 };
 
 onMounted(() => {
   fetchOrders();
 });
+
+const filteredOrders = computed(() => {
+  let r = orders.value;
+  if (search.value) r = r.filter(o => o.buyer.toLowerCase().includes(search.value.toLowerCase()) || o.orderId.toLowerCase().includes(search.value.toLowerCase()));
+  return r;
+});
+
+watch(statusFilter, () => {
+  fetchOrders();
+});
+
+const statusClass = (s) => ({
+  pending: 'bg-amber-50 text-amber-600',
+  paid: 'bg-blue-50 text-blue-600',
+  shipped: 'bg-violet-50 text-violet-600',
+  completed: 'bg-emerald-50 text-emerald-600',
+  cancelled: 'bg-red-50 text-red-500',
+}[s] || 'bg-slate-100 text-slate-500');
+
+const updateStatus = async (id, status) => {
+    try {
+        const token = localStorage.getItem('token') || '';
+        await fetch(`/api/v1/admin/orders/${id}/status`, {
+            method: 'PATCH',
+            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status })
+        });
+        fetchOrders();
+    } catch(e) {}
+};
 </script>

@@ -1,12 +1,12 @@
 <template>
   <div class="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-[2rem] p-8 text-white relative overflow-hidden shadow-xl shadow-indigo-500/20 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-8 text-white relative overflow-hidden shadow-xl shadow-indigo-500/20 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
       <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4yKSIvPjwvc3ZnPg==')] opacity-30"></div>
       <div class="relative z-10">
-        <h2 class="text-3xl font-black tracking-tighter mb-2">Co-Create Rooms 👥</h2>
+        <h2 class="text-3xl font-bold tracking-tight mb-2">Co-Create Rooms 👥</h2>
         <p class="text-indigo-100 text-sm max-w-lg font-medium">Tempat kolaborasi real-time antara UMKM dan Desainer. Buat ruang diskusi untuk merancang produk unggulan bersama ahlinya.</p>
       </div>
-      <button @click="showCreateModal = true" class="relative z-10 bg-white text-indigo-600 hover:bg-indigo-50 px-6 py-4 rounded-xl text-xs font-black tracking-widest uppercase transition-all shadow-lg flex items-center gap-2 flex-shrink-0">
+      <button @click="showCreateModal = true" class="relative z-10 bg-white text-indigo-600 hover:bg-indigo-50 px-6 py-4 rounded-xl text-xs font-bold tracking-wider uppercase transition-all shadow-lg flex items-center gap-2 flex-shrink-0">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
         Buat Ruangan
       </button>
@@ -17,20 +17,20 @@
       <div v-for="i in 3" :key="i" class="bg-white rounded-3xl p-6 border border-slate-100 animate-pulse h-48"></div>
     </div>
     
-    <div v-else-if="rooms.length === 0" class="bg-white rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] py-20 text-center">
+    <div v-else-if="rooms.length === 0" class="bg-white rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] py-20 text-center">
       <div class="w-20 h-20 bg-indigo-50 text-indigo-400 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">🪑</div>
-      <h3 class="text-lg font-black text-slate-800 mb-1">Belum Ada Ruang Aktif</h3>
+      <h3 class="text-lg font-bold text-slate-800 mb-1">Belum Ada Ruang Aktif</h3>
       <p class="text-slate-400 text-sm font-medium mb-6">Mulai kolaborasi pertamamu dengan membuat ruangan baru.</p>
     </div>
 
     <div v-else class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-      <div v-for="room in rooms" :key="room.id" class="bg-white rounded-[2rem] border border-slate-100 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all flex flex-col justify-between group">
+      <div v-for="room in rooms" :key="room.id" class="bg-white rounded-2xl border border-slate-100 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all flex flex-col justify-between group">
         <div>
           <div class="flex items-start justify-between mb-4">
             <div class="w-12 h-12 bg-indigo-50 text-indigo-500 rounded-2xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
               {{ room.name.charAt(0).toUpperCase() }}
             </div>
-            <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-black uppercase tracking-widest rounded-full">Aktif</span>
+            <span class="px-3 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase tracking-wider rounded-full">Aktif</span>
           </div>
           <h3 class="font-bold text-slate-800 text-lg mb-2 truncate">{{ room.name }}</h3>
           <p class="text-xs text-slate-500 line-clamp-2 mb-4">{{ room.description || 'Tidak ada deskripsi.' }}</p>
@@ -45,7 +45,7 @@
               +{{ (room.participants_count || 1) - 3 }}
             </div>
           </div>
-          <button @click="joinRoom(room.id)" class="text-xs font-black uppercase tracking-widest text-indigo-600 hover:text-indigo-800 transition-colors">
+          <button @click="joinRoom(room.id)" class="text-xs font-bold uppercase tracking-wider text-indigo-600 hover:text-indigo-800 transition-colors">
             Gabung &rarr;
           </button>
         </div>
@@ -55,20 +55,20 @@
     <!-- Create Room Modal -->
     <div v-if="showCreateModal" class="fixed inset-0 z-50 flex items-center justify-center px-4">
       <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" @click="showCreateModal = false"></div>
-      <div class="bg-white rounded-[2rem] shadow-2xl p-8 max-w-md w-full relative z-10 animate-in zoom-in-95 duration-200">
-        <h3 class="text-xl font-black text-slate-800 mb-6">Buat Ruang Kolaborasi</h3>
+      <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full relative z-10 animate-in zoom-in-95 duration-200">
+        <h3 class="text-xl font-bold text-slate-800 mb-6">Buat Ruang Kolaborasi</h3>
         <form @submit.prevent="createRoom" class="space-y-4">
           <div>
-            <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Nama Ruangan</label>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2 ml-1">Nama Ruangan</label>
             <input v-model="form.name" type="text" required class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-slate-800 outline-none focus:ring-2 focus:ring-indigo-200 transition-all" placeholder="Contoh: Desain Batik Summer 2026" />
           </div>
           <div>
-            <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Deskripsi & Tujuan</label>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2 ml-1">Deskripsi & Tujuan</label>
             <textarea v-model="form.description" rows="3" required class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-medium text-slate-800 outline-none focus:ring-2 focus:ring-indigo-200 transition-all resize-none" placeholder="Mencari desainer untuk membuat pola baru..."></textarea>
           </div>
           <div class="flex gap-4 pt-4">
-            <button type="button" @click="showCreateModal = false" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 py-4 rounded-xl text-xs font-black uppercase tracking-widest transition-colors">Batal</button>
-            <button type="submit" :disabled="isCreating" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-xl text-xs font-black uppercase tracking-widest transition-colors disabled:opacity-50">
+            <button type="button" @click="showCreateModal = false" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 py-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors">Batal</button>
+            <button type="submit" :disabled="isCreating" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-colors disabled:opacity-50">
               {{ isCreating ? 'Membuat...' : 'Buat Sekarang' }}
             </button>
           </div>

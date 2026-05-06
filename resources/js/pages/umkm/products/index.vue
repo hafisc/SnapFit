@@ -1,13 +1,13 @@
 <template>
   <div class="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
       <div>
-        <h2 class="text-xl font-black text-slate-800 tracking-tight">Produk Saya</h2>
+        <h2 class="text-xl font-bold text-slate-800 tracking-tight">Produk Saya</h2>
         <p class="text-xs text-slate-400 font-medium mt-1">Kelola daftar produk yang tampil di Marketplace.</p>
       </div>
       
       <div class="flex items-center gap-3">
-        <router-link to="/umkm/products/create" class="bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-xl text-xs font-black tracking-widest uppercase transition-all shadow-lg shadow-orange-500/20 flex items-center gap-2">
+        <router-link to="/umkm/products/create" class="bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-xl text-xs font-bold tracking-wider uppercase transition-all shadow-sm flex items-center gap-2">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
           Tambah Produk
         </router-link>
@@ -23,17 +23,17 @@
       </div>
     </div>
     
-    <div v-else-if="products.length === 0" class="bg-white rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] py-20 text-center">
+    <div v-else-if="products.length === 0" class="bg-white rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] py-20 text-center">
       <div class="w-20 h-20 bg-orange-50 text-orange-400 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">📦</div>
-      <h3 class="text-lg font-black text-slate-800 mb-1">Belum Ada Produk</h3>
+      <h3 class="text-lg font-bold text-slate-800 mb-1">Belum Ada Produk</h3>
       <p class="text-slate-400 text-sm font-medium mb-6">Mulai tambahkan produk pertamamu ke dalam sistem.</p>
-      <router-link to="/umkm/products/create" class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl text-xs font-black tracking-widest uppercase transition-all shadow-lg shadow-orange-500/20 inline-block">
+      <router-link to="/umkm/products/create" class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl text-xs font-bold tracking-wider uppercase transition-all shadow-sm inline-block">
         Tambah Produk
       </router-link>
     </div>
 
     <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      <div v-for="product in products" :key="product.id" class="bg-white rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden group hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all">
+      <div v-for="product in products" :key="product.id" class="bg-white rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden group hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all">
         <div class="relative h-56 w-full bg-slate-100 overflow-hidden">
           <img :src="product.image_url" :alt="product.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
           
@@ -51,16 +51,16 @@
           </div>
           
           <div class="absolute bottom-4 left-4">
-            <span class="px-3 py-1 bg-white/90 backdrop-blur-sm text-[10px] font-black tracking-widest uppercase rounded-full shadow-sm" :class="product.is_published ? 'text-emerald-600' : 'text-slate-500'">
+            <span class="px-3 py-1 bg-white/90 backdrop-blur-sm text-[10px] font-bold tracking-wider uppercase rounded-full shadow-sm" :class="product.is_published ? 'text-emerald-600' : 'text-slate-500'">
               {{ product.is_published ? 'Published' : 'Draft' }}
             </span>
           </div>
         </div>
         
         <div class="p-5">
-          <p class="text-[10px] text-orange-500 font-black uppercase tracking-widest mb-1">{{ product.category }}</p>
+          <p class="text-[10px] text-orange-500 font-bold uppercase tracking-wider mb-1">{{ product.category }}</p>
           <h3 class="font-bold text-slate-800 text-base mb-2 truncate">{{ product.name }}</h3>
-          <p class="text-lg font-black text-slate-900 tracking-tight">Rp {{ Number(product.price).toLocaleString('id-ID') }}</p>
+          <p class="text-lg font-bold text-slate-900 tracking-tight">Rp {{ Number(product.price).toLocaleString('id-ID') }}</p>
         </div>
       </div>
     </div>

@@ -77,6 +77,16 @@ const routes = [
         name: 'umkm.orders',
         component: () => import('@/pages/umkm/orders/index.vue'),
       },
+      {
+        path: 'analytics',
+        name: 'umkm.analytics',
+        component: () => import('@/pages/umkm/analytics/index.vue'),
+      },
+      {
+        path: 'settings',
+        name: 'umkm.settings',
+        component: () => import('@/pages/umkm/settings/index.vue'),
+      },
     ],
   },
 
@@ -92,9 +102,29 @@ const routes = [
         component: () => import('@/pages/designer/dashboard/index.vue'),
       },
       {
+        path: 'cocreate',
+        name: 'designer.cocreate.index',
+        component: () => import('@/pages/designer/cocreate/index.vue'),
+      },
+      {
         path: 'cocreate/:id',
-        name: 'designer.cocreate',
+        name: 'designer.cocreate.detail',
         component: () => import('@/pages/designer/cocreate/[id].vue'),
+      },
+      {
+        path: 'portfolio',
+        name: 'designer.portfolio',
+        component: () => import('@/pages/designer/portfolio/index.vue'),
+      },
+      {
+        path: 'history',
+        name: 'designer.history',
+        component: () => import('@/pages/designer/history/index.vue'),
+      },
+      {
+        path: 'settings',
+        name: 'designer.settings',
+        component: () => import('@/pages/designer/settings/index.vue'),
       },
     ],
   },
@@ -144,6 +174,11 @@ const routes = [
         path: 'analytics',
         name: 'admin.analytics',
         component: () => import('@/pages/admin/analytics/index.vue'),
+      },
+      {
+        path: 'roles',
+        name: 'admin.roles',
+        component: () => import('@/pages/admin/roles/index.vue'),
       },
     ],
   },
