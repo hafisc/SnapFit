@@ -1,5 +1,5 @@
 <template>
-  <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-2xl border-b border-gray-100/50 shadow-sm">
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-2xl border-b border-gray-100/50 shadow-sm animate-slide-down">
     <nav class="max-w-[1600px] mx-auto px-6 py-2.5 flex justify-between items-center">
       <!-- Logo Section -->
       <a href="/" class="flex items-center gap-2.5 group cursor-pointer">
@@ -42,15 +42,6 @@
           </svg>
         </div>
 
-        <!-- Cart Button -->
-        <button class="relative p-2.5 rounded-xl bg-gray-50 border border-gray-100 text-gray-600 hover:text-orange-600 hover:bg-orange-50 hover:border-orange-200 transition-colors flex items-center justify-center group shadow-sm mr-1">
-          <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <circle cx="9" cy="21" r="1"></circle>
-            <circle cx="20" cy="21" r="1"></circle>
-            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-          </svg>
-          <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-        </button>
 
         <!-- Mobile Menu Button -->
         <button @click="toggleMobileMenu" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
@@ -80,21 +71,17 @@
             </button>
 
             <!-- User Info -->
-            <div class="text-right hidden sm:block">
+            <!-- <div class="text-right hidden sm:block">
               <p class="text-[11px] font-black text-gray-900 leading-none">{{ user.name }}</p>
-              <div class="flex items-center justify-end gap-1 mt-0.5">
-                <span class="w-1 h-1 bg-green-500 rounded-full animate-pulse"></span>
-                <p class="text-[8px] text-gray-500 font-bold uppercase tracking-wider">Online</p>
-              </div>
-            </div>
+             
+            </div> -->
 
             <!-- Avatar Button -->
             <button
               @click="toggleUserMenu"
-              class="relative w-9 h-9 rounded-xl bg-orange-600 flex items-center justify-center text-white font-black shadow-md shadow-orange-200/50 hover:shadow-lg hover:shadow-orange-300/50 hover:scale-105 transition-all duration-300 ring-2 ring-white"
+              class="relative w-10 h-10 rounded-xl bg-white overflow-hidden flex items-center justify-center shadow-md shadow-orange-200/50 hover:shadow-lg hover:shadow-orange-300/50 hover:scale-105 transition-all duration-300 ring-2 ring-white"
             >
-              <span class="text-xs">{{ user.name.charAt(0).toUpperCase() }}</span>
-              <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+              <img :src="`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}&scale=130&backgroundColor=ffdfbf,c0aede,d1d4f9`" alt="Avatar" class="w-full h-full object-cover" />
             </button>
 
             <!-- Dropdown Menu -->
@@ -110,8 +97,8 @@
                 <!-- User Header -->
                 <div class="bg-orange-50 px-6 py-5 border-b border-orange-100">
                   <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-orange-600 flex items-center justify-center text-white font-black text-lg shadow-lg">
-                      {{ user.name.charAt(0).toUpperCase() }}
+                    <div class="w-14 h-14 rounded-2xl overflow-hidden bg-white flex items-center justify-center shadow-lg border border-orange-200">
+                      <img :src="`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}&scale=130&backgroundColor=ffdfbf,c0aede,d1d4f9`" alt="Avatar" class="w-full h-full object-cover" />
                     </div>
                     <div>
                       <p class="text-sm font-black text-gray-900">{{ user.name }}</p>
@@ -260,5 +247,18 @@ onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
 
 .nav-link:hover::after {
   width: 60%;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-down {
+  animation: slideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 </style>

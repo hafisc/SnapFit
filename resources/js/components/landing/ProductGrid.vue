@@ -6,7 +6,7 @@
 
     <div class="max-w-[1600px] mx-auto px-6">
       <!-- PROMO CAROUSEL -->
-      <div class="mb-16 px-2 md:px-4">
+      <div class="mb-16 px-2 md:px-4" data-aos="fade-up">
         <div class="overflow-hidden rounded-3xl relative">
 
           <!-- Slides -->
@@ -68,7 +68,7 @@
       </div> -->
 
       <!-- Category Filter with Modern Design -->
-      <div class="mb-12 flex justify-center">
+      <!-- <div class="mb-12 flex justify-center" data-aos="zoom-in" data-aos-delay="100">
         <div class="inline-flex flex-wrap gap-3 bg-white p-3 rounded-3xl border border-gray-200 shadow-lg">
           <button v-for="cat in categories" :key="cat" @click="activeCategory = cat" :class="[
             activeCategory === cat
@@ -82,7 +82,7 @@
             </span>
           </button>
         </div>
-      </div>
+      </div> -->
 
       <!-- Loading State with Better Skeleton -->
       <div v-if="isLoading" class="grid grid-cols-2 lg:grid-cols-5 gap-6">
@@ -101,7 +101,7 @@
 
       <!-- Products Grid -->
       <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-5">
-        <div v-for="product in filteredProducts" :key="product.id" @click="viewProductDetail(product)" class="bg-white border border-gray-200 shadow-sm hover:border-orange-400 hover:shadow-xl transition-all duration-300 rounded-2xl group overflow-hidden flex flex-col h-full cursor-pointer hover:-translate-y-1 relative">
+        <div v-for="(product, index) in filteredProducts" :key="product.id" @click="viewProductDetail(product)" class="bg-white border border-gray-200 shadow-sm hover:border-orange-400 hover:shadow-xl transition-all duration-300 rounded-2xl group overflow-hidden flex flex-col h-full cursor-pointer hover:-translate-y-1 relative" data-aos="fade-up" :data-aos-delay="(index % 6) * 50">
           
           <!-- Image Section -->
           <div class="relative w-full aspect-square bg-gray-100 isolate overflow-hidden border-b border-gray-100">
@@ -156,7 +156,6 @@
               <p class="text-[10px] text-gray-500 font-medium ml-1 whitespace-nowrap">
                 {{ (product.id * 15) % 100 + 1 }}RB+ terjual
               </p>
-            </div>
             </div>
           </div>
         </div>
