@@ -1,12 +1,12 @@
 <template>
   <div class="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
     <!-- Header -->
-    <div class="bg-gradient-to-r from-orange-500 to-amber-500 rounded-[2rem] p-8 text-white relative overflow-hidden shadow-xl shadow-orange-500/20">
-      <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4yKSIvPjwvc3ZnPg==')] opacity-30"></div>
-      <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 text-white relative overflow-hidden">
+      <div class="absolute -right-6 -top-6 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
+      <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
         <div>
-          <h2 class="text-3xl font-black tracking-tighter mb-2">AI Product Studio ✨</h2>
-          <p class="text-orange-100 text-sm max-w-lg font-medium">Ubah foto produk biasamu menjadi luar biasa. Cukup unggah foto mentah, masukkan gaya yang kamu inginkan, dan biarkan AI bekerja.</p>
+          <h2 class="text-xl font-bold tracking-tight mb-1">AI Product Studio ✨</h2>
+          <p class="text-white/80 text-[13px] max-w-lg font-medium">Ubah foto produk biasamu menjadi luar biasa. Cukup unggah foto mentah, masukkan gaya, dan biarkan AI bekerja.</p>
         </div>
       </div>
     </div>
@@ -14,11 +14,11 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <!-- Workspace Form -->
       <div class="lg:col-span-1 space-y-6">
-        <form @submit.prevent="generateAI" class="bg-white rounded-[2rem] border border-slate-100 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.02)] space-y-6">
+        <form @submit.prevent="generateAI" class="bg-white rounded-2xl border border-slate-100 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.02)] space-y-6">
           
           <!-- Image Upload Area -->
           <div>
-            <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Foto Asli</label>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2 ml-1">Foto Asli</label>
             <div class="border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center hover:border-orange-400 hover:bg-orange-50 transition-colors cursor-pointer" @click="$refs.fileInput.click()">
               <input type="file" ref="fileInput" @change="handleFileChange" accept="image/*" class="hidden" />
               <div v-if="previewUrl" class="relative">
@@ -32,19 +32,19 @@
                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                 </div>
                 <p class="text-sm font-bold text-slate-600">Klik untuk unggah foto</p>
-                <p class="text-[10px] text-slate-400 uppercase tracking-widest">JPG, PNG, WEBP (Max 5MB)</p>
+                <p class="text-[10px] text-slate-400 uppercase tracking-wider">JPG, PNG, WEBP (Max 5MB)</p>
               </div>
             </div>
             
             <div class="mt-4">
-               <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Atau Gunakan URL Gambar Asli</label>
+               <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2 ml-1">Atau Gunakan URL Gambar Asli</label>
                <input v-model="form.original_image_url" type="url" placeholder="https://contoh.com/foto.jpg" class="w-full bg-slate-50 border-none rounded-xl px-4 py-3 text-sm font-bold text-slate-800 outline-none focus:ring-2 focus:ring-orange-200 transition-all" />
             </div>
           </div>
 
           <!-- Prompt Input -->
           <div>
-            <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Prompt Gaya Visual</label>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2 ml-1">Prompt Gaya Visual</label>
             <textarea v-model="form.prompt" rows="3" placeholder="Contoh: Jadikan tas ini berada di atas batu marmer dengan latar belakang pantai sunset yang estetik..." class="w-full bg-slate-50 border-none rounded-xl px-4 py-3 text-sm font-medium text-slate-800 outline-none focus:ring-2 focus:ring-orange-200 transition-all resize-none"></textarea>
             
             <!-- Quick Prompts -->
@@ -56,7 +56,7 @@
           </div>
 
           <!-- Submit Button -->
-          <button type="submit" :disabled="isGenerating || (!previewUrl && !form.original_image_url)" class="w-full bg-slate-900 hover:bg-black text-white px-6 py-4 rounded-xl text-xs font-black tracking-widest uppercase transition-all shadow-lg shadow-slate-900/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+          <button type="submit" :disabled="isGenerating || (!previewUrl && !form.original_image_url)" class="w-full bg-slate-900 hover:bg-black text-white px-6 py-4 rounded-xl text-xs font-bold tracking-wider uppercase transition-all shadow-lg shadow-slate-900/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
             <svg v-if="isGenerating" class="animate-spin w-4 h-4 text-orange-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
             {{ isGenerating ? 'AI Sedang Merender...' : 'Mulai Render AI' }}
           </button>
@@ -65,9 +65,9 @@
 
       <!-- Generated Results Gallery -->
       <div class="lg:col-span-2">
-        <div class="bg-white rounded-[2rem] border border-slate-100 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.02)] min-h-full">
+        <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-[0_8px_30px_rgb(0,0,0,0.02)] min-h-full">
           <div class="flex items-center justify-between mb-6">
-            <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest">Riwayat Generasi AI</h3>
+            <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider">Riwayat Generasi AI</h3>
             <button @click="fetchHistory" class="text-slate-400 hover:text-orange-500 transition-colors">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
             </button>
@@ -92,7 +92,7 @@
               <div class="flex items-start gap-4 mb-4">
                 <img :src="item.original_image_url" class="w-16 h-16 rounded-xl object-cover bg-slate-100 border border-slate-200" />
                 <div>
-                  <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">{{ formatDate(item.created_at) }}</p>
+                  <p class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">{{ formatDate(item.created_at) }}</p>
                   <p class="text-sm font-bold text-slate-700 italic mt-1 line-clamp-2">"{{ item.prompt }}"</p>
                 </div>
               </div>
@@ -101,14 +101,14 @@
                 <div v-for="(img, idx) in item.generated_images" :key="idx" class="relative aspect-square rounded-2xl overflow-hidden group/img cursor-pointer">
                   <img :src="img" class="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-700" />
                   <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity flex items-end p-4">
-                    <button class="bg-white text-slate-900 text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg w-full hover:bg-orange-500 hover:text-white transition-colors">Gunakan Ini</button>
+                    <button class="bg-white text-slate-900 text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg w-full hover:bg-orange-500 hover:text-white transition-colors">Gunakan Ini</button>
                   </div>
                 </div>
               </div>
             </div>
             
             <div v-if="pagination.last_page > 1" class="flex justify-center pt-4">
-              <button v-if="pagination.current_page < pagination.last_page" @click="fetchHistory(pagination.current_page + 1)" class="text-xs font-bold text-orange-600 hover:text-orange-700 uppercase tracking-widest">
+              <button v-if="pagination.current_page < pagination.last_page" @click="fetchHistory(pagination.current_page + 1)" class="text-xs font-bold text-orange-600 hover:text-orange-700 uppercase tracking-wider">
                 Muat Lebih Banyak...
               </button>
             </div>

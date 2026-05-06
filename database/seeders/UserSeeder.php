@@ -37,20 +37,6 @@ class UserSeeder extends Seeder
                     'bio'           => 'Pengrajin batik tulis asli Malang dengan motif khas Arema.',
                 ],
             ],
-            // UMKM Kreator 2
-            [
-                'name'     => 'Kerajinan Tangan Budi',
-                'email'    => 'budi@snapfit.id',
-                'password' => Hash::make('password'),
-                'role'     => 'umkm',
-                'profile'  => [
-                    'full_name'     => 'Budi Santoso',
-                    'business_name' => 'Kerajinan Budi Malang',
-                    'phone'         => '082345678901',
-                    'address'       => 'Jl. Kerajinan No. 7, Malang',
-                    'bio'           => 'Pengrajin anyaman rotan dan bambu berkualitas tinggi.',
-                ],
-            ],
             // Desainer
             [
                 'name'     => 'Reza Designer',

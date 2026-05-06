@@ -1,139 +1,136 @@
 <template>
-  <div class="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-    <!-- Top Stats Row -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <!-- Total UMKM -->
-      <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all group relative overflow-hidden">
-        <div class="absolute -right-4 -top-4 w-24 h-24 bg-indigo-50 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
-        <div class="relative z-10">
-          <div class="flex justify-between items-start mb-6">
-            <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center shadow-inner">
-              <span class="font-black text-xl">🏪</span>
-            </div>
-            <span class="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-[10px] font-black tracking-widest">REALTIME</span>
+  <div class="space-y-6 max-w-[1400px]">
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div v-for="(s, i) in stats" :key="i" class="bg-white rounded-2xl p-5 border border-slate-200/60">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center" :class="s.iconBg">
+            <component :is="s.icon" class="w-5 h-5" :class="s.iconColor" />
           </div>
-          <h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Total UMKM</h3>
-          <p class="text-3xl font-black text-slate-800 tracking-tighter">
-            <span v-if="isLoading" class="animate-pulse bg-slate-200 h-8 w-16 block rounded"></span>
-            <span v-else>{{ statsData.users?.umkm || 0 }}</span>
-          </p>
+          <span class="text-[11px] font-semibold px-2 py-0.5 rounded-md" :class="s.changeBg">{{ s.change }}</span>
+        </div>
+        <p class="text-[22px] font-bold text-slate-800 leading-none mb-1">
+          <span v-if="loading" class="inline-block w-16 h-6 bg-slate-100 rounded animate-pulse"></span>
+          <span v-else>{{ s.value }}</span>
+        </p>
+        <p class="text-[11px] text-slate-400 font-medium">{{ s.label }}</p>
+      </div>
+    </div>
+
+    <!-- Chart + Activity Row -->
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
+      <!-- Revenue Chart -->
+      <div class="lg:col-span-3 bg-white rounded-2xl border border-slate-200/60 p-6">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h3 class="text-[14px] font-bold text-slate-800">Revenue</h3>
+            <p class="text-[11px] text-slate-400 font-medium">Platform fees dari transaksi marketplace</p>
+          </div>
+          <div class="flex bg-slate-100 rounded-lg p-0.5">
+            <button v-for="period in ['7D','1M','3M','1Y']" :key="period" @click="activePeriod = period"
+              class="px-3 py-1.5 text-[10px] font-bold rounded-md transition-all"
+              :class="activePeriod === period ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-400 hover:text-slate-600'">
+              {{ period }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Revenue Value -->
+        <div class="mb-6">
+          <p class="text-[28px] font-bold text-slate-800 tracking-tight leading-none">Rp {{ loading ? '—' : '47.850.000' }}</p>
+          <p class="text-[11px] text-emerald-500 font-semibold mt-1">↑ 12.5% dari periode sebelumnya</p>
+        </div>
+
+        <!-- CSS Chart -->
+        <div class="relative h-40">
+          <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+            <div v-for="i in 4" :key="i" class="w-full border-b border-dashed border-slate-100"></div>
+          </div>
+          <div class="h-full flex items-end gap-[3px] relative z-10">
+            <div v-for="(h, i) in barHeights" :key="i" class="flex-1 rounded-t-md transition-all duration-700 hover:opacity-80 cursor-pointer"
+              :class="i === barHeights.length - 1 ? 'bg-orange-500' : 'bg-slate-200'" :style="{ height: h + '%' }"></div>
+          </div>
+        </div>
+        <div class="flex justify-between mt-3 text-[10px] text-slate-400 font-medium">
+          <span v-for="d in ['Sen','Sel','Rab','Kam','Jum','Sab','Min']" :key="d">{{ d }}</span>
         </div>
       </div>
 
-      <!-- Total Desainer -->
-      <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all group relative overflow-hidden">
-        <div class="absolute -right-4 -top-4 w-24 h-24 bg-purple-50 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
-        <div class="relative z-10">
-          <div class="flex justify-between items-start mb-6">
-            <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center shadow-inner">
-              <span class="font-black text-xl">🎨</span>
-            </div>
-            <span class="px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-[10px] font-black tracking-widest">REALTIME</span>
-          </div>
-          <h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Total Desainer</h3>
-          <p class="text-3xl font-black text-slate-800 tracking-tighter">
-            <span v-if="isLoading" class="animate-pulse bg-slate-200 h-8 w-16 block rounded"></span>
-            <span v-else>{{ statsData.users?.desainer || 0 }}</span>
-          </p>
+      <!-- Activity Feed -->
+      <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200/60 p-6">
+        <div class="flex items-center justify-between mb-5">
+          <h3 class="text-[14px] font-bold text-slate-800">Aktivitas Terbaru</h3>
+          <button class="text-[11px] font-semibold text-orange-500 hover:text-orange-600 transition-colors">Lihat Semua</button>
         </div>
-      </div>
 
-      <!-- AI Renderings -->
-      <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all group relative overflow-hidden">
-        <div class="absolute -right-4 -top-4 w-24 h-24 bg-orange-50 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
-        <div class="relative z-10">
-          <div class="flex justify-between items-start mb-6">
-            <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center shadow-inner">
-              <span class="font-black text-xl">🤖</span>
+        <div class="space-y-4">
+          <div v-for="a in activities" :key="a.id" class="flex gap-3 group">
+            <div class="relative flex flex-col items-center">
+              <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs flex-shrink-0" :class="a.dotClass">{{ a.emoji }}</div>
+              <div class="w-px flex-1 bg-slate-100 mt-1"></div>
             </div>
-            <span class="px-3 py-1 bg-orange-50 text-orange-600 rounded-full text-[10px] font-black tracking-widest">REALTIME</span>
-          </div>
-          <h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">AI Renderings</h3>
-          <p class="text-3xl font-black text-slate-800 tracking-tighter">
-            <span v-if="isLoading" class="animate-pulse bg-slate-200 h-8 w-16 block rounded"></span>
-            <span v-else>{{ statsData.ai_generations?.total || 0 }}</span>
-          </p>
-        </div>
-      </div>
-
-      <!-- Total Revenue -->
-      <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all group relative overflow-hidden">
-        <div class="absolute -right-4 -top-4 w-24 h-24 bg-emerald-50 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
-        <div class="relative z-10">
-          <div class="flex justify-between items-start mb-6">
-            <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center shadow-inner">
-              <span class="font-black text-xl">💰</span>
+            <div class="pb-4 flex-1 min-w-0">
+              <p class="text-[12px] font-semibold text-slate-700 leading-snug">{{ a.title }}</p>
+              <p class="text-[11px] text-slate-400 mt-0.5 truncate">{{ a.desc }}</p>
+              <p class="text-[10px] text-slate-300 font-medium mt-1">{{ a.time }}</p>
             </div>
-            <span class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black tracking-widest">REALTIME</span>
           </div>
-          <h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Total Revenue</h3>
-          <p class="text-3xl font-black text-slate-800 tracking-tighter">
-            <span v-if="isLoading" class="animate-pulse bg-slate-200 h-8 w-24 block rounded"></span>
-            <span v-else>Rp {{ Number(statsData.orders?.revenue || 0).toLocaleString('id-ID') }}</span>
-          </p>
         </div>
       </div>
     </div>
 
-    <!-- Charts & Activity Row -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <!-- Main Chart (Placeholder) -->
-      <div class="lg:col-span-2 bg-white p-8 rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
-        <div class="flex justify-between items-center mb-8">
-          <div>
-            <h3 class="text-lg font-black text-slate-800 tracking-tight">Revenue Overview</h3>
-            <p class="text-xs text-slate-400 font-medium">Platform fees (5%) from marketplace transactions</p>
-          </div>
-          <select class="bg-slate-50 border-none text-xs font-bold text-slate-600 rounded-xl px-4 py-2 outline-none focus:ring-2 focus:ring-indigo-100">
-            <option>This Month</option>
-            <option>Last Month</option>
-            <option>This Year</option>
-          </select>
-        </div>
-
-        <div class="h-64 flex items-end justify-between gap-2 relative">
-          <!-- Fake Grid Lines -->
-          <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
-            <div class="border-b border-slate-50 border-dashed w-full h-0"></div>
-            <div class="border-b border-slate-50 border-dashed w-full h-0"></div>
-            <div class="border-b border-slate-50 border-dashed w-full h-0"></div>
-            <div class="border-b border-slate-50 border-dashed w-full h-0"></div>
-            <div class="border-b border-slate-100 w-full h-0"></div>
-          </div>
-
-          <!-- Fake Bars -->
-          <div v-for="bar in [40, 70, 45, 90, 60, 100, 80]" :key="bar" class="w-full relative group">
-            <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-slate-800 text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-              Rp {{ bar }}M
+    <!-- Bottom Row -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <!-- User Composition -->
+      <div class="bg-white rounded-2xl border border-slate-200/60 p-6">
+        <h3 class="text-[14px] font-bold text-slate-800 mb-5">Komposisi Pengguna</h3>
+        <div class="space-y-4">
+          <div v-for="r in userRoles" :key="r.role" class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-[11px] font-bold" :class="r.bgClass">{{ r.initial }}</div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-[12px] font-semibold text-slate-700">{{ r.label }}</span>
+                <span class="text-[12px] font-bold text-slate-800">{{ r.count }}</span>
+              </div>
+              <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full rounded-full transition-all duration-1000" :class="r.barClass" :style="{ width: r.pct + '%' }"></div>
+              </div>
             </div>
-            <div class="bg-indigo-100 rounded-t-xl w-full mx-1 transition-all duration-1000 group-hover:bg-indigo-500" :style="`height: ${bar}%`"></div>
           </div>
-        </div>
-        <div class="flex justify-between mt-4 text-[10px] font-bold text-slate-400 uppercase">
-          <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
         </div>
       </div>
 
-      <!-- Recent Activity -->
-      <div class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
-        <h3 class="text-lg font-black text-slate-800 tracking-tight mb-8">System Activity</h3>
-
-        <div class="space-y-6">
-          <div v-for="activity in activities" :key="activity.id" class="flex gap-4 relative">
-            <div class="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-white" :class="activity.colorClass">
-              {{ activity.icon }}
+      <!-- Top Products -->
+      <div class="bg-white rounded-2xl border border-slate-200/60 p-6">
+        <h3 class="text-[14px] font-bold text-slate-800 mb-5">Produk Terlaris</h3>
+        <div class="space-y-3">
+          <div v-for="(p, i) in topProducts" :key="i" class="flex items-center gap-3 p-2 -mx-2 rounded-xl hover:bg-slate-50 transition-colors">
+            <span class="w-6 h-6 rounded-md bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-400 flex-shrink-0">{{ i + 1 }}</span>
+            <div class="w-9 h-9 rounded-lg bg-slate-100 overflow-hidden flex-shrink-0">
+              <img :src="p.img" :alt="p.name" class="w-full h-full object-cover" />
             </div>
-            <div>
-              <p class="text-sm font-bold text-slate-700">{{ activity.title }}</p>
-              <p class="text-xs text-slate-400">{{ activity.desc }}</p>
-              <span class="text-[9px] font-black text-slate-300 tracking-widest uppercase mt-1 block">{{ activity.time }}</span>
+            <div class="flex-1 min-w-0">
+              <p class="text-[12px] font-semibold text-slate-700 truncate">{{ p.name }}</p>
+              <p class="text-[10px] text-slate-400">{{ p.seller }}</p>
             </div>
+            <span class="text-[12px] font-bold text-slate-800">{{ p.sold }} terjual</span>
           </div>
         </div>
+      </div>
 
-        <button class="w-full mt-8 py-3 bg-slate-50 hover:bg-slate-100 text-slate-600 font-bold text-xs rounded-xl transition-colors">
-          View All Logs
-        </button>
+      <!-- Quick Actions -->
+      <div class="bg-white rounded-2xl border border-slate-200/60 p-6">
+        <h3 class="text-[14px] font-bold text-slate-800 mb-5">Perlu Perhatian</h3>
+        <div class="space-y-3">
+          <div v-for="alert in alerts" :key="alert.id" class="flex items-start gap-3 p-3 rounded-xl border" :class="alert.borderClass">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0" :class="alert.bgClass">{{ alert.emoji }}</div>
+            <div class="flex-1 min-w-0">
+              <p class="text-[12px] font-semibold text-slate-700">{{ alert.title }}</p>
+              <p class="text-[10px] text-slate-400 mt-0.5">{{ alert.desc }}</p>
+            </div>
+            <router-link :to="alert.link" class="text-[10px] font-bold text-orange-500 hover:text-orange-600 whitespace-nowrap mt-0.5">Lihat →</router-link>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -141,53 +138,84 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { h } from 'vue';
 
-const isLoading = ref(true);
-const statsData = ref({
-  users: { umkm: 0, desainer: 0 },
-  ai_generations: { total: 0 },
-  orders: { revenue: 0 },
-});
+const loading = ref(true);
+const activePeriod = ref('7D');
 
-const fetchStats = async () => {
-  try {
-    const token = localStorage.getItem('token');
-    if (!token) return;
+onMounted(() => { setTimeout(() => loading.value = false, 800); });
 
-    const res = await fetch('/api/v1/admin/stats', {
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    });
+const IconStore = () => h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24', 'stroke-width': '1.8' }, [h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: 'M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.15c0 .415.336.75.75.75z' })]);
+const IconPaint = () => h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24', 'stroke-width': '1.8' }, [h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: 'M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42' })]);
+const IconMoney = () => h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24', 'stroke-width': '1.8' }, [h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: 'M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z' })]);
+const IconBox = () => h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24', 'stroke-width': '1.8' }, [h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4' })]);
 
-    if (res.ok) {
-      const data = await res.json();
-      statsData.value = data;
-    }
-  } catch (error) {
-    console.error('Failed to fetch stats:', error);
-  } finally {
-    isLoading.value = false;
-  }
-};
+const stats = ref([
+  { label: 'Total UMKM', value: '0', change: '+0%', icon: IconStore, iconBg: 'bg-orange-50', iconColor: 'text-orange-500', changeBg: 'bg-emerald-50 text-emerald-600' },
+  { label: 'Total Desainer', value: '0', change: '+0%', icon: IconPaint, iconBg: 'bg-blue-50', iconColor: 'text-blue-500', changeBg: 'bg-emerald-50 text-emerald-600' },
+  { label: 'Revenue', value: 'Rp 0', change: '+0%', icon: IconMoney, iconBg: 'bg-emerald-50', iconColor: 'text-emerald-500', changeBg: 'bg-emerald-50 text-emerald-600' },
+  { label: 'Produk Terdaftar', value: '0', change: '+0', icon: IconBox, iconBg: 'bg-violet-50', iconColor: 'text-violet-500', changeBg: 'bg-violet-50 text-violet-600' },
+]);
 
-onMounted(() => {
-  fetchStats();
-});
+const userRoles = ref([
+  { role: 'umkm', label: 'UMKM Kreator', count: 0, pct: 0, initial: 'U', bgClass: 'bg-orange-50 text-orange-600', barClass: 'bg-orange-400' },
+  { role: 'desainer', label: 'Desainer', count: 0, pct: 0, initial: 'D', bgClass: 'bg-blue-50 text-blue-600', barClass: 'bg-blue-400' },
+  { role: 'pembeli', label: 'Pembeli', count: 0, pct: 0, initial: 'P', bgClass: 'bg-emerald-50 text-emerald-600', barClass: 'bg-emerald-400' },
+]);
+
+const barHeights = [35, 52, 45, 78, 62, 90, 70, 42, 88, 55, 72, 60, 82, 48, 68, 75, 58, 92, 65, 80, 45, 70, 85, 50, 78, 62, 95, 72];
 
 const activities = [
-  { id: 1, title: 'New UMKM Registered', desc: 'Batik Tulis Budi registered an account.', time: '2 mins ago', icon: 'U', colorClass: 'bg-indigo-500 shadow-indigo-500/30 shadow-lg' },
-  { id: 2, title: 'AI Studio Limit Reached', desc: 'User #402 hit daily rate limit.', time: '15 mins ago', icon: '!', colorClass: 'bg-orange-500 shadow-orange-500/30 shadow-lg' },
-  { id: 3, title: 'Withdrawal Processed', desc: 'Rp 5.000.000 sent to Designer #12.', time: '1 hour ago', icon: '$', colorClass: 'bg-emerald-500 shadow-emerald-500/30 shadow-lg' },
-  { id: 4, title: 'Co-Create Room Active', desc: 'Room #892 has 5 active participants.', time: '2 hours ago', icon: '👥', colorClass: 'bg-blue-500 shadow-blue-500/30 shadow-lg' },
+  { id: 1, title: 'UMKM baru terdaftar', desc: 'Batik Cap Bunga Malang bergabung ke platform', time: '2 menit lalu', emoji: '🏪', dotClass: 'bg-orange-50' },
+  { id: 2, title: 'Produk pending moderasi', desc: '3 produk baru menunggu review dari UMKM Keramik', time: '15 menit lalu', emoji: '📦', dotClass: 'bg-amber-50' },
+  { id: 3, title: 'Transaksi selesai', desc: 'Order #SF-8842 completed', time: '1 jam lalu', emoji: '✅', dotClass: 'bg-emerald-50' },
 ];
-</script>
 
-<style scoped>
-.animate-in { animation-duration: 0.7s; animation-fill-mode: both; }
-@keyframes slideInUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-.slide-in-from-bottom-4 { animation-name: slideInUp; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-.fade-in { animation-name: fadeIn; }
-</style>
+const topProducts = [
+  { name: 'Batik Tulis Motif Arema', seller: 'Batik Sari Malang', sold: 128, img: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=80&h=80&fit=crop' },
+  { name: 'Tas Anyaman Rotan Natural', seller: 'Rotan Craft Arjosari', sold: 96, img: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=80&h=80&fit=crop' },
+  { name: 'Keramik Vas Modern', seller: 'Kampoeng Keramik', sold: 84, img: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=80&h=80&fit=crop' },
+];
+
+const alerts = [
+  { id: 1, title: 'Produk Menunggu Moderasi', desc: 'Perlu review admin', emoji: '⚠️', bgClass: 'bg-amber-50', borderClass: 'border-amber-200/60', link: '/admin/products' },
+];
+
+// Fetch real data
+onMounted(async () => {
+  try {
+    const token = localStorage.getItem('token') || '';
+    const res = await fetch('/api/v1/admin/stats', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      
+      // Update stats
+      stats.value[0].value = data.users.umkm.toString();
+      stats.value[1].value = data.users.desainer.toString();
+      
+      // Format revenue safely based on backend type
+      const rev = Number(data.orders.revenue || 0);
+      stats.value[2].value = 'Rp ' + (rev > 1000000 ? (rev/1000000).toFixed(1) + 'M' : rev.toLocaleString('id-ID'));
+      
+      stats.value[3].value = data.products.total.toString();
+
+      // Update user roles
+      const totalUsers = data.users.total || 1; // prevent div by zero
+      userRoles.value[0].count = data.users.umkm;
+      userRoles.value[0].pct = Math.round((data.users.umkm / totalUsers) * 100);
+      
+      userRoles.value[1].count = data.users.desainer;
+      userRoles.value[1].pct = Math.round((data.users.desainer / totalUsers) * 100);
+      
+      userRoles.value[2].count = data.users.pembeli;
+      userRoles.value[2].pct = Math.round((data.users.pembeli / totalUsers) * 100);
+    }
+  } catch (e) {
+    console.error('Failed to fetch stats:', e);
+  } finally {
+    loading.value = false;
+  }
+});
+</script>
