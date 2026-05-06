@@ -3,8 +3,8 @@
     <nav class="max-w-[1600px] mx-auto px-6 py-2.5 flex justify-between items-center">
       <!-- Logo Section -->
       <a href="/" class="flex items-center gap-2.5 group cursor-pointer">
-        <div class="w-9 h-9 bg-orange-600 rounded-xl shadow-md shadow-orange-200/50 flex items-center justify-center transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-300">
-          <span class="text-white font-black text-lg italic drop-shadow-sm">S</span>
+        <div class="w-10 h-10 rounded-xl overflow-hidden shadow-sm border border-slate-100 transform group-hover:scale-105 transition-all duration-300 flex items-center justify-center bg-white">
+          <img :src="'/images/logo.png'" alt="SnapFit Logo" class="w-full h-full object-cover" />
         </div>
         <div>
           <h1 class="font-black text-lg tracking-tight text-gray-900 leading-none group-hover:text-orange-600 transition-colors">SnapFit</h1>
@@ -33,7 +33,25 @@
       </div>
 
       <!-- User Menu / Auth Section -->
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Search Input -->
+        <div class="hidden md:flex relative items-center mr-2">
+          <input type="text" placeholder="Cari Produk..." class="w-48 lg:w-60 bg-gray-100/80 border border-gray-200 text-gray-800 text-xs rounded-xl pl-10 pr-4 py-2.5 outline-none focus:border-orange-400 focus:bg-white focus:ring-4 focus:ring-orange-100 transition-all placeholder-gray-500 font-bold shadow-inner" />
+          <svg class="w-4 h-4 text-gray-500 absolute left-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+
+        <!-- Cart Button -->
+        <button class="relative p-2.5 rounded-xl bg-gray-50 border border-gray-100 text-gray-600 hover:text-orange-600 hover:bg-orange-50 hover:border-orange-200 transition-colors flex items-center justify-center group shadow-sm mr-1">
+          <svg class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+        </button>
+
         <!-- Mobile Menu Button -->
         <button @click="toggleMobileMenu" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
           <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,16 +76,6 @@
               </svg>
               <span v-if="cartCount > 0" class="absolute -top-1 -right-1 w-5 h-5 bg-orange-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border border-white">
                 {{ cartCount > 99 ? '99+' : cartCount }}
-              </span>
-            </button>
-
-            <!-- Wishlist Button -->
-            <button @click="goToWishlist" class="relative p-1.5 rounded-lg hover:bg-gray-100 transition-colors group">
-              <svg class="w-4 h-4 text-gray-600 group-hover:text-orange-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-              <span v-if="wishlistCount > 0" class="absolute -top-1 -right-1 w-5 h-5 bg-orange-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border border-white">
-                {{ wishlistCount > 99 ? '99+' : wishlistCount }}
               </span>
             </button>
 
@@ -144,16 +152,13 @@
                     </span>
                   </button>
 
-                  <button @click="goToWishlist" class="w-full flex items-center gap-3 px-6 py-3 text-sm font-bold text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-all group">
+                  <button class="w-full flex items-center gap-3 px-6 py-3 text-sm font-bold text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-all group">
                     <div class="w-8 h-8 rounded-xl bg-gray-100 group-hover:bg-orange-100 flex items-center justify-center transition-colors">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                       </svg>
                     </div>
                     <span>Wishlist</span>
-                    <span v-if="wishlistCount > 0" class="ml-auto bg-orange-500 text-white text-xs font-black px-2 py-1 rounded-full">
-                      {{ wishlistCount > 99 ? '99+' : wishlistCount }}
-                    </span>
                   </button>
                 </div>
 
@@ -204,11 +209,9 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCartStore } from '@/stores/cartStore';
-import { useWishlistStore } from '@/stores/wishlistStore';
 
 const router = useRouter();
 const cartStore = useCartStore();
-const wishlistStore = useWishlistStore();
 
 const props = defineProps({
   user: {
@@ -223,7 +226,6 @@ const showUserMenu  = ref(false);
 const showMobileMenu = ref(false);
 const isLoggedIn    = computed(() => !!props.user);
 const cartCount     = computed(() => cartStore.itemCount);
-const wishlistCount = computed(() => wishlistStore.count);
 
 const toggleUserMenu  = () => { showUserMenu.value  = !showUserMenu.value; };
 const toggleMobileMenu = () => { showMobileMenu.value = !showMobileMenu.value; };
@@ -232,7 +234,6 @@ const goToLogin   = () => emit('goToLogin');
 const goToProfile = () => { showUserMenu.value = false; emit('goToProfile'); };
 const goToOrders  = () => { showUserMenu.value = false; emit('goToOrders'); };
 const goToCart    = () => router.push('/marketplace/cart');
-const goToWishlist = () => { showUserMenu.value = false; router.push('/user/wishlist'); };
 const logout      = () => emit('logout');
 
 // Close dropdown when clicking outside
@@ -240,10 +241,7 @@ const handleClickOutside = (e) => {
   if (!e.target.closest('.user-menu')) showUserMenu.value = false;
 };
 
-onMounted(() => {
-  document.addEventListener('click', handleClickOutside);
-  wishlistStore.loadWishlist();
-});
+onMounted(() => document.addEventListener('click', handleClickOutside));
 onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside));
 </script>
 
