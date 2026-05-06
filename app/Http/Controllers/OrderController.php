@@ -19,7 +19,7 @@ class OrderController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $orders = Order::with(['items.product'])
+        $orders = Order::with(['items.product', 'buyer.profile'])
             ->where('buyer_id', $request->user()->id)
             ->latest()
             ->paginate(10);
@@ -43,7 +43,7 @@ class OrderController extends Controller
             return response()->json(['message' => 'Forbidden.'], 403);
         }
 
-        $order->load(['items.product']);
+        $order->load(['items.product', 'buyer.profile']);
 
         return response()->json(['data' => new OrderResource($order)]);
     }
@@ -114,6 +114,55 @@ class OrderController extends Controller
 
         return response()->json([
             'message' => 'Status order diperbarui.',
+            'data'    => new OrderResource($order),
+        ]);
+    }
+
+    /**
+     * Cancel order (only if pending).
+     */
+    public function cancel(Request $request, Order $order): JsonResponse
+    {
+        if ($order->buyer_id !== $request->user()->id) {
+            return response()->json(['message' => 'Forbidden.'], 403);
+        }
+
+        if ($order->status !== 'pending') {
+            return response()->json([
+                'message' => 'Pesanan hanya dapat dibatalkan jika masih menunggu pembayaran.',
+            ], 422);
+        }
+
+        $order->update([
+            'status' => 'cancelled',
+            'cancelled_at' => now(),
+        ]);
+
+        return response()->json([
+            'message' => 'Pesanan berhasil dibatalkan.',
+            'data'    => new OrderResource($order),
+        ]);
+    }
+
+    /**
+     * Initiate review for completed order.
+     */
+    public function review(Request $request, Order $order): JsonResponse
+    {
+        if ($order->buyer_id !== $request->user()->id) {
+            return response()->json(['message' => 'Forbidden.'], 403);
+        }
+
+        if ($order->status !== 'completed') {
+            return response()->json([
+                'message' => 'Anda hanya bisa memberikan ulasan setelah pesanan selesai.',
+            ], 422);
+        }
+
+        $order->load(['items.product', 'buyer.profile']);
+
+        return response()->json([
+            'message' => 'Siap untuk menulis ulasan.',
             'data'    => new OrderResource($order),
         ]);
     }

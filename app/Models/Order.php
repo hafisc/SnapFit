@@ -13,10 +13,12 @@ class Order extends Model
 
     protected $fillable = [
         'buyer_id', 'total_amount', 'status', 'midtrans_order_id',
+        'shipping_courier', 'tracking_number', 'cancelled_at',
     ];
 
     protected $casts = [
         'total_amount' => 'decimal:2',
+        'cancelled_at' => 'datetime',
     ];
 
     public function buyer(): BelongsTo

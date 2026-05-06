@@ -2,16 +2,45 @@
   <section class="min-h-screen bg-slate-50 text-slate-900 p-6 lg:p-10">
     <div class="max-w-5xl mx-auto">
       <div class="mb-8">
-        <div class="flex items-center gap-3 mb-4">
-          <router-link to="/marketplace" class="text-slate-500 hover:text-slate-900 transition">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-          </router-link>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div>
-            <h1 class="text-3xl font-black text-slate-900">Pesanan Saya</h1>
-            <p class="text-slate-600">Lihat semua pesanan dan status pengiriman Anda.</p>
+            <div class="flex items-center gap-3 mb-4">
+              <router-link to="/marketplace" class="text-slate-500 hover:text-slate-900 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+              </router-link>
+              <div>
+                <h1 class="text-3xl font-black text-slate-900">Pesanan Saya</h1>
+                <p class="text-slate-600">Lihat semua pesanan dan status pengiriman Anda.</p>
+              </div>
+            </div>
           </div>
+
+          <div class="w-full sm:w-auto">
+            <input
+              v-model="searchQuery"
+              type="text"
+              placeholder="Search by Order ID or Product Name"
+              class="w-full sm:w-80 px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent"
+            />
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          <button
+            v-for="status in statusOptions"
+            :key="status.value"
+            @click="selectedStatus = status.value"
+            :class="[
+              'px-4 py-2 rounded-full text-sm font-semibold transition-all',
+              selectedStatus === status.value
+                ? 'bg-orange-600 text-white shadow-lg'
+                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+            ]"
+          >
+            {{ status.label }}
+          </button>
         </div>
       </div>
 
@@ -19,7 +48,7 @@
         <p class="text-slate-600">Memuat pesanan...</p>
       </div>
 
-      <div v-else-if="!orders.length" class="rounded-[2rem] bg-white p-8 shadow-sm border border-slate-200 text-center">
+      <div v-else-if="!filteredOrders.length" class="rounded-[2rem] bg-white p-8 shadow-sm border border-slate-200 text-center">
         <div class="py-10">
           <svg class="mx-auto mb-4 h-16 w-16 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
@@ -33,7 +62,7 @@
       </div>
 
       <div v-else class="space-y-4">
-        <div v-for="order in orders" :key="order.id" class="rounded-[2rem] bg-white p-6 shadow-sm border border-slate-200">
+        <div v-for="order in filteredOrders" :key="order.id" class="rounded-[2rem] bg-white p-6 shadow-sm border border-slate-200">
           <div class="flex items-start justify-between gap-4 mb-4">
             <div>
               <div class="flex items-baseline gap-2 mb-2">
@@ -103,12 +132,33 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const orders = ref([]);
 const loading = ref(true);
+const searchQuery = ref('');
+const selectedStatus = ref('all');
+
+const statusOptions = [
+  { value: 'all', label: 'All' },
+  { value: 'pending', label: 'Pending' },
+  { value: 'paid', label: 'Processing' },
+  { value: 'shipped', label: 'Shipped' },
+  { value: 'completed', label: 'Completed' },
+  { value: 'cancelled', label: 'Cancelled' },
+];
+
+const filteredOrders = computed(() => {
+  return orders.value.filter(order => {
+    const matchesStatus = selectedStatus.value === 'all' || order.status === selectedStatus.value;
+    const matchesSearch = !searchQuery.value ||
+      order.midtrans_order_id.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      order.items.some(item => item.product?.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
+    return matchesStatus && matchesSearch;
+  });
+});
 
 const apiHeaders = () => {
   const token = localStorage.getItem('token');
@@ -169,9 +219,10 @@ const formatCurrency = (amount) => {
 const statusLabel = (status) => {
   const labels = {
     pending: '⏳ Menunggu Pembayaran',
-    paid: '✓ Sudah Dibayar',
+    paid: '✓ Sedang Diproses',
     shipped: '📦 Sedang Dikirim',
     completed: '✓ Selesai',
+    cancelled: '✕ Dibatalkan',
   };
   return labels[status] || status;
 };
@@ -182,6 +233,7 @@ const statusBadge = (status) => {
     paid: 'bg-blue-100 text-blue-700',
     shipped: 'bg-purple-100 text-purple-700',
     completed: 'bg-emerald-100 text-emerald-700',
+    cancelled: 'bg-red-100 text-red-700',
   };
   return badges[status] || 'bg-slate-100 text-slate-700';
 };
@@ -207,13 +259,11 @@ const shippingStatus = (status) => {
 };
 
 const viewOrderDetail = (orderId) => {
-  console.log('View order detail:', orderId);
-  // TODO: Implement order detail page
+  router.push({ name: 'marketplace.order.detail', params: { id: orderId } });
 };
 
 const goToPayment = (orderId) => {
-  console.log('Go to payment:', orderId);
-  // TODO: Implement payment navigation
+  router.push({ name: 'marketplace.qris', query: { order_id: orderId } });
 };
 
 onMounted(() => {

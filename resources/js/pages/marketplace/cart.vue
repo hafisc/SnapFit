@@ -202,7 +202,7 @@ const allSelected = computed(() => {
 
 const proceedToCheckout = () => {
   if (cartStore.selectedCount > 0) {
-    router.push('/marketplace/checkout');
+    router.push({ path: '/marketplace/checkout', query: { source: 'cart' } });
   }
 };
 </script>

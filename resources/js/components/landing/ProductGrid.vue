@@ -84,9 +84,9 @@
                 <button
                   @click.stop="toggleWishlist(product)"
                   class="w-10 h-10 bg-white/95 backdrop-blur-md rounded-full flex items-center justify-center hover:bg-white hover:scale-110 active:scale-95 transition-all shadow-lg"
-                  :class="product.inWishlist ? 'text-red-500' : 'text-gray-700'"
+                  :class="isWishlisted(product.id) ? 'text-red-500' : 'text-gray-700'"
                 >
-                  <svg class="w-5 h-5" :class="product.inWishlist ? 'fill-current' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-5 h-5" :class="isWishlisted(product.id) ? 'fill-current' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                   </svg>
                 </button>
@@ -182,12 +182,18 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCartStore } from '@/stores/cartStore';
+import { useWishlistStore } from '@/stores/wishlistStore';
 
 const router = useRouter();
 const cartStore = useCartStore();
+const wishlistStore = useWishlistStore();
+
+onMounted(() => {
+  wishlistStore.loadWishlist();
+});
 
 const props = defineProps({
   products:  { type: Array,   default: () => [] },
@@ -199,6 +205,14 @@ const categories = ['all', 'batik', 'kerajinan', 'aksesoris', 'dekorasi', 'fashi
 
 const addToCart = async (product) => {
   await cartStore.addItem(product);
+};
+
+const isWishlisted = (productId) => {
+  return wishlistStore.isWishlisted(productId);
+};
+
+const toggleWishlist = async (product) => {
+  await wishlistStore.toggleWishlist(product);
 };
 
 const viewProductDetail = (product) => {

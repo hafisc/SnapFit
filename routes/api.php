@@ -94,6 +94,8 @@ Route::prefix('v1')->group(function () {
             Route::get('/',        [OrderController::class, 'index']);
             Route::get('/{order}', [OrderController::class, 'show']);
             Route::post('/',       [OrderController::class, 'store']);
+            Route::post('/{order}/cancel', [OrderController::class, 'cancel']);
+            Route::post('/{order}/review', [OrderController::class, 'review']);
         });
 
         // ─── UMKM ONLY ────────────────────────────────────────────────────────
