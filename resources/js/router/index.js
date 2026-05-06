@@ -30,6 +30,48 @@ const routes = [
     name: 'marketplace',
     component: () => import('@/pages/marketplace/index.vue'),
   },
+  {
+    path: '/marketplace/product/:id',
+    name: 'marketplace.product.detail',
+    component: () => import('@/pages/marketplace/product-detail.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/marketplace/cart',
+    name: 'marketplace.cart',
+    component: () => import('@/pages/marketplace/cart.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/user/wishlist',
+    name: 'user.wishlist',
+    component: () => import('@/pages/user/wishlist.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/marketplace/checkout',
+    name: 'marketplace.checkout',
+    component: () => import('@/pages/marketplace/checkout.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/marketplace/qris',
+    name: 'marketplace.qris',
+    component: () => import('@/pages/marketplace/qris.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/marketplace/orders',
+    name: 'marketplace.orders',
+    component: () => import('@/pages/marketplace/orders.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/marketplace/orders/:id',
+    name: 'marketplace.order.detail',
+    component: () => import('@/pages/marketplace/order-detail.vue'),
+    meta: { requiresAuth: true },
+  },
 
   // ─── UMKM ───────────────────────────────────────
   {

@@ -17,7 +17,7 @@
 
       <!-- Products Grid -->
       <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-5">
-        <div v-for="product in filteredProducts" :key="product.id" class="bg-white border border-gray-200 shadow-sm hover:border-orange-400 hover:shadow-xl transition-all duration-300 rounded-2xl group overflow-hidden flex flex-col h-full cursor-pointer hover:-translate-y-1 relative">
+        <div v-for="product in filteredProducts" :key="product.id" @click="viewProductDetail(product)" class="bg-white border border-gray-200 shadow-sm hover:border-orange-400 hover:shadow-xl transition-all duration-300 rounded-2xl group overflow-hidden flex flex-col h-full cursor-pointer hover:-translate-y-1 relative">
           
           <!-- Image Section -->
           <div class="relative w-full aspect-square bg-gray-100 isolate overflow-hidden border-b border-gray-100">
@@ -77,7 +77,18 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { useCartStore } from '@/stores/cartStore';
+import { useWishlistStore } from '@/stores/wishlistStore';
+
+const router = useRouter();
+const cartStore = useCartStore();
+const wishlistStore = useWishlistStore();
+
+onMounted(() => {
+  wishlistStore.loadWishlist();
+});
 
 const props = defineProps({
   products: { type: Array, default: () => [] },
@@ -87,17 +98,20 @@ const props = defineProps({
 const activeCategory = ref('all');
 const categories = ['all', 'batik', 'kerajinan', 'aksesoris', 'dekorasi', 'fashion'];
 
-const toggleWishlist = (product) => {
-  product.inWishlist = !product.inWishlist;
-
-  // Optional: Show toast notification
-  const action = product.inWishlist ? 'ditambahkan ke' : 'dihapus dari';
-  console.log(`${product.name} ${action} wishlist`);
+const addToCart = async (product) => {
+  await cartStore.addItem(product);
 };
 
-const quickView = (product) => {
-  // TODO: Implement quick view modal
-  console.log('Quick view:', product);
+const isWishlisted = (productId) => {
+  return wishlistStore.isWishlisted(productId);
+};
+
+const toggleWishlist = async (product) => {
+  await wishlistStore.toggleWishlist(product);
+};
+
+const viewProductDetail = (product) => {
+  router.push({ name: 'marketplace.product.detail', params: { id: product.id } });
 };
 
 const filteredProducts = computed(() => {

@@ -79,7 +79,7 @@ const fetchProducts = async () => {
 /* ── Navigation ───────────────────────────────────────── */
 const goToLogin   = () => router.push('/login');
 const goToProfile = () => console.log('Navigate to profile');
-const goToOrders  = () => console.log('Navigate to orders');
+const goToOrders  = () => router.push('/marketplace/orders');
 
 const logout = () => {
   localStorage.removeItem('user');
