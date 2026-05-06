@@ -43,12 +43,6 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/user/wishlist',
-    name: 'user.wishlist',
-    component: () => import('@/pages/user/wishlist.vue'),
-    meta: { requiresAuth: true },
-  },
-  {
     path: '/marketplace/checkout',
     name: 'marketplace.checkout',
     component: () => import('@/pages/marketplace/checkout.vue'),

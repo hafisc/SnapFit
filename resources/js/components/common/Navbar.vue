@@ -79,16 +79,6 @@
               </span>
             </button>
 
-            <!-- Wishlist Button -->
-            <button @click="goToWishlist" class="relative p-1.5 rounded-lg hover:bg-gray-100 transition-colors group">
-              <svg class="w-4 h-4 text-gray-600 group-hover:text-orange-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-              <span v-if="wishlistCount > 0" class="absolute -top-1 -right-1 w-5 h-5 bg-orange-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border border-white">
-                {{ wishlistCount > 99 ? '99+' : wishlistCount }}
-              </span>
-            </button>
-
             <!-- User Info -->
             <div class="text-right hidden sm:block">
               <p class="text-[11px] font-black text-gray-900 leading-none">{{ user.name }}</p>
@@ -162,16 +152,13 @@
                     </span>
                   </button>
 
-                  <button @click="goToWishlist" class="w-full flex items-center gap-3 px-6 py-3 text-sm font-bold text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-all group">
+                  <button class="w-full flex items-center gap-3 px-6 py-3 text-sm font-bold text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-all group">
                     <div class="w-8 h-8 rounded-xl bg-gray-100 group-hover:bg-orange-100 flex items-center justify-center transition-colors">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                       </svg>
                     </div>
                     <span>Wishlist</span>
-                    <span v-if="wishlistCount > 0" class="ml-auto bg-orange-500 text-white text-xs font-black px-2 py-1 rounded-full">
-                      {{ wishlistCount > 99 ? '99+' : wishlistCount }}
-                    </span>
                   </button>
                 </div>
 
@@ -222,11 +209,9 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCartStore } from '@/stores/cartStore';
-import { useWishlistStore } from '@/stores/wishlistStore';
 
 const router = useRouter();
 const cartStore = useCartStore();
-const wishlistStore = useWishlistStore();
 
 const props = defineProps({
   user: {
@@ -241,7 +226,6 @@ const showUserMenu  = ref(false);
 const showMobileMenu = ref(false);
 const isLoggedIn    = computed(() => !!props.user);
 const cartCount     = computed(() => cartStore.itemCount);
-const wishlistCount = computed(() => wishlistStore.count);
 
 const toggleUserMenu  = () => { showUserMenu.value  = !showUserMenu.value; };
 const toggleMobileMenu = () => { showMobileMenu.value = !showMobileMenu.value; };
@@ -250,7 +234,6 @@ const goToLogin   = () => emit('goToLogin');
 const goToProfile = () => { showUserMenu.value = false; emit('goToProfile'); };
 const goToOrders  = () => { showUserMenu.value = false; emit('goToOrders'); };
 const goToCart    = () => router.push('/marketplace/cart');
-const goToWishlist = () => { showUserMenu.value = false; router.push('/user/wishlist'); };
 const logout      = () => emit('logout');
 
 // Close dropdown when clicking outside
@@ -258,10 +241,7 @@ const handleClickOutside = (e) => {
   if (!e.target.closest('.user-menu')) showUserMenu.value = false;
 };
 
-onMounted(() => {
-  document.addEventListener('click', handleClickOutside);
-  wishlistStore.loadWishlist();
-});
+onMounted(() => document.addEventListener('click', handleClickOutside));
 onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside));
 </script>
 
