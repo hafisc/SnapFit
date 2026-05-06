@@ -278,13 +278,11 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useCartStore } from '@/stores/cartStore';
-import { useWishlistStore } from '@/stores/wishlistStore';
 import { useNotificationStore } from '@/stores/notificationStore';
 
 const route = useRoute();
 const router = useRouter();
 const cartStore = useCartStore();
-const wishlistStore = useWishlistStore();
 const notificationStore = useNotificationStore();
 
 const product = ref(null);
@@ -293,6 +291,7 @@ const error = ref('');
 const quantity = ref(1);
 const activeImageIndex = ref(0);
 const showArModal = ref(false);
+const isWishlisted = ref(false);
 const relatedProducts = ref([]);
 const variantOptions = ref([]);
 const selectedVariantId = ref(null);
@@ -394,7 +393,6 @@ const selectedStock = computed(() => {
 const reviews = computed(() => product.value?.reviews ?? []);
 const reviewCount = computed(() => reviews.value.length);
 const canAddToCart = computed(() => selectedStock.value > 0 && !isLoading.value);
-const isWishlisted = computed(() => wishlistStore.isWishlisted(product.value?.id));
 
 const formatCurrency = (value) => {
   const number = Number(value ?? 0);
@@ -441,17 +439,16 @@ const buyNow = async () => {
   setTimeout(() => router.push({ path: '/marketplace/checkout', query: { source: 'buy-now' } }), 400);
 };
 
-const toggleWishlist = async () => {
-  if (!product.value) return;
-
-  if (wishlistStore.isWishlisted(product.value.id)) {
-    await wishlistStore.removeItem(product.value.id);
-    notificationStore.success('Produk dihapus dari wishlist', 3000, 'Success');
-    return;
+const toggleWishlist = () => {
+  isWishlisted.value = !isWishlisted.value;
+  const list = JSON.parse(localStorage.getItem('snapfit_wishlist') ?? '[]');
+  if (isWishlisted.value) {
+    list.push({ id: product.value.id, name: product.value.name, image: product.value.images?.[0] });
+  } else {
+    const index = list.findIndex((item) => item.id === product.value.id);
+    if (index >= 0) list.splice(index, 1);
   }
-
-  await wishlistStore.addItem(product.value);
-  notificationStore.success('Produk ditambahkan ke wishlist', 3000, 'Success');
+  localStorage.setItem('snapfit_wishlist', JSON.stringify(list));
 };
 
 const shareProduct = async () => {
@@ -485,10 +482,7 @@ watch(
   }
 );
 
-onMounted(async () => {
-  await wishlistStore.loadWishlist();
-  await loadProduct();
-});
+onMounted(loadProduct);
 </script>
 
 <style scoped>

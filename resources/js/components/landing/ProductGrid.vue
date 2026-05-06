@@ -5,33 +5,77 @@
     <div class="absolute bottom-0 left-0 w-96 h-96 bg-orange-50 rounded-full blur-[120px] opacity-40 -z-10"></div>
 
     <div class="max-w-[1600px] mx-auto px-6">
-      <!-- Header with Animation -->
+      <!-- PROMO CAROUSEL -->
+      <div class="mb-16 px-2 md:px-4">
+        <div class="overflow-hidden rounded-3xl relative">
+
+          <!-- Slides -->
+          <div class="flex transition-transform duration-700"
+            :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
+            <div v-for="(slide, index) in promoSlides" :key="index"
+              class="min-w-full h-[280px] md:h-[360px] lg:h-[420px] relative">
+              <!-- Background -->
+              <img :src="slide.image" class="absolute inset-0 w-full h-full object-cover" />
+
+              <!-- Overlay -->
+              <div class="absolute inset-0 bg-black/40"></div>
+
+              <!-- Content Wrapper (BIAR TIDAK NEMPEL) -->
+              <div class="relative z-10 h-full flex items-center">
+                <div class="w-full max-w-[1400px] mx-auto px-6 md:px-12">
+
+                  <div class="max-w-xl text-white">
+                    <h3 class="text-2xl md:text-4xl lg:text-5xl font-black mb-3 leading-tight">
+                      {{ slide.title }}
+                    </h3>
+
+                    <p class="text-sm md:text-base text-white/90 mb-6">
+                      {{ slide.description }}
+                    </p>
+
+                    <button
+                      class="bg-orange-600 px-6 py-3 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-orange-700 transition">
+                      Shop Now
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Indicator -->
+          <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+            <span v-for="(slide, index) in promoSlides" :key="index" @click="currentSlide = index"
+              class="h-2 rounded-full cursor-pointer transition-all"
+              :class="currentSlide === index ? 'bg-orange-600 w-6' : 'bg-white/50 w-2'"></span>
+          </div>
+
+        </div>
+      </div>
+      <!-- Header with Animation
       <div class="text-center mb-16 animate-fade-in">
-       
-        
+
+
         <h2 class="text-5xl md:text-6xl font-black tracking-tighter mb-4">
           <span class="text-gray-900">Indonesian Craft</span>
           <span class="block text-orange-600">Marketplace</span>
         </h2>
         <p class="text-gray-500 text-lg max-w-2xl mx-auto font-medium">
-          Koleksi terkurasi dari pengrajin terbaik seluruh Indonesia. Setiap produk dibuat dengan cinta dan keahlian turun-temurun.
+          Koleksi terkurasi dari pengrajin terbaik seluruh Indonesia. Setiap produk dibuat dengan cinta dan keahlian
+          turun-temurun.
         </p>
-      </div>
+      </div> -->
 
       <!-- Category Filter with Modern Design -->
       <div class="mb-12 flex justify-center">
         <div class="inline-flex flex-wrap gap-3 bg-white p-3 rounded-3xl border border-gray-200 shadow-lg">
-          <button
-            v-for="cat in categories"
-            :key="cat"
-            @click="activeCategory = cat"
-            :class="[
-              activeCategory === cat 
-                ? 'bg-orange-600 text-white shadow-lg shadow-orange-200 scale-105' 
-                : 'text-gray-600 hover:text-orange-600 hover:bg-orange-50'
-            ]"
-            class="px-6 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-300 whitespace-nowrap"
-          >
+          <button v-for="cat in categories" :key="cat" @click="activeCategory = cat" :class="[
+            activeCategory === cat
+              ? 'bg-orange-600 text-white shadow-lg shadow-orange-200 scale-105'
+              : 'text-gray-600 hover:text-orange-600 hover:bg-orange-50'
+          ]"
+            class="px-6 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-300 whitespace-nowrap">
             <span class="flex items-center gap-2">
               <span v-if="activeCategory === cat" class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
               {{ cat }}
@@ -57,48 +101,50 @@
 
       <!-- Products Grid with Enhanced Cards -->
       <div v-else class="grid grid-cols-2 lg:grid-cols-5 gap-6">
-        <div
-          v-for="product in filteredProducts"
-          :key="product.id"
+        <div v-for="product in filteredProducts" :key="product.id"
           class="group cursor-pointer transform hover:-translate-y-2 transition-all duration-500"
-          @click="viewProductDetail(product)"
-        >
+          @click="viewProductDetail(product)">
           <!-- Product Card -->
-          <div class="bg-white rounded-3xl overflow-hidden shadow-lg shadow-gray-200/50 hover:shadow-2xl hover:shadow-orange-200/50 transition-all duration-500 border border-gray-100">
+          <div
+            class="bg-white rounded-3xl overflow-hidden shadow-lg shadow-gray-200/50 hover:shadow-2xl hover:shadow-orange-200/50 transition-all duration-500 border border-gray-100">
             <!-- Image Container -->
             <div class="aspect-[3/4] bg-gray-100 overflow-hidden relative">
               <!-- Gradient Overlay -->
-              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
+              <div
+                class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10">
+              </div>
 
               <!-- Category Badge -->
               <div class="absolute top-4 left-4 z-20">
-                <span class="inline-flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg border border-orange-100">
+                <span
+                  class="inline-flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg border border-orange-100">
                   <span class="w-1.5 h-1.5 bg-orange-500 rounded-full"></span>
                   {{ product.category }}
                 </span>
               </div>
 
               <!-- Action Buttons -->
-              <div class="absolute top-4 right-4 z-20 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
+              <div
+                class="absolute top-4 right-4 z-20 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
                 <!-- Wishlist -->
-                <button
-                  @click.stop="toggleWishlist(product)"
+                <button @click.stop="toggleWishlist(product)"
                   class="w-10 h-10 bg-white/95 backdrop-blur-md rounded-full flex items-center justify-center hover:bg-white hover:scale-110 active:scale-95 transition-all shadow-lg"
-                  :class="isWishlisted(product.id) ? 'text-red-500' : 'text-gray-700'"
-                >
-                  <svg class="w-5 h-5" :class="isWishlisted(product.id) ? 'fill-current' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  :class="isWishlisted(product.id) ? 'text-red-500' : 'text-gray-700'">
+                  <svg class="w-5 h-5" :class="isWishlisted(product.id) ? 'fill-current' : ''" fill="none"
+                    stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                   </svg>
                 </button>
 
                 <!-- Quick View -->
-                <button
-                  @click.stop="quickView(product)"
-                  class="w-10 h-10 bg-white/95 backdrop-blur-md rounded-full flex items-center justify-center hover:bg-white hover:scale-110 active:scale-95 transition-all shadow-lg text-gray-700"
-                >
+                <button @click.stop="quickView(product)"
+                  class="w-10 h-10 bg-white/95 backdrop-blur-md rounded-full flex items-center justify-center hover:bg-white hover:scale-110 active:scale-95 transition-all shadow-lg text-gray-700">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                   </svg>
                 </button>
               </div>
@@ -107,14 +153,16 @@
               <img
                 :src="product.images && product.images.length ? product.images[0] : 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1000'"
                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                :alt="product.name"
-              />
+                :alt="product.name" />
 
               <!-- Quick Add to Cart (Bottom Overlay) -->
-              <div class="absolute bottom-0 left-0 right-0 p-4 z-20 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                <button @click.stop="addToCart(product)" class="w-full bg-orange-600 text-white py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-orange-700 hover:shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2">
+              <div
+                class="absolute bottom-0 left-0 right-0 p-4 z-20 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                <button @click.stop="addToCart(product)"
+                  class="w-full bg-orange-600 text-white py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-orange-700 hover:shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
                   Add to Cart
                 </button>
@@ -124,7 +172,8 @@
             <!-- Product Info -->
             <div class="p-5">
               <!-- Product Name -->
-              <h3 class="font-black text-lg mb-2 text-gray-900 group-hover:text-orange-600 transition-colors line-clamp-2 leading-tight">
+              <h3
+                class="font-black text-lg mb-2 text-gray-900 group-hover:text-orange-600 transition-colors line-clamp-2 leading-tight">
                 {{ product.name }}
               </h3>
 
@@ -132,7 +181,8 @@
               <div class="flex items-center gap-2 mb-3">
                 <div class="flex items-center gap-0.5">
                   <svg v-for="i in 5" :key="i" class="w-3.5 h-3.5 text-amber-400 fill-current" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    <path
+                      d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
                 </div>
                 <span class="text-xs font-bold text-gray-600">4.9</span>
@@ -147,7 +197,7 @@
                   </p>
                   <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mt-0.5">Premium Quality</p>
                 </div>
-                
+
                 <!-- Stock Badge -->
                 <div class="flex items-center gap-1.5 bg-green-50 text-green-600 px-3 py-1.5 rounded-full">
                   <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
@@ -226,6 +276,33 @@ const viewProductDetail = (product) => {
 const filteredProducts = computed(() => {
   if (activeCategory.value === 'all') return props.products;
   return props.products.filter(p => p.category === activeCategory.value);
+});
+
+const currentSlide = ref(0);
+
+const promoSlides = [
+  {
+    title: "Diskon 50% Produk Batik",
+    description: "Koleksi batik terbaik dari pengrajin lokal.",
+    image: "https://plus.unsplash.com/premium_photo-1673429738990-2b85964723ad?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    title: "Kerajinan Handmade Premium",
+    description: "Produk unik buatan tangan asli Indonesia.",
+    image: "https://images.unsplash.com/photo-1506806732259-39c2d0268443?q=80&w=1172&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    title: "Dekorasi Rumah Estetik",
+    description: "Percantik rumah dengan sentuhan budaya.",
+    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200"
+  }
+];
+
+onMounted(() => {
+  setInterval(() => {
+    currentSlide.value =
+      (currentSlide.value + 1) % promoSlides.length;
+  }, 4000);
 });
 </script>
 
