@@ -223,6 +223,21 @@ class ProductSeeder extends Seeder
             ],
         ];
 
+        // Generate tambahan 100 produk dummy dengan Faker
+        $faker = \Faker\Factory::create('id_ID');
+        $categories = ['batik', 'kerajinan', 'aksesoris', 'dekorasi', 'fashion'];
+
+        for ($i = 0; $i < 100; $i++) {
+            $products[] = [
+                'name'        => $faker->words(3, true) . ' Premium',
+                'description' => $faker->paragraph(),
+                'price'       => $faker->numberBetween(50000, 1000000),
+                'category'    => $faker->randomElement($categories),
+                'images'      => ['/images/baju_batik_pria.png'],
+                'is_published' => true,
+            ];
+        }
+
         $umkmIds = $umkmUsers->pluck('id')->toArray();
 
         foreach ($products as $index => $data) {

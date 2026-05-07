@@ -183,12 +183,22 @@
           </button>
         </div>
       </div>
+      <!-- Loading More State -->
+      <div v-if="isLoadingMore" class="flex justify-center items-center py-8">
+        <div class="flex items-center gap-2 px-6 py-3 bg-white shadow-md rounded-full border border-orange-100">
+          <div class="w-5 h-5 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+          <span class="text-sm font-semibold text-orange-600">Memuat produk...</span>
+        </div>
+      </div>
+
+      <!-- Load More Trigger -->
+      <div ref="loadMoreTrigger" class="h-4 w-full"></div>
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCartStore } from '@/stores/cartStore';
 import { useWishlistStore } from '@/stores/wishlistStore';
@@ -203,8 +213,15 @@ onMounted(() => {
 
 const props = defineProps({
   products: { type: Array, default: () => [] },
-  isLoading: { type: Boolean, default: false }
+  isLoading: { type: Boolean, default: false },
+  isLoadingMore: { type: Boolean, default: false },
+  hasMore: { type: Boolean, default: true }
 });
+
+const emit = defineEmits(['load-more']);
+
+const loadMoreTrigger = ref(null);
+let observer = null;
 
 const activeCategory = ref('all');
 const categories = ['all', 'batik', 'kerajinan', 'aksesoris', 'dekorasi', 'fashion'];
@@ -255,6 +272,25 @@ onMounted(() => {
     currentSlide.value =
       (currentSlide.value + 1) % promoSlides.length;
   }, 4000);
+
+  // Intersection Observer for Infinite Scroll
+  observer = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting && props.hasMore && !props.isLoading && !props.isLoadingMore) {
+      emit('load-more');
+    }
+  }, {
+    rootMargin: '100px',
+  });
+
+  if (loadMoreTrigger.value) {
+    observer.observe(loadMoreTrigger.value);
+  }
+});
+
+onBeforeUnmount(() => {
+  if (observer) {
+    observer.disconnect();
+  }
 });
 </script>
 

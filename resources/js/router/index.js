@@ -66,6 +66,12 @@ const routes = [
     component: () => import('@/pages/marketplace/order-detail.vue'),
     meta: { requiresAuth: true },
   },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: () => import('@/pages/profile/index.vue'),
+    meta: { requiresAuth: true },
+  },
 
   // ─── UMKM ───────────────────────────────────────
   {

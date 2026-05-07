@@ -60,7 +60,7 @@
           <p class="mt-3 text-slate-600 max-w-2xl mx-auto">Browse best-selling items, curated collections, and the latest arrivals from our UMKM partners.</p>
         </div>
 
-        <ProductGrid :products="products" :isLoading="isLoading" />
+        <ProductGrid :products="products" :isLoading="isLoading" :isLoadingMore="isLoadingMore" :hasMore="hasMore" @load-more="fetchMore" />
       </div>
     </section>
     </main>
@@ -79,6 +79,10 @@ const products = ref([]);
 const isLoading = ref(true);
 const productSection = ref(null);
 
+const page = ref(1);
+const hasMore = ref(true);
+const isLoadingMore = ref(false);
+
 const parseImages = (item) => {
   if (typeof item.images === 'string') {
     try {
@@ -92,8 +96,9 @@ const parseImages = (item) => {
 
 const fetchProducts = async () => {
   isLoading.value = true;
+  page.value = 1;
   try {
-    const res = await fetch('/api/v1/products', {
+    const res = await fetch(`/api/v1/products?page=1&per_page=12`, {
       headers: { Accept: 'application/json' },
     });
 
@@ -112,11 +117,54 @@ const fetchProducts = async () => {
         images: parseImages(product),
         inWishlist: false,
       }));
+
+    if (data.pagination) {
+      hasMore.value = data.pagination.current_page < data.pagination.last_page;
+    } else {
+      hasMore.value = fetched.length > 0;
+    }
   } catch (error) {
     console.error('Failed to load marketplace products:', error);
     products.value = [];
   } finally {
     isLoading.value = false;
+  }
+};
+
+const fetchMore = async () => {
+  if (!hasMore.value || isLoadingMore.value) return;
+  isLoadingMore.value = true;
+  page.value++;
+
+  try {
+    const res = await fetch(`/api/v1/products?page=${page.value}&per_page=12`, {
+      headers: { Accept: 'application/json' },
+    });
+
+    if (!res.ok) return;
+
+    const data = await res.json();
+    const fetched = Array.isArray(data) ? data : data.data || [];
+
+    const newProducts = fetched
+      .filter((product) => product.is_published)
+      .map((product) => ({
+        ...product,
+        images: parseImages(product),
+        inWishlist: false,
+      }));
+
+    products.value.push(...newProducts);
+
+    if (data.pagination) {
+      hasMore.value = data.pagination.current_page < data.pagination.last_page;
+    } else {
+      hasMore.value = fetched.length > 0;
+    }
+  } catch (error) {
+    console.error('Failed to load more products:', error);
+  } finally {
+    isLoadingMore.value = false;
   }
 };
 
