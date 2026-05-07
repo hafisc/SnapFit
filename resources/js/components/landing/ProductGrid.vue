@@ -1,10 +1,14 @@
 <template>
-  <section id="marketplace" class="pt-10 pb-24 bg-white relative overflow-hidden">
-    <!-- Background Decoration -->
-    <div class="absolute top-0 right-0 w-96 h-96 bg-orange-50 rounded-full blur-[120px] opacity-40 -z-10"></div>
-    <div class="absolute bottom-0 left-0 w-96 h-96 bg-orange-50 rounded-full blur-[120px] opacity-40 -z-10"></div>
+  <section id="marketplace" class="pt-10 pb-24 relative overflow-hidden bg-[#fafafa]">
+    <!-- Premium Background Decoration -->
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:40px_40px] z-0 opacity-40"></div>
+    
+    <!-- Glowing Ambient Orbs -->
+    <div class="absolute top-[-5%] right-[-5%] w-[500px] h-[500px] bg-orange-500/15 rounded-full blur-[120px] z-0 animate-pulse" style="animation-duration: 8s;"></div>
+    <div class="absolute bottom-[10%] left-[-10%] w-[600px] h-[600px] bg-rose-400/10 rounded-full blur-[120px] z-0"></div>
+    <div class="absolute top-[50%] left-[50%] w-[800px] h-[400px] bg-amber-200/10 rounded-full blur-[150px] z-0 -translate-x-1/2 -translate-y-1/2"></div>
 
-    <div class="max-w-[1600px] mx-auto px-6">
+    <div class="max-w-[1600px] mx-auto px-6 relative z-10">
       <!-- PROMO CAROUSEL -->
       <div class="mb-16 px-2 md:px-4" data-aos="fade-up">
         <div class="overflow-hidden rounded-3xl relative">

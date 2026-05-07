@@ -13,7 +13,7 @@
       </a>
 
       <!-- Navigation Links -->
-      <div class="hidden lg:flex items-center gap-1.5 bg-gray-50 px-2 py-1.5 rounded-xl border border-gray-100">
+      <!-- <div class="hidden lg:flex items-center gap-1.5 bg-gray-50 px-2 py-1.5 rounded-xl border border-gray-100">
         <a href="#marketplace" class="nav-link group relative px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-[0.15em] text-gray-500 hover:text-orange-600 hover:bg-white transition-all duration-300">
           <span class="relative z-10">Marketplace</span>
           <div class="absolute inset-0 bg-orange-50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -30,7 +30,7 @@
           <span class="relative z-10">AR Try-On</span>
           <div class="absolute inset-0 bg-orange-50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
         </a>
-      </div>
+      </div> -->
 
       <!-- User Menu / Auth Section -->
       <div class="flex items-center gap-2 sm:gap-3">
@@ -89,11 +89,11 @@
 
 
         <!-- Mobile Menu Button -->
-        <button @click="toggleMobileMenu" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
+        <!-- <button @click="toggleMobileMenu" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
           <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
-        </button>
+        </button> -->
 
         <!-- Notification Bell (Always Visible) -->
         <div class="relative notification-menu">
