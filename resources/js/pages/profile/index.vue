@@ -110,11 +110,7 @@
 
             
 
-            <!-- Kota Asal -->
-            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8">
-              <label class="w-48 text-sm font-bold text-slate-600 flex-shrink-0">Kota Asal</label>
-              <input v-model="form.city" type="text" placeholder="Pilih kota asal" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 text-sm text-slate-900 font-medium focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all placeholder-slate-400" />
-            </div>
+            
 
             <div class="pt-10 flex justify-end">
               <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 px-8 rounded-xl transition-colors active:scale-[0.98] text-sm shadow-lg shadow-orange-500/20">
