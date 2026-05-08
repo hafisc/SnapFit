@@ -149,7 +149,7 @@
             </div>
 
             <!-- Google Login Button -->
-            <button type="button" class="w-full flex items-center justify-center gap-3 bg-white border border-slate-200 text-slate-700 py-4 rounded-[1.25rem] font-bold text-xs hover:bg-slate-50 hover:border-slate-300 hover:shadow-sm transition-all active:scale-[0.98]">
+            <button @click="loginWithGoogle" type="button" class="w-full flex items-center justify-center gap-3 bg-white border border-slate-200 text-slate-700 py-4 rounded-[1.25rem] font-bold text-xs hover:bg-slate-50 hover:border-slate-300 hover:shadow-sm transition-all active:scale-[0.98]">
               <svg class="w-5 h-5" viewBox="0 0 24 24">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
@@ -175,10 +175,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 
 const router       = useRouter();
+const route        = useRoute();
 const isLogin      = ref(true);
 const name         = ref('');
 const email        = ref('');
@@ -192,6 +193,57 @@ const brandFeatures = [
   { label: 'Kolaborasi Real-time',    color: 'amber'  },
   { label: 'Uji Coba AR di Web',            color: 'orange' },
 ];
+
+onMounted(async () => {
+  // Tangkap callback dari Google OAuth (berupa query string parameter)
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get('token');
+  const error = urlParams.get('error');
+  const role = urlParams.get('role');
+
+  if (error) {
+    errorMessage.value = error;
+    // Bersihkan URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+  } else if (token) {
+    loading.value = true;
+    try {
+      // Ambil data user lengkap menggunakan token dari Google
+      const res = await fetch('/api/v1/auth/me', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json'
+        }
+      });
+      const data = await res.json();
+      
+      if (res.ok) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        // Bersihkan URL parameter agar token tidak terlihat
+        window.history.replaceState({}, document.title, window.location.pathname);
+
+        // Redirect sesuai role
+        if (role === 'admin')    return router.push('/admin/dashboard');
+        if (role === 'umkm')     return router.push('/umkm/dashboard');
+        if (role === 'desainer') return router.push('/designer/dashboard');
+        router.push('/');
+      } else {
+        errorMessage.value = 'Gagal memverifikasi sesi Google.';
+      }
+    } catch (e) {
+      errorMessage.value = 'Terjadi kesalahan jaringan saat verifikasi Google.';
+    } finally {
+      loading.value = false;
+    }
+  }
+});
+
+const loginWithGoogle = () => {
+  // Arahkan browser ke backend Laravel yang akan redirect ke Google
+  window.location.href = '/api/v1/auth/google';
+};
 
 const submit = async () => {
   loading.value      = true;

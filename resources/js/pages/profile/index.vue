@@ -59,8 +59,8 @@
           <p class="text-sm font-medium text-orange-800">Lengkapi profil Anda untuk mendapatkan rekomendasi produk yang lebih sesuai dan kemudahan saat checkout di platform SnapFit.</p>
         </div>
 
-        <!-- Form Area -->
-        <div class="bg-white rounded-[2rem] p-6 sm:p-10 border border-slate-100 shadow-sm">
+        <!-- Form Area (Profil Saya) -->
+        <div v-if="activeMenu === 'profile'" class="bg-white rounded-[2rem] p-6 sm:p-10 border border-slate-100 shadow-sm">
           <div class="flex flex-col items-center mb-10">
             <div class="w-24 h-24 bg-gradient-to-tr from-orange-600 to-amber-400 rounded-full flex items-center justify-center text-4xl font-bold text-white shadow-xl shadow-orange-500/20 mb-4 relative group cursor-pointer border-4 border-white overflow-hidden">
               <img :src="userAvatar" alt="Avatar" class="w-full h-full object-cover" />
@@ -122,6 +122,74 @@
               </button>
             </div>
           </form>
+        </div>
+
+        <!-- Pesanan Saya -->
+        <div v-else-if="activeMenu === 'orders'" class="bg-white rounded-[2rem] p-6 sm:p-10 border border-slate-100 shadow-sm min-h-[400px] flex flex-col items-center justify-center text-center animate-fade-in">
+          <div class="w-20 h-20 bg-orange-50 rounded-full flex items-center justify-center text-orange-500 mb-6 group hover:scale-110 transition-transform duration-300">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">Belum ada pesanan</h3>
+          <p class="text-slate-500 max-w-sm mb-8 text-sm">Anda belum melakukan pemesanan apapun. Mari temukan karya UMKM dan desainer kreatif terbaik!</p>
+          <button @click="router.push('/products')" class="bg-slate-900 text-white px-8 py-3.5 rounded-xl font-bold text-sm hover:bg-orange-600 transition-all duration-300 shadow-lg shadow-slate-900/10 hover:shadow-orange-500/20 active:scale-[0.98]">Mulai Belanja</button>
+        </div>
+
+        <!-- Keranjang -->
+        <div v-else-if="activeMenu === 'cart'" class="bg-white rounded-[2rem] p-6 sm:p-10 border border-slate-100 shadow-sm min-h-[400px] flex flex-col items-center justify-center text-center animate-fade-in">
+          <div class="w-20 h-20 bg-amber-50 rounded-full flex items-center justify-center text-amber-500 mb-6 group hover:scale-110 transition-transform duration-300">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">Keranjang Anda kosong</h3>
+          <p class="text-slate-500 max-w-sm mb-8 text-sm">Kelihatannya Anda belum menambahkan apapun ke keranjang. Yuk cari inspirasi desain!</p>
+          <button @click="router.push('/products')" class="bg-slate-900 text-white px-8 py-3.5 rounded-xl font-bold text-sm hover:bg-amber-500 transition-all duration-300 shadow-lg shadow-slate-900/10 hover:shadow-amber-500/20 active:scale-[0.98]">Cari Produk</button>
+        </div>
+
+        <!-- Wishlist -->
+        <div v-else-if="activeMenu === 'wishlist'" class="bg-white rounded-[2rem] p-6 sm:p-10 border border-slate-100 shadow-sm min-h-[400px] flex flex-col items-center justify-center text-center animate-fade-in">
+          <div class="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center text-red-500 mb-6 group hover:scale-110 transition-transform duration-300">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 mb-2">Wishlist masih kosong</h3>
+          <p class="text-slate-500 max-w-sm mb-8 text-sm">Simpan produk atau desain favorit Anda di sini agar mudah ditemukan kembali nanti.</p>
+          <button @click="router.push('/products')" class="bg-slate-900 text-white px-8 py-3.5 rounded-xl font-bold text-sm hover:bg-red-500 transition-all duration-300 shadow-lg shadow-slate-900/10 hover:shadow-red-500/20 active:scale-[0.98]">Eksplorasi Sekarang</button>
+        </div>
+
+        <!-- Pengaturan -->
+        <div v-else-if="activeMenu === 'settings'" class="bg-white rounded-[2rem] p-6 sm:p-10 border border-slate-100 shadow-sm animate-fade-in">
+          <h3 class="text-2xl font-bold text-slate-900 mb-2">Pengaturan Akun</h3>
+          <p class="text-slate-500 text-sm mb-8">Kelola preferensi dan keamanan akun Anda.</p>
+          
+          <div class="space-y-2">
+            <!-- Toggles -->
+            <div class="flex items-center justify-between py-5 border-b border-slate-100 group">
+              <div>
+                <h4 class="font-bold text-slate-800 text-sm group-hover:text-orange-600 transition-colors">Notifikasi Email</h4>
+                <p class="text-xs text-slate-500 mt-1">Terima email untuk pembaruan pesanan dan promo eksklusif.</p>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" class="sr-only peer" checked>
+                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+              </label>
+            </div>
+            
+            <div class="flex items-center justify-between py-5 border-b border-slate-100 group">
+              <div>
+                <h4 class="font-bold text-slate-800 text-sm group-hover:text-orange-600 transition-colors">Autentikasi Dua Faktor (2FA)</h4>
+                <p class="text-xs text-slate-500 mt-1">Amankan akun Anda dengan verifikasi dua langkah ekstra.</p>
+              </div>
+              <button class="text-xs font-bold text-orange-600 bg-orange-50 border border-orange-100 px-5 py-2.5 rounded-xl hover:bg-orange-600 hover:text-white transition-all duration-300 active:scale-[0.98]">Aktifkan</button>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="pt-8">
+              <h4 class="font-bold text-red-600 text-sm mb-2 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                Zona Berbahaya
+              </h4>
+              <p class="text-xs text-slate-500 mb-5">Setelah Anda menghapus akun, proses ini tidak dapat dibatalkan dan semua data akan hilang.</p>
+              <button class="text-xs font-bold text-red-500 border border-red-200 bg-white px-6 py-3 rounded-xl hover:bg-red-500 hover:text-white hover:border-red-500 transition-all duration-300 active:scale-[0.98]">Hapus Akun Permanen</button>
+            </div>
+          </div>
         </div>
       </main>
     </div>
@@ -208,5 +276,18 @@ const updateProfile = () => {
 </script>
 
 <style scoped>
-/* Optional styling */
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 </style>

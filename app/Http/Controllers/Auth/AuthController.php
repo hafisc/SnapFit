@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -85,5 +86,56 @@ class AuthController extends Controller
         return response()->json([
             'user' => new UserResource($request->user()->load('profile')),
         ]);
+    }
+
+    /**
+     * Redirect to Google OAuth.
+     */
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->stateless()->redirect();
+    }
+
+    /**
+     * Handle Google OAuth Callback.
+     */
+    public function handleGoogleCallback()
+    {
+        try {
+            $googleUser = Socialite::driver('google')->stateless()->user();
+            
+            // Check if user exists by email
+            $user = User::where('email', $googleUser->getEmail())->first();
+            
+            if (!$user) {
+                // Create user if not exists
+                $user = User::create([
+                    'name' => $googleUser->getName(),
+                    'email' => $googleUser->getEmail(),
+                    'password' => null,
+                    'google_id' => $googleUser->getId(),
+                    'role' => 'pembeli', // Default role for OAuth
+                ]);
+                
+                // Create empty profile
+                Profile::create([
+                    'user_id'   => $user->id,
+                    'full_name' => $googleUser->getName(),
+                ]);
+            } elseif (!$user->google_id) {
+                // Link existing user to google
+                $user->update(['google_id' => $googleUser->getId()]);
+            }
+            
+            // Generate token
+            $user->tokens()->delete();
+            $token = $user->createToken('auth_token')->plainTextToken;
+            
+            // Redirect to frontend with token
+            return redirect()->away(url('/login') . '?token=' . $token . '&role=' . $user->role);
+            
+        } catch (\Exception $e) {
+            return redirect()->away(url('/login') . '?error=Terjadi kesalahan saat login dengan Google.');
+        }
     }
 }

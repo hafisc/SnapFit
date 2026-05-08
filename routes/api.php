@@ -32,6 +32,10 @@ Route::prefix('v1')->group(function () {
         Route::post('login',           [AuthController::class, 'login']);
         Route::post('forgot-password', [PasswordResetController::class, 'forgotPassword']);
         Route::post('reset-password',  [PasswordResetController::class, 'resetPassword']);
+        
+        // Google OAuth
+        Route::get('google',           [AuthController::class, 'redirectToGoogle']);
+        Route::get('google/callback',  [AuthController::class, 'handleGoogleCallback']);
     });
 
     // Marketplace publik
