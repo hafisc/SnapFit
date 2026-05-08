@@ -62,16 +62,18 @@ export const useCartStore = defineStore('cart', () => {
         });
 
         if (response.ok) {
-          const data = await response.json();
-          const backendItems = Array.isArray(data) ? data : data.data || [];
-
-          // Merge with localStorage items
-          mergeWithBackend(backendItems);
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            const data = await response.json();
+            const backendItems = Array.isArray(data) ? data : data.data || [];
+            mergeWithBackend(backendItems);
+          } else {
+            console.warn('API Keranjang belum tersedia di backend. Menggunakan Local Storage.');
+          }
         }
       }
     } catch (err) {
       console.error('Failed to load cart:', err);
-      error.value = 'Gagal memuat keranjang';
     } finally {
       isLoading.value = false;
     }

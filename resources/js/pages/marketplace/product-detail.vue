@@ -424,6 +424,10 @@ let pose = null;
 let camera = null;
 let productImgObj = null;
 
+// Smoothing state untuk landmark tracking yang halus
+let smoothedLandmarks = null;
+const SMOOTH_FACTOR = 0.35; // 0 = no smoothing, 1 = full lag
+
 const fetchJson = async (url) => {
   const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
   if (!res.ok) throw new Error('Gagal memuat data');
@@ -630,54 +634,78 @@ const closeArModal = () => {
   analysisResult.value = null;
   isAnalyzing.value = false;
   isInitializingAR.value = false;
+  smoothedLandmarks = null;
 };
 
 const initProductImage = () => {
   return new Promise((resolve) => {
-    if (!product.value?.images?.[0]) {
-      resolve();
-      return;
-    }
+    const imgUrl = product.value?.images?.[0];
+    if (!imgUrl) { console.warn('[AR] Tidak ada gambar produk'); resolve(); return; }
+
+    console.log('[AR] Memuat gambar produk:', imgUrl);
+
+    // Coba load dengan crossOrigin untuk bisa processing pixel
     const img = new Image();
     img.crossOrigin = "anonymous";
+
     img.onload = () => {
-      // Basic Background Removal (Light Gray/White Keying)
-      const tempCanvas = document.createElement('canvas');
-      const ctx = tempCanvas.getContext('2d');
-      tempCanvas.width = img.width;
-      tempCanvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
-      
+      console.log('[AR] Gambar produk berhasil dimuat:', img.width, 'x', img.height);
       try {
-        const imageData = ctx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
-        const data = imageData.data;
-        
-        for (let i = 0; i < data.length; i += 4) {
-          const r = data[i];
-          const g = data[i + 1];
-          const b = data[i + 2];
-          
-          const max = Math.max(r, g, b);
-          const min = Math.min(r, g, b);
-          const diff = max - min;
-          
-          // Make light gray/white background pixels transparent
-          if (r > 190 && g > 190 && b > 190 && diff < 30) {
-            data[i + 3] = 0; // Fully transparent
-          } else if (r > 150 && g > 150 && b > 150 && diff < 20) {
-            // Smooth edge transition
-            data[i + 3] = 120;
+        // Crop atas 15% untuk buang hanger
+        const cropTop = Math.floor(img.height * 0.15);
+        const croppedH = img.height - cropTop;
+
+        const c = document.createElement('canvas');
+        const ctx = c.getContext('2d');
+        c.width = img.width;
+        c.height = croppedH;
+        ctx.drawImage(img, 0, cropTop, img.width, croppedH, 0, 0, img.width, croppedH);
+
+        // Test apakah bisa getImageData (CORS check)
+        ctx.getImageData(0, 0, 1, 1);
+
+        // Berhasil — lakukan background removal sederhana
+        const imageData = ctx.getImageData(0, 0, c.width, c.height);
+        const d = imageData.data;
+        for (let i = 0; i < d.length; i += 4) {
+          const r = d[i], g = d[i+1], b = d[i+2];
+          const brightness = (r + g + b) / 3;
+          const saturation = Math.max(r, g, b) - Math.min(r, g, b);
+          // Hapus pixel yang sangat terang dan tidak berwarna (putih/abu-abu muda)
+          if (brightness > 200 && saturation < 30) {
+            d[i+3] = 0;
+          } else if (brightness > 170 && saturation < 20) {
+            d[i+3] = 100;
           }
         }
         ctx.putImageData(imageData, 0, 0);
-        productImgObj = tempCanvas;
+        productImgObj = c;
+        console.log('[AR] Background removal berhasil');
       } catch(e) {
-        // Fallback if CORS issue
+        console.warn('[AR] CORS issue, pakai gambar mentah (tanpa bg removal):', e.message);
         productImgObj = img;
       }
       resolve();
     };
-    img.src = product.value.images[0];
+
+    img.onerror = () => {
+      console.warn('[AR] Gagal load dengan CORS, coba tanpa crossOrigin...');
+      // Fallback: load tanpa crossOrigin — tidak bisa processing pixel, tapi bisa di-render
+      const img2 = new Image();
+      img2.onload = () => {
+        console.log('[AR] Gambar berhasil dimuat tanpa CORS');
+        productImgObj = img2;
+        resolve();
+      };
+      img2.onerror = () => {
+        console.error('[AR] Gambar produk gagal total dimuat');
+        productImgObj = null;
+        resolve();
+      };
+      img2.src = imgUrl;
+    };
+
+    img.src = imgUrl;
   });
 };
 
@@ -712,7 +740,6 @@ const onPoseResults = (results) => {
   
   const ctx = canvas.getContext('2d');
   
-  // Set canvas dimension matching video only once or when changed
   if (canvas.width !== results.image.width) {
     canvas.width = results.image.width;
     canvas.height = results.image.height;
@@ -721,55 +748,77 @@ const onPoseResults = (results) => {
   ctx.save();
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-  // Mirror the canvas for selfie view
+  // Mirror untuk selfie view
   ctx.translate(canvas.width, 0);
   ctx.scale(-1, 1);
-  
-  // Draw video frame
   ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
   
-  // Draw clothes if landmarks exist
+  // Overlay baju jika landmark terdeteksi
+  if (!productImgObj) {
+    // Log sekali saja per 60 frame supaya tidak spam
+    if (Math.random() < 0.02) console.warn('[AR] productImgObj belum tersedia');
+  }
   if (results.poseLandmarks && productImgObj) {
-    // In mirrored view, left and right are flipped
-    // MediaPipe landmarks: 11 = user's left shoulder, 12 = user's right shoulder
-    const leftShoulder = results.poseLandmarks[11];
-    const rightShoulder = results.poseLandmarks[12];
+    const lm = results.poseLandmarks;
+    const lShoulder = lm[11];
+    const rShoulder = lm[12];
+    const lHip = lm[23];
+    const rHip = lm[24];
     
-    // Check if shoulders are visible
-    if (leftShoulder.visibility > 0.5 && rightShoulder.visibility > 0.5) {
-      const lSx = leftShoulder.x * canvas.width;
-      const lSy = leftShoulder.y * canvas.height;
-      const rSx = rightShoulder.x * canvas.width;
-      const rSy = rightShoulder.y * canvas.height;
+    const shouldersVisible = lShoulder.visibility > 0.4 && rShoulder.visibility > 0.4;
+    const hipsVisible = lHip.visibility > 0.4 && rHip.visibility > 0.4;
+    
+    if (shouldersVisible) {
+      const lSx = lShoulder.x * canvas.width;
+      const lSy = lShoulder.y * canvas.height;
+      const rSx = rShoulder.x * canvas.width;
+      const rSy = rShoulder.y * canvas.height;
       
-      // Calculate width and center point between shoulders
-      const shoulderWidth = Math.hypot(lSx - rSx, lSy - rSy);
-      const centerX = (lSx + rSx) / 2;
-      const centerY = (lSy + rSy) / 2;
+      let torsoH;
+      if (hipsVisible) {
+        // Hitung tinggi torso dari landmark pinggul
+        const lHy = lHip.y * canvas.height;
+        const rHy = rHip.y * canvas.height;
+        torsoH = ((lHy - lSy) + (rHy - rSy)) / 2;
+      } else {
+        // Fallback: estimasi tinggi torso = 1.8x lebar bahu
+        const shoulderW = Math.hypot(lSx - rSx, lSy - rSy);
+        torsoH = shoulderW * 1.8;
+      }
       
-      // Calculate angle
-      const angle = Math.atan2(lSy - rSy, lSx - rSx);
+      // Raw coordinates
+      const raw = { lSx, lSy, rSx, rSy, torsoH };
       
-      // Image scale factor (seberapa lebar baju dibanding bahu asli)
-      const scaleFactor = 2.4; 
-      const imgWidth = shoulderWidth * scaleFactor; 
+      // EMA Smoothing — anti goyang/jitter
+      if (!smoothedLandmarks) {
+        smoothedLandmarks = { ...raw };
+      } else {
+        for (const key in raw) {
+          smoothedLandmarks[key] = smoothedLandmarks[key] * SMOOTH_FACTOR + raw[key] * (1 - SMOOTH_FACTOR);
+        }
+      }
+      const s = smoothedLandmarks;
       
-      const aspect = productImgObj.height / productImgObj.width;
-      const imgHeight = imgWidth * aspect;
+      // Hitung dimensi badan
+      const shoulderW = Math.hypot(s.lSx - s.rSx, s.lSy - s.rSy);
+      const centerX = (s.lSx + s.rSx) / 2;
+      const shoulderY = (s.lSy + s.rSy) / 2;
+      const angle = Math.atan2(s.lSy - s.rSy, s.lSx - s.rSx);
       
-      ctx.translate(centerX, centerY);
+      // Baju lebih lebar dari bahu (menutupi lengan atas)
+      const clothW = shoulderW * 2.2;
+      // Tinggi baju dari torso
+      const clothH = s.torsoH * 1.55;
       
-      // We don't rotate because shoulders naturally tilt, but shirts hang straight down mostly.
-      ctx.rotate(angle * 0.5); 
+      ctx.translate(centerX, shoulderY);
+      ctx.rotate(angle * 0.4);
       
-      // Karena gambar baju biasanya memiliki ruang kosong/hanger di bagian atas,
-      // kita perlu menggeser gambar ke ATAS agar posisi kerah pas di leher/bahu user.
-      // Semakin besar nilai minusnya, semakin naik posisinya.
-      const drawY = -imgHeight * 0.22;
+      // Posisi Y: mulai sedikit di atas bahu (kerah baju)
+      const drawY = -clothH * 0.08;
       
-      // Draw the processed image with transparent background normally
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.drawImage(productImgObj, -imgWidth/2, drawY, imgWidth, imgHeight);
+      ctx.globalAlpha = 0.88;
+      ctx.drawImage(productImgObj, -clothW / 2, drawY, clothW, clothH);
+      ctx.globalAlpha = 1.0;
     }
   }
   
@@ -789,7 +838,7 @@ const startCamera = async () => {
           }
         });
         pose.setOptions({
-          modelComplexity: 1,
+          modelComplexity: 0,
           smoothLandmarks: true,
           enableSegmentation: false,
           smoothSegmentation: false,
@@ -878,6 +927,7 @@ const stopCamera = () => {
 const retake = () => {
   capturedImage.value = null;
   analysisResult.value = null;
+  smoothedLandmarks = null;
   startCamera();
 };
 

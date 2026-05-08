@@ -113,21 +113,51 @@
             
 
             <div class="pt-10 flex justify-end">
-              <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 px-8 rounded-xl transition-colors active:scale-[0.98] text-sm shadow-lg shadow-orange-500/20">
-                Simpan Perubahan
+              <button :disabled="isSavingProfile" type="submit" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 px-8 rounded-xl transition-colors active:scale-[0.98] text-sm shadow-lg shadow-orange-500/20 disabled:opacity-50">
+                {{ isSavingProfile ? 'Menyimpan...' : 'Simpan Perubahan' }}
               </button>
             </div>
           </form>
         </div>
 
         <!-- Pesanan Saya -->
-        <div v-else-if="activeMenu === 'orders'" class="bg-white rounded-[2rem] p-6 sm:p-10 border border-slate-100 shadow-sm min-h-[400px] flex flex-col items-center justify-center text-center animate-fade-in">
-          <div class="w-20 h-20 bg-orange-50 rounded-full flex items-center justify-center text-orange-500 mb-6 group hover:scale-110 transition-transform duration-300">
-            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+        <div v-else-if="activeMenu === 'orders'" class="bg-white rounded-[2rem] p-6 sm:p-10 border border-slate-100 shadow-sm min-h-[400px] animate-fade-in">
+          <div v-if="orders.length === 0" class="flex flex-col items-center justify-center text-center h-full pt-10">
+            <div class="w-20 h-20 bg-orange-50 rounded-full flex items-center justify-center text-orange-500 mb-6 group hover:scale-110 transition-transform duration-300">
+              <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Belum ada pesanan</h3>
+            <p class="text-slate-500 max-w-sm mb-8 text-sm">Anda belum melakukan pemesanan apapun. Mari temukan karya UMKM dan desainer kreatif terbaik!</p>
+            <button @click="router.push('/products')" class="bg-slate-900 text-white px-8 py-3.5 rounded-xl font-bold text-sm hover:bg-orange-600 transition-all duration-300 shadow-lg shadow-slate-900/10 hover:shadow-orange-500/20 active:scale-[0.98]">Mulai Belanja</button>
           </div>
-          <h3 class="text-xl font-bold text-slate-900 mb-2">Belum ada pesanan</h3>
-          <p class="text-slate-500 max-w-sm mb-8 text-sm">Anda belum melakukan pemesanan apapun. Mari temukan karya UMKM dan desainer kreatif terbaik!</p>
-          <button @click="router.push('/products')" class="bg-slate-900 text-white px-8 py-3.5 rounded-xl font-bold text-sm hover:bg-orange-600 transition-all duration-300 shadow-lg shadow-slate-900/10 hover:shadow-orange-500/20 active:scale-[0.98]">Mulai Belanja</button>
+          <div v-else>
+            <h3 class="text-2xl font-bold text-slate-900 mb-6">Riwayat Pesanan</h3>
+            <div class="space-y-4">
+              <div v-for="order in orders" :key="order.id" class="border border-slate-100 rounded-xl p-5 hover:border-orange-500 transition-colors bg-slate-50/50">
+                <div class="flex justify-between items-center mb-4 border-b border-slate-200 pb-4">
+                  <div>
+                    <p class="text-[10px] text-slate-400 font-bold mb-1 uppercase tracking-widest">{{ new Date(order.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) }}</p>
+                    <p class="text-sm font-bold text-slate-900">{{ order.midtrans_order_id || `ORD-${order.id}` }}</p>
+                  </div>
+                  <div class="px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest"
+                       :class="{
+                         'bg-yellow-100 text-yellow-700': order.status === 'pending', 
+                         'bg-green-100 text-green-700': order.status === 'paid' || order.status === 'completed', 
+                         'bg-red-100 text-red-700': order.status === 'cancelled'
+                       }">
+                    {{ order.status }}
+                  </div>
+                </div>
+                <div class="flex justify-between items-end">
+                  <div>
+                    <p class="text-xs font-semibold text-slate-500 mb-1">{{ order.items?.length || 0 }} Produk</p>
+                    <p class="font-black text-slate-900 text-lg">{{ formatPrice(order.total_amount) }}</p>
+                  </div>
+                  <button class="text-[11px] bg-white border border-slate-200 text-slate-700 font-bold px-4 py-2 rounded-lg hover:bg-slate-50 hover:text-orange-600 transition-colors">Detail Pesanan</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Keranjang -->
@@ -141,13 +171,39 @@
         </div>
 
         <!-- Wishlist -->
-        <div v-else-if="activeMenu === 'wishlist'" class="bg-white rounded-[2rem] p-6 sm:p-10 border border-slate-100 shadow-sm min-h-[400px] flex flex-col items-center justify-center text-center animate-fade-in">
-          <div class="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center text-red-500 mb-6 group hover:scale-110 transition-transform duration-300">
-            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+        <div v-else-if="activeMenu === 'wishlist'" class="bg-white rounded-[2rem] p-6 sm:p-10 border border-slate-100 shadow-sm min-h-[400px] animate-fade-in">
+          <div v-if="wishlists.length === 0" class="flex flex-col items-center justify-center text-center pt-10">
+            <div class="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center text-red-500 mb-6 group hover:scale-110 transition-transform duration-300">
+              <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Wishlist masih kosong</h3>
+            <p class="text-slate-500 max-w-sm mb-8 text-sm">Simpan produk atau desain favorit Anda di sini agar mudah ditemukan kembali nanti.</p>
+            <button @click="router.push('/products')" class="bg-slate-900 text-white px-8 py-3.5 rounded-xl font-bold text-sm hover:bg-red-500 transition-all duration-300 shadow-lg shadow-slate-900/10 hover:shadow-red-500/20 active:scale-[0.98]">Eksplorasi Sekarang</button>
           </div>
-          <h3 class="text-xl font-bold text-slate-900 mb-2">Wishlist masih kosong</h3>
-          <p class="text-slate-500 max-w-sm mb-8 text-sm">Simpan produk atau desain favorit Anda di sini agar mudah ditemukan kembali nanti.</p>
-          <button @click="router.push('/products')" class="bg-slate-900 text-white px-8 py-3.5 rounded-xl font-bold text-sm hover:bg-red-500 transition-all duration-300 shadow-lg shadow-slate-900/10 hover:shadow-red-500/20 active:scale-[0.98]">Eksplorasi Sekarang</button>
+          <div v-else>
+            <h3 class="text-2xl font-bold text-slate-900 mb-6">Wishlist Tersimpan</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              <div v-for="product in wishlists" :key="product.id" @click="router.push(`/products/${product.id}`)" class="group bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col">
+                <div class="h-48 bg-slate-100 overflow-hidden relative">
+                  <!-- Fallback to placeholder if parsing fails or no image -->
+                  <img :src="(product.images && typeof product.images === 'string' && product.images.startsWith('[')) ? JSON.parse(product.images)[0] : (product.images || '/images/placeholder.png')" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <div class="absolute top-3 right-3 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-red-500 shadow-sm group-hover:bg-red-500 group-hover:text-white transition-colors">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                  </div>
+                </div>
+                <div class="p-5 flex flex-col flex-1">
+                  <div class="flex items-center gap-2 mb-2 opacity-70">
+                    <img :src="`https://api.dicebear.com/7.x/avataaars/svg?seed=${product.owner?.name || 'UMKM'}&backgroundColor=f1f5f9`" class="w-4 h-4 rounded-full" />
+                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-500">{{ product.owner?.profile?.full_name || product.owner?.name || 'UMKM' }}</p>
+                  </div>
+                  <h4 class="font-bold text-slate-900 leading-snug mb-1 line-clamp-2">{{ product.title }}</h4>
+                  <div class="mt-auto pt-3 flex items-center justify-between">
+                    <p class="text-orange-600 font-black text-lg">{{ formatPrice(product.price) }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Pengaturan -->
@@ -193,7 +249,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import Navbar from '@/components/common/Navbar.vue';
 
@@ -206,28 +262,88 @@ const form = ref({
   email: '',
   gender: 'Laki-laki',
   dob: '',
-  occupation: 'Mahasiswa',
-  education: 'S1',
   city: ''
 });
 
-onMounted(() => {
-  const storedUser = localStorage.getItem('user');
-  if (storedUser) {
-    user.value = JSON.parse(storedUser);
-    form.value.name = user.value.name || '';
-    form.value.email = user.value.email || '';
-    if (user.value.profile) {
-      form.value.city = user.value.profile.address || '';
+const orders = ref([]);
+const wishlists = ref([]);
+const isSavingProfile = ref(false);
+
+const token = localStorage.getItem('token');
+
+const formatPrice = (price) => {
+  return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(price);
+};
+
+const fetchProfileData = async () => {
+  if (!token) return router.push('/login');
+  try {
+    const res = await fetch('/api/v1/profile', {
+      headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      user.value = data.user;
+      form.value.name = user.value.name || '';
+      form.value.email = user.value.email || '';
+      if (user.value.profile) {
+        form.value.city = user.value.profile.address || '';
+        form.value.gender = user.value.profile.gender || 'Laki-laki';
+        // Date input needs YYYY-MM-DD
+        if (user.value.profile.date_of_birth) {
+          form.value.dob = new Date(user.value.profile.date_of_birth).toISOString().split('T')[0];
+        }
+      }
     }
-  } else {
-    router.push('/login');
+  } catch (err) {
+    console.error('Failed to fetch profile', err);
   }
+};
+
+const fetchOrders = async () => {
+  try {
+    const res = await fetch('/api/v1/orders', {
+      headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      const json = await res.json();
+      orders.value = json.data;
+    }
+  } catch (err) {
+    console.error('Failed to fetch orders', err);
+  }
+};
+
+const fetchWishlists = async () => {
+  try {
+    const res = await fetch('/api/v1/wishlist', {
+      headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      const json = await res.json();
+      wishlists.value = json.data;
+    }
+  } catch (err) {
+    console.error('Failed to fetch wishlists', err);
+  }
+};
+
+watch(activeMenu, (newVal) => {
+  if (newVal === 'orders' && orders.value.length === 0) fetchOrders();
+  if (newVal === 'wishlist' && wishlists.value.length === 0) fetchWishlists();
+});
+
+onMounted(() => {
+  if (!token) {
+    router.push('/login');
+    return;
+  }
+  fetchProfileData();
 });
 
 const userAvatar = computed(() => {
-  if (user.value?.avatar) {
-    return user.value.avatar;
+  if (user.value?.profile?.avatar) {
+    return user.value.profile.avatar;
   }
   return `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.value?.name || 'User'}&scale=130&backgroundColor=ffdfbf,c0aede,d1d4f9`;
 });
@@ -266,8 +382,37 @@ const logout = () => {
   router.push('/login');
 };
 
-const updateProfile = () => {
-  alert('Profil berhasil diperbarui!');
+const updateProfile = async () => {
+  isSavingProfile.value = true;
+  try {
+    const res = await fetch('/api/v1/profile', {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        full_name: form.value.name,
+        address: form.value.city,
+        gender: form.value.gender,
+        date_of_birth: form.value.dob
+      })
+    });
+    
+    if (res.ok) {
+      const data = await res.json();
+      user.value = data.user;
+      localStorage.setItem('user', JSON.stringify(data.user));
+      alert('Profil berhasil diperbarui!');
+    } else {
+      alert('Gagal memperbarui profil.');
+    }
+  } catch (err) {
+    alert('Terjadi kesalahan jaringan.');
+  } finally {
+    isSavingProfile.value = false;
+  }
 };
 </script>
 

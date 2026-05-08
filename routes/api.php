@@ -14,6 +14,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -58,6 +59,12 @@ Route::prefix('v1')->group(function () {
         Route::get('profile', [ProfileController::class, 'show']);
         Route::put('profile', [ProfileController::class, 'update']);
 
+        // ─── CART ──────────────────────────────────────────────────────────
+        Route::prefix('cart')->group(function () {
+            Route::get('/', [CartController::class, 'index']);
+            Route::post('/sync', [CartController::class, 'sync']);
+        });
+
         // ─── AR TRY ON ────────────────────────────────────────────────────────
         Route::post('ar-try-on/analyze', [ArTryOnController::class, 'analyze']);
 
@@ -99,6 +106,7 @@ Route::prefix('v1')->group(function () {
 
         // ─── ORDERS (semua role bisa beli) ────────────────────────────────────
         Route::middleware('role:pembeli,umkm,desainer,admin')->prefix('orders')->group(function () {
+
             Route::get('/',        [OrderController::class, 'index']);
             Route::get('/{order}', [OrderController::class, 'show']);
             Route::post('/',       [OrderController::class, 'store']);

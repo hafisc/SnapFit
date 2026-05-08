@@ -1,6 +1,8 @@
 <template>
-  <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-2xl border-b border-gray-100/50 shadow-sm animate-slide-down">
-    <nav class="max-w-[1600px] mx-auto px-6 py-2.5 flex justify-between items-center">
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white/60 backdrop-blur-2xl border-b border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] animate-slide-down">
+    <!-- Top inner highlight for premium glass effect -->
+    <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent"></div>
+    <nav class="max-w-[1600px] mx-auto px-6 py-2.5 flex justify-between items-center relative">
       <!-- Logo Section -->
       <a href="/" class="flex items-center gap-2.5 group cursor-pointer">
         <div class="w-10 h-10 rounded-xl overflow-hidden shadow-sm border border-slate-100 transform group-hover:scale-105 transition-all duration-300 flex items-center justify-center bg-white">
@@ -175,15 +177,31 @@
                   <p class="text-xs text-gray-500 font-medium">Yuk cari produk impianmu!</p>
                 </div>
                 <div v-else>
-                  <div v-for="item in cartStore.items.slice(0, 4)" :key="item.id" class="p-4 border-b border-gray-50 flex gap-3 relative hover:bg-gray-50/50 transition-colors">
+                  <div v-for="item in cartStore.items.slice(0, 4)" :key="`${item.id}-${item.variant}`" class="p-4 border-b border-gray-50 flex gap-3 relative hover:bg-gray-50/50 transition-colors group">
                     <img :src="item.image || '/images/placeholder.png'" class="w-14 h-14 rounded-xl object-cover bg-gray-100 flex-shrink-0" />
                     <div class="flex-1 min-w-0 flex flex-col justify-center">
-                      <h4 class="text-sm font-bold text-gray-900 truncate">{{ item.name }}</h4>
-                      <div class="flex justify-between items-center mt-1">
-                        <p class="text-xs font-black text-orange-600">{{ cartStore.formatCurrency(item.price) }}</p>
-                        <p class="text-[10px] text-gray-500 font-semibold bg-gray-100 px-2 py-0.5 rounded-md">x{{ item.quantity }}</p>
+                      <h4 class="text-sm font-bold text-gray-900 truncate pr-6">{{ item.name }}</h4>
+                      <p class="text-xs font-black text-orange-600 mt-0.5">{{ cartStore.formatCurrency(item.price) }}</p>
+                      <div class="flex items-center gap-1.5 mt-1.5">
+                        <button
+                          @click.stop="decrementItem(item)"
+                          class="w-6 h-6 rounded-lg bg-gray-100 hover:bg-orange-100 text-gray-600 hover:text-orange-600 flex items-center justify-center text-xs font-black transition-colors"
+                        >−</button>
+                        <span class="w-7 text-center text-xs font-black text-gray-900">{{ item.quantity }}</span>
+                        <button
+                          @click.stop="incrementItem(item)"
+                          class="w-6 h-6 rounded-lg bg-gray-100 hover:bg-orange-100 text-gray-600 hover:text-orange-600 flex items-center justify-center text-xs font-black transition-colors"
+                        >+</button>
                       </div>
                     </div>
+                    <!-- Tombol hapus -->
+                    <button
+                      @click.stop="removeCartItem(item)"
+                      class="absolute top-3 right-3 w-6 h-6 rounded-lg bg-transparent hover:bg-red-50 text-gray-300 hover:text-red-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all"
+                      title="Hapus dari keranjang"
+                    >
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
                   </div>
                   <div v-if="cartStore.items.length > 4" class="p-3 text-center text-xs font-bold text-gray-500 bg-gray-50">
                     + {{ cartStore.items.length - 4 }} produk lainnya
@@ -418,6 +436,23 @@ const goToProduct = (id) => {
   showSearchResults.value = false;
   searchQuery.value = '';
   router.push({ name: 'marketplace.product.detail', params: { id } });
+};
+
+// Cart item manipulation
+const incrementItem = (item) => {
+  cartStore.updateQuantity(item.id, item.variant, item.quantity + 1);
+};
+
+const decrementItem = (item) => {
+  if (item.quantity <= 1) {
+    cartStore.removeItem(item.id, item.variant);
+  } else {
+    cartStore.updateQuantity(item.id, item.variant, item.quantity - 1);
+  }
+};
+
+const removeCartItem = (item) => {
+  cartStore.removeItem(item.id, item.variant);
 };
 
 const goToLogin   = () => emit('goToLogin');

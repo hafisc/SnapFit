@@ -1,5 +1,13 @@
 <template>
-  <div class="min-h-screen bg-white text-gray-900 font-sans selection:bg-orange-100 overflow-x-hidden">
+  <div class="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-orange-500 selection:text-white overflow-x-hidden relative">
+    
+    <!-- Premium Ambient Background -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+      <!-- Soft Orange/Amber Glows -->
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(251,146,60,0.08),transparent_50%),radial-gradient(circle_at_bottom_left,rgba(251,191,36,0.08),transparent_60%)]"></div>
+      <!-- Subtle Grid Pattern fading out at the bottom -->
+      <div class="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:32px_32px] [mask-image:radial-gradient(ellipse_80%_60%_at_50%_0%,#000_40%,transparent_100%)] opacity-50"></div>
+    </div>
 
     <!-- Navbar -->
     <Navbar
