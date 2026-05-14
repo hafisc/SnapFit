@@ -11,6 +11,28 @@
       </div>
     </div>
 
+    <!-- API Status Notice -->
+    <div class="bg-emerald-50 border-l-4 border-emerald-500 rounded-xl p-4 flex items-start gap-3">
+      <svg class="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      </svg>
+      <div>
+        <p class="text-sm font-bold text-emerald-900 mb-1">✨ AI Aktif - Siap Menghasilkan Foto Profesional</p>
+        <p class="text-xs text-emerald-700 mb-2">Sistem terhubung dengan <strong>OpenRouter AI</strong> dan <strong>Groq Vision</strong>. AI akan menganalisis produk Anda dan menghasilkan variasi foto profesional.</p>
+        <div class="flex items-center gap-2 text-xs text-emerald-600">
+          <span class="flex items-center gap-1">
+            <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+            OpenRouter Active
+          </span>
+          <span class="text-emerald-400">•</span>
+          <span class="flex items-center gap-1">
+            <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+            Groq Vision Active
+          </span>
+        </div>
+      </div>
+    </div>
+
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <!-- Workspace Form -->
       <div class="lg:col-span-1 space-y-6">
@@ -174,50 +196,44 @@ const generateAI = async () => {
   
   isGenerating.value = true;
   
-  // Simulasi proses AI rendering (delay 3 detik)
-  setTimeout(async () => {
-    // Generate mock images array
-    const mockGeneratedImages = [
-      `https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80&sig=${Math.random()}`,
-      `https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80&sig=${Math.random()}`,
-      `https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80&sig=${Math.random()}`,
-      `https://images.unsplash.com/photo-1608231387042-66d1773070a5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80&sig=${Math.random()}`
-    ];
+  try {
+    const token = localStorage.getItem('token');
+    const res = await fetch('/api/v1/umkm/ai-generations/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        original_image_url: form.value.original_image_url,
+        prompt: form.value.prompt || 'Professional product photography studio lighting'
+      })
+    });
     
-    try {
-      const token = localStorage.getItem('token');
-      const res = await fetch('/api/v1/umkm/ai-generations', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          original_image_url: form.value.original_image_url,
-          prompt: form.value.prompt || 'Professional product photography studio lighting',
-          generated_images: mockGeneratedImages
-        })
-      });
+    if (res.ok) {
+      const data = await res.json();
       
-      if (res.ok) {
-        // Reset form
-        previewUrl.value = null;
-        form.value.original_image_url = '';
-        form.value.prompt = '';
-        
-        // Reload history
-        fetchHistory(1);
-      } else {
-        alert('Gagal menyimpian riwayat generasi AI.');
-      }
-    } catch (e) {
-      console.error(e);
-      alert('Terjadi kesalahan jaringan.');
-    } finally {
-      isGenerating.value = false;
+      // Reset form
+      previewUrl.value = null;
+      form.value.original_image_url = '';
+      form.value.prompt = '';
+      
+      // Reload history
+      await fetchHistory(1);
+      
+      // Show success message
+      alert('✨ AI berhasil menghasilkan gambar produk!');
+    } else {
+      const error = await res.json();
+      alert('Gagal menghasilkan gambar: ' + (error.message || 'Unknown error'));
     }
-  }, 3000);
+  } catch (e) {
+    console.error(e);
+    alert('Terjadi kesalahan jaringan.');
+  } finally {
+    isGenerating.value = false;
+  }
 };
 
 const deleteHistory = async (id) => {

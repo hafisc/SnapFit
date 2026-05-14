@@ -16,8 +16,8 @@
       <!-- Logo -->
       <div class="h-[72px] flex items-center px-7 border-b border-slate-100">
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
-            <span class="text-white font-extrabold text-sm">S</span>
+          <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center overflow-hidden">
+            <img src="/images/logo.png" alt="SnapFit Logo" class="w-full h-full object-contain p-1" />
           </div>
           <div>
             <span class="font-extrabold text-[15px] text-slate-800 tracking-tight">SnapFit</span>

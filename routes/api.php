@@ -15,6 +15,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\UmkmDashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -116,6 +117,9 @@ Route::prefix('v1')->group(function () {
 
         // ─── UMKM ONLY ────────────────────────────────────────────────────────
         Route::middleware('role:umkm')->prefix('umkm')->group(function () {
+            // Dashboard
+            Route::get('dashboard', [UmkmDashboardController::class, 'index']);
+            
             Route::get('products',                         [ProductController::class, 'myProducts']);
             Route::post('products',                        [ProductController::class, 'store']);
             Route::put('products/{product}',               [ProductController::class, 'update']);
@@ -124,6 +128,7 @@ Route::prefix('v1')->group(function () {
 
             // AI Product Studio
             Route::get('ai-generations',                   [AiGenerationController::class, 'index']);
+            Route::post('ai-generations/generate',         [AiGenerationController::class, 'generate']); // NEW: Real AI generation
             Route::post('ai-generations',                  [AiGenerationController::class, 'store']);
             Route::delete('ai-generations/{aiGeneration}', [AiGenerationController::class, 'destroy']);
         });

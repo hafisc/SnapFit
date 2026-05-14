@@ -251,7 +251,7 @@
                     </div>
                     <div>
                       <p class="text-sm font-black text-gray-900">{{ user.name }}</p>
-                      <p class="text-[10px] text-orange-600 font-bold uppercase tracking-wider">Premium Member</p>
+                      <!-- <p class="text-[10px] text-orange-600 font-bold uppercase tracking-wider">Premium Member</p> -->
                     </div>
                   </div>
                 </div>

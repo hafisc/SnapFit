@@ -1,34 +1,34 @@
 <template>
-  <div class="space-y-6 max-w-[1400px]">
+  <div class="space-y-6 max-w-7xl mx-auto">
     <!-- Quick Stats -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      <div v-for="(s, i) in stats" :key="i" class="bg-white rounded-2xl p-5 border border-slate-200/60">
-        <div class="flex items-center justify-between mb-4">
-          <div class="w-10 h-10 rounded-xl flex items-center justify-center" :class="s.iconBg">
-            <component :is="s.icon" class="w-5 h-5" :class="s.iconColor" />
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div v-for="(s, i) in stats" :key="i" class="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-slate-200/60">
+        <div class="flex items-center justify-between mb-3 sm:mb-4">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center" :class="s.iconBg">
+            <component :is="s.icon" class="w-4 h-4 sm:w-5 sm:h-5" :class="s.iconColor" />
           </div>
-          <span class="text-[11px] font-semibold px-2 py-0.5 rounded-md" :class="s.changeBg">{{ s.change }}</span>
+          <span class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 rounded-md" :class="s.changeBg">{{ s.change }}</span>
         </div>
-        <p class="text-[22px] font-bold text-slate-800 leading-none mb-1">
-          <span v-if="loading" class="inline-block w-16 h-6 bg-slate-100 rounded animate-pulse"></span>
+        <p class="text-lg sm:text-[22px] font-bold text-slate-800 leading-none mb-1">
+          <span v-if="loading" class="inline-block w-14 sm:w-16 h-5 sm:h-6 bg-slate-100 rounded animate-pulse"></span>
           <span v-else>{{ s.value }}</span>
         </p>
-        <p class="text-[11px] text-slate-400 font-medium">{{ s.label }}</p>
+        <p class="text-[10px] sm:text-[11px] text-slate-400 font-medium">{{ s.label }}</p>
       </div>
     </div>
 
     <!-- Chart + Activity Row -->
-    <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
       <!-- Revenue Chart -->
-      <div class="lg:col-span-3 bg-white rounded-2xl border border-slate-200/60 p-6">
-        <div class="flex items-center justify-between mb-6">
+      <div class="lg:col-span-2 bg-white rounded-xl sm:rounded-2xl border border-slate-200/60 p-4 sm:p-6">
+        <div class="flex items-center justify-between mb-4 sm:mb-6 flex-wrap gap-3">
           <div>
-            <h3 class="text-[14px] font-bold text-slate-800">Revenue</h3>
-            <p class="text-[11px] text-slate-400 font-medium">Platform fees dari transaksi marketplace</p>
+            <h3 class="text-[13px] sm:text-[14px] font-bold text-slate-800">Revenue</h3>
+            <p class="text-[10px] sm:text-[11px] text-slate-400 font-medium">Platform fees dari transaksi marketplace</p>
           </div>
           <div class="flex bg-slate-100 rounded-lg p-0.5">
             <button v-for="period in ['7D','1M','3M','1Y']" :key="period" @click="activePeriod = period"
-              class="px-3 py-1.5 text-[10px] font-bold rounded-md transition-all"
+              class="px-2.5 sm:px-3 py-1 sm:py-1.5 text-[9px] sm:text-[10px] font-bold rounded-md transition-all"
               :class="activePeriod === period ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-400 hover:text-slate-600'">
               {{ period }}
             </button>
@@ -36,43 +36,43 @@
         </div>
 
         <!-- Revenue Value -->
-        <div class="mb-6">
-          <p class="text-[28px] font-bold text-slate-800 tracking-tight leading-none">Rp {{ loading ? '—' : '47.850.000' }}</p>
-          <p class="text-[11px] text-emerald-500 font-semibold mt-1">↑ 12.5% dari periode sebelumnya</p>
+        <div class="mb-4 sm:mb-6">
+          <p class="text-2xl sm:text-[28px] font-bold text-slate-800 tracking-tight leading-none">Rp {{ loading ? '—' : '47.850.000' }}</p>
+          <p class="text-[10px] sm:text-[11px] text-emerald-500 font-semibold mt-1">↑ 12.5% dari periode sebelumnya</p>
         </div>
 
         <!-- CSS Chart -->
-        <div class="relative h-40">
+        <div class="relative h-48 sm:h-52">
           <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
             <div v-for="i in 4" :key="i" class="w-full border-b border-dashed border-slate-100"></div>
           </div>
-          <div class="h-full flex items-end gap-[3px] relative z-10">
+          <div class="h-full flex items-end gap-[2px] sm:gap-[3px] relative z-10">
             <div v-for="(h, i) in barHeights" :key="i" class="flex-1 rounded-t-md transition-all duration-700 hover:opacity-80 cursor-pointer"
               :class="i === barHeights.length - 1 ? 'bg-orange-500' : 'bg-slate-200'" :style="{ height: h + '%' }"></div>
           </div>
         </div>
-        <div class="flex justify-between mt-3 text-[10px] text-slate-400 font-medium">
+        <div class="flex justify-between mt-2 sm:mt-3 text-[9px] sm:text-[10px] text-slate-400 font-medium">
           <span v-for="d in ['Sen','Sel','Rab','Kam','Jum','Sab','Min']" :key="d">{{ d }}</span>
         </div>
       </div>
 
       <!-- Activity Feed -->
-      <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200/60 p-6">
-        <div class="flex items-center justify-between mb-5">
-          <h3 class="text-[14px] font-bold text-slate-800">Aktivitas Terbaru</h3>
-          <button class="text-[11px] font-semibold text-orange-500 hover:text-orange-600 transition-colors">Lihat Semua</button>
+      <div class="lg:col-span-1 bg-white rounded-2xl border border-slate-200/60 p-5 sm:p-6">
+        <div class="flex items-center justify-between mb-4 sm:mb-5">
+          <h3 class="text-[13px] sm:text-[14px] font-bold text-slate-800">Aktivitas Terbaru</h3>
+          <button class="text-[10px] sm:text-[11px] font-semibold text-orange-500 hover:text-orange-600 transition-colors">Lihat Semua</button>
         </div>
 
-        <div class="space-y-4">
-          <div v-for="a in activities" :key="a.id" class="flex gap-3 group">
+        <div class="space-y-3 sm:space-y-4">
+          <div v-for="a in activities" :key="a.id" class="flex gap-2 sm:gap-3 group">
             <div class="relative flex flex-col items-center">
-              <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs flex-shrink-0" :class="a.dotClass">{{ a.emoji }}</div>
+              <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-xs flex-shrink-0" :class="a.dotClass">{{ a.emoji }}</div>
               <div class="w-px flex-1 bg-slate-100 mt-1"></div>
             </div>
-            <div class="pb-4 flex-1 min-w-0">
-              <p class="text-[12px] font-semibold text-slate-700 leading-snug">{{ a.title }}</p>
-              <p class="text-[11px] text-slate-400 mt-0.5 truncate">{{ a.desc }}</p>
-              <p class="text-[10px] text-slate-300 font-medium mt-1">{{ a.time }}</p>
+            <div class="pb-3 sm:pb-4 flex-1 min-w-0">
+              <p class="text-[11px] sm:text-[12px] font-semibold text-slate-700 leading-snug">{{ a.title }}</p>
+              <p class="text-[10px] sm:text-[11px] text-slate-400 mt-0.5 truncate">{{ a.desc }}</p>
+              <p class="text-[9px] sm:text-[10px] text-slate-300 font-medium mt-1">{{ a.time }}</p>
             </div>
           </div>
         </div>
@@ -80,17 +80,17 @@
     </div>
 
     <!-- Bottom Row -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
       <!-- User Composition -->
-      <div class="bg-white rounded-2xl border border-slate-200/60 p-6">
-        <h3 class="text-[14px] font-bold text-slate-800 mb-5">Komposisi Pengguna</h3>
-        <div class="space-y-4">
-          <div v-for="r in userRoles" :key="r.role" class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-[11px] font-bold" :class="r.bgClass">{{ r.initial }}</div>
+      <div class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/60 p-4 sm:p-6">
+        <h3 class="text-[13px] sm:text-[14px] font-bold text-slate-800 mb-4 sm:mb-5">Komposisi Pengguna</h3>
+        <div class="space-y-3 sm:space-y-4">
+          <div v-for="r in userRoles" :key="r.role" class="flex items-center gap-2 sm:gap-3">
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-[10px] sm:text-[11px] font-bold flex-shrink-0" :class="r.bgClass">{{ r.initial }}</div>
             <div class="flex-1 min-w-0">
               <div class="flex items-center justify-between mb-1">
-                <span class="text-[12px] font-semibold text-slate-700">{{ r.label }}</span>
-                <span class="text-[12px] font-bold text-slate-800">{{ r.count }}</span>
+                <span class="text-[11px] sm:text-[12px] font-semibold text-slate-700">{{ r.label }}</span>
+                <span class="text-[11px] sm:text-[12px] font-bold text-slate-800">{{ r.count }}</span>
               </div>
               <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
                 <div class="h-full rounded-full transition-all duration-1000" :class="r.barClass" :style="{ width: r.pct + '%' }"></div>
@@ -101,34 +101,34 @@
       </div>
 
       <!-- Top Products -->
-      <div class="bg-white rounded-2xl border border-slate-200/60 p-6">
-        <h3 class="text-[14px] font-bold text-slate-800 mb-5">Produk Terlaris</h3>
-        <div class="space-y-3">
-          <div v-for="(p, i) in topProducts" :key="i" class="flex items-center gap-3 p-2 -mx-2 rounded-xl hover:bg-slate-50 transition-colors">
-            <span class="w-6 h-6 rounded-md bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-400 flex-shrink-0">{{ i + 1 }}</span>
-            <div class="w-9 h-9 rounded-lg bg-slate-100 overflow-hidden flex-shrink-0">
+      <div class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/60 p-4 sm:p-6">
+        <h3 class="text-[13px] sm:text-[14px] font-bold text-slate-800 mb-4 sm:mb-5">Produk Terlaris</h3>
+        <div class="space-y-2 sm:space-y-3">
+          <div v-for="(p, i) in topProducts" :key="i" class="flex items-center gap-2 sm:gap-3 p-2 -mx-2 rounded-xl hover:bg-slate-50 transition-colors">
+            <span class="w-5 h-5 sm:w-6 sm:h-6 rounded-md bg-slate-100 flex items-center justify-center text-[9px] sm:text-[10px] font-bold text-slate-400 flex-shrink-0">{{ i + 1 }}</span>
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-slate-100 overflow-hidden flex-shrink-0">
               <img :src="p.img" :alt="p.name" class="w-full h-full object-cover" />
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-[12px] font-semibold text-slate-700 truncate">{{ p.name }}</p>
-              <p class="text-[10px] text-slate-400">{{ p.seller }}</p>
+              <p class="text-[11px] sm:text-[12px] font-semibold text-slate-700 truncate">{{ p.name }}</p>
+              <p class="text-[9px] sm:text-[10px] text-slate-400">{{ p.seller }}</p>
             </div>
-            <span class="text-[12px] font-bold text-slate-800">{{ p.sold }} terjual</span>
+            <span class="text-[11px] sm:text-[12px] font-bold text-slate-800 whitespace-nowrap">{{ p.sold }} terjual</span>
           </div>
         </div>
       </div>
 
       <!-- Quick Actions -->
-      <div class="bg-white rounded-2xl border border-slate-200/60 p-6">
-        <h3 class="text-[14px] font-bold text-slate-800 mb-5">Perlu Perhatian</h3>
-        <div class="space-y-3">
-          <div v-for="alert in alerts" :key="alert.id" class="flex items-start gap-3 p-3 rounded-xl border" :class="alert.borderClass">
-            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0" :class="alert.bgClass">{{ alert.emoji }}</div>
+      <div class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/60 p-4 sm:p-6">
+        <h3 class="text-[13px] sm:text-[14px] font-bold text-slate-800 mb-4 sm:mb-5">Perlu Perhatian</h3>
+        <div class="space-y-2 sm:space-y-3">
+          <div v-for="alert in alerts" :key="alert.id" class="flex items-start gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-xl border" :class="alert.borderClass">
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0" :class="alert.bgClass">{{ alert.emoji }}</div>
             <div class="flex-1 min-w-0">
-              <p class="text-[12px] font-semibold text-slate-700">{{ alert.title }}</p>
-              <p class="text-[10px] text-slate-400 mt-0.5">{{ alert.desc }}</p>
+              <p class="text-[11px] sm:text-[12px] font-semibold text-slate-700">{{ alert.title }}</p>
+              <p class="text-[9px] sm:text-[10px] text-slate-400 mt-0.5">{{ alert.desc }}</p>
             </div>
-            <router-link :to="alert.link" class="text-[10px] font-bold text-orange-500 hover:text-orange-600 whitespace-nowrap mt-0.5">Lihat →</router-link>
+            <router-link :to="alert.link" class="text-[9px] sm:text-[10px] font-bold text-orange-500 hover:text-orange-600 whitespace-nowrap mt-0.5 flex-shrink-0">Lihat →</router-link>
           </div>
         </div>
       </div>

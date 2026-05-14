@@ -16,8 +16,8 @@
       <!-- Logo -->
       <div class="h-[72px] flex items-center px-7 border-b border-white/5">
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
-            <span class="text-white font-extrabold text-sm">S</span>
+          <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center overflow-hidden">
+            <img src="/images/logo.png" alt="SnapFit Logo" class="w-full h-full object-contain p-1" />
           </div>
           <div>
             <span class="font-extrabold text-[15px] text-white tracking-tight">SnapFit</span>
@@ -72,14 +72,14 @@
     <!-- Main -->
     <main class="flex-1 flex flex-col min-w-0">
       <!-- Header -->
-      <header class="h-[72px] bg-white border-b border-slate-200/60 sticky top-0 z-20 px-6 lg:px-8 flex items-center justify-between">
-        <div class="flex items-center gap-4">
-          <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500">
+      <header class="h-16 sm:h-[72px] bg-white border-b border-slate-200/60 sticky top-0 z-20 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+          <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 flex-shrink-0">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
           </button>
-          <div>
-            <h1 class="text-[15px] font-bold text-slate-800">{{ currentPageTitle }}</h1>
-            <p class="text-[11px] text-slate-400 font-medium -mt-0.5">{{ currentPageDesc }}</p>
+          <div class="min-w-0">
+            <h1 class="text-sm sm:text-[15px] font-bold text-slate-800 truncate">{{ currentPageTitle }}</h1>
+            <p class="text-[10px] sm:text-[11px] text-slate-400 font-medium -mt-0.5 truncate hidden sm:block">{{ currentPageDesc }}</p>
           </div>
         </div>
 
@@ -99,7 +99,7 @@
       </header>
 
       <!-- Content -->
-      <div class="flex-1 overflow-y-auto p-6 lg:p-8 no-scrollbar">
+      <div class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 no-scrollbar">
         <RouterView />
       </div>
     </main>

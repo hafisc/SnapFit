@@ -3,11 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\AiGeneration;
+use App\Services\AiImageGenerationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AiGenerationController extends Controller
 {
+    protected $aiImageService;
+
+    public function __construct(AiImageGenerationService $aiImageService)
+    {
+        $this->aiImageService = $aiImageService;
+    }
     /**
      * List riwayat AI generation milik UMKM.
      */
@@ -32,6 +39,49 @@ class AiGenerationController extends Controller
                 'last_page'    => $generations->lastPage(),
             ],
         ]);
+    }
+
+    /**
+     * Generate AI images for product (NEW: actual AI generation)
+     */
+    public function generate(Request $request): JsonResponse
+    {
+        $request->validate([
+            'original_image_url' => ['required', 'url'],
+            'prompt'             => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        try {
+            // Generate images using AI service
+            $generatedImages = $this->aiImageService->generateProductImages(
+                $request->original_image_url,
+                $request->prompt ?? 'Professional product photography'
+            );
+
+            // Save to database
+            $generation = $request->user()->aiGenerations()->create([
+                'original_image_url' => $request->original_image_url,
+                'prompt'             => $request->prompt,
+                'generated_images'   => $generatedImages,
+            ]);
+
+            return response()->json([
+                'message' => 'AI Generation berhasil.',
+                'data'    => [
+                    'id'                 => $generation->id,
+                    'original_image_url' => $generation->original_image_url,
+                    'generated_images'   => $generation->generated_images,
+                    'prompt'             => $generation->prompt,
+                    'created_at'         => $generation->created_at->toDateTimeString(),
+                ],
+            ], 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Gagal menghasilkan gambar AI.',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**

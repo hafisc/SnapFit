@@ -43,6 +43,14 @@ return [
         'api_key' => env('OPENROUTER_API_KEY'),
     ],
 
+    'replicate' => [
+        'api_key' => env('REPLICATE_API_KEY'),
+    ],
+
+    'stability' => [
+        'api_key' => env('STABILITY_API_KEY'),
+    ],
+
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
