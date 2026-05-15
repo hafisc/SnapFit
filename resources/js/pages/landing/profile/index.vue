@@ -251,7 +251,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import Navbar from '@/components/common/Navbar.vue';
+import Navbar from '@/pages/landing/partials/Navbar.vue';
 
 const router = useRouter();
 const user = ref(null);

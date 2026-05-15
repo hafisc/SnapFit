@@ -25,13 +25,13 @@ class UserSeeder extends Seeder
             ],
             // UMKM Kreator 1
             [
-                'name'     => 'Sari Batik Malang',
-                'email'    => 'sari@snapfit.id',
+                'name'     => 'Raja Batik Malang',
+                'email'    => 'raja@gmail.com',
                 'password' => Hash::make('password'),
                 'role'     => 'umkm',
                 'profile'  => [
-                    'full_name'     => 'Sari Rahayu',
-                    'business_name' => 'Batik Sari Malang',
+                    'full_name'     => 'Raja Batik Malang',
+                    'business_name' => 'Raja Batik Malang',
                     'phone'         => '081234567890',
                     'address'       => 'Jl. Batik No. 12, Malang',
                     'bio'           => 'Pengrajin batik tulis asli Malang dengan motif khas Arema.',

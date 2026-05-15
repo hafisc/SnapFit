@@ -70,7 +70,7 @@ import { useRouter } from 'vue-router';
 import { useCartStore } from '@/stores/cartStore';
 import { useWishlistStore } from '@/stores/wishlistStore';
 import { useNotificationStore } from '@/stores/notificationStore';
-import Navbar from '@/components/common/Navbar.vue';
+import Navbar from '@/pages/landing/partials/Navbar.vue';
 
 const router = useRouter();
 const wishlistStore = useWishlistStore();

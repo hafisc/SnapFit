@@ -388,7 +388,7 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useCartStore } from '@/stores/cartStore';
 import { useNotificationStore } from '@/stores/notificationStore';
-import Navbar from '@/components/common/Navbar.vue';
+import Navbar from '@/pages/landing/partials/Navbar.vue';
 
 const route = useRoute();
 const router = useRouter();

@@ -70,8 +70,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import ProductGrid from '@/components/landing/ProductGrid.vue';
-import Navbar from '@/components/common/Navbar.vue';
+import ProductGrid from '@/pages/landing/section/ProductGrid.vue';
+import Navbar from '@/pages/landing/partials/Navbar.vue';
 
 const router = useRouter();
 const user = ref(null);

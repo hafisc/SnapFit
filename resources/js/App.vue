@@ -4,5 +4,5 @@
 </template>
 
 <script setup>
-import NotificationContainer from '@/components/NotificationContainer.vue';
+import NotificationContainer from '@/pages/landing/partials/NotificationContainer.vue';
 </script>

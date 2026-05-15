@@ -40,10 +40,10 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 // Layout components
-import Navbar   from '@/components/common/Navbar.vue';
+import Navbar from '@/pages/landing/partials/Navbar.vue';
 
 // Landing sections
-import ProductGrid     from '@/components/landing/ProductGrid.vue';
+import ProductGrid     from './section/ProductGrid.vue';
 
 const router    = useRouter();
 const user      = ref(null);

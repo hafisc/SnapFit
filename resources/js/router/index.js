@@ -28,55 +28,55 @@ const routes = [
   {
     path: '/marketplace',
     name: 'marketplace',
-    component: () => import('@/pages/marketplace/index.vue'),
+    component: () => import('@/pages/landing/marketplace/index.vue'),
   },
   {
     path: '/marketplace/product/:id',
     name: 'marketplace.product.detail',
-    component: () => import('@/pages/marketplace/product-detail.vue'),
+    component: () => import('@/pages/landing/marketplace/product-detail.vue'),
     meta: { requiresAuth: true },
   },
   {
     path: '/marketplace/cart',
     name: 'marketplace.cart',
-    component: () => import('@/pages/marketplace/cart.vue'),
+    component: () => import('@/pages/landing/marketplace/cart.vue'),
     meta: { requiresAuth: true },
   },
   {
     path: '/marketplace/checkout',
     name: 'marketplace.checkout',
-    component: () => import('@/pages/marketplace/checkout.vue'),
+    component: () => import('@/pages/landing/marketplace/checkout.vue'),
     meta: { requiresAuth: true },
   },
   {
     path: '/marketplace/qris',
     name: 'marketplace.qris',
-    component: () => import('@/pages/marketplace/qris.vue'),
+    component: () => import('@/pages/landing/marketplace/qris.vue'),
     meta: { requiresAuth: true },
   },
   {
     path: '/marketplace/orders',
     name: 'marketplace.orders',
-    component: () => import('@/pages/marketplace/orders.vue'),
+    component: () => import('@/pages/landing/marketplace/orders.vue'),
     meta: { requiresAuth: true },
   },
   {
     path: '/marketplace/orders/:id',
     name: 'marketplace.order.detail',
-    component: () => import('@/pages/marketplace/order-detail.vue'),
+    component: () => import('@/pages/landing/marketplace/order-detail.vue'),
     meta: { requiresAuth: true },
   },
   {
     path: '/profile',
     name: 'profile',
-    component: () => import('@/pages/profile/index.vue'),
+    component: () => import('@/pages/landing/profile/index.vue'),
     meta: { requiresAuth: true },
   },
 
   // ─── UMKM ───────────────────────────────────────
   {
     path: '/umkm',
-    component: () => import('@/layouts/UmkmLayout.vue'),
+    component: () => import('@/layouts/umkm.vue'),
     meta: { requiresAuth: true, role: 'umkm' },
     children: [
       {
@@ -135,7 +135,7 @@ const routes = [
   // ─── DESIGNER ───────────────────────────────────
   {
     path: '/designer',
-    component: () => import('@/layouts/DesignerLayout.vue'),
+    component: () => import('@/layouts/designer.vue'),
     meta: { requiresAuth: true, role: 'desainer' },
     children: [
       {
@@ -174,7 +174,7 @@ const routes = [
   // ─── ADMIN ──────────────────────────────────────
   {
     path: '/admin',
-    component: () => import('@/layouts/AdminLayout.vue'),
+    component: () => import('@/layouts/admin.vue'),
     meta: { requiresAuth: true, role: 'admin' },
     children: [
       {
