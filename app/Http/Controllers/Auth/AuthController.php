@@ -131,11 +131,31 @@ class AuthController extends Controller
             $user->tokens()->delete();
             $token = $user->createToken('auth_token')->plainTextToken;
             
-            // Redirect to frontend with token
-            return redirect()->away(url('/login') . '?token=' . $token . '&role=' . $user->role);
+            // Determine redirect URL based on role
+            $frontendUrl = config('app.frontend_url', 'http://localhost:5174');
+            
+            // Redirect based on role
+            switch ($user->role) {
+                case 'admin':
+                    $redirectPath = '/admin/dashboard';
+                    break;
+                case 'umkm':
+                    $redirectPath = '/umkm/dashboard';
+                    break;
+                case 'desainer':
+                    $redirectPath = '/designer/dashboard';
+                    break;
+                case 'pembeli':
+                default:
+                    $redirectPath = '/'; // Landing page for pembeli
+                    break;
+            }
+            
+            return redirect()->away($frontendUrl . $redirectPath . '?token=' . $token);
             
         } catch (\Exception $e) {
-            return redirect()->away(url('/login') . '?error=Terjadi kesalahan saat login dengan Google.');
+            $frontendUrl = config('app.frontend_url', 'http://localhost:5174');
+            return redirect()->away($frontendUrl . '/?error=' . urlencode('Terjadi kesalahan saat login dengan Google.'));
         }
     }
 }

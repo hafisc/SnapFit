@@ -136,8 +136,41 @@ const logout = () => {
 
 /* ── Lifecycle ────────────────────────────────────────── */
 onMounted(() => {
-  const stored = localStorage.getItem('user');
-  if (stored) user.value = JSON.parse(stored);
+  // Check for token in URL (from Google OAuth redirect)
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get('token');
+  
+  if (token) {
+    // Save token to localStorage
+    localStorage.setItem('token', token);
+    
+    // Fetch user data with the token
+    fetch('/api/v1/auth/me', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.user) {
+        localStorage.setItem('user', JSON.stringify(data.user));
+        user.value = data.user;
+      }
+      // Clean URL (remove token from query params)
+      window.history.replaceState({}, document.title, window.location.pathname);
+    })
+    .catch(err => {
+      console.error('Failed to fetch user:', err);
+      // Clean URL even on error
+      window.history.replaceState({}, document.title, window.location.pathname);
+    });
+  } else {
+    // Load user from localStorage if no token in URL
+    const stored = localStorage.getItem('user');
+    if (stored) user.value = JSON.parse(stored);
+  }
+  
   fetchProducts();
 });
 </script>
