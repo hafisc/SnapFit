@@ -31,6 +31,7 @@ class AiGenerationController extends Controller
                 'original_image_url' => $g->original_image_url,
                 'generated_images'   => $g->generated_images ?? [],
                 'prompt'             => $g->prompt,
+                'ai_analysis'        => $g->ai_analysis,
                 'created_at'         => $g->created_at->toDateTimeString(),
             ]),
             'pagination' => [
@@ -53,7 +54,7 @@ class AiGenerationController extends Controller
 
         try {
             // Generate images using AI service
-            $generatedImages = $this->aiImageService->generateProductImages(
+            $result = $this->aiImageService->generateProductImages(
                 $request->original_image_url,
                 $request->prompt ?? 'Professional product photography'
             );
@@ -62,7 +63,8 @@ class AiGenerationController extends Controller
             $generation = $request->user()->aiGenerations()->create([
                 'original_image_url' => $request->original_image_url,
                 'prompt'             => $request->prompt,
-                'generated_images'   => $generatedImages,
+                'generated_images'   => $result['images'] ?? [],
+                'ai_analysis'        => $result['analysis'] ?? null,
             ]);
 
             return response()->json([
@@ -72,6 +74,7 @@ class AiGenerationController extends Controller
                     'original_image_url' => $generation->original_image_url,
                     'generated_images'   => $generation->generated_images,
                     'prompt'             => $generation->prompt,
+                    'ai_analysis'        => $generation->ai_analysis,
                     'created_at'         => $generation->created_at->toDateTimeString(),
                 ],
             ], 201);

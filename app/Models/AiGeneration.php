@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class AiGeneration extends Model
 {
     protected $fillable = [
-        'user_id', 'original_image_url', 'generated_images', 'prompt',
+        'user_id', 'original_image_url', 'generated_images', 'prompt', 'ai_analysis',
     ];
 
     protected $casts = [

@@ -12,28 +12,18 @@ class AiImageGenerationService
      * 
      * @param string $originalImageUrl URL of the original product image
      * @param string $prompt User's styling prompt
-     * @return array Array of generated image URLs
+     * @return array Array of generated image URLs and ai analysis
      */
     public function generateProductImages(string $originalImageUrl, string $prompt): array
     {
-        // Try OpenRouter API first (if configured)
-        if ($openRouterKey = config('services.openrouter.api_key')) {
-            return $this->generateWithOpenRouter($originalImageUrl, $prompt, $openRouterKey);
-        }
-        
-        // Try Replicate API
-        if ($replicateKey = config('services.replicate.api_key')) {
-            return $this->generateWithReplicate($originalImageUrl, $prompt, $replicateKey);
-        }
-        
-        // Try Stability AI as fallback
-        if ($stabilityKey = config('services.stability.api_key')) {
-            return $this->generateWithStability($originalImageUrl, $prompt, $stabilityKey);
-        }
-        
-        // Try Groq with image-to-image (if supported)
+        // Try Groq API first
         if ($groqKey = config('services.groq.api_key')) {
             return $this->generateWithGroq($originalImageUrl, $prompt, $groqKey);
+        }
+
+        // Try OpenRouter API as fallback
+        if ($openRouterKey = config('services.openrouter.api_key')) {
+            return $this->generateWithOpenRouter($originalImageUrl, $prompt, $openRouterKey);
         }
         
         // If no API key configured, return mock images
@@ -41,51 +31,57 @@ class AiImageGenerationService
     }
 
     /**
-     * Generate images using OpenRouter API
+     * Generate images and analysis using OpenRouter API
      */
     private function generateWithOpenRouter(string $imageUrl, string $prompt, string $apiKey): array
     {
         try {
-            // OpenRouter supports multiple AI models including image generation
-            // Using vision model to analyze and describe the image, then generate variations
+            // Kita ubah image URL jadi path utuh agar AI bisa baca (jika tidak public, kita pakai teks saja)
+            // Note: Idealnya URL ini public. Karena app mungkin masih local, kita akan pakai text prompt saja
+            // namun jika URL dari cloud storage, AI bisa membacanya.
+            
+            // Format URL agar valid jika pakai storage public
+            $isLocal = str_contains($imageUrl, 'localhost') || str_contains($imageUrl, '127.0.0.1');
+            $imageContent = [];
+            
+            if (!$isLocal && filter_var($imageUrl, FILTER_VALIDATE_URL)) {
+                 $imageContent[] = [
+                     'type' => 'image_url',
+                     'image_url' => ['url' => $imageUrl],
+                 ];
+            }
+
+            $imageContent[] = [
+                'type' => 'text',
+                'text' => "Analyze this product photography prompt: '{$prompt}'. \n\nPlease provide a highly detailed, professional AI Product Studio report in Markdown format. \n\nInclude the following sections:\n\n1. 📸 **Product Analysis & Styling Recommendations:** Based on the prompt, suggest the best lighting, camera angles, and background setting to make the product look premium and cinematic.\n2. ✍️ **Marketing Captions:** Provide 3 engaging Instagram/TikTok caption variations (1 casual, 1 professional, 1 persuasive) complete with emojis.\n3. 🏷️ **Hashtags:** Suggest 10 highly relevant and trending hashtags.\n4. 🎨 **Target Audience & Vibe:** Describe the target market and the aesthetic vibe of this photoshoot.\n\nMake it sound like a senior creative director advising an MSME (UMKM). Use Indonesian language.",
+            ];
+
             $response = Http::withHeaders([
                 'Authorization' => "Bearer {$apiKey}",
                 'Content-Type' => 'application/json',
                 'HTTP-Referer' => config('app.url'),
                 'X-Title' => 'SnapFit AI Studio',
             ])->timeout(60)->post('https://openrouter.ai/api/v1/chat/completions', [
-                'model' => 'google/gemini-2.0-flash-exp:free', // Free vision model
+                'model' => 'openrouter/free', // Free auto-routed model
                 'messages' => [
                     [
                         'role' => 'system',
-                        'content' => 'You are a professional product photographer. Analyze the product image and provide detailed descriptions for 4 different professional photography styles that would enhance this product.',
+                        'content' => 'You are a professional product photographer and creative director helping Indonesian UMKM. Give structured, highly valuable, and premium advice. Answer in Indonesian.',
                     ],
                     [
                         'role' => 'user',
-                        'content' => [
-                            [
-                                'type' => 'text',
-                                'text' => "Analyze this product image and create 4 different professional photography style descriptions based on this prompt: {$prompt}. For each style, provide a detailed description of lighting, background, composition, and mood. Format as JSON array with keys: style1, style2, style3, style4.",
-                            ],
-                            [
-                                'type' => 'image_url',
-                                'image_url' => ['url' => $imageUrl],
-                            ],
-                        ],
+                        'content' => $imageContent,
                     ],
                 ],
-                'max_tokens' => 1000,
-                'temperature' => 0.8,
+                'max_tokens' => 2000,
+                'temperature' => 0.7,
             ]);
 
             if ($response->successful()) {
-                $content = $response->json('choices.0.message.content', '');
-                Log::info('OpenRouter AI Analysis', ['content' => $content]);
+                $analysis = $response->json('choices.0.message.content', '');
+                Log::info('OpenRouter AI Analysis Success');
                 
-                // Since OpenRouter doesn't generate actual images, we'll use the enhanced descriptions
-                // and return variations of the original image with metadata
-                // In production, you'd use these descriptions with an actual image generation API
-                return $this->generateEnhancedVariations($imageUrl, $content, $prompt);
+                return $this->generateEnhancedVariations($imageUrl, $analysis, $prompt);
             }
             
             Log::error('OpenRouter API Error', [
@@ -105,17 +101,15 @@ class AiImageGenerationService
      */
     private function generateEnhancedVariations(string $originalUrl, string $aiAnalysis, string $prompt): array
     {
-        // Create 4 variations with different filters/styles
-        // In production, you'd use the AI analysis to actually generate new images
-        $timestamp = time();
-        $styles = ['professional', 'minimal', 'vibrant', 'elegant'];
-        
-        $variations = [];
-        foreach ($styles as $index => $style) {
-            $variations[] = $originalUrl . '?style=' . $style . '&ai=enhanced&t=' . ($timestamp + $index);
-        }
-        
-        return $variations;
+        return [
+            'images' => [
+                $originalUrl . '?style=professional',
+                $originalUrl . '?style=minimal',
+                $originalUrl . '?style=vibrant',
+                $originalUrl . '?style=elegant',
+            ],
+            'analysis' => $aiAnalysis
+        ];
     }
 
     /**
@@ -240,45 +234,46 @@ class AiImageGenerationService
     }
 
     /**
-     * Generate images using Groq (text-based enhancement)
+     * Generate images and analysis using Groq
      */
     private function generateWithGroq(string $imageUrl, string $prompt, string $apiKey): array
     {
         try {
-            // Groq doesn't support image generation, but we can use it to enhance the prompt
-            // and then use that enhanced prompt with mock images
+            $imageContent = [
+                [
+                    'type' => 'text',
+                    'text' => "Analyze this product photography prompt: '{$prompt}'. \n\nPlease provide a highly detailed, professional AI Product Studio report in Markdown format. \n\nInclude the following sections:\n\n1. 📸 **Product Analysis & Styling Recommendations:** Based on the prompt, suggest the best lighting, camera angles, and background setting to make the product look premium and cinematic.\n2. ✍️ **Marketing Captions:** Provide 3 engaging Instagram/TikTok caption variations (1 casual, 1 professional, 1 persuasive) complete with emojis.\n3. 🏷️ **Hashtags:** Suggest 10 highly relevant and trending hashtags.\n4. 🎨 **Target Audience & Vibe:** Describe the target market and the aesthetic vibe of this photoshoot.\n\nMake it sound like a senior creative director advising an MSME (UMKM). Use Indonesian language.",
+                ]
+            ];
+
+            // Groq currently does not support vision models (decommissioned), so we only send the text prompt
+            // using their fastest text model.
             $response = Http::withHeaders([
                 'Authorization' => "Bearer {$apiKey}",
                 'Content-Type' => 'application/json',
-            ])->timeout(30)->post('https://api.groq.com/openai/v1/chat/completions', [
-                'model' => 'llama-3.2-11b-vision-preview',
+            ])->timeout(60)->post('https://api.groq.com/openai/v1/chat/completions', [
+                'model' => 'llama-3.3-70b-versatile',
                 'messages' => [
                     [
-                        'role' => 'system',
-                        'content' => 'You are a professional product photography expert. Enhance the user\'s prompt to create stunning product photos.',
-                    ],
-                    [
-                        'role' => 'user',
-                        'content' => [
-                            [
-                                'type' => 'text',
-                                'text' => "Enhance this product photography prompt: {$prompt}. Make it more detailed and professional.",
-                            ],
-                            [
-                                'type' => 'image_url',
-                                'image_url' => ['url' => $imageUrl],
-                            ],
-                        ],
+                        'role' => 'user', 
+                        'content' => $imageContent,
                     ],
                 ],
-                'max_tokens' => 500,
+                'max_tokens' => 2000,
                 'temperature' => 0.7,
             ]);
 
             if ($response->successful()) {
-                $enhancedPrompt = $response->json('choices.0.message.content', $prompt);
-                Log::info('Groq enhanced prompt', ['original' => $prompt, 'enhanced' => $enhancedPrompt]);
+                $analysis = $response->json('choices.0.message.content', '');
+                Log::info('Groq AI Analysis Success');
+                
+                return $this->generateEnhancedVariations($imageUrl, $analysis, $prompt);
             }
+            
+            Log::error('Groq API Error', [
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
             
         } catch (\Exception $e) {
             Log::error('Groq Exception', ['error' => $e->getMessage()]);
@@ -297,10 +292,13 @@ class AiImageGenerationService
         $timestamp = time();
         
         return [
-            $originalImageUrl . '?style=professional&t=' . $timestamp,
-            $originalImageUrl . '?style=minimal&t=' . ($timestamp + 1),
-            $originalImageUrl . '?style=vibrant&t=' . ($timestamp + 2),
-            $originalImageUrl . '?style=elegant&t=' . ($timestamp + 3),
+            'images' => [
+                $originalImageUrl . '?style=professional&t=' . $timestamp,
+                $originalImageUrl . '?style=minimal&t=' . ($timestamp + 1),
+                $originalImageUrl . '?style=vibrant&t=' . ($timestamp + 2),
+                $originalImageUrl . '?style=elegant&t=' . ($timestamp + 3),
+            ],
+            'analysis' => null
         ];
     }
 

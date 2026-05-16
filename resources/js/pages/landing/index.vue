@@ -1,12 +1,43 @@
 <template>
-  <div class="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-orange-500 selection:text-white overflow-x-hidden relative">
+  <div class="min-h-screen bg-[#FFF8F0] text-slate-900 font-sans selection:bg-orange-500 selection:text-white overflow-x-hidden relative">
     
-    <!-- Premium Ambient Background -->
-    <div class="fixed inset-0 pointer-events-none z-0">
-      <!-- Soft Orange/Amber Glows -->
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(251,146,60,0.08),transparent_50%),radial-gradient(circle_at_bottom_left,rgba(251,191,36,0.08),transparent_60%)]"></div>
-      <!-- Subtle Grid Pattern fading out at the bottom -->
-      <div class="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:32px_32px] [mask-image:radial-gradient(ellipse_80%_60%_at_50%_0%,#000_40%,transparent_100%)] opacity-50"></div>
+    <!-- ═══ HIGH-END INTERNATIONAL BACKGROUND SYSTEM ═══ -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#FAFAFA]">
+      
+      <!-- 1) Complex Liquid Mesh Gradient (CSS-only volumetric lighting) -->
+      <div class="absolute inset-0 opacity-60 mix-blend-multiply" 
+           style="background-image: 
+             radial-gradient(at 40% 20%, hsla(28,100%,74%,1) 0px, transparent 50%),
+             radial-gradient(at 80% 0%, hsla(189,100%,56%,0.2) 0px, transparent 50%),
+             radial-gradient(at 0% 50%, hsla(355,100%,93%,1) 0px, transparent 50%),
+             radial-gradient(at 80% 50%, hsla(340,100%,76%,0.4) 0px, transparent 50%),
+             radial-gradient(at 0% 100%, hsla(22,100%,77%,1) 0px, transparent 50%),
+             radial-gradient(at 80% 100%, hsla(242,100%,70%,0.2) 0px, transparent 50%),
+             radial-gradient(at 0% 0%, hsla(343,100%,76%,0.3) 0px, transparent 50%);
+             filter: blur(80px);">
+      </div>
+
+      <!-- 2) Breathing Ambient Orbs (Animated) -->
+      <div class="absolute top-[-10%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-gradient-to-br from-orange-200/40 to-rose-200/20 blur-[120px] animate-breathe-slow mix-blend-overlay"></div>
+      <div class="absolute bottom-[-20%] left-[-10%] w-[70vw] h-[70vw] rounded-full bg-gradient-to-tr from-amber-100/50 to-orange-100/30 blur-[140px] animate-breathe-slow-delayed mix-blend-overlay"></div>
+
+      <!-- 3) Technical Blueprint Grid (Ultra Subtle) -->
+      <div class="absolute inset-0" 
+           style="background-image: 
+             linear-gradient(to right, rgba(15, 23, 42, 0.02) 1px, transparent 1px),
+             linear-gradient(to bottom, rgba(15, 23, 42, 0.02) 1px, transparent 1px);
+           background-size: 40px 40px;
+           mask-image: radial-gradient(ellipse at center, black 20%, transparent 80%);
+           -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 80%);">
+      </div>
+
+      <!-- 4) Fine Film Grain / Noise Texture (Crucial for premium feel) -->
+      <div class="absolute inset-0 opacity-[0.05] mix-blend-overlay pointer-events-none" 
+           style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');">
+      </div>
+      
+      <!-- 5) Glassmorphism Frosted Layer Overlay -->
+      <div class="absolute inset-0 backdrop-blur-[1px] bg-white/10"></div>
     </div>
 
     <!-- Navbar -->
@@ -176,5 +207,28 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Page-level styles */
+/* ═══ High-End Background Animations ═══ */
+@keyframes breathe-slow {
+  0%, 100% { 
+    transform: translate(0, 0) scale(1) rotate(0deg); 
+    opacity: 0.8;
+  }
+  33% { 
+    transform: translate(3vw, -4vh) scale(1.05) rotate(2deg); 
+    opacity: 0.95;
+  }
+  66% { 
+    transform: translate(-2vw, 3vh) scale(0.95) rotate(-1deg); 
+    opacity: 0.85;
+  }
+}
+
+.animate-breathe-slow {
+  animation: breathe-slow 24s ease-in-out infinite;
+}
+
+.animate-breathe-slow-delayed {
+  animation: breathe-slow 28s ease-in-out infinite;
+  animation-delay: -12s; /* Start halfway through to offset */
+}
 </style>

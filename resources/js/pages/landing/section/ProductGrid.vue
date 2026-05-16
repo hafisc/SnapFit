@@ -1,8 +1,13 @@
 <template>
   <section id="marketplace" class="pt-10 pb-24 relative z-10">
-    <div class="absolute top-[-5%] right-[-5%] w-[500px] h-[500px] bg-orange-500/15 rounded-full blur-[120px] z-0 animate-pulse" style="animation-duration: 8s;"></div>
-    <div class="absolute bottom-[10%] left-[-10%] w-[600px] h-[600px] bg-rose-400/10 rounded-full blur-[120px] z-0"></div>
-    <div class="absolute top-[50%] left-[50%] w-[800px] h-[400px] bg-amber-200/10 rounded-full blur-[150px] z-0 -translate-x-1/2 -translate-y-1/2"></div>
+    <div
+      class="absolute top-[-5%] right-[-5%] w-[500px] h-[500px] bg-orange-500/15 rounded-full blur-[120px] z-0 animate-pulse"
+      style="animation-duration: 8s;"></div>
+    <div class="absolute bottom-[10%] left-[-10%] w-[600px] h-[600px] bg-rose-400/10 rounded-full blur-[120px] z-0">
+    </div>
+    <div
+      class="absolute top-[50%] left-[50%] w-[800px] h-[400px] bg-amber-200/10 rounded-full blur-[150px] z-0 -translate-x-1/2 -translate-y-1/2">
+    </div>
 
     <div class="max-w-[1600px] mx-auto px-6 relative z-10">
       <!-- PROMO CAROUSEL -->
@@ -101,38 +106,52 @@
 
       <!-- Products Grid -->
       <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-5">
-        <div v-for="(product, index) in filteredProducts" :key="product.id" @click="viewProductDetail(product)" class="bg-white border border-gray-200 shadow-sm hover:border-orange-400 hover:shadow-xl transition-all duration-300 rounded-2xl group overflow-hidden flex flex-col h-full cursor-pointer hover:-translate-y-1 relative" data-aos="fade-up" :data-aos-delay="(index % 6) * 50">
-          
+        <div v-for="(product, index) in filteredProducts" :key="product.id" @click="viewProductDetail(product)"
+          class="bg-white border border-gray-200 shadow-sm hover:border-orange-400 hover:shadow-xl transition-all duration-300 rounded-2xl group overflow-hidden flex flex-col h-full cursor-pointer hover:-translate-y-1 relative"
+          data-aos="fade-up" :data-aos-delay="(index % 6) * 50">
+
           <!-- Image Section -->
           <div class="relative w-full aspect-square bg-gray-100 isolate overflow-hidden border-b border-gray-100">
             <!-- Category Badge -->
             <div class="absolute top-2 left-2 z-20">
-              <span class="inline-flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-2 py-1 rounded-full text-[8px] font-black uppercase tracking-widest shadow-sm border border-orange-100">
+              <span
+                class="inline-flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-2 py-1 rounded-full text-[8px] font-black uppercase tracking-widest shadow-sm border border-orange-100">
                 <span class="w-1.5 h-1.5 bg-orange-500 rounded-full"></span>
                 {{ product.category }}
               </span>
             </div>
 
             <!-- Action Buttons (from incoming) -->
-            <div class="absolute top-2 right-2 z-20 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
+            <div
+              class="absolute top-2 right-2 z-20 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
               <!-- Wishlist -->
-              <button @click.stop="toggleWishlist(product)" class="w-8 h-8 bg-white/95 backdrop-blur-md rounded-full flex items-center justify-center hover:bg-white hover:scale-110 active:scale-95 transition-all shadow-sm" :class="isWishlisted(product.id) ? 'text-red-500' : 'text-gray-700'">
-                <svg class="w-4 h-4" :class="isWishlisted(product.id) ? 'fill-current' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              <button @click.stop="toggleWishlist(product)"
+                class="w-8 h-8 bg-white/95 backdrop-blur-md rounded-full flex items-center justify-center hover:bg-white hover:scale-110 active:scale-95 transition-all shadow-sm"
+                :class="isWishlisted(product.id) ? 'text-red-500' : 'text-gray-700'">
+                <svg class="w-4 h-4" :class="isWishlisted(product.id) ? 'fill-current' : ''" fill="none"
+                  stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
               </button>
             </div>
 
-            <img :src="product.images && product.images.length ? product.images[0] : 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1000'" :alt="product.name" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-            
+            <img
+              :src="product.images && product.images.length ? product.images[0] : 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1000'"
+              :alt="product.name"
+              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+
             <!-- Hover Overlay -->
             <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
 
             <!-- Quick Add to Cart (Bottom Overlay) -->
-            <div class="absolute bottom-0 left-0 right-0 p-2 z-20 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-              <button @click.stop="addToCart(product)" class="w-full bg-orange-600 text-white py-2 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-orange-700 shadow-lg active:scale-95 transition-all flex items-center justify-center gap-1.5">
+            <div
+              class="absolute bottom-0 left-0 right-0 p-2 z-20 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+              <button @click.stop="addToCart(product)"
+                class="w-full bg-orange-600 text-white py-2 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-orange-700 shadow-lg active:scale-95 transition-all flex items-center justify-center gap-1.5">
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
                 + Keranjang
               </button>
@@ -141,7 +160,8 @@
 
           <!-- Product Info -->
           <div class="p-3 flex flex-col flex-1">
-            <h3 class="font-medium text-xs mb-1 text-gray-800 line-clamp-2 leading-tight group-hover:text-orange-600 transition-colors">
+            <h3
+              class="font-medium text-xs mb-1 text-gray-800 line-clamp-2 leading-tight group-hover:text-orange-600 transition-colors">
               {{ product.name }}
             </h3>
 
@@ -151,7 +171,8 @@
             <!-- Price & Sold -->
             <div class="flex items-center justify-between mt-auto pt-1">
               <p class="text-base font-bold text-orange-600 tracking-tight">
-                <span class="text-[11px] font-semibold mr-0.5">Rp</span>{{ Number(product.price).toLocaleString('id-ID') }}
+                <span class="text-[11px] font-semibold mr-0.5">Rp</span>{{ Number(product.price).toLocaleString('id-ID')
+                }}
               </p>
               <p class="text-[10px] text-gray-500 font-medium ml-1 whitespace-nowrap">
                 {{ (product.id * 15) % 100 + 1 }}RB+ terjual
