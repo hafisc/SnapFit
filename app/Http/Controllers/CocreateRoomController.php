@@ -81,7 +81,7 @@ class CocreateRoomController extends Controller
             ->exists();
 
         if ($already) {
-            return response()->json(['message' => 'Anda sudah bergabung di room ini.'], 422);
+            return response()->json(['message' => 'Anda sudah bergabung di room ini.'], 200);
         }
 
         RoomParticipant::create([
