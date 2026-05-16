@@ -1,5 +1,19 @@
 <template>
   <section id="marketplace" class="pt-10 pb-24 relative z-10">
+    <!-- GRID BACKGROUND -->
+    <div class="absolute inset-0 opacity-[0.03] z-0" style="
+    background-image: 
+      linear-gradient(to right, black 1px, transparent 1px),
+      linear-gradient(to bottom, black 1px, transparent 1px);
+    background-size: 40px 40px;
+  ">
+    </div>
+
+    <!-- NOISE -->
+    <div class="absolute inset-0 opacity-[0.02] mix-blend-multiply pointer-events-none" style="
+    background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+  ">
+    </div>
     <div
       class="absolute top-[-5%] right-[-5%] w-[500px] h-[500px] bg-orange-500/15 rounded-full blur-[120px] z-0 animate-pulse"
       style="animation-duration: 8s;"></div>
@@ -10,71 +24,49 @@
     </div>
 
     <div class="max-w-[1600px] mx-auto px-6 relative z-10">
-      <!-- PROMO CAROUSEL -->
-      <div class="mb-16 px-2 md:px-4" data-aos="fade-up">
-        <div class="overflow-hidden rounded-3xl relative">
 
-          <!-- Slides -->
+      <!-- PROMO CAROUSEL -->
+      <div class="mb-10 px-2 md:px-4" data-aos="fade-up">
+        <div class="overflow-hidden rounded-3xl relative">
           <div class="flex transition-transform duration-700"
             :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
             <div v-for="(slide, index) in promoSlides" :key="index"
               class="min-w-full h-[280px] md:h-[360px] lg:h-[420px] relative">
-              <!-- Background -->
               <img :src="slide.image" class="absolute inset-0 w-full h-full object-cover" />
-
-              <!-- Overlay -->
               <div class="absolute inset-0 bg-black/40"></div>
-
-              <!-- Content Wrapper (BIAR TIDAK NEMPEL) -->
               <div class="relative z-10 h-full flex items-center">
                 <div class="w-full max-w-[1400px] mx-auto px-6 md:px-12">
-
                   <div class="max-w-xl text-white">
+                    <div
+                      class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-xl border border-white/20 px-4 py-2 rounded-full mb-5">
+                      <div class="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
+                      <span class="text-xs font-bold uppercase tracking-[0.3em]">Limited Collection</span>
+                    </div>
                     <h3 class="text-2xl md:text-4xl lg:text-5xl font-black mb-3 leading-tight">
                       {{ slide.title }}
                     </h3>
-
-                    <p class="text-sm md:text-base text-white/90 mb-6">
-                      {{ slide.description }}
-                    </p>
-
+                    <p class="text-sm md:text-base text-white/90 mb-6">{{ slide.description }}</p>
                     <button
                       class="bg-orange-600 px-6 py-3 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-orange-700 transition">
                       Shop Now
                     </button>
                   </div>
-
                 </div>
               </div>
             </div>
           </div>
-
-          <!-- Indicator -->
           <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
             <span v-for="(slide, index) in promoSlides" :key="index" @click="currentSlide = index"
               class="h-2 rounded-full cursor-pointer transition-all"
               :class="currentSlide === index ? 'bg-orange-600 w-6' : 'bg-white/50 w-2'"></span>
           </div>
-
         </div>
       </div>
-      <!-- Header with Animation
-      <div class="text-center mb-16 animate-fade-in">
 
 
-        <h2 class="text-5xl md:text-6xl font-black tracking-tighter mb-4">
-          <span class="text-gray-900">Indonesian Craft</span>
-          <span class="block text-orange-600">Marketplace</span>
-        </h2>
-        <p class="text-gray-500 text-lg max-w-2xl mx-auto font-medium">
-          Koleksi terkurasi dari pengrajin terbaik seluruh Indonesia. Setiap produk dibuat dengan cinta dan keahlian
-          turun-temurun.
-        </p>
-      </div> -->
-
-      <!-- Category Filter with Modern Design -->
-      <!-- <div class="mb-12 flex justify-center" data-aos="zoom-in" data-aos-delay="100">
-        <div class="inline-flex flex-wrap gap-3 bg-white p-3 rounded-3xl border border-gray-200 shadow-lg">
+      <!-- Category Filter -->
+      <div class="mb-12 flex justify-center" data-aos="zoom-in" data-aos-delay="100">
+        <div class="inline-flex flex-wrap gap- bg-white p-3 rounded-3xl border border-gray-200 shadow-lg">
           <button v-for="cat in categories" :key="cat" @click="activeCategory = cat" :class="[
             activeCategory === cat
               ? 'bg-orange-600 text-white shadow-lg shadow-orange-200 scale-105'
@@ -87,9 +79,81 @@
             </span>
           </button>
         </div>
-      </div> -->
+      </div>
+      <!-- ============================================================ -->
+      <!-- FLASH SALE SECTION                                           -->
+      <!-- ============================================================ -->
+      <div class="mb-10" data-aos="fade-up" data-aos-delay="50">
 
-      <!-- Loading State with Better Skeleton -->
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-3">
+            <span class="text-base font-black text-gray-900">⚡ Flash Sale</span>
+            <!-- Countdown -->
+            <div class="flex items-center gap-1">
+              <template v-for="(unit, i) in countdown" :key="i">
+                <div
+                  class="bg-orange-600 text-white text-xs font-black px-2 py-1 rounded-md tabular-nums min-w-[28px] text-center">
+                  {{ unit }}
+                </div>
+                <span v-if="i < countdown.length - 1" class="text-gray-400 font-bold text-sm">:</span>
+              </template>
+            </div>
+          </div>
+          <span class="text-xs text-orange-600 font-bold cursor-pointer hover:underline">Lihat Semua →</span>
+        </div>
+
+        <!-- Flash Sale Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div v-for="item in flashItems" :key="item.id"
+            class="bg-white border border-gray-200 rounded-2xl overflow-hidden cursor-pointer hover:-translate-y-1 hover:shadow-lg hover:border-orange-300 transition-all duration-300">
+
+            <!-- Image area -->
+            <div class="relative h-[100px] flex items-center justify-center text-5xl"
+              :style="{ background: item.bgColor }">
+              {{ item.icon }}
+              <!-- Discount badge -->
+              <div
+                class="absolute top-2 left-2 text-white text-[9px] font-extrabold px-2 py-0.5 rounded-full animate-flash-blink"
+                :style="{ background: item.badgeColor }">
+                -{{ item.discount }}%
+              </div>
+            </div>
+
+            <!-- Info -->
+            <div class="p-2.5 pb-3">
+              <p class="text-[11px] font-bold text-gray-800 mb-1.5 leading-snug line-clamp-2">{{ item.name }}</p>
+              <div class="flex items-baseline gap-1.5 mb-2">
+                <span class="text-sm font-black text-orange-600">{{ formatPrice(item.salePrice) }}</span>
+                <span class="text-[10px] text-gray-400 line-through">{{ formatPrice(item.origPrice) }}</span>
+              </div>
+              <!-- Stock progress bar -->
+              <div class="bg-gray-100 rounded-full h-[4px] overflow-hidden">
+                <div class="h-full bg-orange-500 rounded-full transition-all" :style="{ width: item.stockPct + '%' }">
+                </div>
+              </div>
+              <p class="text-[9.5px] text-gray-400 mt-1">Sisa {{ item.remaining }} pcs</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- ============================================================ -->
+      <!-- END FLASH SALE                                               -->
+      <!-- ============================================================ -->
+
+      <!-- Section Label -->
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-1 h-[18px] bg-orange-600 rounded-full"></div>
+          <span class="text-[14px] font-black text-gray-900">Terlaris Minggu Ini</span>
+          <span
+            class="bg-orange-50 text-orange-600 text-[9px] font-extrabold px-2 py-0.5 rounded-full border border-orange-200">🔥
+            HOT</span>
+        </div>
+        <span class="text-[11px] text-orange-600 font-bold cursor-pointer">Lihat Semua →</span>
+      </div>
+
+      <!-- Loading Skeleton -->
       <div v-if="isLoading" class="grid grid-cols-2 lg:grid-cols-5 gap-6">
         <div v-for="i in 10" :key="i" class="animate-pulse">
           <div class="aspect-[3/4] bg-gray-200 rounded-3xl mb-4"></div>
@@ -110,9 +174,8 @@
           class="bg-white border border-gray-200 shadow-sm hover:border-orange-400 hover:shadow-xl transition-all duration-300 rounded-2xl group overflow-hidden flex flex-col h-full cursor-pointer hover:-translate-y-1 relative"
           data-aos="fade-up" :data-aos-delay="(index % 6) * 50">
 
-          <!-- Image Section -->
+          <!-- Image -->
           <div class="relative w-full aspect-square bg-gray-100 isolate overflow-hidden border-b border-gray-100">
-            <!-- Category Badge -->
             <div class="absolute top-2 left-2 z-20">
               <span
                 class="inline-flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-2 py-1 rounded-full text-[8px] font-black uppercase tracking-widest shadow-sm border border-orange-100">
@@ -120,11 +183,8 @@
                 {{ product.category }}
               </span>
             </div>
-
-            <!-- Action Buttons (from incoming) -->
             <div
               class="absolute top-2 right-2 z-20 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
-              <!-- Wishlist -->
               <button @click.stop="toggleWishlist(product)"
                 class="w-8 h-8 bg-white/95 backdrop-blur-md rounded-full flex items-center justify-center hover:bg-white hover:scale-110 active:scale-95 transition-all shadow-sm"
                 :class="isWishlisted(product.id) ? 'text-red-500' : 'text-gray-700'">
@@ -135,16 +195,11 @@
                 </svg>
               </button>
             </div>
-
             <img
               :src="product.images && product.images.length ? product.images[0] : 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1000'"
               :alt="product.name"
               class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-
-            <!-- Hover Overlay -->
             <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
-
-            <!-- Quick Add to Cart (Bottom Overlay) -->
             <div
               class="absolute bottom-0 left-0 right-0 p-2 z-20 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
               <button @click.stop="addToCart(product)"
@@ -164,11 +219,17 @@
               class="font-medium text-xs mb-1 text-gray-800 line-clamp-2 leading-tight group-hover:text-orange-600 transition-colors">
               {{ product.name }}
             </h3>
-
-            <!-- Spacer -->
+            <div class="flex items-center gap-2 mt-1">
+              <div class="flex items-center gap-1">
+                <svg class="w-3 h-3 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                  <path
+                    d="M9.049 2.927C9.3 2.148 10.7 2.148 10.951 2.927L12.469 7.37H17.18C17.969 7.37 18.296 8.378 17.664 8.84L13.854 11.63L15.372 16.073C15.623 16.852 14.523 17.42 13.891 16.958L10.081 14.168L6.271 16.958C5.639 17.42 4.539 16.852 4.79 16.073L6.308 11.63L2.498 8.84C1.866 8.378 2.193 7.37 2.982 7.37H7.693L9.049 2.927Z" />
+                </svg>
+                <span class="text-[10px] font-semibold text-gray-600">4.9</span>
+              </div>
+              <span class="text-[10px] text-gray-400">• Bali</span>
+            </div>
             <div class="flex-1"></div>
-
-            <!-- Price & Sold -->
             <div class="flex items-center justify-between mt-auto pt-1">
               <p class="text-base font-bold text-orange-600 tracking-tight">
                 <span class="text-[11px] font-semibold mr-0.5">Rp</span>{{ Number(product.price).toLocaleString('id-ID')
@@ -182,7 +243,7 @@
         </div>
       </div>
 
-      <!-- Empty State with Better Design -->
+      <!-- Empty State -->
       <div v-if="!isLoading && filteredProducts.length === 0" class="py-32 text-center">
         <div class="max-w-md mx-auto">
           <div class="w-24 h-24 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -204,7 +265,8 @@
           </button>
         </div>
       </div>
-      <!-- Loading More State -->
+
+      <!-- Loading More -->
       <div v-if="isLoadingMore" class="flex justify-center items-center py-8">
         <div class="flex items-center gap-2 px-6 py-3 bg-white shadow-md rounded-full border border-orange-100">
           <div class="w-5 h-5 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
@@ -233,41 +295,29 @@ onMounted(() => {
 });
 
 const props = defineProps({
-  products: { type: Array, default: () => [] },
-  isLoading: { type: Boolean, default: false },
+  products:      { type: Array,   default: () => [] },
+  isLoading:     { type: Boolean, default: false },
   isLoadingMore: { type: Boolean, default: false },
-  hasMore: { type: Boolean, default: true }
+  hasMore:       { type: Boolean, default: true },
 });
 
 const emit = defineEmits(['load-more']);
 
 const loadMoreTrigger = ref(null);
-let observer = null;
+let observer  = null;
+let slideTimer = null;
+let countTimer = null;
 
+// ─── Category filter ─────────────────────────────────────────────────────────
 const activeCategory = ref('all');
 const categories = ['all', 'batik', 'kerajinan', 'aksesoris', 'dekorasi', 'fashion'];
-
-const addToCart = async (product) => {
-  await cartStore.addItem(product);
-};
-
-const isWishlisted = (productId) => {
-  return wishlistStore.isWishlisted(productId);
-};
-
-const toggleWishlist = async (product) => {
-  await wishlistStore.toggleWishlist(product);
-};
-
-const viewProductDetail = (product) => {
-  router.push({ name: 'marketplace.product.detail', params: { id: product.id } });
-};
 
 const filteredProducts = computed(() => {
   if (activeCategory.value === 'all') return props.products;
   return props.products.filter(p => p.category === activeCategory.value);
 });
 
+// ─── Carousel ────────────────────────────────────────────────────────────────
 const currentSlide = ref(0);
 
 const promoSlides = [
@@ -288,20 +338,101 @@ const promoSlides = [
   }
 ];
 
+// ─── Flash Sale ───────────────────────────────────────────────────────────────
+const countdown = ref(['03', '27', '14']);
+
+const flashItems = [
+  {
+    id: 1,
+    icon: '🎨',
+    name: 'Batik Parang Premium',
+    discount: 60,
+    salePrice: 114000,
+    origPrice: 285000,
+    stockPct: 72,
+    remaining: 28,
+    bgColor: '#FFF0EB',
+    badgeColor: '#E84B0E',
+  },
+  {
+    id: 2,
+    icon: '🏺',
+    name: 'Anyaman Rotan Bali',
+    discount: 45,
+    salePrice: 107000,
+    origPrice: 195000,
+    stockPct: 55,
+    remaining: 45,
+    bgColor: '#ECFDF5',
+    badgeColor: '#16A34A',
+  },
+  {
+    id: 3,
+    icon: '💍',
+    name: 'Gelang Perak Ukir',
+    discount: 30,
+    salePrice: 87000,
+    origPrice: 125000,
+    stockPct: 88,
+    remaining: 12,
+    bgColor: '#F5F3FF',
+    badgeColor: '#7C3AED',
+  },
+  {
+    id: 4,
+    icon: '🪴',
+    name: 'Vas Keramik Jawa',
+    discount: 50,
+    salePrice: 160000,
+    origPrice: 320000,
+    stockPct: 40,
+    remaining: 60,
+    bgColor: '#FFF7ED',
+    badgeColor: '#EA580C',
+  },
+];
+
+const formatPrice = (n) => 'Rp' + Number(n).toLocaleString('id-ID');
+
+// ─── Countdown timer ──────────────────────────────────────────────────────────
+const startCountdown = () => {
+  let secs = 3 * 3600 + 27 * 60 + 14;
+  const pad = (n) => String(n).padStart(2, '0');
+  countTimer = setInterval(() => {
+    if (secs <= 0) { clearInterval(countTimer); return; }
+    secs--;
+    countdown.value = [
+      pad(Math.floor(secs / 3600)),
+      pad(Math.floor((secs % 3600) / 60)),
+      pad(secs % 60),
+    ];
+  }, 1000);
+};
+
+// ─── Cart & Wishlist ──────────────────────────────────────────────────────────
+const addToCart = async (product) => { await cartStore.addItem(product); };
+const isWishlisted = (productId) => wishlistStore.isWishlisted(productId);
+const toggleWishlist = async (product) => { await wishlistStore.toggleWishlist(product); };
+const viewProductDetail = (product) => {
+  router.push({ name: 'marketplace.product.detail', params: { id: product.id } });
+};
+
+// ─── Lifecycle ────────────────────────────────────────────────────────────────
 onMounted(() => {
-  setInterval(() => {
-    currentSlide.value =
-      (currentSlide.value + 1) % promoSlides.length;
+  // Auto-slide carousel
+  slideTimer = setInterval(() => {
+    currentSlide.value = (currentSlide.value + 1) % promoSlides.length;
   }, 4000);
 
-  // Intersection Observer for Infinite Scroll
+  // Countdown
+  startCountdown();
+
+  // Infinite scroll observer
   observer = new IntersectionObserver((entries) => {
     if (entries[0].isIntersecting && props.hasMore && !props.isLoading && !props.isLoadingMore) {
       emit('load-more');
     }
-  }, {
-    rootMargin: '100px',
-  });
+  }, { rootMargin: '100px' });
 
   if (loadMoreTrigger.value) {
     observer.observe(loadMoreTrigger.value);
@@ -309,22 +440,16 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  if (observer) {
-    observer.disconnect();
-  }
+  if (observer)    observer.disconnect();
+  if (slideTimer)  clearInterval(slideTimer);
+  if (countTimer)  clearInterval(countTimer);
 });
 </script>
 
 <style scoped>
 /* Scrollbar Hider */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 /* Line Clamp */
 .line-clamp-2 {
@@ -334,29 +459,24 @@ onBeforeUnmount(() => {
   overflow: hidden;
 }
 
-/* Fade In Animation */
+/* Fade In */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
+.animate-fade-in { animation: fadeIn 0.8s ease-out; }
 
-.animate-fade-in {
-  animation: fadeIn 0.8s ease-out;
+/* Flash badge blink — daftarkan juga di tailwind.config jika ingin pakai kelas */
+@keyframes flash-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.55; }
 }
+.animate-flash-blink { animation: flash-blink 1s ease-in-out infinite; }
 
-/* Smooth Hover Effects */
-.group:hover .group-hover\:scale-110 {
-  transform: scale(1.1);
-}
+/* Smooth hover */
+.group:hover .group-hover\:scale-110 { transform: scale(1.1); }
 
-/* Custom Gradient Text */
+/* Gradient text */
 .bg-clip-text {
   -webkit-background-clip: text;
   background-clip: text;
