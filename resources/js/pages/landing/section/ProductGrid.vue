@@ -1,13 +1,13 @@
 <template>
   <section id="marketplace" class="pt-10 pb-24 relative z-10">
     <!-- GRID BACKGROUND -->
-    <div class="absolute inset-0 opacity-[0.03] z-0" style="
+    <!-- <div class="absolute inset-0 opacity-[0.03] z-0" style="
     background-image: 
       linear-gradient(to right, black 1px, transparent 1px),
       linear-gradient(to bottom, black 1px, transparent 1px);
     background-size: 40px 40px;
   ">
-    </div>
+    </div> -->
 
     <!-- NOISE -->
     <div class="absolute inset-0 opacity-[0.02] mix-blend-multiply pointer-events-none" style="
