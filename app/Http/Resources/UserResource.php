@@ -10,12 +10,19 @@ class UserResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'         => $this->id,
-            'name'       => $this->name,
-            'email'      => $this->email,
-            'role'       => $this->role,
-            'created_at' => $this->created_at->toDateTimeString(),
-            'profile'    => $this->whenLoaded('profile', fn() => [
+            'id'              => $this->id,
+            'name'            => $this->name,
+            'email'           => $this->email,
+            'active_role'     => $this->active_role ?? 'buyer',
+            'owned_roles'     => $this->whenLoaded('roles', fn() => 
+                $this->roles->pluck('name')->toArray()
+            ),
+            'is_admin'        => $this->isAdmin(),
+            'is_umkm'         => $this->isUmkm(),
+            'is_designer'     => $this->isDesigner(),
+            'is_buyer'        => $this->isBuyer(),
+            'created_at'      => $this->created_at->toDateTimeString(),
+            'profile'         => $this->whenLoaded('profile', fn() => [
                 'full_name'     => $this->profile?->full_name,
                 'business_name' => $this->profile?->business_name,
                 'avatar_url'    => $this->profile?->avatar_url,
@@ -26,3 +33,4 @@ class UserResource extends JsonResource
         ];
     }
 }
+

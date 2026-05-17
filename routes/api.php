@@ -55,10 +55,13 @@ Route::prefix('v1')->group(function () {
         Route::post('auth/logout',          [AuthController::class, 'logout']);
         Route::get('auth/me',               [AuthController::class, 'me']);
         Route::post('auth/change-password', [PasswordResetController::class, 'changePassword']);
+        Route::post('auth/switch-role',     [AuthController::class, 'switchRole']);
 
         // Profile
         Route::get('profile', [ProfileController::class, 'show']);
         Route::put('profile', [ProfileController::class, 'update']);
+        Route::get('profile/role-menu', [ProfileController::class, 'getRoleMenu']);
+        Route::post('profile/switch-role', [ProfileController::class, 'switchRole']);
 
         // ─── CART ──────────────────────────────────────────────────────────
         Route::prefix('cart')->group(function () {
@@ -105,8 +108,8 @@ Route::prefix('v1')->group(function () {
             Route::get('orders/{order}/status',      [PaymentController::class, 'checkStatus']);
         });
 
-        // ─── ORDERS (semua role bisa beli) ────────────────────────────────────
-        Route::middleware('role:pembeli,umkm,desainer,admin')->prefix('orders')->group(function () {
+        // ─── ORDERS (semua non-admin bisa beli: buyer, umkm, designer) ────────
+        Route::middleware('role:umkm,designer')->prefix('orders')->group(function () {
 
             Route::get('/',        [OrderController::class, 'index']);
             Route::get('/{order}', [OrderController::class, 'show']);
@@ -131,10 +134,22 @@ Route::prefix('v1')->group(function () {
             Route::post('ai-generations/generate',         [AiGenerationController::class, 'generate']); // NEW: Real AI generation
             Route::post('ai-generations',                  [AiGenerationController::class, 'store']);
             Route::delete('ai-generations/{aiGeneration}', [AiGenerationController::class, 'destroy']);
+
+            // Register as UMKM (upgrade dari buyer)
+            Route::post('register', [AuthController::class, 'registerUmkm']);
         });
 
-        // ─── UMKM + DESAINER (Co-Create Room) ────────────────────────────────
-        Route::middleware('role:umkm,desainer')->prefix('cocreate')->group(function () {
+        // ─── DESIGNER ONLY ────────────────────────────────────────────────────
+        Route::middleware('role:designer')->prefix('designer')->group(function () {
+            // Dashboard & Portfolio akan ditambahkan nanti
+            // Route::get('dashboard', [DesignerDashboardController::class, 'index']);
+            
+            // Register as Designer (upgrade dari buyer)
+            Route::post('register', [AuthController::class, 'registerDesigner']);
+        });
+
+        // ─── CO-CREATE ROOM (UMKM + DESIGNER) ──────────────────────────────────
+        Route::middleware('role:umkm,designer')->prefix('cocreate')->group(function () {
             Route::get('rooms',                [CocreateRoomController::class, 'index']);
             Route::get('rooms/{room}',         [CocreateRoomController::class, 'show']);
             Route::post('rooms',               [CocreateRoomController::class, 'store']);

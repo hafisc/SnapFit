@@ -120,6 +120,14 @@
           </form>
         </div>
 
+        <!-- Role & Workspace -->
+        <div v-else-if="activeMenu === 'roles'" class="bg-white rounded-[2rem] p-6 sm:p-10 border border-slate-100 shadow-sm animate-fade-in">
+          <h3 class="text-2xl font-bold text-slate-900 mb-2">Role & Workspace</h3>
+          <p class="text-slate-500 text-sm mb-8">Kelola role Anda dan akses ke berbagai workspace di SnapFit.</p>
+          
+          <RoleWorkspaceMenu />
+        </div>
+
         <!-- Pesanan Saya -->
         <div v-else-if="activeMenu === 'orders'" class="bg-white rounded-[2rem] p-6 sm:p-10 border border-slate-100 shadow-sm min-h-[400px] animate-fade-in">
           <div v-if="orders.length === 0" class="flex flex-col items-center justify-center text-center h-full pt-10">
@@ -252,6 +260,7 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import Navbar from '@/pages/landing/partials/Navbar.vue';
+import RoleWorkspaceMenu from './RoleWorkspaceMenu.vue';
 
 const router = useRouter();
 const user = ref(null);
@@ -353,6 +362,11 @@ const menus = [
     id: 'profile', 
     label: 'Profil Saya',
     icon: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>`
+  },
+  { 
+    id: 'roles', 
+    label: 'Role & Workspace',
+    icon: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" /></svg>`
   },
   { 
     id: 'orders', 
