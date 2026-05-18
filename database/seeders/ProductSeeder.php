@@ -17,6 +17,11 @@ class ProductSeeder extends Seeder
             return;
         }
 
+        // Clear old products to remove mismatched data
+        \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Product::truncate();
+        \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
         $products = [
             // ═══ BATIK ═══
             [
