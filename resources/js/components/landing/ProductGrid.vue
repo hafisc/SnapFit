@@ -176,13 +176,13 @@
       </div>
 
       <!-- Products Grid -->
-      <div v-else class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+      <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-5">
         <div v-for="(product, index) in filteredProducts" :key="product.id" @click="viewProductDetail(product)"
           class="bg-surface border border-borderSoft shadow-sm hover:border-terracotta hover:shadow-xl transition-all duration-300 rounded-2xl group overflow-hidden flex flex-col h-full cursor-pointer hover:-translate-y-1 relative"
           data-aos="fade-up" :data-aos-delay="(index % 6) * 50">
 
           <!-- Image Section -->
-          <div class="relative w-full h-[170px] bg-gray-100 isolate overflow-hidden border-b border-borderSoft">
+          <div class="relative w-full aspect-square bg-gray-100 isolate overflow-hidden border-b border-borderSoft">
             <!-- Category Badge -->
             <div class="absolute top-2 left-2 z-20">
               <span
@@ -213,7 +213,7 @@
               class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
 
             <!-- Hover Overlay -->
-            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
+            <div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
 
             <!-- Quick Add to Cart (Bottom Overlay) -->
             <div
