@@ -1,5 +1,5 @@
 <template>
-  <section class="min-h-screen bg-slate-50 text-espresso pb-10">
+  <section class="snapfit-heritage-bg min-h-screen text-espresso pb-10 relative overflow-hidden">
     <!-- Navbar -->
     <Navbar
       :user="user"
@@ -9,7 +9,7 @@
       @goToOrders="goToOrders"
     />
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-20 sm:pt-24">
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-20 sm:pt-24">
       <div class="mb-4 sm:mb-6 flex items-center gap-2 text-sm font-semibold text-muted">
         <button @click="router.push('/')" class="hover:text-espresso transition flex items-center gap-1">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
@@ -17,30 +17,30 @@
         </button>
       </div>
 
-      <div class="flex flex-col lg:grid gap-6 lg:gap-8 lg:grid-cols-[1.3fr_0.9fr] lg:items-start">
+      <div class="flex flex-col lg:grid gap-6 lg:gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-start">
         <div class="contents lg:block lg:space-y-6">
           <div class="order-1 lg:order-none bg-surface rounded-[2rem] p-3 sm:p-4 shadow-sm border border-borderSoft overflow-hidden">
-            <div class="grid gap-4 lg:grid-cols-[1fr_80px]">
+            <div class="grid gap-4">
               <div class="relative overflow-hidden rounded-[2rem] bg-slate-100">
                 <img
                   v-if="activeImage"
                   :src="activeImage"
                   :alt="product?.name ?? 'Product image'"
-                  class="w-full h-[380px] sm:h-[520px] object-cover transition duration-300 ease-out hover:scale-105"
+                  class="w-full aspect-[4/5] sm:aspect-square object-cover transition duration-300 ease-out hover:scale-105"
                 />
                 <div class="absolute right-4 top-4 rounded-full bg-surface/80 px-3 py-2 text-xs font-semibold text-espresso backdrop-blur">
                   {{ currentImageLabel }}
                 </div>
               </div>
 
-              <div class="flex flex-row lg:flex-col gap-3 overflow-x-auto hide-scrollbar rounded-[2rem] bg-slate-50 p-2 sm:p-3">
+              <div class="flex flex-row gap-3 overflow-x-auto hide-scrollbar rounded-[2rem] bg-slate-50 p-2 sm:p-3 border border-borderSoft">
                 <button
                   v-for="(image, index) in galleryImages"
                   :key="index"
                   type="button"
                   @click="activeImageIndex = index"
-                  class="group flex-shrink-0 w-20 h-20 lg:w-full flex items-center justify-center overflow-hidden rounded-2xl sm:rounded-3xl border transition-all duration-200"
-                  :class="index === activeImageIndex ? 'border-orange-500 ring-2 ring-orange-200' : 'border-borderSoft hover:border-slate-300'"
+                  class="group flex-shrink-0 w-20 h-20 flex items-center justify-center overflow-hidden rounded-2xl sm:rounded-3xl border transition-all duration-200"
+                  :class="index === activeImageIndex ? 'border-terracotta ring-2 ring-terracotta/20' : 'border-borderSoft hover:border-terracotta/50'"
                 >
                   <img :src="image" :alt="`Gallery ${index + 1}`" class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
                 </button>
@@ -48,32 +48,74 @@
             </div>
           </div>
 
-          <div class="order-3 lg:order-none grid gap-3 lg:grid-cols-[1.2fr_0.8fr]">
-            <div v-if="product?.description" class="rounded-3xl bg-surface p-5 sm:p-6 shadow-sm border border-borderSoft">
-              <h3 class="text-base sm:text-lg font-bold tracking-tight text-espresso mb-3">Deskripsi Produk</h3>
-              <p class="text-muted text-sm leading-relaxed whitespace-pre-line">{{ product.description }}</p>
-            </div>
-
-            <div class="rounded-3xl bg-surface p-5 sm:p-6 shadow-sm border border-borderSoft">
-              <h3 class="text-base sm:text-lg font-bold tracking-tight text-espresso mb-4">Info Penjual</h3>
-              <div class="space-y-4 text-espresso">
-                <div class="flex items-start gap-3">
-                  <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-400">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+          <div class="order-3 lg:order-none grid gap-6 lg:grid-cols-[1.5fr_1fr]">
+            <!-- Product Story Tabs -->
+            <div class="rounded-3xl bg-surface p-1 shadow-sm border border-borderSoft overflow-hidden flex flex-col">
+              <div class="flex overflow-x-auto hide-scrollbar border-b border-borderSoft px-2 pt-2 gap-1 sm:gap-2">
+                <button v-for="tab in ['Deskripsi', 'Cerita Budaya', 'Material', 'Profil UMKM']" :key="tab"
+                  @click="activeTab = tab"
+                  class="px-4 py-3 text-sm font-bold whitespace-nowrap transition-colors border-b-2"
+                  :class="activeTab === tab ? 'border-terracotta text-terracotta' : 'border-transparent text-muted hover:text-espresso'"
+                >
+                  {{ tab }}
+                </button>
+              </div>
+              <div class="p-5 sm:p-6 bg-white flex-1 rounded-b-3xl">
+                <div v-if="activeTab === 'Deskripsi'" class="animate-fade-in">
+                  <p class="text-espresso text-sm leading-relaxed whitespace-pre-line">{{ product?.description }}</p>
+                </div>
+                <div v-if="activeTab === 'Cerita Budaya'" class="animate-fade-in space-y-6">
+                  <div>
+                    <h4 class="text-sm font-bold text-espresso mb-2">Filosofi Budaya</h4>
+                    <p class="text-muted text-sm leading-relaxed">{{ product?.cultural_story }}</p>
                   </div>
                   <div>
-                    <p class="font-semibold text-espresso">{{ product?.seller?.name ?? product?.seller_name ?? 'UMKM Lokal' }}</p>
-                    <p class="text-xs text-muted mt-0.5">{{ product?.seller?.location ?? product?.seller_location ?? 'Indonesia' }}</p>
+                    <h4 class="text-sm font-bold text-espresso mb-2">Makna Motif</h4>
+                    <p class="text-muted text-sm leading-relaxed">{{ product?.motif_meaning }}</p>
                   </div>
                 </div>
-                <div class="pt-2 border-t border-slate-50 flex items-center gap-2 text-sm text-muted">
-                  <span class="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-3 py-1 font-semibold text-emerald-700">
-                    <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M2.5 10a7.5 7.5 0 1115 0 7.5 7.5 0 01-15 0zm10.894-1.356L9 13.038l-2.394-2.394.848-.848L9 11.342l4.546-4.546.848.848z" />
-                    </svg>
-                    Terpercaya
-                  </span>
+                <div v-if="activeTab === 'Material'" class="animate-fade-in">
+                  <p class="text-muted text-sm leading-relaxed whitespace-pre-line">{{ product?.material_care }}</p>
                 </div>
+                <div v-if="activeTab === 'Profil UMKM'" class="animate-fade-in">
+                  <p class="text-muted text-sm leading-relaxed">{{ product?.artisan_info }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Enhanced Seller Info -->
+            <div class="rounded-3xl bg-surface p-6 shadow-sm border border-borderSoft flex flex-col">
+              <h3 class="text-base font-bold tracking-tight text-espresso mb-4">Informasi Penjual</h3>
+              <div class="flex items-center gap-4 mb-5">
+                <div class="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 overflow-hidden border border-borderSoft">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                </div>
+                <div>
+                  <h4 class="font-bold text-espresso text-base">{{ product?.seller?.name ?? 'UMKM Lokal' }}</h4>
+                  <p class="text-xs text-muted flex items-center gap-1 mt-1">
+                    <svg class="w-3 h-3 text-terracotta" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>
+                    {{ product?.seller?.location ?? 'Indonesia' }}
+                  </p>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-2 gap-3 mb-6 bg-slate-50 rounded-2xl p-3 border border-borderSoft">
+                <div class="text-center">
+                  <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1">Rating</p>
+                  <p class="text-sm font-bold text-espresso flex items-center justify-center gap-1">
+                    <svg class="w-4 h-4 text-amber-400" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.95a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.388 2.46a1 1 0 00-.363 1.118l1.287 3.95c.3.921-.755 1.688-1.54 1.118l-3.388-2.46a1 1 0 00-1.175 0l-3.388 2.46c-.784.57-1.838-.197-1.539-1.118l1.287-3.95a1 1 0 00-.363-1.118L2.098 9.377c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.95z"/></svg>
+                    {{ product?.seller?.rating ?? 4.9 }}
+                  </p>
+                </div>
+                <div class="text-center border-l border-borderSoft">
+                  <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1">Terjual</p>
+                  <p class="text-sm font-bold text-espresso">{{ product?.seller?.sold ?? 120 }}+</p>
+                </div>
+              </div>
+
+              <div class="mt-auto grid gap-2">
+                <button class="w-full py-2.5 rounded-xl border border-terracotta text-terracotta font-bold text-xs hover:bg-terracotta hover:text-white transition">Kunjungi Toko</button>
+                <button class="w-full py-2.5 rounded-xl bg-[#2B1E16] text-white font-bold text-xs hover:bg-black transition">Ajak Kolaborasi</button>
               </div>
             </div>
           </div>
@@ -106,15 +148,25 @@
         </div>
 
         <div class="contents lg:block lg:space-y-6">
-          <div class="order-2 lg:order-none rounded-[2rem] bg-surface p-5 sm:p-6 lg:p-8 shadow-sm border border-borderSoft">
+          <div class="order-2 lg:order-none rounded-[2rem] bg-surface p-5 sm:p-6 shadow-sm border border-borderSoft">
             <div class="mb-5">
               <p class="text-xs font-bold uppercase tracking-[0.25em] text-terracotta">Marketplace</p>
-              <h1 class="mt-3 text-2xl sm:text-3xl font-bold tracking-tight text-espresso leading-tight">{{ product?.name ?? 'Loading produk...' }}</h1>
-              <div class="mt-3 flex flex-wrap items-center gap-3 text-sm text-muted">
+              <h1 class="mt-3 text-2xl sm:text-3xl font-black tracking-tight text-[#2B1E16] leading-tight">{{ product?.name ?? 'Loading produk...' }}</h1>
+              
+              <!-- Badges -->
+              <div v-if="product?.badges?.length" class="mt-3 flex flex-wrap gap-2">
+                <span v-for="badge in product.badges" :key="badge" class="inline-flex items-center rounded-lg bg-[#2B1E16] px-2.5 py-1 text-[10px] font-bold text-[#D4AF37] uppercase tracking-wider">
+                  {{ badge }}
+                </span>
+              </div>
+
+              <div class="mt-4 flex flex-wrap items-center gap-3 text-sm text-muted">
                 <div class="flex items-center gap-1.5">
                   <svg class="w-4 h-4 text-amber-400" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.95a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.388 2.46a1 1 0 00-.363 1.118l1.287 3.95c.3.921-.755 1.688-1.54 1.118l-3.388-2.46a1 1 0 00-1.175 0l-3.388 2.46c-.784.57-1.838-.197-1.539-1.118l1.287-3.95a1 1 0 00-.363-1.118L2.098 9.377c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.95z"/></svg>
                   <span class="font-bold text-espresso">{{ product?.rating?.toFixed(1) ?? product?.average_rating?.toFixed(1) ?? '0.0' }}</span>
                 </div>
+                <span class="text-slate-300">•</span>
+                <span class="text-muted">{{ product?.seller?.sold ?? 120 }} terjual</span>
                 <span class="text-slate-300">•</span>
                 <span class="text-muted hover:text-espresso cursor-pointer underline-offset-4 hover:underline transition">{{ reviewCount }} ulasan</span>
               </div>
@@ -124,10 +176,6 @@
               <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-50 border border-borderSoft px-3 py-1.5">
                 <svg class="w-3.5 h-3.5 text-slate-400" fill="currentColor" viewBox="0 0 20 20"><path d="M4 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" /></svg>
                 {{ product?.category ?? 'Batik & Kerajinan' }}
-              </span>
-              <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-50 border border-borderSoft px-3 py-1.5">
-                <svg class="w-3.5 h-3.5 text-slate-400" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4h12v12H4V4z" /></svg>
-                SKU: {{ product?.sku ?? 'N/A' }}
               </span>
             </div>
 
@@ -140,18 +188,18 @@
             </div>
 
             <div class="space-y-4">
-              <div v-if="variantOptions.length" class="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <label class="block text-sm font-semibold text-espresso mb-2">Pilih Varian</label>
-                  <select v-model="selectedVariantId" class="w-full rounded-3xl border border-borderSoft bg-surface px-4 py-3 text-sm text-espresso outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20">
-                    <option
-                      v-for="variant in variantOptions"
-                      :key="variant.value"
-                      :value="variant.value"
-                    >
-                      {{ variant.label }} - Rp {{ formatCurrency(variant.price) }}
-                    </option>
-                  </select>
+              <div v-if="variantOptions.length" class="mb-4">
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Pilih Varian</label>
+                <div class="flex flex-wrap gap-2">
+                  <button 
+                    v-for="variant in variantOptions" 
+                    :key="variant.value"
+                    @click="selectedVariantId = variant.value"
+                    class="px-5 py-2.5 rounded-xl border text-sm font-bold transition-all duration-200"
+                    :class="selectedVariantId === variant.value ? 'border-terracotta bg-terracotta text-white shadow-md shadow-terracotta/20' : 'border-borderSoft hover:border-slate-300 text-espresso bg-surface'"
+                  >
+                    {{ variant.label }}
+                  </button>
                 </div>
               </div>
 
@@ -172,7 +220,7 @@
                   type="button"
                   @click="addToCart"
                   :disabled="!canAddToCart"
-                  class="rounded-2xl bg-slate-900 px-5 py-3.5 text-sm font-bold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60 shadow-lg shadow-slate-200"
+                  class="rounded-2xl bg-[#2B1E16] px-5 py-3.5 text-sm font-bold text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-60 shadow-lg shadow-[#2B1E16]/20"
                 >
                   Tambah ke Keranjang
                 </button>
@@ -186,24 +234,35 @@
                 </button>
               </div>
 
-              <div class="grid gap-3 sm:grid-cols-2">
+              <div class="grid gap-3 sm:grid-cols-2 mt-2">
+                <button
+                  type="button"
+                  @click="openArModal"
+                  class="sm:col-span-2 relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#2B1E16] to-terracotta px-5 py-4 text-left transition hover:shadow-lg hover:-translate-y-0.5 group"
+                >
+                  <div class="absolute right-0 top-0 bottom-0 w-32 bg-white/5 skew-x-12 -mr-10 group-hover:bg-white/10 transition"></div>
+                  <div class="flex items-center justify-between relative z-10">
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[#D4AF37]">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                      </div>
+                      <div>
+                        <p class="text-white font-bold text-sm">Coba dengan AR</p>
+                        <p class="text-white/70 text-[10px] mt-0.5">Lihat produk secara virtual sebelum membeli</p>
+                      </div>
+                    </div>
+                    <svg class="w-5 h-5 text-white/50 group-hover:text-white transition group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                  </div>
+                </button>
                 <button
                   type="button"
                   @click="toggleWishlist"
-                  class="rounded-2xl border border-borderSoft bg-surface px-5 py-3.5 text-sm font-bold text-espresso transition hover:bg-slate-50 hover:border-slate-300"
+                  class="sm:col-span-2 rounded-2xl border border-borderSoft bg-surface px-5 py-3.5 text-sm font-bold text-espresso transition hover:bg-slate-50 hover:border-slate-300"
                 >
                   <span class="flex items-center justify-center gap-2">
                     <svg class="w-4 h-4" :class="isWishlisted ? 'fill-red-500 text-red-500' : 'fill-none text-slate-400'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
                     {{ isWishlisted ? 'Tersimpan' : 'Wishlist' }}
                   </span>
-                </button>
-                <button
-                  type="button"
-                  @click="openArModal"
-                  class="rounded-2xl border border-terracotta/30 bg-sand px-5 py-3.5 text-sm font-bold text-orange-700 transition hover:bg-sand flex justify-center items-center gap-2 group"
-                >
-                  <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                  AR Try-On
                 </button>
               </div>
             </div>
@@ -406,6 +465,7 @@ const isWishlisted = ref(false);
 const relatedProducts = ref([]);
 const variantOptions = ref([]);
 const selectedVariantId = ref(null);
+const activeTab = ref('Cerita Budaya');
 
 // AR Try-On State
 const videoElement = ref(null);
@@ -448,26 +508,43 @@ const safeParseArray = (value) => {
 const normalizeProduct = (raw) => {
   const item = raw?.product ?? raw;
   const images = safeParseArray(item.images ?? item.gallery ?? item.image_url ?? []).filter(Boolean);
-  const variants = Array.isArray(item.variants) ? item.variants : [];
+  
+  const mockVariants = [
+    { id: 1, name: 'S', price: 349000 },
+    { id: 2, name: 'M', price: 349000 },
+    { id: 3, name: 'L', price: 349000 },
+    { id: 4, name: 'XL', price: 349000 }
+  ];
+  
+  const variants = mockVariants;
   const reviews = Array.isArray(item.reviews) ? item.reviews : [];
+
+  const dbName = item.name ?? item.title ?? '';
+  // Force override for prototype display
+  const isDemo = true;
 
   return {
     id: item.id,
-    name: item.name ?? item.title ?? 'Produk Batik & Kerajinan',
-    price: item.price ?? item.base_price ?? 0,
-    description: item.description ?? item.detail ?? 'Deskripsi produk tidak tersedia.',
-    category: item.category ?? item.type ?? 'Batik & Kerajinan',
+    name: 'Kemeja Batik Parang Heritage',
+    price: 349000,
+    description: 'Kemeja batik premium dengan motif Parang klasik, dirancang untuk tampilan formal maupun casual. Dibuat dari kain katun nyaman dengan detail motif khas Indonesia.',
+    category: 'Batik / Fashion',
     sku: item.sku ?? item.code ?? 'N/A',
-    rating: item.rating ?? item.average_rating ?? 0,
-    average_rating: item.average_rating ?? item.rating ?? 0,
+    rating: item.rating ?? item.average_rating ?? 4.8,
+    average_rating: item.average_rating ?? item.rating ?? 4.8,
     reviews,
-    seller: item.seller ?? {
-      name: item.seller_name,
-      location: item.seller_location,
+    seller: {
+      name: isDemo ? 'Sanggar Batik Laras' : (item.seller?.name ?? item.seller_name ?? 'UMKM Lokal'),
+      location: isDemo ? 'Yogyakarta, Indonesia' : (item.seller?.location ?? item.seller_location ?? 'Indonesia'),
+      rating: 4.9,
+      sold: 120,
     },
-    seller_name: item.seller_name,
-    seller_location: item.seller_location,
-    images: images.length ? images : ['/images/placeholder-product.png'],
+    cultural_story: 'Motif Parang dikenal sebagai simbol kekuatan, keteguhan, dan semangat yang terus bergerak maju. Motif ini banyak digunakan dalam karya batik Yogyakarta dan Solo.',
+    motif_meaning: 'Garis diagonal pada motif Parang menggambarkan kesinambungan dan perjuangan. Filosofinya cocok untuk pengguna yang ingin membawa kesan kuat, elegan, dan berkarakter.',
+    material_care: 'Material:\nKatun premium dengan tekstur lembut dan nyaman digunakan.\n\nPerawatan:\nCuci manual dengan air dingin, hindari pemutih, dan jemur di tempat teduh agar warna tetap awet.',
+    artisan_info: 'Dibuat oleh Sanggar Batik Laras, UMKM batik asal Yogyakarta yang berfokus pada motif klasik dengan sentuhan desain modern.',
+    badges: isDemo ? ['Batik Tulis', 'AR Ready', 'Handmade'] : [],
+    images: images.length ? (isDemo ? [images[0], images[0], images[0], images[0]] : images) : ['/images/placeholder-product.png'],
     stock: Math.max(1, item.stock ?? item.quantity ?? 999),
     variants,
   };
@@ -501,10 +578,16 @@ const loadProduct = async () => {
 
     const related = await fetchJson('/api/v1/products');
     const list = Array.isArray(related) ? related : related.data ?? [];
+    const relatedNames = ['Outer Batik Mega Mendung', 'Kemeja Batik Kawung', 'Scarf Batik Cirebon', 'Blouse Batik Lasem'];
+
     relatedProducts.value = list
       .filter((item) => item?.id && item.id !== normalized.id)
       .slice(0, 4)
-      .map((item) => normalizeProduct(item));
+      .map((item, idx) => {
+        const norm = normalizeProduct(item);
+        norm.name = relatedNames[idx] || norm.name;
+        return norm;
+      });
   } catch (err) {
     console.error(err);
     error.value = 'Gagal memuat data produk. Silakan coba lagi.';

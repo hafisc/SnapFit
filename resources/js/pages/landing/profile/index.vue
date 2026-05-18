@@ -1,9 +1,9 @@
 <template>
-  <div class="min-h-screen bg-slate-50 font-sans">
+  <div class="snapfit-heritage-bg min-h-screen font-sans">
     <!-- Menggunakan Navbar bawaan SnapFit -->
     <Navbar :user="user" />
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8 pt-28 flex flex-col md:flex-row gap-6 md:gap-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 pt-28 flex flex-col md:flex-row gap-6 lg:gap-8">
       <!-- Sidebar -->
       <aside class="w-full md:w-72 flex-shrink-0 space-y-6">
         <!-- Profile Card -->
@@ -16,13 +16,6 @@
               <h3 class="text-espresso font-bold text-base truncate">{{ user?.name || 'User' }}</h3>
               
             </div>
-          </div>
-          <!-- Progress -->
-          <div class="space-y-2">
-            <div class="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-              <div class="h-full bg-terracotta w-3/4 rounded-full"></div>
-            </div>
-            <p class="text-[10px] text-slate-400 font-semibold text-right">7/10 data profil terisi</p>
           </div>
         </div>
 
@@ -60,7 +53,7 @@
         </div>
 
         <!-- Form Area (Profil Saya) -->
-        <div v-if="activeMenu === 'profile'" class="bg-surface rounded-[2rem] p-6 sm:p-10 border border-borderSoft shadow-sm">
+        <div v-if="activeMenu === 'profile'" class="bg-surface rounded-[2rem] p-6 sm:p-8 border border-borderSoft shadow-sm">
           <div class="flex flex-col items-center mb-10">
             <div class="w-24 h-24 bg-gradient-to-tr from-orange-600 to-amber-400 rounded-full flex items-center justify-center text-4xl font-bold text-white shadow-xl shadow-terracotta/50/20 mb-4 relative group cursor-pointer border-4 border-white overflow-hidden">
               <img :src="userAvatar" alt="Avatar" class="w-full h-full object-cover" />
@@ -76,22 +69,22 @@
 
           <form class="space-y-6 max-w-2xl mx-auto" @submit.prevent="updateProfile">
             <!-- Nama Lengkap -->
-            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8">
-              <label class="w-48 text-sm font-bold text-muted flex-shrink-0">Nama Lengkap</label>
-              <input v-model="form.name" type="text" class="flex-1 bg-slate-50 border border-borderSoft rounded-xl px-5 py-3.5 text-sm text-espresso font-medium focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all placeholder-slate-400" />
+            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+              <label class="w-40 text-sm font-bold text-muted flex-shrink-0">Nama Lengkap</label>
+              <input v-model="form.name" type="text" class="flex-1 bg-surface border border-borderSoft rounded-xl px-4 py-3 text-sm text-espresso font-medium focus:outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20 transition-all placeholder-slate-400" />
             </div>
 
             <!-- Email -->
-            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8">
-              <label class="w-48 text-sm font-bold text-muted flex-shrink-0">Email</label>
-              <input v-model="form.email" type="email" readonly class="flex-1 bg-slate-100 border border-borderSoft rounded-xl px-5 py-3.5 text-sm text-slate-400 font-medium cursor-not-allowed" />
+            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+              <label class="w-40 text-sm font-bold text-muted flex-shrink-0">Email</label>
+              <input v-model="form.email" type="email" readonly class="flex-1 bg-slate-50 border border-borderSoft rounded-xl px-4 py-3 text-sm text-slate-400 font-medium cursor-not-allowed" />
             </div>
 
             <!-- Jenis Kelamin -->
-            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8">
-              <label class="w-48 text-sm font-bold text-muted flex-shrink-0">Jenis Kelamin</label>
+            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+              <label class="w-40 text-sm font-bold text-muted flex-shrink-0">Jenis Kelamin</label>
               <div class="flex-1 relative">
-                <select v-model="form.gender" class="w-full bg-slate-50 border border-borderSoft rounded-xl px-5 py-3.5 text-sm text-espresso font-medium focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all appearance-none cursor-pointer">
+                <select v-model="form.gender" class="w-full bg-surface border border-borderSoft rounded-xl px-4 py-3 text-sm text-espresso font-medium focus:outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20 transition-all appearance-none cursor-pointer">
                   <option value="Laki-laki">Laki-laki</option>
                   <option value="Perempuan">Perempuan</option>
                   <option value="Lainnya">Lainnya</option>
@@ -103,17 +96,13 @@
             </div>
 
             <!-- Tanggal Lahir -->
-            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-8">
-              <label class="w-48 text-sm font-bold text-muted flex-shrink-0">Tanggal Lahir</label>
-              <input v-model="form.dob" type="date" class="flex-1 bg-slate-50 border border-borderSoft rounded-xl px-5 py-3.5 text-sm text-espresso font-medium focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all cursor-pointer" />
+            <div class="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
+              <label class="w-40 text-sm font-bold text-muted flex-shrink-0">Tanggal Lahir</label>
+              <input v-model="form.dob" type="date" class="flex-1 bg-surface border border-borderSoft rounded-xl px-4 py-3 text-sm text-espresso font-medium focus:outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20 transition-all cursor-pointer" />
             </div>
 
-            
-
-            
-
-            <div class="pt-10 flex justify-end">
-              <button :disabled="isSavingProfile" type="submit" class="bg-terracotta hover:bg-terracottaDark text-white font-bold py-3.5 px-8 rounded-xl transition-colors active:scale-[0.98] text-sm shadow-lg shadow-terracotta/50/20 disabled:opacity-50">
+            <div class="pt-8 flex justify-end">
+              <button :disabled="isSavingProfile" type="submit" class="bg-terracotta hover:bg-[#2B1E16] text-white font-bold py-3 px-6 rounded-xl transition-colors active:scale-[0.98] text-sm shadow-md shadow-terracotta/20 disabled:opacity-50">
                 {{ isSavingProfile ? 'Menyimpan...' : 'Simpan Perubahan' }}
               </button>
             </div>
