@@ -95,4 +95,28 @@ class UploadController extends Controller
             'path'         => $path,
         ], 201);
     }
+
+    /**
+     * Upload dokumen/foto untuk pendaftaran role (UMKM/Designer).
+     * Menerima gambar atau PDF.
+     */
+    public function uploadRoleDocument(Request $request): JsonResponse
+    {
+        $request->validate([
+            'file' => ['required', 'file', 'mimes:jpg,jpeg,png,webp,pdf', 'max:5120'], // max 5MB
+            'type' => ['required', 'string', 'in:logo,product_sample,identity_document,sample_work'],
+        ]);
+
+        $file     = $request->file('file');
+        $type     = $request->input('type');
+        $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+        $path     = $file->storeAs("role-documents/{$type}", $filename, 'public');
+
+        return response()->json([
+            'message'  => 'File berhasil diupload.',
+            'url'      => Storage::url($path),
+            'path'     => $path,
+            'filename' => $file->getClientOriginalName(),
+        ], 201);
+    }
 }

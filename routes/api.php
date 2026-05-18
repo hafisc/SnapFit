@@ -64,6 +64,13 @@ Route::prefix('v1')->group(function () {
         Route::post('profile/switch-role', [ProfileController::class, 'switchRole']);
         Route::post('profile/register-role', [ProfileController::class, 'registerRole']);
 
+        // ─── ROLE APPLICATIONS (AI Verification) ──────────────────────────
+        Route::prefix('role-applications')->group(function () {
+            Route::post('/umkm', [\App\Http\Controllers\RoleApplicationController::class, 'submitUmkm']);
+            Route::post('/designer', [\App\Http\Controllers\RoleApplicationController::class, 'submitDesigner']);
+            Route::get('/status/{role}', [\App\Http\Controllers\RoleApplicationController::class, 'status']);
+        });
+
         // ─── CART ──────────────────────────────────────────────────────────
         Route::prefix('cart')->group(function () {
             Route::get('/', [CartController::class, 'index']);
@@ -82,6 +89,7 @@ Route::prefix('v1')->group(function () {
             Route::post('product-image', [UploadController::class, 'uploadProductImage']);
             Route::post('ai-source',     [UploadController::class, 'uploadAiSource']);
             Route::post('ar-model',      [UploadController::class, 'uploadArModel']);
+            Route::post('role-document', [UploadController::class, 'uploadRoleDocument']);
         });
 
         // ─── WISHLIST ─────────────────────────────────────────────────────────
@@ -112,8 +120,8 @@ Route::prefix('v1')->group(function () {
             Route::get('orders/{order}/status',      [PaymentController::class, 'checkStatus']);
         });
 
-        // ─── ORDERS (semua non-admin bisa beli: buyer, umkm, designer) ────────
-        Route::middleware('role:umkm,designer')->prefix('orders')->group(function () {
+        // ─── ORDERS (semua user yang login bisa melihat & membuat pesanan) ────────
+        Route::prefix('orders')->group(function () {
 
             Route::get('/',        [OrderController::class, 'index']);
             Route::get('/{order}', [OrderController::class, 'show']);

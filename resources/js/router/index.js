@@ -72,6 +72,18 @@ const routes = [
     component: () => import('@/pages/landing/profile/index.vue'),
     meta: { requiresAuth: true },
   },
+  {
+    path: '/register/umkm',
+    name: 'register.umkm',
+    component: () => import('@/pages/landing/register/umkm.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/register/designer',
+    name: 'register.designer',
+    component: () => import('@/pages/landing/register/designer.vue'),
+    meta: { requiresAuth: true },
+  },
 
   // ─── UMKM ───────────────────────────────────────
   {

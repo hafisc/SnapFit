@@ -66,12 +66,13 @@
           </button>
         </div>
 
-        <!-- Inactive/Pending/Rejected Role Card -->
+        <!-- Inactive/Pending/Rejected/Need Review Role Card -->
         <div v-else
              class="p-6 rounded-2xl border-2 bg-gradient-to-br from-slate-50 to-slate-100 transition-all duration-300 group cursor-pointer"
              :class="{
                'border-slate-300 hover:border-terracotta hover:shadow-lg': role.status === 'inactive',
                'border-amber-300 shadow-md bg-gradient-to-br from-amber-50 to-orange-50': role.status === 'pending',
+               'border-orange-300 shadow-md bg-gradient-to-br from-orange-50 to-amber-50': role.status === 'need_review',
                'border-red-300 shadow-md bg-gradient-to-br from-red-50 to-rose-50': role.status === 'rejected'
              }">
           
@@ -88,15 +89,17 @@
                         :class="{
                           'bg-slate-400': role.status === 'inactive',
                           'bg-amber-500 animate-pulse': role.status === 'pending',
+                          'bg-orange-500': role.status === 'need_review',
                           'bg-red-500': role.status === 'rejected'
                         }"></span>
                   <p class="text-[10px] font-bold uppercase tracking-widest"
                      :class="{
                        'text-muted': role.status === 'inactive',
                        'text-amber-700': role.status === 'pending',
+                       'text-orange-700': role.status === 'need_review',
                        'text-red-700': role.status === 'rejected'
                      }">
-                    {{ role.status === 'pending' ? 'Menunggu Verifikasi' : (role.status === 'rejected' ? 'Ditolak' : 'Belum Terdaftar') }}
+                    {{ role.status === 'pending' ? 'Menunggu Verifikasi' : (role.status === 'need_review' ? 'Perlu Dilengkapi' : (role.status === 'rejected' ? 'Ditolak' : 'Belum Terdaftar')) }}
                   </p>
                 </div>
               </div>
@@ -108,9 +111,14 @@
              :class="{
                'text-muted': role.status === 'inactive',
                'text-amber-900': role.status === 'pending',
+               'text-orange-900': role.status === 'need_review',
                'text-red-900': role.status === 'rejected'
              }">
-            <template v-if="role.status === 'pending'">Pengajuan Anda sedang ditinjau oleh tim admin. Silakan tunggu update selanjutnya.</template>
+            <template v-if="role.status === 'pending'">Pengajuan Anda sedang ditinjau oleh AI SnapFit. Silakan tunggu update selanjutnya.</template>
+            <template v-else-if="role.status === 'need_review'">
+              <span class="block mb-1 font-bold">Data perlu dilengkapi (Skor: {{ role.ai_score }}/100)</span>
+              <span class="text-xs">{{ role.ai_summary || 'Beberapa data belum memenuhi syarat. Klik untuk memperbaiki.' }}</span>
+            </template>
             <template v-else-if="role.status === 'rejected'">
               <span class="block mb-1 font-bold">Pengajuan ditolak.</span>
               <span class="text-xs">{{ role.rejection_reason || 'Dokumen belum lengkap atau tidak memenuhi syarat.' }}</span>
@@ -122,18 +130,19 @@
 
           <!-- Action -->
           <button 
-            v-if="role.status === 'inactive' || role.status === 'rejected'"
+            v-if="role.status === 'inactive' || role.status === 'rejected' || role.status === 'need_review'"
             @click="handleRegisterRole(role.name)"
             :disabled="isRegisteringRole"
             class="w-full font-bold py-3 px-5 rounded-lg transition-all duration-200 active:scale-95 text-sm flex items-center justify-center gap-2 disabled:opacity-50"
             :class="{
               'bg-surface border-2 border-slate-400 text-espresso hover:border-orange-600 hover:text-terracotta hover:shadow-lg': role.status === 'inactive',
+              'bg-orange-600 hover:bg-orange-700 text-white shadow-md': role.status === 'need_review',
               'bg-red-600 hover:bg-red-700 text-white shadow-md': role.status === 'rejected'
             }">
             <svg v-if="!isRegisteringRole && role.status === 'inactive'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-            <svg v-if="!isRegisteringRole && role.status === 'rejected'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+            <svg v-if="!isRegisteringRole && (role.status === 'rejected' || role.status === 'need_review')" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
             <span v-if="isRegisteringRole">Mengirim...</span>
-            <span v-else>{{ role.status === 'rejected' ? 'Ajukan Ulang' : 'Daftar Sekarang' }}</span>
+            <span v-else>{{ role.status === 'rejected' ? 'Ajukan Ulang' : (role.status === 'need_review' ? 'Perbaiki Data' : 'Daftar Sekarang') }}</span>
           </button>
           
           <button 
@@ -141,7 +150,7 @@
             disabled
             class="w-full bg-amber-200 text-amber-800 font-bold py-3 px-5 rounded-lg transition-all duration-200 text-sm flex items-center justify-center gap-2 opacity-80 cursor-not-allowed">
             <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-            Sedang Direview Admin
+            Sedang Diverifikasi AI
           </button>
         </div>
       </template>
@@ -263,34 +272,12 @@ const goToDashboard = (roleName) => {
 const isRegisteringRole = ref(false);
 
 const handleRegisterRole = async (roleName) => {
-  isRegisteringRole.value = true;
-  try {
-    const res = await fetch('/api/v1/profile/register-role', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify({ role: roleName }),
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-      localStorage.setItem('user', JSON.stringify(data.user));
-
-      // Refresh role menu to show it as active
-      await fetchRoleMenu();
-    } else {
-      const errData = await res.json();
-      alert(errData.message || 'Gagal mendaftar role baru.');
-    }
-  } catch (err) {
-    alert('Terjadi kesalahan jaringan.');
-    console.error('Failed to register role', err);
-  } finally {
-    isRegisteringRole.value = false;
-  }
+  // Navigate to the dedicated registration form
+  const routes = {
+    umkm: '/register/umkm',
+    designer: '/register/designer',
+  };
+  router.push(routes[roleName] || '/profile');
 };
 
 onMounted(() => {

@@ -61,7 +61,7 @@ class ProfileController extends Controller
 
         // Check pending applications
         $applications = \App\Models\RoleApplication::where('user_id', $user->id)
-            ->whereIn('status', ['pending', 'rejected'])
+            ->whereIn('status', ['pending', 'submitted', 'ai_reviewing', 'need_review', 'rejected'])
             ->get()->keyBy('requested_role');
 
         // Role UMKM
@@ -75,12 +75,22 @@ class ProfileController extends Controller
             ];
         } else {
             $app = $applications['umkm'] ?? null;
-            if ($app && $app->status === 'pending') {
+            if ($app && in_array($app->status, ['pending', 'submitted', 'ai_reviewing'])) {
                 $roles[] = [
                     'name' => 'umkm',
                     'display_name' => 'Daftar sebagai UMKM',
                     'status' => 'pending',
                     'action' => 'wait',
+                ];
+            } else if ($app && $app->status === 'need_review') {
+                $roles[] = [
+                    'name' => 'umkm',
+                    'display_name' => 'Daftar sebagai UMKM',
+                    'status' => 'need_review',
+                    'action' => 'register',
+                    'url' => '/register/umkm',
+                    'ai_score' => $app->ai_score,
+                    'ai_summary' => $app->ai_summary,
                 ];
             } else if ($app && $app->status === 'rejected') {
                 $roles[] = [
@@ -89,7 +99,7 @@ class ProfileController extends Controller
                     'status' => 'rejected',
                     'action' => 'register',
                     'url' => '/register/umkm',
-                    'rejection_reason' => $app->rejection_reason,
+                    'rejection_reason' => $app->rejection_reason ?? $app->ai_summary,
                 ];
             } else {
                 $roles[] = [
@@ -113,12 +123,22 @@ class ProfileController extends Controller
             ];
         } else {
             $app = $applications['designer'] ?? null;
-            if ($app && $app->status === 'pending') {
+            if ($app && in_array($app->status, ['pending', 'submitted', 'ai_reviewing'])) {
                 $roles[] = [
                     'name' => 'designer',
                     'display_name' => 'Daftar sebagai Designer',
                     'status' => 'pending',
                     'action' => 'wait',
+                ];
+            } else if ($app && $app->status === 'need_review') {
+                $roles[] = [
+                    'name' => 'designer',
+                    'display_name' => 'Daftar sebagai Designer',
+                    'status' => 'need_review',
+                    'action' => 'register',
+                    'url' => '/register/designer',
+                    'ai_score' => $app->ai_score,
+                    'ai_summary' => $app->ai_summary,
                 ];
             } else if ($app && $app->status === 'rejected') {
                 $roles[] = [
@@ -127,7 +147,7 @@ class ProfileController extends Controller
                     'status' => 'rejected',
                     'action' => 'register',
                     'url' => '/register/designer',
-                    'rejection_reason' => $app->rejection_reason,
+                    'rejection_reason' => $app->rejection_reason ?? $app->ai_summary,
                 ];
             } else {
                 $roles[] = [
