@@ -10,218 +10,310 @@ class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        $umkmUsers = User::where('role', 'umkm')->get();
+        $umkmUsers = User::where('active_role', 'umkm')->get();
 
         if ($umkmUsers->isEmpty()) {
             $this->command->warn('Tidak ada user UMKM. Jalankan UserSeeder dulu.');
             return;
         }
 
-        $products = [
-            // BATIK
+                        $products = [
+            // BATIK & FASHION
             [
-                'name'        => 'Kain Batik Tulis Motif Kawung',
-                'description' => 'Batik tulis asli motif Kawung, dikerjakan secara manual oleh pengrajin. Cocok untuk seragam dan acara resmi.',
-                'price'       => 450000,
+                'name'        => 'Batik Parang Heritage',
+                'description' => 'Motif parang klasik yang melambangkan kekuatan dan keteguhan.',
+                'price'       => 349000,
                 'category'    => 'batik',
+                'origin'      => 'Yogyakarta, Indonesia',
+                'badges'      => ['Batik Tulis', 'AR Ready'],
+                'rating'      => 4.8,
+                'sold'        => 120,
                 'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
+                'is_published'=> true,
+                'umkm_name'   => 'Sanggar Batik Laras'
             ],
             [
-                'name'        => 'Kain Batik Cap Parang Rusak',
-                'description' => 'Batik cap berkualitas tinggi dengan motif legendaris Parang Rusak. Material katun primisima premium.',
-                'price'       => 215000,
-                'category'    => 'batik',
-                'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
-            ],
-            [
-                'name'        => 'Batik Tulis Lasem Tiga Negeri',
-                'description' => 'Kain batik pesisir Lasem motif tiga negeri dengan perpaduan warna yang sangat menawan dan detail.',
+                'name'        => 'Batik Tulis Lasem',
+                'description' => 'Kain batik pesisir Lasem motif tiga negeri dengan perpaduan warna menawan.',
                 'price'       => 850000,
                 'category'    => 'batik',
+                'origin'      => 'Rembang, Indonesia',
+                'badges'      => ['Batik Tulis', 'Premium'],
+                'rating'      => 4.9,
+                'sold'        => 45,
                 'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
+                'is_published'=> true,
+                'umkm_name'   => 'Batik Pusaka Lasem'
             ],
             [
-                'name'        => 'Kain Batik Motif Megamendung',
-                'description' => 'Batik motif khas Cirebon Megamendung dengan warna biru gradasi yang elegan dan modern.',
-                'price'       => 275000,
-                'category'    => 'batik',
+                'name'        => 'Kemeja Tenun Jepara',
+                'description' => 'Kemeja pria elegan berbahan tenun troso asli Jepara.',
+                'price'       => 250000,
+                'category'    => 'fashion',
+                'origin'      => 'Jepara, Indonesia',
+                'badges'      => ['Handmade', 'AR Ready'],
+                'rating'      => 4.7,
+                'sold'        => 310,
                 'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
+                'is_published'=> true,
+                'umkm_name'   => 'Tenun Troso Indah'
             ],
             [
-                'name'        => 'Batik Tulis Klasik Solo',
-                'description' => 'Batik klasik Solo dengan pewarnaan soga alam yang khas, memancarkan aura keraton yang anggun.',
-                'price'       => 650000,
-                'category'    => 'batik',
+                'name'        => 'Kain Songket Palembang',
+                'description' => 'Songket merah emas khas Palembang ditenun manual benang emas.',
+                'price'       => 1250000,
+                'category'    => 'fashion',
+                'origin'      => 'Palembang, Indonesia',
+                'badges'      => ['Premium', 'Limited'],
+                'rating'      => 5.0,
+                'sold'        => 12,
                 'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
+                'is_published'=> true,
+                'umkm_name'   => 'Songket Sriwijaya'
+            ],
+            [
+                'name'        => 'Kebaya Kutu Baru Modern',
+                'description' => 'Kebaya tradisional dengan sentuhan potongan modern dan brokat lembut.',
+                'price'       => 450000,
+                'category'    => 'fashion',
+                'origin'      => 'Solo, Indonesia',
+                'badges'      => ['AR Ready'],
+                'rating'      => 4.6,
+                'sold'        => 88,
+                'images'      => ['/images/baju_batik_pria.png'],
+                'is_published'=> true,
+                'umkm_name'   => 'Kebaya Keraton'
             ],
             
-            // KERAJINAN
+            // KERAJINAN & DEKORASI
             [
-                'name'        => 'Tas Anyaman Rotan Bali Natural',
-                'description' => 'Tas rotan handmade asli Bali. Tahan lama, estetik, dan cocok untuk liburan atau OOTD.',
-                'price'       => 150000,
+                'name'        => 'Tenun Ikat Sumba',
+                'description' => 'Kain tenun handmade dengan warna alam dan motif tradisional Sumba.',
+                'price'       => 520000,
                 'category'    => 'kerajinan',
+                'origin'      => 'Sumba, Indonesia',
+                'badges'      => ['Handmade', 'Limited'],
+                'rating'      => 4.9,
+                'sold'        => 85,
                 'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
+                'is_published'=> true,
+                'umkm_name'   => 'Rumah Tenun Marapu'
             ],
             [
-                'name'        => 'Keranjang Bambu Estetik Multiguna',
-                'description' => 'Keranjang anyaman bambu kokoh untuk laundry, pot tanaman, atau dekorasi sudut ruang.',
-                'price'       => 85000,
+                'name'        => 'Tas Anyaman Bali',
+                'description' => 'Tas rotan handmade dengan desain modern untuk gaya kasual.',
+                'price'       => 275000,
                 'category'    => 'kerajinan',
+                'origin'      => 'Bali, Indonesia',
+                'badges'      => ['Eco Craft', 'Handmade'],
+                'rating'      => 4.7,
+                'sold'        => 210,
                 'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
+                'is_published'=> true,
+                'umkm_name'   => 'Bali Rattan Studio'
             ],
             [
-                'name'        => 'Topi Anyaman Pandan Klasik',
-                'description' => 'Topi lebar dari daun pandan asli, nyaman dipakai ke pantai atau berkebun.',
-                'price'       => 45000,
-                'category'    => 'kerajinan',
+                'name'        => 'Keramik Kasongan',
+                'description' => 'Vas keramik handmade dengan sentuhan natural untuk dekorasi rumah.',
+                'price'       => 160000,
+                'category'    => 'dekorasi',
+                'origin'      => 'Yogyakarta, Indonesia',
+                'badges'      => ['Eco Craft'],
+                'rating'      => 4.6,
+                'sold'        => 95,
                 'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
+                'is_published'=> true,
+                'umkm_name'   => 'Kasongan Clay Studio'
             ],
             [
-                'name'        => 'Tikar Tenun Lontar Asli',
-                'description' => 'Tikar lontar tenun tangan, sangat sejuk saat digunakan dan memberikan nuansa tropis yang elegan.',
-                'price'       => 195000,
-                'category'    => 'kerajinan',
+                'name'        => 'Ukiran Kayu Jepara',
+                'description' => 'Dekorasi kayu ukir dengan motif floral khas Jepara.',
+                'price'       => 310000,
+                'category'    => 'dekorasi',
+                'origin'      => 'Jepara, Indonesia',
+                'badges'      => ['Handmade', 'Premium'],
+                'rating'      => 4.9,
+                'sold'        => 60,
                 'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
+                'is_published'=> true,
+                'umkm_name'   => 'Jepara Woodcraft'
+            ],
+            [
+                'name'        => 'Lampu Gantung Bambu',
+                'description' => 'Lampu hias anyaman bambu memberi kesan hangat dan estetik.',
+                'price'       => 185000,
+                'category'    => 'dekorasi',
+                'origin'      => 'Bandung, Indonesia',
+                'badges'      => ['Eco Craft', 'Handmade'],
+                'rating'      => 4.8,
+                'sold'        => 140,
+                'images'      => ['/images/baju_batik_pria.png'],
+                'is_published'=> true,
+                'umkm_name'   => 'Bambu Nusantara'
+            ],
+            [
+                'name'        => 'Karpet Anyaman Enceng Gondok',
+                'description' => 'Karpet ramah lingkungan dari enceng gondok asli dengan tekstur alami.',
+                'price'       => 350000,
+                'category'    => 'dekorasi',
+                'origin'      => 'Semarang, Indonesia',
+                'badges'      => ['Eco Craft'],
+                'rating'      => 4.5,
+                'sold'        => 75,
+                'images'      => ['/images/baju_batik_pria.png'],
+                'is_published'=> true,
+                'umkm_name'   => 'Kriya Alam Sejahtera'
             ],
 
             // AKSESORIS
             [
-                'name'        => 'Gelang Kayu Kokka Asli',
-                'description' => 'Gelang terbuat dari kayu Kokka berkualitas tinggi. Desain minimalis dan tahan lama.',
-                'price'       => 35000,
+                'name'        => 'Gelang Perak Celuk',
+                'description' => 'Gelang perak ukir khas Celuk dengan detail elegan.',
+                'price'       => 189000,
                 'category'    => 'aksesoris',
+                'origin'      => 'Bali, Indonesia',
+                'badges'      => ['Handmade', 'AR Ready'],
+                'rating'      => 4.8,
+                'sold'        => 150,
                 'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
+                'is_published'=> true,
+                'umkm_name'   => 'Celuk Silver Art'
             ],
             [
-                'name'        => 'Kalung Etnik Batu Alam',
-                'description' => 'Kalung dengan liontin batu alam berbalut perak khas pengrajin perak Kotagede.',
+                'name'        => 'Kalung Mutiara Lombok',
+                'description' => 'Kalung mutiara air laut asli Lombok dengan ikatan perak murni.',
+                'price'       => 850000,
+                'category'    => 'aksesoris',
+                'origin'      => 'Lombok, Indonesia',
+                'badges'      => ['Premium', 'Limited'],
+                'rating'      => 4.9,
+                'sold'        => 35,
+                'images'      => ['/images/baju_batik_pria.png'],
+                'is_published'=> true,
+                'umkm_name'   => 'Mutiara Mandalika'
+            ],
+            [
+                'name'        => 'Cincin Kayu Kokka',
+                'description' => 'Cincin unik dari bahan kayu kokka asli dengan ukiran minimalis.',
+                'price'       => 45000,
+                'category'    => 'aksesoris',
+                'origin'      => 'Martapura, Indonesia',
+                'badges'      => ['Handmade'],
+                'rating'      => 4.7,
+                'sold'        => 420,
+                'images'      => ['/images/baju_batik_pria.png'],
+                'is_published'=> true,
+                'umkm_name'   => 'Kokka Craft'
+            ],
+            [
+                'name'        => 'Bros Kebaya Alpaka',
+                'description' => 'Bros kebaya cantik dari bahan alpaka lapis emas untuk acara formal.',
                 'price'       => 125000,
                 'category'    => 'aksesoris',
+                'origin'      => 'Bali, Indonesia',
+                'badges'      => ['AR Ready'],
+                'rating'      => 4.8,
+                'sold'        => 280,
                 'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
-            ],
-            [
-                'name'        => 'Bros Kebaya Motif Kupu-kupu',
-                'description' => 'Bros tembaga lapis emas dengan detail permata zirconia, sangat cocok untuk kebaya kutubaru.',
-                'price'       => 95000,
-                'category'    => 'aksesoris',
-                'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
-            ],
-            [
-                'name'        => 'Cincin Perak Ukir Tradisional',
-                'description' => 'Cincin perak 925 dengan ukiran motif Majapahit, tebal dan tidak mudah pudar.',
-                'price'       => 185000,
-                'category'    => 'aksesoris',
-                'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
-            ],
-
-            // DEKORASI
-            [
-                'name'        => 'Pajangan Kayu Ukir Jepara',
-                'description' => 'Ukiran dinding kayu jati dari Jepara motif daun merambat, memberikan kesan hangat di ruangan.',
-                'price'       => 450000,
-                'category'    => 'dekorasi',
-                'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
-            ],
-            [
-                'name'        => 'Guci Keramik Tanah Liat Kasongan',
-                'description' => 'Guci keramik besar dari pengrajin Kasongan, dengan sentuhan warna terakota alami yang estetik.',
-                'price'       => 320000,
-                'category'    => 'dekorasi',
-                'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
-            ],
-            [
-                'name'        => 'Lampu Gantung Anyaman Bambu',
-                'description' => 'Kap lampu gantung bergaya rustic dari anyaman bambu, membuat cahaya ruangan lebih dramatis.',
-                'price'       => 175000,
-                'category'    => 'dekorasi',
-                'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
-            ],
-            [
-                'name'        => 'Taplak Meja Tenun Jepara',
-                'description' => 'Taplak meja bahan tenun asli Troso Jepara. Menambah nilai estetika ruang tamu atau meja makan.',
-                'price'       => 110000,
-                'category'    => 'dekorasi',
-                'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
-            ],
-
-            // FASHION
-            [
-                'name'        => 'Kemeja Batik Pria Slim Fit',
-                'description' => 'Kemeja lengan pendek bahan katun adem, motif modern slim fit. Pas untuk ke kantor atau kasual.',
-                'price'       => 225000,
-                'category'    => 'fashion',
-                'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
-            ],
-            [
-                'name'        => 'Outer Tenun Ikat Etnik',
-                'description' => 'Outer/kardigan cantik berbahan kain tenun ikat NTT. Desain open front yang sangat stylish.',
-                'price'       => 315000,
-                'category'    => 'fashion',
-                'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
-            ],
-            [
-                'name'        => 'Dress Batik Modern Wanita',
-                'description' => 'Gaun midi batik motif cap dengan resleting belakang. Bahan jatuh dan anti kusut.',
-                'price'       => 285000,
-                'category'    => 'fashion',
-                'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
-            ],
-            [
-                'name'        => 'Celana Kulot Batik Lasem',
-                'description' => 'Kulot panjang katun dengan motif batik Lasem merah cerah, dilengkapi pinggang karet elastis.',
-                'price'       => 150000,
-                'category'    => 'fashion',
-                'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
-            ],
-            [
-                'name'        => 'Selendang Tenun Sutra',
-                'description' => 'Selendang berbahan sutra asli dengan corak songket eksklusif. Halus dan berkilau mewah.',
-                'price'       => 750000,
-                'category'    => 'fashion',
-                'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
-            ],
-            [
-                'name'        => 'Tas Tote Bag Tenun Etnik',
-                'description' => 'Tote bag kokoh dengan jahitan rapi, full tenun blanket. Cocok untuk kuliah atau jalan-jalan.',
-                'price'       => 135000,
-                'category'    => 'fashion',
-                'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
+                'is_published'=> true,
+                'umkm_name'   => 'Bali Aksesoris'
             ],
             
-            // DRAFTS
+            // MAKANAN & MINUMAN LOKAL
             [
-                'name'        => 'Draft Produk (Belum Dipublikasi)',
-                'description' => 'Produk yang masih dalam tahap pengembangan.',
-                'price'       => 99000,
-                'category'    => 'kerajinan',
-                'images'      => [],
-                'is_published' => false,
+                'name'        => 'Kopi Arabika Gayo',
+                'description' => 'Kopi Arabika asli dataran tinggi Gayo Aceh dengan aroma khas rempah.',
+                'price'       => 85000,
+                'category'    => 'minuman',
+                'origin'      => 'Aceh, Indonesia',
+                'badges'      => ['Organic', 'Premium'],
+                'rating'      => 4.9,
+                'sold'        => 650,
+                'images'      => ['/images/baju_batik_pria.png'],
+                'is_published'=> true,
+                'umkm_name'   => 'Gayo Coffee Roastery'
+            ],
+            [
+                'name'        => 'Teh Oolong Halimun',
+                'description' => 'Teh pegunungan Halimun organik kualitas ekspor.',
+                'price'       => 55000,
+                'category'    => 'minuman',
+                'origin'      => 'Jawa Barat, Indonesia',
+                'badges'      => ['Organic'],
+                'rating'      => 4.7,
+                'sold'        => 310,
+                'images'      => ['/images/baju_batik_pria.png'],
+                'is_published'=> true,
+                'umkm_name'   => 'Pusaka Teh Jabar'
+            ],
+            [
+                'name'        => 'Cokelat Ransiki Papua',
+                'description' => 'Dark chocolate 70% asli dari biji kakao premium Ransiki Papua.',
+                'price'       => 45000,
+                'category'    => 'makanan',
+                'origin'      => 'Papua, Indonesia',
+                'badges'      => ['Organic', 'Premium'],
+                'rating'      => 4.8,
+                'sold'        => 480,
+                'images'      => ['/images/baju_batik_pria.png'],
+                'is_published'=> true,
+                'umkm_name'   => 'Papua Cocoa'
+            ],
+            [
+                'name'        => 'Keripik Tempe Sagu',
+                'description' => 'Keripik tempe renyah berlapis sagu, oleh-oleh khas Malang.',
+                'price'       => 20000,
+                'category'    => 'makanan',
+                'origin'      => 'Malang, Indonesia',
+                'badges'      => ['Handmade'],
+                'rating'      => 4.6,
+                'sold'        => 1200,
+                'images'      => ['/images/baju_batik_pria.png'],
+                'is_published'=> true,
+                'umkm_name'   => 'Oleh Oleh Arema'
+            ],
+            [
+                'name'        => 'Sambal Roa Manado',
+                'description' => 'Sambal botol pedas ikan roa asap khas Sulawesi Utara.',
+                'price'       => 35000,
+                'category'    => 'makanan',
+                'origin'      => 'Manado, Indonesia',
+                'badges'      => ['Handmade'],
+                'rating'      => 4.8,
+                'sold'        => 890,
+                'images'      => ['/images/baju_batik_pria.png'],
+                'is_published'=> true,
+                'umkm_name'   => 'Roa Khas Minahasa'
             ],
         ];
+
+        foreach ($products as $p) {
+            // Find or create user for this UMKM
+            $user = User::firstOrCreate(
+                ['email' => strtolower(str_replace(' ', '', $p['umkm_name'])) . '@umkm.com'],
+                [
+                    'name' => $p['umkm_name'],
+                    'password' => bcrypt('password'),
+                    'active_role' => 'umkm'
+                ]
+            );
+            
+            // Create or update profile
+            \App\Models\Profile::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'full_name' => $p['umkm_name'],
+                    'business_name' => $p['umkm_name'],
+                    'phone' => '08123456789'
+                ]
+            );
+
+            $p['user_id'] = $user->id;
+            unset($p['umkm_name']);
+            Product::create($p);
+        }
+        
+        return; // Skip the rest of the old seeder
 
         // Generate tambahan 100 produk dummy dengan Faker
         $faker = \Faker\Factory::create('id_ID');
@@ -240,7 +332,36 @@ class ProductSeeder extends Seeder
 
         $umkmIds = $umkmUsers->pluck('id')->toArray();
 
+        $categoryImages = [
+            'batik'     => [
+                'https://images.unsplash.com/photo-1620054707166-0b299e5a1b32?q=80&w=800&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1598300042247-083623910543?q=80&w=800&auto=format&fit=crop'
+            ],
+            'kerajinan' => [
+                'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=800&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop'
+            ],
+            'aksesoris' => [
+                'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=800&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1574015974293-817f0ebebb74?q=80&w=800&auto=format&fit=crop'
+            ],
+            'dekorasi'  => [
+                'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=800&auto=format&fit=crop'
+            ],
+            'fashion'   => [
+                'https://images.unsplash.com/photo-1583417319070-4a69db38a482?q=80&w=800&auto=format&fit=crop',
+                'https://images.unsplash.com/photo-1523906354313-059715560931?q=80&w=800&auto=format&fit=crop'
+            ],
+        ];
+
         foreach ($products as $index => $data) {
+            // Jika image masih dummy baju_batik, ganti dengan gambar random sesuai kategori
+            if (isset($data['images'][0]) && $data['images'][0] === '/images/baju_batik_pria.png') {
+                $availableImages = $categoryImages[$data['category']] ?? $categoryImages['fashion'];
+                $data['images'] = [$availableImages[array_rand($availableImages)]];
+            }
+
             Product::updateOrCreate(
                 ['name' => $data['name']],
                 array_merge($data, [
@@ -249,6 +370,6 @@ class ProductSeeder extends Seeder
             );
         }
 
-        $this->command->info('✅ Products seeded (' . count($products) . ' produk).');
+        $this->command->info('✅ Products seeded (' . count($products) . ' produk) with varied images.');
     }
 }

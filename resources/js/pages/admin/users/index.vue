@@ -6,16 +6,16 @@
         <div class="flex bg-slate-100 rounded-lg p-0.5">
           <button v-for="t in roleTabs" :key="t.key" @click="roleFilter = t.key"
             class="px-3.5 py-2 text-[11px] font-semibold rounded-md transition-all"
-            :class="roleFilter === t.key ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-400 hover:text-slate-600'">
+            :class="roleFilter === t.key ? 'bg-surface text-espresso shadow-sm' : 'text-slate-400 hover:text-muted'">
             {{ t.label }}
-            <span v-if="t.count" class="ml-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md" :class="roleFilter === t.key ? 'bg-orange-50 text-orange-500' : 'bg-slate-200/60 text-slate-400'">{{ t.count }}</span>
+            <span v-if="t.count" class="ml-1 text-[10px] font-bold px-1.5 py-0.5 rounded-md" :class="roleFilter === t.key ? 'bg-sand text-terracotta' : 'bg-slate-200/60 text-slate-400'">{{ t.count }}</span>
           </button>
         </div>
       </div>
       <div class="flex items-center gap-2.5 w-full md:w-auto">
-        <div class="flex-1 md:w-56 flex items-center bg-white rounded-lg px-3.5 py-2.5 gap-2 border border-slate-200/60">
+        <div class="flex-1 md:w-56 flex items-center bg-surface rounded-lg px-3.5 py-2.5 gap-2 border border-borderSoft/60">
           <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-          <input v-model="search" @input="debounceSearch" type="text" placeholder="Cari user..." class="bg-transparent outline-none text-[12px] font-medium text-slate-600 w-full placeholder:text-slate-400" />
+          <input v-model="search" @input="debounceSearch" type="text" placeholder="Cari user..." class="bg-transparent outline-none text-[12px] font-medium text-muted w-full placeholder:text-slate-400" />
         </div>
         <router-link to="/admin/users/create" class="bg-slate-800 hover:bg-slate-900 text-white px-4 py-2.5 rounded-lg text-[11px] font-bold transition-colors flex items-center gap-1.5 whitespace-nowrap">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
@@ -25,10 +25,10 @@
     </div>
 
     <!-- Table -->
-    <div class="bg-white rounded-2xl border border-slate-200/60 overflow-hidden">
+    <div class="bg-surface rounded-2xl border border-borderSoft/60 overflow-hidden">
       <table class="w-full text-left">
         <thead>
-          <tr class="border-b border-slate-100">
+          <tr class="border-b border-borderSoft">
             <th class="px-5 py-3.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">Pengguna</th>
             <th class="px-5 py-3.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">Role</th>
             <th class="px-5 py-3.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 hidden md:table-cell">Status</th>
@@ -50,7 +50,7 @@
                   {{ u.name.charAt(0) }}
                 </div>
                 <div class="min-w-0">
-                  <p class="text-[13px] font-semibold text-slate-800 truncate">{{ u.name }}</p>
+                  <p class="text-[13px] font-semibold text-espresso truncate">{{ u.name }}</p>
                   <p class="text-[11px] text-slate-400 truncate">{{ u.email }}</p>
                 </div>
               </div>
@@ -69,7 +69,7 @@
             </td>
             <td class="px-5 py-3.5 text-right">
               <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <router-link :to="`/admin/users/edit/${u.id}`" class="w-7 h-7 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors">
+                <router-link :to="`/admin/users/edit/${u.id}`" class="w-7 h-7 rounded-md bg-slate-100 hover:bg-slate-200 text-muted flex items-center justify-center transition-colors">
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                 </router-link>
                 <button class="w-7 h-7 rounded-md hover:bg-red-50 text-slate-400 hover:text-red-500 flex items-center justify-center transition-colors">
@@ -82,7 +82,7 @@
       </table>
 
       <!-- Pagination -->
-      <div class="px-5 py-3.5 border-t border-slate-100 flex items-center justify-between">
+      <div class="px-5 py-3.5 border-t border-borderSoft flex items-center justify-between">
         <p class="text-[11px] text-slate-400 font-medium">Menampilkan {{ filteredUsers.length }} dari {{ allUsers.length }} user</p>
         <div class="flex items-center gap-1">
           <button v-for="p in 3" :key="p" class="w-8 h-8 rounded-md text-[11px] font-bold transition-colors"
@@ -156,16 +156,16 @@ watch(roleFilter, () => {
 });
 
 const avatarClass = (role) => ({
-  umkm: 'bg-orange-50 text-orange-600',
+  umkm: 'bg-sand text-terracotta',
   desainer: 'bg-blue-50 text-blue-600',
   pembeli: 'bg-emerald-50 text-emerald-600',
   admin: 'bg-slate-800 text-white',
-}[role] || 'bg-slate-100 text-slate-500');
+}[role] || 'bg-slate-100 text-muted');
 
 const roleClass = (role) => ({
-  umkm: 'bg-orange-50 text-orange-600',
+  umkm: 'bg-sand text-terracotta',
   desainer: 'bg-blue-50 text-blue-600',
   pembeli: 'bg-emerald-50 text-emerald-600',
-  admin: 'bg-slate-100 text-slate-800',
-}[role] || 'bg-slate-100 text-slate-500');
+  admin: 'bg-slate-100 text-espresso',
+}[role] || 'bg-slate-100 text-muted');
 </script>

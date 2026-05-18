@@ -4,7 +4,7 @@
     <div class="relative bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-8 overflow-hidden">
       <!-- Animated Background Elements -->
       <div class="absolute inset-0 overflow-hidden">
-        <div class="absolute -top-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-surface/10 rounded-full blur-3xl"></div>
         <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-orange-800/20 rounded-full blur-3xl"></div>
       </div>
       
@@ -16,7 +16,7 @@
         </div>
         <div class="flex gap-3">
           <router-link to="/umkm/products/create" 
-            class="group relative px-6 py-3 bg-white text-orange-600 rounded-xl font-semibold text-sm hover:shadow-xl hover:scale-105 transition-all duration-200">
+            class="group relative px-6 py-3 bg-surface text-terracotta rounded-xl font-semibold text-sm hover:shadow-xl hover:scale-105 transition-all duration-200">
             <span class="relative z-10 flex items-center gap-2">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -25,7 +25,7 @@
             </span>
           </router-link>
           <router-link to="/umkm/studio" 
-            class="group relative px-6 py-3 bg-white/10 backdrop-blur-sm text-white rounded-xl font-semibold text-sm border border-white/20 hover:bg-white/20 hover:scale-105 transition-all duration-200">
+            class="group relative px-6 py-3 bg-surface/10 backdrop-blur-sm text-white rounded-xl font-semibold text-sm border border-white/20 hover:bg-surface/20 hover:scale-105 transition-all duration-200">
             <span class="relative z-10 flex items-center gap-2">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -40,7 +40,7 @@
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
       <div v-for="(stat, idx) in stats" :key="idx" 
-        class="group relative bg-white rounded-2xl p-6 border border-slate-200/60 hover:border-slate-300 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
+        class="group relative bg-surface rounded-2xl p-6 border border-borderSoft/60 hover:border-slate-300 hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden">
         <!-- Gradient Overlay on Hover -->
         <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" 
           :class="stat.gradientOverlay"></div>
@@ -55,8 +55,8 @@
             </span>
           </div>
           <div>
-            <p class="text-sm font-medium text-slate-600 mb-1">{{ stat.label }}</p>
-            <p class="text-3xl font-bold text-slate-900 tracking-tight">{{ stat.value }}</p>
+            <p class="text-sm font-medium text-muted mb-1">{{ stat.label }}</p>
+            <p class="text-3xl font-bold text-espresso tracking-tight">{{ stat.value }}</p>
           </div>
         </div>
       </div>
@@ -65,10 +65,10 @@
     <!-- Main Content -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Revenue Chart -->
-      <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200/60 p-6 hover:shadow-lg transition-shadow duration-300">
+      <div class="lg:col-span-2 bg-surface rounded-2xl border border-borderSoft/60 p-6 hover:shadow-lg transition-shadow duration-300">
         <div class="flex items-center justify-between mb-6">
           <div>
-            <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+            <h3 class="text-lg font-bold text-espresso flex items-center gap-2">
               Ringkasan Pendapatan
               <span class="inline-flex items-center px-2 py-0.5 text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-full">
                 <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -77,22 +77,22 @@
                 +14%
               </span>
             </h3>
-            <p class="text-sm text-slate-500 mt-1">Performa 7 hari terakhir</p>
+            <p class="text-sm text-muted mt-1">Performa 7 hari terakhir</p>
           </div>
           <div class="flex items-center gap-1 bg-slate-100 rounded-xl p-1">
             <button v-for="period in ['7H','1B','3B','1T']" :key="period" @click="activePeriod = period"
               class="px-4 py-2 text-xs font-bold rounded-lg transition-all duration-200"
               :class="activePeriod === period 
-                ? 'bg-white text-slate-900 shadow-sm' 
-                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'">
+                ? 'bg-surface text-espresso shadow-sm' 
+                : 'text-muted hover:text-espresso hover:bg-surface/50'">
               {{ period }}
             </button>
           </div>
         </div>
 
         <div class="mb-8">
-          <p class="text-4xl font-bold text-slate-900 mb-1">Rp 12.500.000</p>
-          <p class="text-sm text-slate-500">Total pendapatan periode ini</p>
+          <p class="text-4xl font-bold text-espresso mb-1">Rp 12.500.000</p>
+          <p class="text-sm text-muted">Total pendapatan periode ini</p>
         </div>
 
         <div class="relative h-64">
@@ -100,7 +100,7 @@
           <div class="absolute inset-0 flex flex-col justify-between">
             <div v-for="i in 5" :key="i" class="flex items-center">
               <span class="text-xs text-slate-400 w-20 text-right pr-4">{{ formatChartValue(i) }}</span>
-              <div class="flex-1 border-b border-dashed border-slate-200"></div>
+              <div class="flex-1 border-b border-dashed border-borderSoft"></div>
             </div>
           </div>
           
@@ -131,18 +131,18 @@
                   <div class="absolute inset-0 bg-gradient-to-t from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </div>
               </div>
-              <p class="text-xs text-slate-600 text-center mt-3 font-medium">{{ bar.label }}</p>
+              <p class="text-xs text-muted text-center mt-3 font-medium">{{ bar.label }}</p>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Recent Orders -->
-      <div class="bg-white rounded-2xl border border-slate-200/60 p-6 hover:shadow-lg transition-shadow duration-300">
+      <div class="bg-surface rounded-2xl border border-borderSoft/60 p-6 hover:shadow-lg transition-shadow duration-300">
         <div class="flex items-center justify-between mb-6">
-          <h3 class="text-lg font-bold text-slate-900">Pesanan Terbaru</h3>
+          <h3 class="text-lg font-bold text-espresso">Pesanan Terbaru</h3>
           <router-link to="/umkm/orders" 
-            class="text-sm font-semibold text-orange-500 hover:text-orange-600 transition-colors flex items-center gap-1 group">
+            class="text-sm font-semibold text-terracotta hover:text-terracotta transition-colors flex items-center gap-1 group">
             Lihat Semua
             <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
@@ -157,25 +157,25 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
             </div>
-            <p class="text-sm text-slate-500 font-medium">Belum ada pesanan</p>
+            <p class="text-sm text-muted font-medium">Belum ada pesanan</p>
           </div>
           <div v-for="order in recentOrders" :key="order.id" 
-            class="group flex items-center gap-3 p-3 rounded-xl hover:bg-gradient-to-r hover:from-orange-50 hover:to-transparent border border-transparent hover:border-orange-100 transition-all duration-200 cursor-pointer">
+            class="group flex items-center gap-3 p-3 rounded-xl hover:bg-gradient-to-r hover:from-orange-50 hover:to-transparent border border-transparent hover:border-terracotta/20 transition-all duration-200 cursor-pointer">
             <div class="relative flex-shrink-0">
               <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-slate-100 to-slate-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
-                <span class="text-sm font-bold text-slate-700">{{ order.customer.charAt(0) }}</span>
+                <span class="text-sm font-bold text-espresso">{{ order.customer.charAt(0) }}</span>
               </div>
               <div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white shadow-sm" 
                 :class="order.status === 'Selesai' ? 'bg-emerald-500' : 'bg-amber-500'"></div>
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-sm font-semibold text-slate-900 truncate group-hover:text-orange-600 transition-colors">
+              <p class="text-sm font-semibold text-espresso truncate group-hover:text-terracotta transition-colors">
                 {{ order.customer }}
               </p>
-              <p class="text-xs text-slate-500">{{ order.id }}</p>
+              <p class="text-xs text-muted">{{ order.id }}</p>
             </div>
             <div class="text-right">
-              <p class="text-sm font-bold text-slate-900">{{ formatCurrency(order.total) }}</p>
+              <p class="text-sm font-bold text-espresso">{{ formatCurrency(order.total) }}</p>
               <span class="inline-block text-xs font-semibold px-2 py-0.5 rounded-full mt-1" 
                 :class="order.status === 'Selesai' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'">
                 {{ order.status }}
@@ -229,7 +229,7 @@ const stats = ref([
   { label: 'Total Produk', value: '0', change: '+0', icon: IconBox, iconBg: 'bg-blue-50', iconColor: 'text-blue-600', badgeClass: 'bg-blue-100 text-blue-700', gradientOverlay: 'bg-gradient-to-br from-blue-50/50 to-transparent' },
   { label: 'Pesanan', value: '0', change: '+0', icon: IconShoppingBag, iconBg: 'bg-emerald-50', iconColor: 'text-emerald-600', badgeClass: 'bg-emerald-100 text-emerald-700', gradientOverlay: 'bg-gradient-to-br from-emerald-50/50 to-transparent' },
   { label: 'Kolaborasi', value: '0', change: 'Live', icon: IconUsers, iconBg: 'bg-purple-50', iconColor: 'text-purple-600', badgeClass: 'bg-purple-100 text-purple-700', gradientOverlay: 'bg-gradient-to-br from-purple-50/50 to-transparent' },
-  { label: 'Pendapatan', value: 'Rp 0', change: '↑ 0%', icon: IconCash, iconBg: 'bg-orange-50', iconColor: 'text-orange-600', badgeClass: 'bg-emerald-100 text-emerald-700', gradientOverlay: 'bg-gradient-to-br from-orange-50/50 to-transparent' },
+  { label: 'Pendapatan', value: 'Rp 0', change: '↑ 0%', icon: IconCash, iconBg: 'bg-sand', iconColor: 'text-terracotta', badgeClass: 'bg-emerald-100 text-emerald-700', gradientOverlay: 'bg-gradient-to-br from-orange-50/50 to-transparent' },
 ]);
 
 const chartData = ref([
@@ -246,10 +246,10 @@ const recentOrders = ref([]);
 const topProducts = ref([]);
 
 const quickActions = [
-  { title: 'Tambah Produk', desc: 'Upload produk baru', link: '/umkm/products/create', icon: IconPlus, iconBg: 'bg-blue-100 group-hover:bg-white', iconColor: 'text-blue-600 group-hover:text-white', gradientBg: 'bg-gradient-to-br from-blue-500 to-blue-600' },
-  { title: 'AI Studio', desc: 'Generate visual AI', link: '/umkm/studio', icon: IconLightbulb, iconBg: 'bg-orange-100 group-hover:bg-white', iconColor: 'text-orange-600 group-hover:text-white', gradientBg: 'bg-gradient-to-br from-orange-500 to-orange-600' },
-  { title: 'Co-Create', desc: 'Kolaborasi sekarang', link: '/umkm/cocreate', icon: IconUsers, iconBg: 'bg-purple-100 group-hover:bg-white', iconColor: 'text-purple-600 group-hover:text-white', gradientBg: 'bg-gradient-to-br from-purple-500 to-purple-600' },
-  { title: 'Analitik', desc: 'Lihat insight', link: '/umkm/analytics', icon: IconChart, iconBg: 'bg-emerald-100 group-hover:bg-white', iconColor: 'text-emerald-600 group-hover:text-white', gradientBg: 'bg-gradient-to-br from-emerald-500 to-emerald-600' },
+  { title: 'Tambah Produk', desc: 'Upload produk baru', link: '/umkm/products/create', icon: IconPlus, iconBg: 'bg-blue-100 group-hover:bg-surface', iconColor: 'text-blue-600 group-hover:text-white', gradientBg: 'bg-gradient-to-br from-blue-500 to-blue-600' },
+  { title: 'AI Studio', desc: 'Generate visual AI', link: '/umkm/studio', icon: IconLightbulb, iconBg: 'bg-sand group-hover:bg-surface', iconColor: 'text-terracotta group-hover:text-white', gradientBg: 'bg-gradient-to-br from-orange-500 to-orange-600' },
+  { title: 'Co-Create', desc: 'Kolaborasi sekarang', link: '/umkm/cocreate', icon: IconUsers, iconBg: 'bg-purple-100 group-hover:bg-surface', iconColor: 'text-purple-600 group-hover:text-white', gradientBg: 'bg-gradient-to-br from-purple-500 to-purple-600' },
+  { title: 'Analitik', desc: 'Lihat insight', link: '/umkm/analytics', icon: IconChart, iconBg: 'bg-emerald-100 group-hover:bg-surface', iconColor: 'text-emerald-600 group-hover:text-white', gradientBg: 'bg-gradient-to-br from-emerald-500 to-emerald-600' },
 ];
 
 const formatCurrency = (value) => {

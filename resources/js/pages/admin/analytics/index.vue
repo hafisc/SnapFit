@@ -5,11 +5,11 @@
       <div class="flex bg-slate-100 rounded-lg p-0.5">
         <button v-for="p in periods" :key="p" @click="activePeriod = p"
           class="px-3.5 py-2 text-[11px] font-semibold rounded-md transition-all"
-          :class="activePeriod === p ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-400 hover:text-slate-600'">
+          :class="activePeriod === p ? 'bg-surface text-espresso shadow-sm' : 'text-slate-400 hover:text-muted'">
           {{ p }}
         </button>
       </div>
-      <button class="px-4 py-2 bg-white border border-slate-200/60 rounded-lg text-[11px] font-semibold text-slate-600 hover:bg-slate-50 transition-colors flex items-center gap-1.5">
+      <button class="px-4 py-2 bg-surface border border-borderSoft/60 rounded-lg text-[11px] font-semibold text-muted hover:bg-slate-50 transition-colors flex items-center gap-1.5">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
         Export CSV
       </button>
@@ -17,9 +17,9 @@
 
     <!-- KPI Cards -->
     <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
-      <div v-for="k in kpis" :key="k.label" class="bg-white rounded-2xl border border-slate-200/60 p-5">
+      <div v-for="k in kpis" :key="k.label" class="bg-surface rounded-2xl border border-borderSoft/60 p-5">
         <p class="text-[10px] text-slate-400 font-medium uppercase tracking-wide mb-3">{{ k.label }}</p>
-        <p class="text-[22px] font-bold leading-none mb-1" :class="k.valueClass || 'text-slate-800'">{{ k.value }}</p>
+        <p class="text-[22px] font-bold leading-none mb-1" :class="k.valueClass || 'text-espresso'">{{ k.value }}</p>
         <div class="flex items-center gap-1 mt-1">
           <span class="text-[10px] font-semibold" :class="k.up ? 'text-emerald-500' : 'text-red-400'">{{ k.up ? '↑' : '↓' }} {{ k.change }}</span>
           <span class="text-[10px] text-slate-300">vs bulan lalu</span>
@@ -30,13 +30,13 @@
     <!-- Charts Row -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <!-- Revenue Trend -->
-      <div class="bg-white rounded-2xl border border-slate-200/60 p-6">
-        <h3 class="text-[14px] font-bold text-slate-800 mb-1">Tren Revenue</h3>
+      <div class="bg-surface rounded-2xl border border-borderSoft/60 p-6">
+        <h3 class="text-[14px] font-bold text-espresso mb-1">Tren Revenue</h3>
         <p class="text-[11px] text-slate-400 font-medium mb-6">6 bulan terakhir</p>
         <div class="h-48 flex items-end gap-2">
           <div v-for="(m, i) in revenueData" :key="i" class="flex-1 flex flex-col items-center gap-1 group cursor-pointer relative">
             <div class="absolute -top-8 bg-slate-800 text-white text-[10px] font-bold px-2.5 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">Rp {{ m.value }}M</div>
-            <div class="w-full rounded-t-md transition-all duration-500" :class="i === revenueData.length - 1 ? 'bg-orange-500' : 'bg-orange-200 group-hover:bg-orange-300'" :style="{ height: m.pct + '%' }"></div>
+            <div class="w-full rounded-t-md transition-all duration-500" :class="i === revenueData.length - 1 ? 'bg-terracotta' : 'bg-orange-200 group-hover:bg-orange-300'" :style="{ height: m.pct + '%' }"></div>
           </div>
         </div>
         <div class="flex justify-between mt-3 text-[10px] text-slate-400 font-medium">
@@ -45,8 +45,8 @@
       </div>
 
       <!-- User Growth -->
-      <div class="bg-white rounded-2xl border border-slate-200/60 p-6">
-        <h3 class="text-[14px] font-bold text-slate-800 mb-1">Pertumbuhan User</h3>
+      <div class="bg-surface rounded-2xl border border-borderSoft/60 p-6">
+        <h3 class="text-[14px] font-bold text-espresso mb-1">Pertumbuhan User</h3>
         <p class="text-[11px] text-slate-400 font-medium mb-6">Registrasi baru per bulan</p>
         <div class="h-48 flex items-end gap-2">
           <div v-for="(m, i) in userGrowth" :key="i" class="flex-1 flex flex-col items-center gap-0.5 group cursor-pointer relative">
@@ -68,15 +68,15 @@
     <!-- Bottom Row -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
       <!-- Top Categories -->
-      <div class="bg-white rounded-2xl border border-slate-200/60 p-6">
-        <h3 class="text-[14px] font-bold text-slate-800 mb-5">Kategori Populer</h3>
+      <div class="bg-surface rounded-2xl border border-borderSoft/60 p-6">
+        <h3 class="text-[14px] font-bold text-espresso mb-5">Kategori Populer</h3>
         <div class="space-y-3">
           <div v-for="c in topCategories" :key="c.name" class="flex items-center gap-3">
             <span class="w-8 h-8 rounded-lg flex items-center justify-center text-sm" :class="c.bgClass">{{ c.emoji }}</span>
             <div class="flex-1">
               <div class="flex items-center justify-between mb-1">
-                <span class="text-[12px] font-semibold text-slate-700">{{ c.name }}</span>
-                <span class="text-[11px] font-bold text-slate-800">{{ c.pct }}%</span>
+                <span class="text-[12px] font-semibold text-espresso">{{ c.name }}</span>
+                <span class="text-[11px] font-bold text-espresso">{{ c.pct }}%</span>
               </div>
               <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
                 <div class="h-full rounded-full transition-all duration-700" :class="c.barClass" :style="{ width: c.pct + '%' }"></div>
@@ -87,16 +87,16 @@
       </div>
 
       <!-- Geographic -->
-      <div class="bg-white rounded-2xl border border-slate-200/60 p-6">
-        <h3 class="text-[14px] font-bold text-slate-800 mb-5">Distribusi Wilayah</h3>
+      <div class="bg-surface rounded-2xl border border-borderSoft/60 p-6">
+        <h3 class="text-[14px] font-bold text-espresso mb-5">Distribusi Wilayah</h3>
         <div class="space-y-3">
           <div v-for="r in regions" :key="r.name" class="flex items-center justify-between py-2 border-b border-slate-50 last:border-0">
             <div class="flex items-center gap-2.5">
               <span class="w-2 h-2 rounded-full" :class="r.dotClass"></span>
-              <span class="text-[12px] font-medium text-slate-700">{{ r.name }}</span>
+              <span class="text-[12px] font-medium text-espresso">{{ r.name }}</span>
             </div>
             <div class="text-right">
-              <span class="text-[12px] font-bold text-slate-800">{{ r.users }}</span>
+              <span class="text-[12px] font-bold text-espresso">{{ r.users }}</span>
               <span class="text-[10px] text-slate-400 ml-1">user</span>
             </div>
           </div>
@@ -104,12 +104,12 @@
       </div>
 
       <!-- Platform Health -->
-      <div class="bg-white rounded-2xl border border-slate-200/60 p-6">
-        <h3 class="text-[14px] font-bold text-slate-800 mb-5">Platform Health</h3>
+      <div class="bg-surface rounded-2xl border border-borderSoft/60 p-6">
+        <h3 class="text-[14px] font-bold text-espresso mb-5">Platform Health</h3>
         <div class="space-y-4">
           <div v-for="m in healthMetrics" :key="m.label">
             <div class="flex items-center justify-between mb-1.5">
-              <span class="text-[12px] font-medium text-slate-600">{{ m.label }}</span>
+              <span class="text-[12px] font-medium text-muted">{{ m.label }}</span>
               <span class="text-[12px] font-bold" :class="m.valueClass">{{ m.value }}</span>
             </div>
             <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
@@ -155,7 +155,7 @@ const userGrowth = [
 ];
 
 const topCategories = [
-  { name: 'Batik', emoji: '🎨', pct: 38, bgClass: 'bg-orange-50', barClass: 'bg-orange-400' },
+  { name: 'Batik', emoji: '🎨', pct: 38, bgClass: 'bg-sand', barClass: 'bg-orange-400' },
   { name: 'Kerajinan', emoji: '🪴', pct: 26, bgClass: 'bg-emerald-50', barClass: 'bg-emerald-400' },
   { name: 'Aksesoris', emoji: '💍', pct: 18, bgClass: 'bg-blue-50', barClass: 'bg-blue-400' },
   { name: 'Fashion', emoji: '👕', pct: 12, bgClass: 'bg-violet-50', barClass: 'bg-violet-400' },
@@ -163,7 +163,7 @@ const topCategories = [
 ];
 
 const regions = [
-  { name: 'Kota Malang', users: 142, dotClass: 'bg-orange-500' },
+  { name: 'Kota Malang', users: 142, dotClass: 'bg-terracotta' },
   { name: 'Kabupaten Malang', users: 68, dotClass: 'bg-blue-500' },
   { name: 'Kota Batu', users: 34, dotClass: 'bg-emerald-500' },
   { name: 'Pasuruan', users: 8, dotClass: 'bg-violet-500' },

@@ -3,32 +3,32 @@
     <!-- Roles Overview -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       <div v-for="r in roles" :key="r.name"
-        class="bg-white rounded-2xl border border-slate-200/60 p-5 cursor-pointer hover:shadow-md transition-all group"
-        :class="selectedRole === r.name ? 'ring-2 ring-orange-500/30 border-orange-200' : ''" @click="selectedRole = r.name">
+        class="bg-surface rounded-2xl border border-borderSoft/60 p-5 cursor-pointer hover:shadow-md transition-all group"
+        :class="selectedRole === r.name ? 'ring-2 ring-orange-500/30 border-terracotta/30' : ''" @click="selectedRole = r.name">
         <div class="flex items-center justify-between mb-4">
           <div class="w-10 h-10 rounded-xl flex items-center justify-center" :class="r.bgClass">
             <span class="text-lg">{{ r.emoji }}</span>
           </div>
           <span class="text-[10px] font-bold px-2 py-0.5 rounded-md" :class="r.countBg">{{ r.count }} user</span>
         </div>
-        <h3 class="text-[14px] font-bold text-slate-800 mb-0.5 group-hover:text-orange-600 transition-colors">{{ r.label }}</h3>
+        <h3 class="text-[14px] font-bold text-espresso mb-0.5 group-hover:text-terracotta transition-colors">{{ r.label }}</h3>
         <p class="text-[11px] text-slate-400 font-medium leading-relaxed">{{ r.desc }}</p>
       </div>
     </div>
 
     <!-- Permission Matrix -->
-    <div class="bg-white rounded-2xl border border-slate-200/60 overflow-hidden">
-      <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+    <div class="bg-surface rounded-2xl border border-borderSoft/60 overflow-hidden">
+      <div class="px-6 py-5 border-b border-borderSoft flex items-center justify-between">
         <div>
-          <h3 class="text-[14px] font-bold text-slate-800">Permission Matrix</h3>
-          <p class="text-[11px] text-slate-400 font-medium mt-0.5">Kelola hak akses untuk role: <span class="text-orange-500 font-bold capitalize">{{ selectedRole }}</span></p>
+          <h3 class="text-[14px] font-bold text-espresso">Permission Matrix</h3>
+          <p class="text-[11px] text-slate-400 font-medium mt-0.5">Kelola hak akses untuk role: <span class="text-terracotta font-bold capitalize">{{ selectedRole }}</span></p>
         </div>
         <button class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white text-[11px] font-bold rounded-lg transition-colors">Simpan Perubahan</button>
       </div>
 
       <table class="w-full text-left">
         <thead>
-          <tr class="border-b border-slate-100 bg-slate-50/50">
+          <tr class="border-b border-borderSoft bg-slate-50/50">
             <th class="px-6 py-3.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 w-1/3">Modul</th>
             <th class="px-4 py-3.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 text-center">Lihat</th>
             <th class="px-4 py-3.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 text-center">Buat</th>
@@ -42,7 +42,7 @@
               <div class="flex items-center gap-2.5">
                 <span class="text-sm">{{ perm.emoji }}</span>
                 <div>
-                  <p class="text-[12px] font-semibold text-slate-700">{{ perm.module }}</p>
+                  <p class="text-[12px] font-semibold text-espresso">{{ perm.module }}</p>
                   <p class="text-[10px] text-slate-400">{{ perm.desc }}</p>
                 </div>
               </div>
@@ -88,8 +88,8 @@ import { ref, computed } from 'vue';
 const selectedRole = ref('admin');
 
 const roles = [
-  { name: 'admin', label: 'Administrator', desc: 'Akses penuh ke semua fitur platform.', emoji: '🛡️', count: 2, bgClass: 'bg-slate-100', countBg: 'bg-slate-100 text-slate-600' },
-  { name: 'umkm', label: 'UMKM Kreator', desc: 'Kelola produk, pesanan, dan studio AI.', emoji: '🏪', count: 142, bgClass: 'bg-orange-50', countBg: 'bg-orange-50 text-orange-600' },
+  { name: 'admin', label: 'Administrator', desc: 'Akses penuh ke semua fitur platform.', emoji: '🛡️', count: 2, bgClass: 'bg-slate-100', countBg: 'bg-slate-100 text-muted' },
+  { name: 'umkm', label: 'UMKM Kreator', desc: 'Kelola produk, pesanan, dan studio AI.', emoji: '🏪', count: 142, bgClass: 'bg-sand', countBg: 'bg-sand text-terracotta' },
   { name: 'desainer', label: 'Desainer', desc: 'Kolaborasi Co-Create dan portofolio.', emoji: '🎨', count: 67, bgClass: 'bg-blue-50', countBg: 'bg-blue-50 text-blue-600' },
   { name: 'pembeli', label: 'Pembeli', desc: 'Beli produk dan AR Try-On.', emoji: '🛒', count: 48, bgClass: 'bg-emerald-50', countBg: 'bg-emerald-50 text-emerald-600' },
 ];

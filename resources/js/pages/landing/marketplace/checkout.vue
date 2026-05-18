@@ -1,34 +1,34 @@
 <template>
-  <section class="min-h-screen bg-slate-50 text-slate-900 p-6 lg:p-10">
+  <section class="min-h-screen bg-slate-50 text-espresso p-6 lg:p-10">
     <div class="max-w-6xl mx-auto">
       <div class="mb-8">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 class="text-4xl font-black text-slate-900">Checkout</h1>
-            <p class="text-slate-600 mt-2">Lengkapi alamat dan pilih pengiriman sebelum melanjutkan ke pembayaran.</p>
+            <h1 class="text-4xl font-black text-espresso">Checkout</h1>
+            <p class="text-muted mt-2">Lengkapi alamat dan pilih pengiriman sebelum melanjutkan ke pembayaran.</p>
           </div>
-          <div class="rounded-full bg-orange-50 px-4 py-2 text-sm font-semibold text-orange-700">Source: {{ sourceLabel }}</div>
+          <div class="rounded-full bg-sand px-4 py-2 text-sm font-semibold text-orange-700">Source: {{ sourceLabel }}</div>
         </div>
       </div>
 
       <div class="grid gap-8 lg:grid-cols-[1.7fr_0.9fr]">
         <div class="space-y-6">
-          <div class="rounded-[2rem] bg-white p-8 shadow-sm border border-slate-200">
+          <div class="rounded-[2rem] bg-surface p-8 shadow-sm border border-borderSoft">
             <div class="flex items-center justify-between mb-6">
               <div>
                 <p class="text-sm uppercase tracking-[0.25em] text-slate-400 font-black">Langkah</p>
-                <h2 class="text-2xl font-black text-slate-900">{{ stepTitle }}</h2>
+                <h2 class="text-2xl font-black text-espresso">{{ stepTitle }}</h2>
               </div>
-              <span class="rounded-full bg-slate-100 px-4 py-2 text-sm font-black text-slate-700">{{ activeStep }} / 3</span>
+              <span class="rounded-full bg-slate-100 px-4 py-2 text-sm font-black text-espresso">{{ activeStep }} / 3</span>
             </div>
 
             <div v-if="activeStep === 1" class="space-y-6">
               <div class="flex items-center justify-between">
                 <div>
-                  <p class="text-slate-900 font-black">Alamat Pengiriman</p>
-                  <p class="text-sm text-slate-500">Pilih alamat yang akan digunakan untuk pengiriman.</p>
+                  <p class="text-espresso font-black">Alamat Pengiriman</p>
+                  <p class="text-sm text-muted">Pilih alamat yang akan digunakan untuk pengiriman.</p>
                 </div>
-                <button @click="toggleAddressForm" class="rounded-full border border-orange-200 bg-orange-50 px-4 py-2 text-sm font-black text-orange-700 hover:bg-orange-100 transition-all">{{ showNewAddress ? 'Tutup Form' : 'Tambah Alamat' }}</button>
+                <button @click="toggleAddressForm" class="rounded-full border border-terracotta/30 bg-sand px-4 py-2 text-sm font-black text-orange-700 hover:bg-sand transition-all">{{ showNewAddress ? 'Tutup Form' : 'Tambah Alamat' }}</button>
               </div>
 
               <div v-if="addresses.length && !showNewAddress" class="grid gap-4 sm:grid-cols-2">
@@ -39,142 +39,142 @@
                   :class="addressClass(address.id)"
                   class="text-left rounded-3xl border p-5 transition-all"
                 >
-                  <p class="font-black text-slate-900">{{ address.name }}</p>
-                  <p class="text-sm text-slate-600 mt-2">{{ address.address }}</p>
-                  <p class="text-sm text-slate-600 mt-1">{{ address.city }} • {{ address.postal_code }}</p>
-                  <p class="text-sm text-slate-600 mt-1">{{ address.phone }}</p>
+                  <p class="font-black text-espresso">{{ address.name }}</p>
+                  <p class="text-sm text-muted mt-2">{{ address.address }}</p>
+                  <p class="text-sm text-muted mt-1">{{ address.city }} • {{ address.postal_code }}</p>
+                  <p class="text-sm text-muted mt-1">{{ address.phone }}</p>
                 </button>
               </div>
 
               <div v-if="showNewAddress || !addresses.length" class="space-y-4">
                 <div class="grid gap-4 sm:grid-cols-2">
                   <label class="block">
-                    <span class="text-sm font-semibold text-slate-700">Nama Penerima</span>
-                    <input v-model="addressForm.name" type="text" class="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100" placeholder="Nama lengkap" />
+                    <span class="text-sm font-semibold text-espresso">Nama Penerima</span>
+                    <input v-model="addressForm.name" type="text" class="mt-2 w-full rounded-3xl border border-borderSoft bg-slate-50 px-4 py-3 outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20" placeholder="Nama lengkap" />
                   </label>
                   <label class="block">
-                    <span class="text-sm font-semibold text-slate-700">No. HP</span>
-                    <input v-model="addressForm.phone" type="tel" class="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100" placeholder="081234567890" />
+                    <span class="text-sm font-semibold text-espresso">No. HP</span>
+                    <input v-model="addressForm.phone" type="tel" class="mt-2 w-full rounded-3xl border border-borderSoft bg-slate-50 px-4 py-3 outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20" placeholder="081234567890" />
                   </label>
                 </div>
                 <label class="block">
-                  <span class="text-sm font-semibold text-slate-700">Alamat Lengkap</span>
-                  <textarea v-model="addressForm.address" rows="3" class="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100" placeholder="Contoh: Jl. Merdeka No. 12"></textarea>
+                  <span class="text-sm font-semibold text-espresso">Alamat Lengkap</span>
+                  <textarea v-model="addressForm.address" rows="3" class="mt-2 w-full rounded-3xl border border-borderSoft bg-slate-50 px-4 py-3 outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20" placeholder="Contoh: Jl. Merdeka No. 12"></textarea>
                 </label>
                 <div class="grid gap-4 sm:grid-cols-2">
                   <label class="block">
-                    <span class="text-sm font-semibold text-slate-700">Kota</span>
-                    <input v-model="addressForm.city" type="text" class="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100" placeholder="Bandung" />
+                    <span class="text-sm font-semibold text-espresso">Kota</span>
+                    <input v-model="addressForm.city" type="text" class="mt-2 w-full rounded-3xl border border-borderSoft bg-slate-50 px-4 py-3 outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20" placeholder="Bandung" />
                   </label>
                   <label class="block">
-                    <span class="text-sm font-semibold text-slate-700">Kode Pos</span>
-                    <input v-model="addressForm.postal_code" type="text" class="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100" placeholder="40123" />
+                    <span class="text-sm font-semibold text-espresso">Kode Pos</span>
+                    <input v-model="addressForm.postal_code" type="text" class="mt-2 w-full rounded-3xl border border-borderSoft bg-slate-50 px-4 py-3 outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20" placeholder="40123" />
                   </label>
                 </div>
                 <p v-if="addressError" class="text-sm text-red-600">{{ addressError }}</p>
                 <div class="flex flex-wrap gap-3">
-                  <button @click="saveAddress" class="rounded-3xl bg-orange-600 px-6 py-3 text-sm font-black uppercase tracking-widest text-white hover:bg-orange-700 transition-all">Simpan Alamat</button>
-                  <button type="button" @click="resetAddressForm" class="rounded-3xl border border-slate-200 bg-white px-6 py-3 text-sm font-black uppercase tracking-widest text-slate-900 hover:bg-slate-100 transition-all">Batal</button>
+                  <button @click="saveAddress" class="rounded-3xl bg-terracotta px-6 py-3 text-sm font-black uppercase tracking-widest text-white hover:bg-terracottaDark transition-all">Simpan Alamat</button>
+                  <button type="button" @click="resetAddressForm" class="rounded-3xl border border-borderSoft bg-surface px-6 py-3 text-sm font-black uppercase tracking-widest text-espresso hover:bg-slate-100 transition-all">Batal</button>
                 </div>
               </div>
             </div>
 
             <div v-if="activeStep === 2" class="space-y-6">
               <div>
-                <p class="font-black text-slate-900">Metode Pengiriman</p>
-                <p class="text-sm text-slate-500">Pilih kurir dan layanan untuk pesanan Anda.</p>
+                <p class="font-black text-espresso">Metode Pengiriman</p>
+                <p class="text-sm text-muted">Pilih kurir dan layanan untuk pesanan Anda.</p>
               </div>
               <div class="grid gap-4 sm:grid-cols-2">
                 <label class="block">
-                  <span class="text-sm font-semibold text-slate-700">Kurir</span>
-                  <select v-model="selectedCourier" class="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100">
+                  <span class="text-sm font-semibold text-espresso">Kurir</span>
+                  <select v-model="selectedCourier" class="mt-2 w-full rounded-3xl border border-borderSoft bg-slate-50 px-4 py-3 outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20">
                     <option v-for="courier in couriers" :key="courier.id" :value="courier.id">{{ courier.label }}</option>
                   </select>
                 </label>
                 <label class="block">
-                  <span class="text-sm font-semibold text-slate-700">Layanan</span>
-                  <select v-model="selectedService" class="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-100">
+                  <span class="text-sm font-semibold text-espresso">Layanan</span>
+                  <select v-model="selectedService" class="mt-2 w-full rounded-3xl border border-borderSoft bg-slate-50 px-4 py-3 outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20">
                     <option v-for="service in services" :key="service" :value="service">{{ service }}</option>
                   </select>
                 </label>
               </div>
-              <div class="rounded-[2rem] border border-slate-200 bg-slate-50 p-6">
+              <div class="rounded-[2rem] border border-borderSoft bg-slate-50 p-6">
                 <div class="flex items-center justify-between mb-4">
                   <div>
-                    <p class="text-sm text-slate-500">Estimasi Pengiriman</p>
-                    <p class="text-lg font-black text-slate-900">{{ shippingEstimate }}</p>
+                    <p class="text-sm text-muted">Estimasi Pengiriman</p>
+                    <p class="text-lg font-black text-espresso">{{ shippingEstimate }}</p>
                   </div>
                   <div class="text-right">
-                    <p class="text-sm text-slate-500">Biaya</p>
-                    <p class="text-2xl font-black text-orange-600">{{ formatCurrency(shippingCost) }}</p>
+                    <p class="text-sm text-muted">Biaya</p>
+                    <p class="text-2xl font-black text-terracotta">{{ formatCurrency(shippingCost) }}</p>
                   </div>
                 </div>
-                <button @click="calculateShipping" :disabled="!selectedAddressId" class="w-full rounded-3xl bg-white px-6 py-3 text-sm font-black text-slate-900 border border-slate-200 hover:bg-slate-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed">Hitung Ongkos</button>
+                <button @click="calculateShipping" :disabled="!selectedAddressId" class="w-full rounded-3xl bg-surface px-6 py-3 text-sm font-black text-espresso border border-borderSoft hover:bg-slate-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed">Hitung Ongkos</button>
               </div>
             </div>
 
             <div v-if="activeStep === 3" class="space-y-6">
               <div>
-                <p class="font-black text-slate-900">Review Pesanan</p>
-                <p class="text-sm text-slate-500">Pastikan alamat dan pengiriman sudah benar sebelum melanjutkan.</p>
+                <p class="font-black text-espresso">Review Pesanan</p>
+                <p class="text-sm text-muted">Pastikan alamat dan pengiriman sudah benar sebelum melanjutkan.</p>
               </div>
-              <div class="rounded-[2rem] border border-slate-200 bg-slate-50 p-6">
-                <p class="text-sm text-slate-500 mb-2">Alamat Pengiriman</p>
-                <p class="font-semibold text-slate-900">{{ selectedAddress?.name }}</p>
-                <p class="text-sm text-slate-600">{{ selectedAddress?.address }}, {{ selectedAddress?.city }} {{ selectedAddress?.postal_code }}</p>
-                <p class="text-sm text-slate-600">{{ selectedAddress?.phone }}</p>
+              <div class="rounded-[2rem] border border-borderSoft bg-slate-50 p-6">
+                <p class="text-sm text-muted mb-2">Alamat Pengiriman</p>
+                <p class="font-semibold text-espresso">{{ selectedAddress?.name }}</p>
+                <p class="text-sm text-muted">{{ selectedAddress?.address }}, {{ selectedAddress?.city }} {{ selectedAddress?.postal_code }}</p>
+                <p class="text-sm text-muted">{{ selectedAddress?.phone }}</p>
               </div>
-              <div class="rounded-[2rem] border border-slate-200 bg-slate-50 p-6">
-                <div class="flex items-center justify-between mb-4 text-sm text-slate-500 uppercase tracking-[0.18em] font-black">
+              <div class="rounded-[2rem] border border-borderSoft bg-slate-50 p-6">
+                <div class="flex items-center justify-between mb-4 text-sm text-muted uppercase tracking-[0.18em] font-black">
                   <span>Pengiriman</span>
                   <span>{{ courierLabel }}</span>
                 </div>
-                <p class="text-sm text-slate-600">Estimasi: {{ shippingEstimate }}</p>
-                <p class="text-sm text-slate-600">Biaya: {{ formatCurrency(shippingCost) }}</p>
+                <p class="text-sm text-muted">Estimasi: {{ shippingEstimate }}</p>
+                <p class="text-sm text-muted">Biaya: {{ formatCurrency(shippingCost) }}</p>
               </div>
-              <div class="rounded-[2rem] border border-slate-200 bg-white p-6">
-                <div class="flex justify-between mb-3 text-sm text-slate-500">
+              <div class="rounded-[2rem] border border-borderSoft bg-surface p-6">
+                <div class="flex justify-between mb-3 text-sm text-muted">
                   <span>Subtotal</span>
                   <span>{{ formatCurrency(subtotal) }}</span>
                 </div>
-                <div class="flex justify-between mb-3 text-sm text-slate-500">
+                <div class="flex justify-between mb-3 text-sm text-muted">
                   <span>Ongkir</span>
                   <span>{{ formatCurrency(shippingCost) }}</span>
                 </div>
-                <div class="border-t border-slate-200 pt-3 flex justify-between text-lg font-black text-slate-900">
+                <div class="border-t border-borderSoft pt-3 flex justify-between text-lg font-black text-espresso">
                   <span>Total</span>
                   <span>{{ formatCurrency(totalPrice) }}</span>
                 </div>
               </div>
-              <button @click="goToQris" :disabled="!canPay" class="w-full rounded-3xl bg-orange-600 px-6 py-4 text-sm font-black uppercase tracking-widest text-white hover:bg-orange-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed">Lanjut ke QRIS</button>
+              <button @click="goToQris" :disabled="!canPay" class="w-full rounded-3xl bg-terracotta px-6 py-4 text-sm font-black uppercase tracking-widest text-white hover:bg-terracottaDark transition-all disabled:opacity-50 disabled:cursor-not-allowed">Lanjut ke QRIS</button>
             </div>
           </div>
 
           <div class="flex justify-between gap-3">
-            <button @click="previousStep" :disabled="activeStep === 1" class="flex-1 rounded-3xl border border-slate-200 bg-white px-6 py-4 text-sm font-black uppercase tracking-widest text-slate-900 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all">Kembali</button>
+            <button @click="previousStep" :disabled="activeStep === 1" class="flex-1 rounded-3xl border border-borderSoft bg-surface px-6 py-4 text-sm font-black uppercase tracking-widest text-espresso hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all">Kembali</button>
             <button @click="nextStep" :disabled="!canContinue" class="flex-1 rounded-3xl bg-slate-900 px-6 py-4 text-sm font-black uppercase tracking-widest text-white hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all">{{ activeStep < 3 ? 'Lanjutkan' : 'Simpan' }}</button>
           </div>
         </div>
 
         <aside class="space-y-6">
-          <div class="rounded-[2rem] bg-white p-8 shadow-sm border border-slate-200">
-            <h3 class="text-lg font-black text-slate-900 mb-4">Ringkasan Pesanan</h3>
+          <div class="rounded-[2rem] bg-surface p-8 shadow-sm border border-borderSoft">
+            <h3 class="text-lg font-black text-espresso mb-4">Ringkasan Pesanan</h3>
             <div class="space-y-4">
               <div v-for="item in selectedItems" :key="`${item.id}-${item.variant}`" class="flex items-center gap-4 rounded-3xl bg-slate-50 p-4">
                 <img :src="item.image" class="h-20 w-20 rounded-3xl object-cover" :alt="item.name" />
                 <div class="flex-1 min-w-0">
-                  <p class="font-black text-slate-900 line-clamp-2">{{ item.name }}</p>
-                  <p v-if="item.variant" class="text-sm text-slate-500">{{ item.variant }}</p>
-                  <p class="text-sm text-slate-500 mt-2">Jumlah: {{ item.quantity }}</p>
+                  <p class="font-black text-espresso line-clamp-2">{{ item.name }}</p>
+                  <p v-if="item.variant" class="text-sm text-muted">{{ item.variant }}</p>
+                  <p class="text-sm text-muted mt-2">Jumlah: {{ item.quantity }}</p>
                 </div>
-                <p class="font-black text-slate-900">{{ formatCurrency((item.price || 0) * (item.quantity || 1)) }}</p>
+                <p class="font-black text-espresso">{{ formatCurrency((item.price || 0) * (item.quantity || 1)) }}</p>
               </div>
             </div>
           </div>
 
-          <div class="rounded-[2rem] border border-slate-200 bg-slate-50 p-6">
-            <p class="text-sm text-slate-500 mb-3 uppercase tracking-[0.18em] font-black">Detail</p>
-            <div class="space-y-3 text-sm text-slate-600">
+          <div class="rounded-[2rem] border border-borderSoft bg-slate-50 p-6">
+            <p class="text-sm text-muted mb-3 uppercase tracking-[0.18em] font-black">Detail</p>
+            <div class="space-y-3 text-sm text-muted">
               <div class="flex justify-between">
                 <span>Items</span>
                 <span>{{ selectedItems.length }}</span>
@@ -187,7 +187,7 @@
                 <span>Ongkir</span>
                 <span>{{ formatCurrency(shippingCost) }}</span>
               </div>
-              <div class="flex justify-between font-black text-slate-900 text-lg">
+              <div class="flex justify-between font-black text-espresso text-lg">
                 <span>Total</span>
                 <span>{{ formatCurrency(totalPrice) }}</span>
               </div>
@@ -282,8 +282,8 @@ const selectedAddress = computed(() => {
 
 const addressClass = (id) => {
   return selectedAddressId.value === id
-    ? 'border-orange-400 bg-orange-50'
-    : 'border-slate-200 bg-white hover:border-slate-300';
+    ? 'border-terracotta bg-sand'
+    : 'border-borderSoft bg-surface hover:border-slate-300';
 };
 
 const formatCurrency = (value) => {

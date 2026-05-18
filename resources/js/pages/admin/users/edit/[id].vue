@@ -2,7 +2,7 @@
   <div class="max-w-3xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
     <div class="flex items-center justify-between">
       <div>
-        <h2 class="text-xl font-black text-slate-800 tracking-tight">Edit Pengguna</h2>
+        <h2 class="text-xl font-black text-espresso tracking-tight">Edit Pengguna</h2>
         <p class="text-xs text-slate-400 font-medium mt-1">Perbarui data profil pengguna.</p>
       </div>
       <router-link to="/admin/users" class="text-xs font-bold text-slate-400 hover:text-indigo-600 transition-colors">
@@ -10,7 +10,7 @@
       </router-link>
     </div>
 
-    <form @submit.prevent="submit" class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] space-y-6">
+    <form @submit.prevent="submit" class="bg-surface p-8 rounded-[2rem] border border-borderSoft shadow-[0_8px_30px_rgb(0,0,0,0.02)] space-y-6">
       <div v-if="errorMessage" class="p-4 bg-red-50 text-red-600 text-xs font-bold rounded-xl">
         {{ errorMessage }}
       </div>
@@ -18,17 +18,17 @@
       <div class="space-y-4" v-if="!loadingData">
         <div>
           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Nama Lengkap</label>
-          <input v-model="form.name" type="text" required class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-slate-800 outline-none focus:ring-2 focus:ring-indigo-100 transition-all" />
+          <input v-model="form.name" type="text" required class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-espresso outline-none focus:ring-2 focus:ring-indigo-100 transition-all" />
         </div>
 
         <div>
           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Email</label>
-          <input v-model="form.email" type="email" required class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-slate-800 outline-none focus:ring-2 focus:ring-indigo-100 transition-all" />
+          <input v-model="form.email" type="email" required class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-espresso outline-none focus:ring-2 focus:ring-indigo-100 transition-all" />
         </div>
 
         <div>
           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Role</label>
-          <select v-model="form.role" required class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-slate-800 outline-none focus:ring-2 focus:ring-indigo-100 transition-all cursor-pointer">
+          <select v-model="form.role" required class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-espresso outline-none focus:ring-2 focus:ring-indigo-100 transition-all cursor-pointer">
             <option value="umkm">UMKM Kreator</option>
             <option value="desainer">Desainer</option>
             <option value="pembeli">Pembeli</option>

@@ -2,7 +2,7 @@
   <div class="max-w-3xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
     <div class="flex items-center justify-between">
       <div>
-        <h2 class="text-xl font-black text-slate-800 tracking-tight">Tambah Pengguna</h2>
+        <h2 class="text-xl font-black text-espresso tracking-tight">Tambah Pengguna</h2>
         <p class="text-xs text-slate-400 font-medium mt-1">Buat akun baru untuk masuk ke ekosistem SnapFit.</p>
       </div>
       <router-link to="/admin/users" class="text-xs font-bold text-slate-400 hover:text-indigo-600 transition-colors">
@@ -10,7 +10,7 @@
       </router-link>
     </div>
 
-    <form @submit.prevent="submit" class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] space-y-6">
+    <form @submit.prevent="submit" class="bg-surface p-8 rounded-[2rem] border border-borderSoft shadow-[0_8px_30px_rgb(0,0,0,0.02)] space-y-6">
       <div v-if="errorMessage" class="p-4 bg-red-50 text-red-600 text-xs font-bold rounded-xl">
         {{ errorMessage }}
       </div>
@@ -18,17 +18,17 @@
       <div class="space-y-4">
         <div>
           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Nama Lengkap</label>
-          <input v-model="form.name" type="text" required class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-slate-800 outline-none focus:ring-2 focus:ring-indigo-100 transition-all" placeholder="Masukkan nama..." />
+          <input v-model="form.name" type="text" required class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-espresso outline-none focus:ring-2 focus:ring-indigo-100 transition-all" placeholder="Masukkan nama..." />
         </div>
 
         <div>
           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Email</label>
-          <input v-model="form.email" type="email" required class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-slate-800 outline-none focus:ring-2 focus:ring-indigo-100 transition-all" placeholder="email@snapfit.id" />
+          <input v-model="form.email" type="email" required class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-espresso outline-none focus:ring-2 focus:ring-indigo-100 transition-all" placeholder="email@snapfit.id" />
         </div>
 
         <div>
           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Role</label>
-          <select v-model="form.role" required class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-slate-800 outline-none focus:ring-2 focus:ring-indigo-100 transition-all cursor-pointer">
+          <select v-model="form.role" required class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-espresso outline-none focus:ring-2 focus:ring-indigo-100 transition-all cursor-pointer">
             <option value="umkm">UMKM Kreator</option>
             <option value="desainer">Desainer</option>
             <option value="pembeli">Pembeli</option>
@@ -38,7 +38,7 @@
 
         <div>
           <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Password</label>
-          <input v-model="form.password" type="password" required minlength="8" class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-slate-800 outline-none focus:ring-2 focus:ring-indigo-100 transition-all" placeholder="Minimal 8 karakter" />
+          <input v-model="form.password" type="password" required minlength="8" class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-espresso outline-none focus:ring-2 focus:ring-indigo-100 transition-all" placeholder="Minimal 8 karakter" />
         </div>
       </div>
 

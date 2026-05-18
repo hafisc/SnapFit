@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Seed CoCreate Room demo
-        $umkm     = User::where('role', 'umkm')->first();
-        $desainer = User::where('role', 'desainer')->first();
+        $umkm     = User::where('active_role', 'umkm')->first();
+        $desainer = User::where('active_role', 'desainer')->first();
 
         if ($umkm && $desainer) {
             $room = CocreateRoom::updateOrCreate(

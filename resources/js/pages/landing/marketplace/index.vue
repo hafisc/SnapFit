@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-slate-50 text-slate-900 overflow-x-hidden">
+  <div class="min-h-screen bg-slate-50 text-espresso overflow-x-hidden">
     <!-- Navbar -->
     <Navbar
       :user="user"
@@ -10,59 +10,46 @@
     />
 
     <main class="pt-16">
-      <section class="relative overflow-hidden bg-white pb-16">
-      <div class="absolute inset-x-0 top-0 h-80 bg-orange-50"></div>
-      <div class="relative max-w-[1400px] mx-auto px-6 py-16 lg:py-24">
-        <div class="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] items-center">
-          <div class="space-y-6 max-w-2xl">
-            <span class="inline-flex items-center gap-2 rounded-full bg-orange-100 px-4 py-2 text-sm font-black uppercase tracking-[0.2em] text-orange-700">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18" />
-              </svg>
-              Authentic Indonesian Crafts
-            </span>
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900">
-              Discover handmade fashion, accessories, and home decor from local artisans.
-            </h1>
-            <p class="text-lg leading-8 text-slate-600 max-w-xl">
-              SnapFit brings curated local products to your fingertips. Browse premium collections, compare trusted sellers, and shop with confidence.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-3">
-              <router-link to="/marketplace" class="inline-flex items-center justify-center rounded-3xl bg-orange-600 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white shadow-lg shadow-orange-200/50 hover:bg-orange-700 transition-all">
-                Browse Marketplace
-              </router-link>
-              <button @click="scrollToProducts" class="inline-flex items-center justify-center rounded-3xl border border-slate-200 bg-white px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-slate-900 hover:border-orange-400 hover:text-orange-600 transition-all">
-                Explore Collections
-              </button>
+      <section class="bg-surface border-b border-borderSoft pt-6 pb-6 mt-2">
+        <div class="max-w-[1440px] mx-auto px-6">
+          <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-5">
+            <div>
+              <h1 class="text-2xl md:text-3xl font-black text-espresso mb-1.5">Katalog Produk Nusantara</h1>
+              <p class="text-sm text-muted">Temukan batik, tenun, kerajinan, aksesoris, dan dekorasi lokal dari UMKM terkurasi.</p>
+            </div>
+            
+            <div class="flex flex-wrap gap-2">
+              <select class="py-2.5 px-4 rounded-xl border border-borderSoft bg-white text-xs font-bold text-espresso focus:outline-none focus:border-terracotta cursor-pointer hover:border-terracotta transition-colors shadow-sm">
+                <option>Daerah Asal: Semua</option>
+                <option>Yogyakarta</option>
+                <option>Bali</option>
+                <option>Jepara</option>
+                <option>Sumba</option>
+              </select>
+              
+              <select class="py-2.5 px-4 rounded-xl border border-borderSoft bg-white text-xs font-bold text-espresso focus:outline-none focus:border-terracotta cursor-pointer hover:border-terracotta transition-colors shadow-sm">
+                <option>Urutkan: Terbaru</option>
+                <option>Terlaris</option>
+                <option>Harga Terendah</option>
+                <option>Harga Tertinggi</option>
+              </select>
             </div>
           </div>
-          <div class="grid gap-6 sm:grid-cols-2">
-            <div class="rounded-[2rem] bg-white p-6 shadow-xl border border-slate-200">
-              <p class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400 mb-4">Trusted Sellers</p>
-              <h2 class="text-3xl font-black text-slate-900">500+</h2>
-              <p class="mt-3 text-slate-600">Verified creative businesses across Indonesia selling premium handcrafted goods.</p>
-            </div>
-            <div class="rounded-[2rem] bg-white p-6 shadow-xl border border-slate-200">
-              <p class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-400 mb-4">Fast Shipping</p>
-              <h2 class="text-3xl font-black text-slate-900">Next-day delivery</h2>
-              <p class="mt-3 text-slate-600">Enjoy fast shipping with trusted couriers and live tracking for every order.</p>
-            </div>
+          
+          <div class="flex flex-wrap gap-2">
+            <button class="px-4 py-1.5 rounded-full text-xs font-bold border transition-colors bg-terracotta border-terracotta text-white">Semua</button>
+            <button v-for="cat in ['Batik', 'Tenun', 'Kerajinan', 'Aksesoris', 'Dekorasi', 'Fashion', 'AR Ready']" :key="cat" class="px-4 py-1.5 rounded-full text-xs font-bold border border-borderSoft bg-white text-muted hover:border-terracotta hover:text-terracotta transition-colors">
+              {{ cat }}
+            </button>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section ref="productSection" class="bg-slate-50 pt-12 pb-24">
-      <div class="max-w-[1400px] mx-auto px-6">
-        <div class="mb-10 text-center">
-          <p class="text-sm font-black uppercase tracking-[0.25em] text-orange-600 mb-3">Marketplace</p>
-          <h2 class="text-4xl font-black text-slate-900">Featured Products</h2>
-          <p class="mt-3 text-slate-600 max-w-2xl mx-auto">Browse best-selling items, curated collections, and the latest arrivals from our UMKM partners.</p>
+      <section ref="productSection" class="bg-slate-50 pt-8 pb-24">
+        <div class="max-w-[1440px] mx-auto px-6">
+          <ProductGrid :products="products" :isLoading="isLoading" :isLoadingMore="isLoadingMore" :hasMore="hasMore" @load-more="fetchMore" :is-homepage="false" />
         </div>
-
-        <ProductGrid :products="products" :isLoading="isLoading" :isLoadingMore="isLoadingMore" :hasMore="hasMore" @load-more="fetchMore" />
-      </div>
-    </section>
+      </section>
     </main>
   </div>
 </template>
@@ -70,7 +57,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import ProductGrid from '@/pages/landing/section/ProductGrid.vue';
+import ProductGrid from '@/components/landing/ProductGrid.vue';
 import Navbar from '@/pages/landing/partials/Navbar.vue';
 
 const router = useRouter();

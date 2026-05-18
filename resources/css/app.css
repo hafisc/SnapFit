@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+@theme {
+  --color-cream: #F8F1E7;
+  --color-sand: #EFE2D0;
+  --color-surface: #FFFFFF;
+  --color-espresso: #2B1E16;
+  --color-muted: #6F6259;
+  --color-terracotta: #B85C38;
+  --color-terracottaDark: #9E4B2E;
+  --color-gold: #C9A45C;
+  --color-olive: #6F7D4C;
+  --color-indigo: #243B53;
+  --color-borderSoft: #E8DCCB;
+}
+
 /* Custom Modern Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -25,4 +39,18 @@
 * {
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 #f8fafc;
+}
+
+.snapfit-heritage-bg {
+  background-color: #F8F1E7;
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(255, 250, 243, 0.86),
+      rgba(255, 250, 243, 0.90)
+    ),
+    url('/assets/batik-bg.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center top;
 }

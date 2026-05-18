@@ -1,99 +1,99 @@
 <template>
-  <section class="min-h-screen bg-slate-50 text-slate-900 p-6 lg:p-10">
+  <section class="min-h-screen bg-slate-50 text-espresso p-6 lg:p-10">
     <div class="max-w-6xl mx-auto">
       <div class="mb-8">
-        <button @click="goBack" class="inline-flex items-center gap-2 text-slate-600 hover:text-slate-900 transition mb-6">
+        <button @click="goBack" class="inline-flex items-center gap-2 text-muted hover:text-espresso transition mb-6">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
           Back to Orders
         </button>
 
-        <div class="rounded-[2rem] bg-white p-8 shadow-sm border border-slate-200">
+        <div class="rounded-[2rem] bg-surface p-8 shadow-sm border border-borderSoft">
           <div class="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6">
             <div>
-              <h1 class="text-3xl font-black text-slate-900 mb-2">Order Detail</h1>
-              <p class="text-slate-600">Review the status, shipping, and payment information for your order.</p>
+              <h1 class="text-3xl font-black text-espresso mb-2">Order Detail</h1>
+              <p class="text-muted">Review the status, shipping, and payment information for your order.</p>
             </div>
             <div class="text-right">
-              <p class="text-sm text-slate-500">Order ID</p>
-              <p class="text-xl font-black text-slate-900">{{ order?.midtrans_order_id || 'N/A' }}</p>
-              <p class="text-sm text-slate-500 mt-2">{{ formatDate(order?.created_at) }}</p>
+              <p class="text-sm text-muted">Order ID</p>
+              <p class="text-xl font-black text-espresso">{{ order?.midtrans_order_id || 'N/A' }}</p>
+              <p class="text-sm text-muted mt-2">{{ formatDate(order?.created_at) }}</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div v-if="loading" class="rounded-[2rem] bg-white p-8 shadow-sm border border-slate-200 text-center">
+      <div v-if="loading" class="rounded-[2rem] bg-surface p-8 shadow-sm border border-borderSoft text-center">
         <div class="flex justify-center mb-4">
           <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
         </div>
-        <p class="text-slate-600 font-semibold">Loading order details...</p>
+        <p class="text-muted font-semibold">Loading order details...</p>
       </div>
 
       <div v-else-if="order" class="space-y-6">
         <div class="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
-          <div class="rounded-[2rem] bg-white p-8 shadow-sm border border-slate-200">
-            <h2 class="text-xl font-black text-slate-900 mb-6">Status Timeline</h2>
+          <div class="rounded-[2rem] bg-surface p-8 shadow-sm border border-borderSoft">
+            <h2 class="text-xl font-black text-espresso mb-6">Status Timeline</h2>
             <div class="space-y-4">
               <div v-for="(item, index) in timeline" :key="item.label" class="flex gap-4 items-start">
                 <div class="flex flex-col items-center">
-                  <div :class="item.completed ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-600'" class="w-10 h-10 rounded-full flex items-center justify-center font-black">
+                  <div :class="item.completed ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-muted'" class="w-10 h-10 rounded-full flex items-center justify-center font-black">
                     {{ item.completed ? '✓' : item.icon }}
                   </div>
                   <div v-if="index < timeline.length - 1" class="w-px flex-1 bg-slate-200 mt-2"></div>
                 </div>
                 <div class="flex-1 pt-1">
-                  <p class="font-black text-slate-900">{{ item.label }}</p>
-                  <p class="text-sm text-slate-600 mt-1">{{ item.description }}</p>
+                  <p class="font-black text-espresso">{{ item.label }}</p>
+                  <p class="text-sm text-muted mt-1">{{ item.description }}</p>
                   <p v-if="item.date" class="text-xs text-slate-400 mt-2">{{ item.date }}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="rounded-[2rem] bg-white p-8 shadow-sm border border-slate-200">
-            <h2 class="text-xl font-black text-slate-900 mb-6">Shipping & Payment</h2>
+          <div class="rounded-[2rem] bg-surface p-8 shadow-sm border border-borderSoft">
+            <h2 class="text-xl font-black text-espresso mb-6">Shipping & Payment</h2>
             <div class="space-y-4">
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div class="rounded-3xl bg-slate-50 p-5 border border-slate-200">
-                  <p class="text-xs text-slate-500 uppercase tracking-[0.12em] font-black mb-2">Courier</p>
-                  <p class="text-sm font-black text-slate-900">{{ order.shipping_courier || 'Not available' }}</p>
+                <div class="rounded-3xl bg-slate-50 p-5 border border-borderSoft">
+                  <p class="text-xs text-muted uppercase tracking-[0.12em] font-black mb-2">Courier</p>
+                  <p class="text-sm font-black text-espresso">{{ order.shipping_courier || 'Not available' }}</p>
                 </div>
-                <div class="rounded-3xl bg-slate-50 p-5 border border-slate-200">
-                  <p class="text-xs text-slate-500 uppercase tracking-[0.12em] font-black mb-2">Tracking Number</p>
-                  <p class="text-sm font-black text-slate-900 break-all">{{ order.tracking_number || 'Not available' }}</p>
+                <div class="rounded-3xl bg-slate-50 p-5 border border-borderSoft">
+                  <p class="text-xs text-muted uppercase tracking-[0.12em] font-black mb-2">Tracking Number</p>
+                  <p class="text-sm font-black text-espresso break-all">{{ order.tracking_number || 'Not available' }}</p>
                 </div>
               </div>
-              <div class="rounded-3xl bg-slate-50 p-5 border border-slate-200">
-                <p class="text-xs text-slate-500 uppercase tracking-[0.12em] font-black mb-2">Payment Status</p>
-                <p class="text-sm font-black text-slate-900">{{ paymentStatus }}</p>
+              <div class="rounded-3xl bg-slate-50 p-5 border border-borderSoft">
+                <p class="text-xs text-muted uppercase tracking-[0.12em] font-black mb-2">Payment Status</p>
+                <p class="text-sm font-black text-espresso">{{ paymentStatus }}</p>
               </div>
-              <div class="rounded-3xl bg-slate-50 p-5 border border-slate-200">
-                <p class="text-xs text-slate-500 uppercase tracking-[0.12em] font-black mb-2">Order Total</p>
-                <p class="text-2xl font-black text-orange-600">{{ formatCurrency(order.total_amount) }}</p>
+              <div class="rounded-3xl bg-slate-50 p-5 border border-borderSoft">
+                <p class="text-xs text-muted uppercase tracking-[0.12em] font-black mb-2">Order Total</p>
+                <p class="text-2xl font-black text-terracotta">{{ formatCurrency(order.total_amount) }}</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="rounded-[2rem] bg-white p-8 shadow-sm border border-slate-200">
-          <h2 class="text-xl font-black text-slate-900 mb-6">Products</h2>
+        <div class="rounded-[2rem] bg-surface p-8 shadow-sm border border-borderSoft">
+          <h2 class="text-xl font-black text-espresso mb-6">Products</h2>
           <div class="space-y-4">
-            <div v-for="item in order.items" :key="item.id" class="grid gap-4 sm:grid-cols-[auto_1fr_auto] items-center rounded-3xl bg-slate-50 p-5 border border-slate-200">
+            <div v-for="item in order.items" :key="item.id" class="grid gap-4 sm:grid-cols-[auto_1fr_auto] items-center rounded-3xl bg-slate-50 p-5 border border-borderSoft">
               <div class="flex items-center gap-4">
                 <img v-if="item.product?.image_url" :src="item.product.image_url" class="h-20 w-20 rounded-2xl object-cover" :alt="item.product?.name" />
                 <div v-else class="h-20 w-20 rounded-2xl bg-slate-200"></div>
                 <div>
-                  <p class="font-black text-slate-900">{{ item.product?.name || 'Product' }}</p>
-                  <p class="text-sm text-slate-500 mt-1">Quantity: {{ item.quantity }}</p>
+                  <p class="font-black text-espresso">{{ item.product?.name || 'Product' }}</p>
+                  <p class="text-sm text-muted mt-1">Quantity: {{ item.quantity }}</p>
                 </div>
               </div>
-              <div class="text-sm text-slate-500">
+              <div class="text-sm text-muted">
                 <p>Unit price</p>
-                <p class="font-black text-slate-900 mt-1">{{ formatCurrency(item.price) }}</p>
+                <p class="font-black text-espresso mt-1">{{ formatCurrency(item.price) }}</p>
               </div>
-              <div class="text-right text-slate-900 font-black text-lg">
+              <div class="text-right text-espresso font-black text-lg">
                 {{ formatCurrency(item.price * item.quantity) }}
               </div>
             </div>
@@ -101,17 +101,17 @@
         </div>
 
         <div class="grid gap-6 lg:grid-cols-[1.4fr_0.6fr]">
-          <div class="rounded-[2rem] bg-white p-8 shadow-sm border border-slate-200">
-            <h2 class="text-xl font-black text-slate-900 mb-6">Shipping Address</h2>
-            <div class="rounded-3xl bg-slate-50 p-6 border border-slate-200">
-              <p class="font-black text-slate-900 mb-2">{{ order.buyer?.profile?.full_name || 'Buyer' }}</p>
-              <p class="text-slate-600 leading-relaxed">{{ order.buyer?.profile?.address || 'No address provided' }}</p>
-              <p class="text-slate-600 mt-3">Phone: {{ order.buyer?.profile?.phone || order.buyer?.phone_number || '-' }}</p>
+          <div class="rounded-[2rem] bg-surface p-8 shadow-sm border border-borderSoft">
+            <h2 class="text-xl font-black text-espresso mb-6">Shipping Address</h2>
+            <div class="rounded-3xl bg-slate-50 p-6 border border-borderSoft">
+              <p class="font-black text-espresso mb-2">{{ order.buyer?.profile?.full_name || 'Buyer' }}</p>
+              <p class="text-muted leading-relaxed">{{ order.buyer?.profile?.address || 'No address provided' }}</p>
+              <p class="text-muted mt-3">Phone: {{ order.buyer?.profile?.phone || order.buyer?.phone_number || '-' }}</p>
             </div>
           </div>
 
-          <div class="rounded-[2rem] bg-white p-8 shadow-sm border border-slate-200">
-            <h2 class="text-xl font-black text-slate-900 mb-6">Actions</h2>
+          <div class="rounded-[2rem] bg-surface p-8 shadow-sm border border-borderSoft">
+            <h2 class="text-xl font-black text-espresso mb-6">Actions</h2>
             <div class="space-y-4">
               <button
                 v-if="order.status === 'shipped'"
@@ -145,20 +145,20 @@
         </div>
       </div>
 
-      <div v-else class="rounded-[2rem] bg-white p-8 shadow-sm border border-slate-200 text-center">
+      <div v-else class="rounded-[2rem] bg-surface p-8 shadow-sm border border-borderSoft text-center">
         <p class="text-red-600 font-semibold mb-4">Order not found or you don't have access to this order.</p>
-        <button @click="goBack" class="inline-flex items-center justify-center rounded-3xl bg-slate-200 px-6 py-3 text-sm font-black text-slate-900 hover:bg-slate-300 transition-all">
+        <button @click="goBack" class="inline-flex items-center justify-center rounded-3xl bg-slate-200 px-6 py-3 text-sm font-black text-espresso hover:bg-slate-300 transition-all">
           Back to Orders
         </button>
       </div>
     </div>
 
     <div v-if="showCancelModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div class="w-full max-w-md rounded-[2rem] bg-white p-6 shadow-2xl border border-slate-200">
-        <h3 class="text-xl font-black text-slate-900 mb-3">Cancel Order</h3>
-        <p class="text-slate-600 mb-6">Are you sure you want to cancel this order? This action cannot be undone.</p>
+      <div class="w-full max-w-md rounded-[2rem] bg-surface p-6 shadow-2xl border border-borderSoft">
+        <h3 class="text-xl font-black text-espresso mb-3">Cancel Order</h3>
+        <p class="text-muted mb-6">Are you sure you want to cancel this order? This action cannot be undone.</p>
         <div class="flex gap-3">
-          <button @click="showCancelModal = false" class="flex-1 rounded-3xl border border-slate-200 bg-white px-4 py-3 text-sm font-black uppercase tracking-widest text-slate-900 hover:bg-slate-50 transition-all">No, Keep It</button>
+          <button @click="showCancelModal = false" class="flex-1 rounded-3xl border border-borderSoft bg-surface px-4 py-3 text-sm font-black uppercase tracking-widest text-espresso hover:bg-slate-50 transition-all">No, Keep It</button>
           <button @click="cancelOrder" class="flex-1 rounded-3xl bg-red-600 px-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:bg-red-700 transition-all">Yes, Cancel</button>
         </div>
       </div>

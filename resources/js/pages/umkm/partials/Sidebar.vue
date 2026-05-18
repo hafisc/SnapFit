@@ -1,19 +1,19 @@
 <template>
   <aside
     :class="[
-      'w-[280px] bg-white flex flex-col z-40 h-screen border-r border-slate-200/80 shadow-sm',
+      'w-[280px] bg-surface flex flex-col z-40 h-screen border-r border-borderSoft/80 shadow-sm',
       'fixed lg:sticky top-0 transition-transform duration-300 lg:translate-x-0',
       sidebarOpen ? 'translate-x-0' : '-translate-x-full'
     ]"
   >
     <!-- Logo -->
-    <div class="h-20 flex items-center px-6 border-b border-slate-100">
+    <div class="h-20 flex items-center px-6 border-b border-borderSoft">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/25 overflow-hidden p-1.5">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-terracotta/50/25 overflow-hidden p-1.5">
           <img :src="logoUrl" alt="SnapFit Logo" class="w-full h-full object-contain" />
         </div>
         <div>
-          <span class="font-bold text-[16px] text-slate-800 tracking-tight">SnapFit</span>
+          <span class="font-bold text-[16px] text-espresso tracking-tight">SnapFit</span>
         </div>
       </div>
     </div>
@@ -27,16 +27,16 @@
         :to="item.path"
         @click="$emit('close')"
         class="flex items-center gap-3.5 px-3.5 py-3 rounded-xl mb-1 transition-all duration-200 text-[13px] font-semibold group relative"
-        :class="[isActive(item.path) ? 'bg-gradient-to-r from-orange-50 to-orange-50/50 text-orange-600 shadow-sm' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50']"
+        :class="[isActive(item.path) ? 'bg-gradient-to-r from-orange-50 to-orange-50/50 text-terracotta shadow-sm' : 'text-muted hover:text-espresso hover:bg-slate-50']"
       >
-        <div v-if="isActive(item.path)" class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-orange-500 rounded-r-full"></div>
+        <div v-if="isActive(item.path)" class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-terracotta rounded-r-full"></div>
         <component
           :is="item.icon"
           class="w-5 h-5 flex-shrink-0 transition-transform group-hover:scale-110"
-          :class="[isActive(item.path) ? 'text-orange-500' : 'text-slate-400 group-hover:text-slate-600']"
+          :class="[isActive(item.path) ? 'text-terracotta' : 'text-slate-400 group-hover:text-muted']"
         />
         <span class="flex-1">{{ item.name }}</span>
-        <span v-if="item.badge" class="text-[10px] font-bold bg-orange-500 text-white px-2 py-0.5 rounded-full shadow-sm">{{ item.badge }}</span>
+        <span v-if="item.badge" class="text-[10px] font-bold bg-terracotta text-white px-2 py-0.5 rounded-full shadow-sm">{{ item.badge }}</span>
       </router-link>
 
       <div class="h-px bg-slate-100 my-5 mx-3"></div>
@@ -46,12 +46,12 @@
         to="/umkm/settings"
         @click="$emit('close')"
         class="flex items-center gap-3.5 px-3.5 py-3 rounded-xl mb-1 transition-all duration-200 text-[13px] font-semibold group relative"
-        :class="[isActive('/umkm/settings') ? 'bg-gradient-to-r from-orange-50 to-orange-50/50 text-orange-600 shadow-sm' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50']"
+        :class="[isActive('/umkm/settings') ? 'bg-gradient-to-r from-orange-50 to-orange-50/50 text-terracotta shadow-sm' : 'text-muted hover:text-espresso hover:bg-slate-50']"
       >
-        <div v-if="isActive('/umkm/settings')" class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-orange-500 rounded-r-full"></div>
+        <div v-if="isActive('/umkm/settings')" class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-terracotta rounded-r-full"></div>
         <svg
           class="w-5 h-5 flex-shrink-0 transition-transform group-hover:rotate-90 duration-300"
-          :class="[isActive('/umkm/settings') ? 'text-orange-500' : 'text-slate-400 group-hover:text-slate-600']"
+          :class="[isActive('/umkm/settings') ? 'text-terracotta' : 'text-slate-400 group-hover:text-muted']"
           fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
         >
           <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -62,14 +62,14 @@
     </nav>
 
     <!-- User -->
-    <div class="p-4 border-t border-slate-100 bg-slate-50/50">
-      <div class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-white transition-all cursor-pointer group border border-transparent hover:border-slate-200 hover:shadow-sm">
+    <div class="p-4 border-t border-borderSoft bg-slate-50/50">
+      <div class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-surface transition-all cursor-pointer group border border-transparent hover:border-borderSoft hover:shadow-sm">
         <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center text-white text-sm font-bold shadow-md">
           {{ user?.name ? user.name.charAt(0) : 'U' }}
         </div>
         <div class="flex-1 min-w-0">
-          <p class="text-[13px] font-bold text-slate-800 truncate">{{ user?.name || 'UMKM Kreator' }}</p>
-          <p class="text-[11px] text-slate-500 truncate">{{ user?.email || 'umkm@snapfit.id' }}</p>
+          <p class="text-[13px] font-bold text-espresso truncate">{{ user?.name || 'UMKM Kreator' }}</p>
+          <p class="text-[11px] text-muted truncate">{{ user?.email || 'umkm@snapfit.id' }}</p>
         </div>
         <button
           @click="$emit('logout')"

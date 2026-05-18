@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-white text-slate-900 font-sans selection:bg-orange-100 overflow-x-hidden">
+  <div class="min-h-screen bg-surface text-espresso font-sans selection:bg-sand overflow-x-hidden">
     <Navbar
       :user="user"
       @logout="logout"
@@ -12,11 +12,11 @@
       <div class="max-w-[1400px] mx-auto px-6">
         <div class="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p class="text-sm font-black uppercase tracking-[0.25em] text-orange-600 mb-2">Wishlist</p>
-            <h1 class="text-4xl font-black text-slate-900">Produk Favorit Saya</h1>
-            <p class="mt-3 text-slate-600 max-w-2xl">Semua produk yang sudah kamu simpan akan ditampilkan di sini. Tambahkan ke keranjang atau hapus favorit kapan saja.</p>
+            <p class="text-sm font-black uppercase tracking-[0.25em] text-terracotta mb-2">Wishlist</p>
+            <h1 class="text-4xl font-black text-espresso">Produk Favorit Saya</h1>
+            <p class="mt-3 text-muted max-w-2xl">Semua produk yang sudah kamu simpan akan ditampilkan di sini. Tambahkan ke keranjang atau hapus favorit kapan saja.</p>
           </div>
-          <button @click="browseMarketplace" class="inline-flex items-center gap-2 rounded-3xl bg-orange-600 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white shadow-lg shadow-orange-200/50 hover:bg-orange-700 transition-all">
+          <button @click="browseMarketplace" class="inline-flex items-center gap-2 rounded-3xl bg-terracotta px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white shadow-lg shadow-terracotta/20/50 hover:bg-terracottaDark transition-all">
             Telusuri Marketplace
           </button>
         </div>
@@ -25,19 +25,19 @@
           <div v-for="i in 6" :key="i" class="animate-pulse rounded-3xl bg-gray-100 p-6 h-80"></div>
         </div>
 
-        <div v-else-if="wishlistStore.count === 0" class="rounded-3xl border border-dashed border-orange-200 bg-orange-50 p-12 text-center">
-          <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-orange-100 text-orange-600 mb-6">
+        <div v-else-if="wishlistStore.count === 0" class="rounded-3xl border border-dashed border-terracotta/30 bg-sand p-12 text-center">
+          <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-sand text-terracotta mb-6">
             <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
           </div>
-          <h2 class="text-3xl font-black text-slate-900 mb-3">Belum ada item favorit</h2>
-          <p class="text-slate-600 mb-6">Tambahkan produk ke wishlist dan temukan kembali nanti dengan mudah.</p>
-          <button @click="browseMarketplace" class="inline-flex items-center gap-2 rounded-3xl bg-orange-600 px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white hover:bg-orange-700 transition-all">Mulai Belanja</button>
+          <h2 class="text-3xl font-black text-espresso mb-3">Belum ada item favorit</h2>
+          <p class="text-muted mb-6">Tambahkan produk ke wishlist dan temukan kembali nanti dengan mudah.</p>
+          <button @click="browseMarketplace" class="inline-flex items-center gap-2 rounded-3xl bg-terracotta px-6 py-3 text-sm font-black uppercase tracking-[0.16em] text-white hover:bg-terracottaDark transition-all">Mulai Belanja</button>
         </div>
 
         <div v-else class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          <div v-for="item in wishlistStore.items" :key="item.product_id || item.id" class="rounded-[2rem] bg-white border border-gray-100 shadow-sm overflow-hidden">
+          <div v-for="item in wishlistStore.items" :key="item.product_id || item.id" class="rounded-[2rem] bg-surface border border-borderSoft shadow-sm overflow-hidden">
             <img
               :src="item.product?.images?.[0] || item.product?.image || 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?q=80&w=1000'"
               :alt="item.product?.name"
@@ -45,16 +45,16 @@
             />
             <div class="p-6 flex flex-col gap-4">
               <div>
-                <p class="text-xs uppercase tracking-[0.25em] text-orange-600 font-black mb-2">{{ item.product?.category || 'Marketplace' }}</p>
-                <h2 class="text-xl font-black text-slate-900 leading-tight">{{ item.product?.name || 'Produk Favorit' }}</h2>
+                <p class="text-xs uppercase tracking-[0.25em] text-terracotta font-black mb-2">{{ item.product?.category || 'Marketplace' }}</p>
+                <h2 class="text-xl font-black text-espresso leading-tight">{{ item.product?.name || 'Produk Favorit' }}</h2>
               </div>
               <div class="flex items-center justify-between gap-4">
-                <p class="text-2xl font-black text-orange-600">Rp {{ formatCurrency(item.product?.price) }}</p>
+                <p class="text-2xl font-black text-terracotta">Rp {{ formatCurrency(item.product?.price) }}</p>
                 <span class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">{{ item.product?.stock ? 'In Stock' : 'Preorder' }}</span>
               </div>
               <div class="flex flex-col gap-3 sm:flex-row">
-                <button @click="addToCart(item.product)" class="flex-1 rounded-3xl bg-orange-600 px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-white hover:bg-orange-700 transition-all">Tambah ke Keranjang</button>
-                <button @click="removeFromWishlist(item.product_id)" class="flex-1 rounded-3xl border border-slate-200 bg-white px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-slate-700 hover:border-orange-300 hover:text-orange-600 transition-all">Hapus</button>
+                <button @click="addToCart(item.product)" class="flex-1 rounded-3xl bg-terracotta px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-white hover:bg-terracottaDark transition-all">Tambah ke Keranjang</button>
+                <button @click="removeFromWishlist(item.product_id)" class="flex-1 rounded-3xl border border-borderSoft bg-surface px-5 py-3 text-sm font-black uppercase tracking-[0.16em] text-espresso hover:border-orange-300 hover:text-terracotta transition-all">Hapus</button>
               </div>
             </div>
           </div>

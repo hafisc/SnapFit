@@ -1,44 +1,6 @@
 <template>
-  <div class="min-h-screen bg-[#FFF8F0] text-slate-900 font-sans selection:bg-orange-500 selection:text-white overflow-x-hidden relative">
-    
-    <!-- ═══ HIGH-END INTERNATIONAL BACKGROUND SYSTEM ═══ -->
-    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#FAFAFA]">
-      
-      <!-- 1) Complex Liquid Mesh Gradient (CSS-only volumetric lighting) -->
-      <div class="absolute inset-0 opacity-60 mix-blend-multiply" 
-           style="background-image: 
-             radial-gradient(at 40% 20%, hsla(28,100%,74%,1) 0px, transparent 50%),
-             radial-gradient(at 80% 0%, hsla(189,100%,56%,0.2) 0px, transparent 50%),
-             radial-gradient(at 0% 50%, hsla(355,100%,93%,1) 0px, transparent 50%),
-             radial-gradient(at 80% 50%, hsla(340,100%,76%,0.4) 0px, transparent 50%),
-             radial-gradient(at 0% 100%, hsla(22,100%,77%,1) 0px, transparent 50%),
-             radial-gradient(at 80% 100%, hsla(242,100%,70%,0.2) 0px, transparent 50%),
-             radial-gradient(at 0% 0%, hsla(343,100%,76%,0.3) 0px, transparent 50%);
-             filter: blur(80px);">
-      </div>
+  <div class="snapfit-heritage-bg min-h-screen text-espresso font-sans selection:bg-terracotta selection:text-white overflow-x-hidden relative">
 
-      <!-- 2) Breathing Ambient Orbs (Animated) -->
-      <div class="absolute top-[-10%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-gradient-to-br from-orange-200/40 to-rose-200/20 blur-[120px] animate-breathe-slow mix-blend-overlay"></div>
-      <div class="absolute bottom-[-20%] left-[-10%] w-[70vw] h-[70vw] rounded-full bg-gradient-to-tr from-amber-100/50 to-orange-100/30 blur-[140px] animate-breathe-slow-delayed mix-blend-overlay"></div>
-
-      <!-- 3) Technical Blueprint Grid (Ultra Subtle) -->
-      <div class="absolute inset-0" 
-           style="background-image: 
-             linear-gradient(to right, rgba(15, 23, 42, 0.02) 1px, transparent 1px),
-             linear-gradient(to bottom, rgba(15, 23, 42, 0.02) 1px, transparent 1px);
-           background-size: 40px 40px;
-           mask-image: radial-gradient(ellipse at center, black 20%, transparent 80%);
-           -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 80%);">
-      </div>
-
-      <!-- 4) Fine Film Grain / Noise Texture (Crucial for premium feel) -->
-      <div class="absolute inset-0 opacity-[0.05] mix-blend-overlay pointer-events-none" 
-           style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');">
-      </div>
-      
-      <!-- 5) Glassmorphism Frosted Layer Overlay -->
-      <div class="absolute inset-0 backdrop-blur-[1px] bg-white/10"></div>
-    </div>
 
     <!-- Navbar -->
     <Navbar
@@ -57,6 +19,7 @@
         :isLoadingMore="isLoadingMore"
         :hasMore="hasMore"
         @load-more="fetchMore"
+        :is-homepage="true"
       />
         
 
@@ -74,7 +37,7 @@ import { useRouter } from 'vue-router';
 import Navbar from '@/pages/landing/partials/Navbar.vue';
 
 // Landing sections
-import ProductGrid     from './section/ProductGrid.vue';
+import ProductGrid from '@/components/landing/ProductGrid.vue';
 
 const router    = useRouter();
 const user      = ref(null);

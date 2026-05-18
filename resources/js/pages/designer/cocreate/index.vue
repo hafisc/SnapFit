@@ -3,16 +3,16 @@
     <!-- Header + Filter -->
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
       <div>
-        <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Co-Create Room</h2>
-        <p class="text-sm text-slate-500 font-medium mt-1">Terima undangan dan kolaborasi bersama UMKM Malang</p>
+        <h2 class="text-2xl font-bold text-espresso tracking-tight">Co-Create Room</h2>
+        <p class="text-sm text-muted font-medium mt-1">Terima undangan dan kolaborasi bersama UMKM Malang</p>
       </div>
       <div class="flex items-center gap-3">
-        <div class="flex bg-white rounded-2xl border border-slate-200 overflow-hidden">
+        <div class="flex bg-surface rounded-2xl border border-borderSoft overflow-hidden">
           <button v-for="tab in tabs" :key="tab.key" @click="activeTab = tab.key"
             class="px-5 py-3 text-[10px] font-bold uppercase tracking-wider transition-all"
-            :class="activeTab === tab.key ? 'bg-orange-500 text-white shadow-sm' : 'text-slate-500 hover:bg-slate-50'">
+            :class="activeTab === tab.key ? 'bg-terracotta text-white shadow-sm' : 'text-muted hover:bg-slate-50'">
             {{ tab.label }}
-            <span v-if="tab.count" class="ml-1.5 bg-white/20 text-[9px] px-1.5 py-0.5 rounded-md" :class="activeTab === tab.key ? '' : 'bg-orange-100 text-orange-600'">{{ tab.count }}</span>
+            <span v-if="tab.count" class="ml-1.5 bg-surface/20 text-[9px] px-1.5 py-0.5 rounded-md" :class="activeTab === tab.key ? '' : 'bg-sand text-terracotta'">{{ tab.count }}</span>
           </button>
         </div>
       </div>
@@ -21,7 +21,7 @@
     <!-- Pending Invitations Section -->
     <div v-if="activeTab === 'pending'" class="space-y-5">
       <div v-for="inv in pendingInvitations" :key="inv.id"
-        class="bg-white rounded-2xl border border-slate-200/60 p-6 md:p-8 hover:shadow-md transition-all duration-300 group">
+        class="bg-surface rounded-2xl border border-borderSoft/60 p-6 md:p-8 hover:shadow-md transition-all duration-300 group">
         <div class="flex flex-col lg:flex-row items-start lg:items-center gap-6">
           <!-- UMKM Info -->
           <div class="flex items-center gap-4 flex-1 min-w-0">
@@ -30,10 +30,10 @@
             </div>
             <div class="min-w-0">
               <div class="flex items-center gap-2 mb-1">
-                <h3 class="text-lg font-bold text-slate-800 truncate">{{ inv.umkmName }}</h3>
-                <span class="flex-shrink-0 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider rounded-lg bg-orange-100 text-orange-600">{{ inv.category }}</span>
+                <h3 class="text-lg font-bold text-espresso truncate">{{ inv.umkmName }}</h3>
+                <span class="flex-shrink-0 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider rounded-lg bg-sand text-terracotta">{{ inv.category }}</span>
               </div>
-              <p class="text-sm text-slate-500 font-medium truncate">{{ inv.projectName }}</p>
+              <p class="text-sm text-muted font-medium truncate">{{ inv.projectName }}</p>
               <div class="flex items-center gap-4 mt-2 text-[11px] text-slate-400 font-medium">
                 <span class="flex items-center gap-1">
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -49,20 +49,20 @@
 
           <!-- Description -->
           <div class="flex-1 min-w-0 hidden xl:block">
-            <p class="text-xs text-slate-500 leading-relaxed line-clamp-3">{{ inv.description }}</p>
+            <p class="text-xs text-muted leading-relaxed line-clamp-3">{{ inv.description }}</p>
           </div>
 
           <!-- Budget & Actions -->
           <div class="flex items-center gap-4 flex-shrink-0">
             <div class="text-right hidden sm:block">
               <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Budget</p>
-              <p class="text-lg font-bold text-slate-800">Rp {{ inv.budget.toLocaleString('id-ID') }}</p>
+              <p class="text-lg font-bold text-espresso">Rp {{ inv.budget.toLocaleString('id-ID') }}</p>
             </div>
             <div class="flex items-center gap-2">
-              <button @click="acceptInvitation(inv.id)" class="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white text-[10px] font-bold uppercase tracking-wider rounded-2xl transition-all shadow-sm shadow-orange-500/20 hover:shadow-md active:scale-95">
+              <button @click="acceptInvitation(inv.id)" class="px-6 py-3 bg-terracotta hover:bg-terracotta text-white text-[10px] font-bold uppercase tracking-wider rounded-2xl transition-all shadow-sm shadow-terracotta/50/20 hover:shadow-md active:scale-95">
                 ✓ Terima
               </button>
-              <button @click="declineInvitation(inv.id)" class="px-6 py-3 bg-slate-100 hover:bg-red-50 text-slate-500 hover:text-red-500 text-[10px] font-bold uppercase tracking-wider rounded-2xl transition-all">
+              <button @click="declineInvitation(inv.id)" class="px-6 py-3 bg-slate-100 hover:bg-red-50 text-muted hover:text-red-500 text-[10px] font-bold uppercase tracking-wider rounded-2xl transition-all">
                 ✕ Tolak
               </button>
             </div>
@@ -71,18 +71,18 @@
       </div>
 
       <!-- Empty State -->
-      <div v-if="pendingInvitations.length === 0" class="bg-white rounded-2xl border border-slate-200 p-16 text-center">
+      <div v-if="pendingInvitations.length === 0" class="bg-surface rounded-2xl border border-borderSoft p-16 text-center">
         <div class="text-6xl mb-4">📭</div>
-        <h3 class="text-lg font-bold text-slate-800 mb-2">Belum Ada Undangan Baru</h3>
-        <p class="text-sm text-slate-500 font-medium">Undangan dari UMKM akan muncul di sini.</p>
+        <h3 class="text-lg font-bold text-espresso mb-2">Belum Ada Undangan Baru</h3>
+        <p class="text-sm text-muted font-medium">Undangan dari UMKM akan muncul di sini.</p>
       </div>
     </div>
 
     <!-- Active Rooms Section -->
     <div v-if="activeTab === 'active'" class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div v-for="room in activeRooms" :key="room.id"
-        class="bg-white rounded-2xl border border-slate-200/60 p-6 hover:shadow-md transition-all duration-300 group cursor-pointer relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+        class="bg-surface rounded-2xl border border-borderSoft/60 p-6 hover:shadow-md transition-all duration-300 group cursor-pointer relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-sand rounded-full blur-3xl opacity-50 pointer-events-none"></div>
         <div class="relative z-10">
           <div class="flex items-center justify-between mb-4">
             <span class="px-3 py-1.5 bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase tracking-wider rounded-xl flex items-center gap-1.5">
@@ -90,14 +90,14 @@
             </span>
             <span class="text-[10px] font-medium text-slate-400">{{ room.timeAgo }}</span>
           </div>
-          <h3 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-orange-600 transition-colors">{{ room.name }}</h3>
-          <p class="text-xs text-slate-500 font-medium mb-4 leading-relaxed">{{ room.description }}</p>
+          <h3 class="text-lg font-bold text-espresso mb-2 group-hover:text-terracotta transition-colors">{{ room.name }}</h3>
+          <p class="text-xs text-muted font-medium mb-4 leading-relaxed">{{ room.description }}</p>
           <div class="flex items-center justify-between">
             <div class="flex -space-x-2">
               <div v-for="(m, mIdx) in room.members.slice(0, 5)" :key="mIdx" class="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-[9px] font-bold text-white shadow-sm" :class="m.color">{{ m.name.charAt(0) }}</div>
-              <div v-if="room.members.length > 5" class="w-8 h-8 rounded-full border-2 border-white bg-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-500">+{{ room.members.length - 5 }}</div>
+              <div v-if="room.members.length > 5" class="w-8 h-8 rounded-full border-2 border-white bg-slate-200 flex items-center justify-center text-[10px] font-bold text-muted">+{{ room.members.length - 5 }}</div>
             </div>
-            <button class="px-4 py-2.5 bg-orange-50 hover:bg-orange-100 text-orange-600 text-[10px] font-bold uppercase tracking-wider rounded-xl transition-colors border border-orange-100">
+            <button class="px-4 py-2.5 bg-sand hover:bg-sand text-terracotta text-[10px] font-bold uppercase tracking-wider rounded-xl transition-colors border border-terracotta/20">
               Masuk Room →
             </button>
           </div>
@@ -107,12 +107,12 @@
 
     <!-- Completed Section -->
     <div v-if="activeTab === 'completed'" class="space-y-4">
-      <div v-for="room in completedRooms" :key="room.id" class="bg-white rounded-2xl border border-slate-200/60 p-6 hover:shadow-md transition-all duration-300">
+      <div v-for="room in completedRooms" :key="room.id" class="bg-surface rounded-2xl border border-borderSoft/60 p-6 hover:shadow-md transition-all duration-300">
         <div class="flex items-center gap-4">
           <div class="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center text-xl bg-slate-100">✅</div>
           <div class="flex-1 min-w-0">
-            <h4 class="text-sm font-bold text-slate-800 truncate">{{ room.name }}</h4>
-            <p class="text-xs text-slate-500 font-medium">{{ room.umkmName }} · Selesai {{ room.completedDate }}</p>
+            <h4 class="text-sm font-bold text-espresso truncate">{{ room.name }}</h4>
+            <p class="text-xs text-muted font-medium">{{ room.umkmName }} · Selesai {{ room.completedDate }}</p>
           </div>
           <div class="flex items-center gap-3">
             <div class="text-right hidden sm:block">
@@ -121,7 +121,7 @@
               </div>
               <p class="text-[10px] text-slate-400 font-medium mt-0.5">{{ room.rating }}/5 rating</p>
             </div>
-            <button class="px-4 py-2 bg-slate-50 hover:bg-orange-50 text-slate-500 hover:text-orange-600 text-[10px] font-bold uppercase tracking-wider rounded-xl transition-colors border border-slate-100">Detail</button>
+            <button class="px-4 py-2 bg-slate-50 hover:bg-sand text-muted hover:text-terracotta text-[10px] font-bold uppercase tracking-wider rounded-xl transition-colors border border-borderSoft">Detail</button>
           </div>
         </div>
       </div>
@@ -146,10 +146,10 @@ const pendingInvitations = ref([
 ]);
 
 const activeRooms = ref([
-  { id: 1, name: 'Packaging Batik Tulis Premium', description: 'Kolaborasi desain packaging premium untuk Batik Sari Malang. Sedang dalam tahap mockup 3D.', timeAgo: '5 min lalu', members: [{ name: 'Sari', color: 'bg-orange-400' }, { name: 'Reza', color: 'bg-orange-500' }, { name: 'Andi', color: 'bg-blue-400' }] },
-  { id: 2, name: 'Branding Rotan Craft', description: 'Brand identity dan panduan visual untuk Rotan Craft Arjosari.', timeAgo: '1 jam lalu', members: [{ name: 'Budi', color: 'bg-emerald-500' }, { name: 'Reza', color: 'bg-orange-500' }] },
-  { id: 3, name: 'Visual Kit Kopi Arjuno', description: 'Konten sosial media Instagram & TikTok untuk brand kopi lokal.', timeAgo: '3 jam lalu', members: [{ name: 'Dewi', color: 'bg-amber-500' }, { name: 'Reza', color: 'bg-orange-500' }, { name: 'Fajar', color: 'bg-pink-400' }, { name: 'Gita', color: 'bg-teal-400' }, { name: 'Heru', color: 'bg-indigo-400' }, { name: 'Indah', color: 'bg-red-400' }] },
-  { id: 4, name: 'Product Photography Keramik', description: 'Style guide foto produk untuk marketplace online.', timeAgo: '6 jam lalu', members: [{ name: 'Lina', color: 'bg-cyan-500' }, { name: 'Reza', color: 'bg-orange-500' }, { name: 'Maya', color: 'bg-rose-400' }] },
+  { id: 1, name: 'Packaging Batik Tulis Premium', description: 'Kolaborasi desain packaging premium untuk Batik Sari Malang. Sedang dalam tahap mockup 3D.', timeAgo: '5 min lalu', members: [{ name: 'Sari', color: 'bg-orange-400' }, { name: 'Reza', color: 'bg-terracotta' }, { name: 'Andi', color: 'bg-blue-400' }] },
+  { id: 2, name: 'Branding Rotan Craft', description: 'Brand identity dan panduan visual untuk Rotan Craft Arjosari.', timeAgo: '1 jam lalu', members: [{ name: 'Budi', color: 'bg-emerald-500' }, { name: 'Reza', color: 'bg-terracotta' }] },
+  { id: 3, name: 'Visual Kit Kopi Arjuno', description: 'Konten sosial media Instagram & TikTok untuk brand kopi lokal.', timeAgo: '3 jam lalu', members: [{ name: 'Dewi', color: 'bg-amber-500' }, { name: 'Reza', color: 'bg-terracotta' }, { name: 'Fajar', color: 'bg-pink-400' }, { name: 'Gita', color: 'bg-teal-400' }, { name: 'Heru', color: 'bg-indigo-400' }, { name: 'Indah', color: 'bg-red-400' }] },
+  { id: 4, name: 'Product Photography Keramik', description: 'Style guide foto produk untuk marketplace online.', timeAgo: '6 jam lalu', members: [{ name: 'Lina', color: 'bg-cyan-500' }, { name: 'Reza', color: 'bg-terracotta' }, { name: 'Maya', color: 'bg-rose-400' }] },
 ]);
 
 const completedRooms = ref([

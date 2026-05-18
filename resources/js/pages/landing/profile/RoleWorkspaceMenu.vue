@@ -1,19 +1,19 @@
 <template>
   <div class="space-y-8">
     <!-- Current Active Role Section -->
-    <div v-if="roleMenu" class="p-6 bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-2xl">
-      <p class="text-xs font-bold text-orange-600 uppercase tracking-widest mb-3">Role Aktif Saat Ini</p>
+    <div v-if="roleMenu" class="p-6 bg-gradient-to-r from-orange-50 to-amber-50 border border-terracotta/30 rounded-2xl">
+      <p class="text-xs font-bold text-terracotta uppercase tracking-widest mb-3">Role Aktif Saat Ini</p>
       <div class="flex items-center gap-4">
-        <div class="flex items-center justify-center w-14 h-14 rounded-full bg-white shadow-md border-2 border-orange-300">
+        <div class="flex items-center justify-center w-14 h-14 rounded-full bg-surface shadow-md border-2 border-orange-300">
           <span class="text-2xl">
             {{ getRoleIcon(roleMenu.current_active_role) }}
           </span>
         </div>
         <div>
-          <p class="text-sm font-black text-slate-700 uppercase tracking-widest">
+          <p class="text-sm font-black text-espresso uppercase tracking-widest">
             {{ getRoleDisplayName(roleMenu.current_active_role) }}
           </p>
-          <p class="text-xs text-slate-500 mt-1">Ruang kerja yang sedang aktif</p>
+          <p class="text-xs text-muted mt-1">Ruang kerja yang sedang aktif</p>
         </div>
       </div>
     </div>
@@ -30,7 +30,7 @@
             <div class="flex items-center gap-3">
               <span class="text-4xl">{{ getRoleIcon(role.name) }}</span>
               <div>
-                <h4 class="font-black text-slate-900 text-sm uppercase tracking-widest">
+                <h4 class="font-black text-espresso text-sm uppercase tracking-widest">
                   {{ getRoleDisplayName(role.name) }}
                 </h4>
                 <div class="flex items-center gap-2 mt-1">
@@ -42,7 +42,7 @@
           </div>
 
           <!-- Description -->
-          <p class="text-sm text-slate-700 mb-6 leading-relaxed font-medium">
+          <p class="text-sm text-espresso mb-6 leading-relaxed font-medium">
             <span v-if="role.name === 'umkm'">Jual produk Anda dan kelola bisnis UMKM dengan AI Product Studio, analytics, dan co-creation tools.</span>
             <span v-else-if="role.name === 'designer'">Kolaborasikan design dengan UMKM dan dapatkan passive income dari karya kreatif Anda.</span>
             <span v-else>Belanja produk lokal terbaik, wishlist favorit, dan track pesanan Anda.</span>
@@ -68,26 +68,26 @@
 
         <!-- Inactive Role Card (User belum punya) -->
         <div v-else
-             class="p-6 rounded-2xl border-2 bg-gradient-to-br from-slate-50 to-slate-100 border-slate-300 hover:border-orange-400 hover:shadow-lg transition-all duration-300 group cursor-pointer">
+             class="p-6 rounded-2xl border-2 bg-gradient-to-br from-slate-50 to-slate-100 border-slate-300 hover:border-terracotta hover:shadow-lg transition-all duration-300 group cursor-pointer">
           
           <!-- Header -->
           <div class="flex items-start justify-between mb-4">
             <div class="flex items-center gap-3">
               <span class="text-4xl opacity-60 group-hover:opacity-100 transition-opacity">{{ getRoleIcon(role.name) }}</span>
               <div>
-                <h4 class="font-black text-slate-900 text-sm uppercase tracking-widest">
+                <h4 class="font-black text-espresso text-sm uppercase tracking-widest">
                   {{ getRoleDisplayName(role.name) }}
                 </h4>
                 <div class="flex items-center gap-2 mt-1">
                   <span class="inline-block w-2 h-2 bg-slate-400 rounded-full"></span>
-                  <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Belum Terdaftar</p>
+                  <p class="text-[10px] font-bold text-muted uppercase tracking-widest">Belum Terdaftar</p>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Description -->
-          <p class="text-sm text-slate-600 mb-6 leading-relaxed font-medium">
+          <p class="text-sm text-muted mb-6 leading-relaxed font-medium">
             <span v-if="role.name === 'umkm'">Jual produk Anda dan kelola bisnis UMKM dengan AI Product Studio, analytics, dan co-creation tools.</span>
             <span v-else-if="role.name === 'designer'">Kolaborasikan design dengan UMKM dan dapatkan passive income dari karya kreatif Anda.</span>
             <span v-else>Belanja produk lokal terbaik, wishlist favorit, dan track pesanan Anda.</span>
@@ -96,7 +96,7 @@
           <!-- Action -->
           <button 
             @click="handleRegisterRole(role.name)"
-            class="w-full bg-white border-2 border-slate-400 text-slate-700 font-bold py-3 px-5 rounded-lg hover:border-orange-600 hover:text-orange-600 hover:shadow-lg transition-all duration-200 active:scale-95 text-sm group-hover:shadow-md flex items-center justify-center gap-2">
+            class="w-full bg-surface border-2 border-slate-400 text-espresso font-bold py-3 px-5 rounded-lg hover:border-orange-600 hover:text-terracotta hover:shadow-lg transition-all duration-200 active:scale-95 text-sm group-hover:shadow-md flex items-center justify-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
             Daftar Sekarang
           </button>
@@ -106,8 +106,8 @@
 
     <!-- Loading State -->
     <div v-if="isLoadingRoles" class="flex flex-col items-center justify-center py-16">
-      <div class="w-12 h-12 border-4 border-orange-200 border-t-orange-600 rounded-full animate-spin mb-4"></div>
-      <p class="text-slate-500 text-sm font-medium">Memuat role menu...</p>
+      <div class="w-12 h-12 border-4 border-terracotta/30 border-t-orange-600 rounded-full animate-spin mb-4"></div>
+      <p class="text-muted text-sm font-medium">Memuat role menu...</p>
     </div>
 
     <!-- Error State -->

@@ -2,14 +2,14 @@
   <div class="space-y-6 max-w-7xl mx-auto">
     <!-- Quick Stats -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-      <div v-for="(s, i) in stats" :key="i" class="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-slate-200/60">
+      <div v-for="(s, i) in stats" :key="i" class="bg-surface rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-borderSoft/60">
         <div class="flex items-center justify-between mb-3 sm:mb-4">
           <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center" :class="s.iconBg">
             <component :is="s.icon" class="w-4 h-4 sm:w-5 sm:h-5" :class="s.iconColor" />
           </div>
           <span class="text-[10px] sm:text-[11px] font-semibold px-2 py-0.5 rounded-md" :class="s.changeBg">{{ s.change }}</span>
         </div>
-        <p class="text-lg sm:text-[22px] font-bold text-slate-800 leading-none mb-1">
+        <p class="text-lg sm:text-[22px] font-bold text-espresso leading-none mb-1">
           <span v-if="loading" class="inline-block w-14 sm:w-16 h-5 sm:h-6 bg-slate-100 rounded animate-pulse"></span>
           <span v-else>{{ s.value }}</span>
         </p>
@@ -20,16 +20,16 @@
     <!-- Chart + Activity Row -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
       <!-- Revenue Chart -->
-      <div class="lg:col-span-2 bg-white rounded-xl sm:rounded-2xl border border-slate-200/60 p-4 sm:p-6">
+      <div class="lg:col-span-2 bg-surface rounded-xl sm:rounded-2xl border border-borderSoft/60 p-4 sm:p-6">
         <div class="flex items-center justify-between mb-4 sm:mb-6 flex-wrap gap-3">
           <div>
-            <h3 class="text-[13px] sm:text-[14px] font-bold text-slate-800">Revenue</h3>
+            <h3 class="text-[13px] sm:text-[14px] font-bold text-espresso">Revenue</h3>
             <p class="text-[10px] sm:text-[11px] text-slate-400 font-medium">Platform fees dari transaksi marketplace</p>
           </div>
           <div class="flex bg-slate-100 rounded-lg p-0.5">
             <button v-for="period in ['7D','1M','3M','1Y']" :key="period" @click="activePeriod = period"
               class="px-2.5 sm:px-3 py-1 sm:py-1.5 text-[9px] sm:text-[10px] font-bold rounded-md transition-all"
-              :class="activePeriod === period ? 'bg-white text-slate-800 shadow-sm' : 'text-slate-400 hover:text-slate-600'">
+              :class="activePeriod === period ? 'bg-surface text-espresso shadow-sm' : 'text-slate-400 hover:text-muted'">
               {{ period }}
             </button>
           </div>
@@ -37,18 +37,18 @@
 
         <!-- Revenue Value -->
         <div class="mb-4 sm:mb-6">
-          <p class="text-2xl sm:text-[28px] font-bold text-slate-800 tracking-tight leading-none">Rp {{ loading ? '—' : '47.850.000' }}</p>
+          <p class="text-2xl sm:text-[28px] font-bold text-espresso tracking-tight leading-none">Rp {{ loading ? '—' : '47.850.000' }}</p>
           <p class="text-[10px] sm:text-[11px] text-emerald-500 font-semibold mt-1">↑ 12.5% dari periode sebelumnya</p>
         </div>
 
         <!-- CSS Chart -->
         <div class="relative h-48 sm:h-52">
           <div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
-            <div v-for="i in 4" :key="i" class="w-full border-b border-dashed border-slate-100"></div>
+            <div v-for="i in 4" :key="i" class="w-full border-b border-dashed border-borderSoft"></div>
           </div>
           <div class="h-full flex items-end gap-[2px] sm:gap-[3px] relative z-10">
             <div v-for="(h, i) in barHeights" :key="i" class="flex-1 rounded-t-md transition-all duration-700 hover:opacity-80 cursor-pointer"
-              :class="i === barHeights.length - 1 ? 'bg-orange-500' : 'bg-slate-200'" :style="{ height: h + '%' }"></div>
+              :class="i === barHeights.length - 1 ? 'bg-terracotta' : 'bg-slate-200'" :style="{ height: h + '%' }"></div>
           </div>
         </div>
         <div class="flex justify-between mt-2 sm:mt-3 text-[9px] sm:text-[10px] text-slate-400 font-medium">
@@ -57,10 +57,10 @@
       </div>
 
       <!-- Activity Feed -->
-      <div class="lg:col-span-1 bg-white rounded-2xl border border-slate-200/60 p-5 sm:p-6">
+      <div class="lg:col-span-1 bg-surface rounded-2xl border border-borderSoft/60 p-5 sm:p-6">
         <div class="flex items-center justify-between mb-4 sm:mb-5">
-          <h3 class="text-[13px] sm:text-[14px] font-bold text-slate-800">Aktivitas Terbaru</h3>
-          <button class="text-[10px] sm:text-[11px] font-semibold text-orange-500 hover:text-orange-600 transition-colors">Lihat Semua</button>
+          <h3 class="text-[13px] sm:text-[14px] font-bold text-espresso">Aktivitas Terbaru</h3>
+          <button class="text-[10px] sm:text-[11px] font-semibold text-terracotta hover:text-terracotta transition-colors">Lihat Semua</button>
         </div>
 
         <div class="space-y-3 sm:space-y-4">
@@ -70,7 +70,7 @@
               <div class="w-px flex-1 bg-slate-100 mt-1"></div>
             </div>
             <div class="pb-3 sm:pb-4 flex-1 min-w-0">
-              <p class="text-[11px] sm:text-[12px] font-semibold text-slate-700 leading-snug">{{ a.title }}</p>
+              <p class="text-[11px] sm:text-[12px] font-semibold text-espresso leading-snug">{{ a.title }}</p>
               <p class="text-[10px] sm:text-[11px] text-slate-400 mt-0.5 truncate">{{ a.desc }}</p>
               <p class="text-[9px] sm:text-[10px] text-slate-300 font-medium mt-1">{{ a.time }}</p>
             </div>
@@ -82,15 +82,15 @@
     <!-- Bottom Row -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
       <!-- User Composition -->
-      <div class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/60 p-4 sm:p-6">
-        <h3 class="text-[13px] sm:text-[14px] font-bold text-slate-800 mb-4 sm:mb-5">Komposisi Pengguna</h3>
+      <div class="bg-surface rounded-xl sm:rounded-2xl border border-borderSoft/60 p-4 sm:p-6">
+        <h3 class="text-[13px] sm:text-[14px] font-bold text-espresso mb-4 sm:mb-5">Komposisi Pengguna</h3>
         <div class="space-y-3 sm:space-y-4">
           <div v-for="r in userRoles" :key="r.role" class="flex items-center gap-2 sm:gap-3">
             <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-[10px] sm:text-[11px] font-bold flex-shrink-0" :class="r.bgClass">{{ r.initial }}</div>
             <div class="flex-1 min-w-0">
               <div class="flex items-center justify-between mb-1">
-                <span class="text-[11px] sm:text-[12px] font-semibold text-slate-700">{{ r.label }}</span>
-                <span class="text-[11px] sm:text-[12px] font-bold text-slate-800">{{ r.count }}</span>
+                <span class="text-[11px] sm:text-[12px] font-semibold text-espresso">{{ r.label }}</span>
+                <span class="text-[11px] sm:text-[12px] font-bold text-espresso">{{ r.count }}</span>
               </div>
               <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
                 <div class="h-full rounded-full transition-all duration-1000" :class="r.barClass" :style="{ width: r.pct + '%' }"></div>
@@ -101,8 +101,8 @@
       </div>
 
       <!-- Top Products -->
-      <div class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/60 p-4 sm:p-6">
-        <h3 class="text-[13px] sm:text-[14px] font-bold text-slate-800 mb-4 sm:mb-5">Produk Terlaris</h3>
+      <div class="bg-surface rounded-xl sm:rounded-2xl border border-borderSoft/60 p-4 sm:p-6">
+        <h3 class="text-[13px] sm:text-[14px] font-bold text-espresso mb-4 sm:mb-5">Produk Terlaris</h3>
         <div class="space-y-2 sm:space-y-3">
           <div v-for="(p, i) in topProducts" :key="i" class="flex items-center gap-2 sm:gap-3 p-2 -mx-2 rounded-xl hover:bg-slate-50 transition-colors">
             <span class="w-5 h-5 sm:w-6 sm:h-6 rounded-md bg-slate-100 flex items-center justify-center text-[9px] sm:text-[10px] font-bold text-slate-400 flex-shrink-0">{{ i + 1 }}</span>
@@ -110,25 +110,25 @@
               <img :src="p.img" :alt="p.name" class="w-full h-full object-cover" />
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-[11px] sm:text-[12px] font-semibold text-slate-700 truncate">{{ p.name }}</p>
+              <p class="text-[11px] sm:text-[12px] font-semibold text-espresso truncate">{{ p.name }}</p>
               <p class="text-[9px] sm:text-[10px] text-slate-400">{{ p.seller }}</p>
             </div>
-            <span class="text-[11px] sm:text-[12px] font-bold text-slate-800 whitespace-nowrap">{{ p.sold }} terjual</span>
+            <span class="text-[11px] sm:text-[12px] font-bold text-espresso whitespace-nowrap">{{ p.sold }} terjual</span>
           </div>
         </div>
       </div>
 
       <!-- Quick Actions -->
-      <div class="bg-white rounded-xl sm:rounded-2xl border border-slate-200/60 p-4 sm:p-6">
-        <h3 class="text-[13px] sm:text-[14px] font-bold text-slate-800 mb-4 sm:mb-5">Perlu Perhatian</h3>
+      <div class="bg-surface rounded-xl sm:rounded-2xl border border-borderSoft/60 p-4 sm:p-6">
+        <h3 class="text-[13px] sm:text-[14px] font-bold text-espresso mb-4 sm:mb-5">Perlu Perhatian</h3>
         <div class="space-y-2 sm:space-y-3">
           <div v-for="alert in alerts" :key="alert.id" class="flex items-start gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-xl border" :class="alert.borderClass">
             <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0" :class="alert.bgClass">{{ alert.emoji }}</div>
             <div class="flex-1 min-w-0">
-              <p class="text-[11px] sm:text-[12px] font-semibold text-slate-700">{{ alert.title }}</p>
+              <p class="text-[11px] sm:text-[12px] font-semibold text-espresso">{{ alert.title }}</p>
               <p class="text-[9px] sm:text-[10px] text-slate-400 mt-0.5">{{ alert.desc }}</p>
             </div>
-            <router-link :to="alert.link" class="text-[9px] sm:text-[10px] font-bold text-orange-500 hover:text-orange-600 whitespace-nowrap mt-0.5 flex-shrink-0">Lihat →</router-link>
+            <router-link :to="alert.link" class="text-[9px] sm:text-[10px] font-bold text-terracotta hover:text-terracotta whitespace-nowrap mt-0.5 flex-shrink-0">Lihat →</router-link>
           </div>
         </div>
       </div>
@@ -151,14 +151,14 @@ const IconMoney = () => h('svg', { fill: 'none', stroke: 'currentColor', viewBox
 const IconBox = () => h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24', 'stroke-width': '1.8' }, [h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4' })]);
 
 const stats = ref([
-  { label: 'Total UMKM', value: '0', change: '+0%', icon: IconStore, iconBg: 'bg-orange-50', iconColor: 'text-orange-500', changeBg: 'bg-emerald-50 text-emerald-600' },
+  { label: 'Total UMKM', value: '0', change: '+0%', icon: IconStore, iconBg: 'bg-sand', iconColor: 'text-terracotta', changeBg: 'bg-emerald-50 text-emerald-600' },
   { label: 'Total Desainer', value: '0', change: '+0%', icon: IconPaint, iconBg: 'bg-blue-50', iconColor: 'text-blue-500', changeBg: 'bg-emerald-50 text-emerald-600' },
   { label: 'Revenue', value: 'Rp 0', change: '+0%', icon: IconMoney, iconBg: 'bg-emerald-50', iconColor: 'text-emerald-500', changeBg: 'bg-emerald-50 text-emerald-600' },
   { label: 'Produk Terdaftar', value: '0', change: '+0', icon: IconBox, iconBg: 'bg-violet-50', iconColor: 'text-violet-500', changeBg: 'bg-violet-50 text-violet-600' },
 ]);
 
 const userRoles = ref([
-  { role: 'umkm', label: 'UMKM Kreator', count: 0, pct: 0, initial: 'U', bgClass: 'bg-orange-50 text-orange-600', barClass: 'bg-orange-400' },
+  { role: 'umkm', label: 'UMKM Kreator', count: 0, pct: 0, initial: 'U', bgClass: 'bg-sand text-terracotta', barClass: 'bg-orange-400' },
   { role: 'desainer', label: 'Desainer', count: 0, pct: 0, initial: 'D', bgClass: 'bg-blue-50 text-blue-600', barClass: 'bg-blue-400' },
   { role: 'pembeli', label: 'Pembeli', count: 0, pct: 0, initial: 'P', bgClass: 'bg-emerald-50 text-emerald-600', barClass: 'bg-emerald-400' },
 ]);
@@ -166,7 +166,7 @@ const userRoles = ref([
 const barHeights = [35, 52, 45, 78, 62, 90, 70, 42, 88, 55, 72, 60, 82, 48, 68, 75, 58, 92, 65, 80, 45, 70, 85, 50, 78, 62, 95, 72];
 
 const activities = [
-  { id: 1, title: 'UMKM baru terdaftar', desc: 'Batik Cap Bunga Malang bergabung ke platform', time: '2 menit lalu', emoji: '🏪', dotClass: 'bg-orange-50' },
+  { id: 1, title: 'UMKM baru terdaftar', desc: 'Batik Cap Bunga Malang bergabung ke platform', time: '2 menit lalu', emoji: '🏪', dotClass: 'bg-sand' },
   { id: 2, title: 'Produk pending moderasi', desc: '3 produk baru menunggu review dari UMKM Keramik', time: '15 menit lalu', emoji: '📦', dotClass: 'bg-amber-50' },
   { id: 3, title: 'Transaksi selesai', desc: 'Order #SF-8842 completed', time: '1 jam lalu', emoji: '✅', dotClass: 'bg-emerald-50' },
 ];

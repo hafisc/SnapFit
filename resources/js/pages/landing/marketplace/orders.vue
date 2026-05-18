@@ -1,18 +1,18 @@
 <template>
-  <section class="min-h-screen bg-slate-50 text-slate-900 p-6 lg:p-10">
+  <section class="min-h-screen bg-slate-50 text-espresso p-6 lg:p-10">
     <div class="max-w-5xl mx-auto">
       <div class="mb-8">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div>
             <div class="flex items-center gap-3 mb-4">
-              <router-link to="/marketplace" class="text-slate-500 hover:text-slate-900 transition">
+              <router-link to="/marketplace" class="text-muted hover:text-espresso transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
               </router-link>
               <div>
-                <h1 class="text-3xl font-black text-slate-900">Pesanan Saya</h1>
-                <p class="text-slate-600">Lihat semua pesanan dan status pengiriman Anda.</p>
+                <h1 class="text-3xl font-black text-espresso">Pesanan Saya</h1>
+                <p class="text-muted">Lihat semua pesanan dan status pengiriman Anda.</p>
               </div>
             </div>
           </div>
@@ -22,7 +22,7 @@
               v-model="searchQuery"
               type="text"
               placeholder="Search by Order ID or Product Name"
-              class="w-full sm:w-80 px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent"
+              class="w-full sm:w-80 px-4 py-3 rounded-2xl border border-borderSoft focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent"
             />
           </div>
         </div>
@@ -35,8 +35,8 @@
             :class="[
               'px-4 py-2 rounded-full text-sm font-semibold transition-all',
               selectedStatus === status.value
-                ? 'bg-orange-600 text-white shadow-lg'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                ? 'bg-terracotta text-white shadow-lg'
+                : 'bg-slate-100 text-espresso hover:bg-slate-200'
             ]"
           >
             {{ status.label }}
@@ -44,84 +44,84 @@
         </div>
       </div>
 
-      <div v-if="loading" class="rounded-[2rem] bg-white p-8 shadow-sm border border-slate-200 text-center">
-        <p class="text-slate-600">Memuat pesanan...</p>
+      <div v-if="loading" class="rounded-[2rem] bg-surface p-8 shadow-sm border border-borderSoft text-center">
+        <p class="text-muted">Memuat pesanan...</p>
       </div>
 
-      <div v-else-if="!filteredOrders.length" class="rounded-[2rem] bg-white p-8 shadow-sm border border-slate-200 text-center">
+      <div v-else-if="!filteredOrders.length" class="rounded-[2rem] bg-surface p-8 shadow-sm border border-borderSoft text-center">
         <div class="py-10">
           <svg class="mx-auto mb-4 h-16 w-16 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
           </svg>
-          <h2 class="text-xl font-black text-slate-900 mb-2">Belum ada pesanan</h2>
-          <p class="text-slate-600 mb-6">Anda belum membuat pesanan apapun. Mulai berbelanja sekarang!</p>
-          <router-link to="/marketplace" class="inline-flex items-center justify-center rounded-3xl bg-orange-600 px-6 py-3 text-sm font-black text-white hover:bg-orange-700 transition-all">
+          <h2 class="text-xl font-black text-espresso mb-2">Belum ada pesanan</h2>
+          <p class="text-muted mb-6">Anda belum membuat pesanan apapun. Mulai berbelanja sekarang!</p>
+          <router-link to="/marketplace" class="inline-flex items-center justify-center rounded-3xl bg-terracotta px-6 py-3 text-sm font-black text-white hover:bg-terracottaDark transition-all">
             Lihat Produk
           </router-link>
         </div>
       </div>
 
       <div v-else class="space-y-4">
-        <div v-for="order in filteredOrders" :key="order.id" class="rounded-[2rem] bg-white p-6 shadow-sm border border-slate-200">
+        <div v-for="order in filteredOrders" :key="order.id" class="rounded-[2rem] bg-surface p-6 shadow-sm border border-borderSoft">
           <div class="flex items-start justify-between gap-4 mb-4">
             <div>
               <div class="flex items-baseline gap-2 mb-2">
-                <p class="text-sm text-slate-500">Order ID:</p>
-                <p class="font-black text-slate-900">{{ order.midtrans_order_id }}</p>
+                <p class="text-sm text-muted">Order ID:</p>
+                <p class="font-black text-espresso">{{ order.midtrans_order_id }}</p>
               </div>
               <div class="flex items-baseline gap-2 mb-2">
-                <p class="text-sm text-slate-500">Tanggal:</p>
-                <p class="text-sm text-slate-600">{{ formatDate(order.created_at) }}</p>
+                <p class="text-sm text-muted">Tanggal:</p>
+                <p class="text-sm text-muted">{{ formatDate(order.created_at) }}</p>
               </div>
             </div>
             <div class="text-right">
-              <p class="text-2xl font-black text-orange-600">{{ formatCurrency(order.total_amount) }}</p>
+              <p class="text-2xl font-black text-terracotta">{{ formatCurrency(order.total_amount) }}</p>
               <span :class="statusBadge(order.status)" class="inline-block mt-2 rounded-full px-4 py-1 text-xs font-black uppercase tracking-wider">
                 {{ statusLabel(order.status) }}
               </span>
             </div>
           </div>
 
-          <div class="border-t border-slate-200 pt-4">
-            <p class="text-sm text-slate-500 mb-3">Produk yang dipesan:</p>
+          <div class="border-t border-borderSoft pt-4">
+            <p class="text-sm text-muted mb-3">Produk yang dipesan:</p>
             <div class="space-y-3">
               <div v-for="item in order.items" :key="item.id" class="flex items-center gap-4 rounded-[1.5rem] bg-slate-50 p-4">
                 <img v-if="item.product?.image_url" :src="item.product.image_url" class="h-16 w-16 rounded-2xl object-cover" :alt="item.product?.name" />
                 <div v-else class="h-16 w-16 rounded-2xl bg-slate-200"></div>
                 <div class="flex-1 min-w-0">
-                  <p class="font-semibold text-slate-900 truncate">{{ item.product?.name || 'Produk' }}</p>
-                  <p class="text-sm text-slate-500">Jumlah: {{ item.quantity }}</p>
+                  <p class="font-semibold text-espresso truncate">{{ item.product?.name || 'Produk' }}</p>
+                  <p class="text-sm text-muted">Jumlah: {{ item.quantity }}</p>
                 </div>
-                <p class="font-black text-slate-900">{{ formatCurrency(item.price * item.quantity) }}</p>
+                <p class="font-black text-espresso">{{ formatCurrency(item.price * item.quantity) }}</p>
               </div>
             </div>
           </div>
 
-          <div class="border-t border-slate-200 mt-4 pt-4">
+          <div class="border-t border-borderSoft mt-4 pt-4">
             <div class="grid gap-4 sm:grid-cols-2">
               <div>
-                <p class="text-xs text-slate-500 uppercase tracking-[0.1em] font-black mb-2">Status Pembayaran</p>
-                <p class="text-sm font-semibold text-slate-900">
+                <p class="text-xs text-muted uppercase tracking-[0.1em] font-black mb-2">Status Pembayaran</p>
+                <p class="text-sm font-semibold text-espresso">
                   {{ paymentStatus(order.status) }}
                 </p>
               </div>
               <div>
-                <p class="text-xs text-slate-500 uppercase tracking-[0.1em] font-black mb-2">Status Pengiriman</p>
-                <p class="text-sm font-semibold text-slate-900">
+                <p class="text-xs text-muted uppercase tracking-[0.1em] font-black mb-2">Status Pengiriman</p>
+                <p class="text-sm font-semibold text-espresso">
                   {{ shippingStatus(order.status) }}
                 </p>
               </div>
             </div>
           </div>
 
-          <div class="border-t border-slate-200 mt-4 pt-4 flex gap-3">
-            <button @click="viewOrderDetail(order.id)" class="flex-1 rounded-3xl border border-slate-200 bg-white px-4 py-3 text-sm font-black uppercase tracking-widest text-slate-900 hover:bg-slate-100 transition-all">
+          <div class="border-t border-borderSoft mt-4 pt-4 flex gap-3">
+            <button @click="viewOrderDetail(order.id)" class="flex-1 rounded-3xl border border-borderSoft bg-surface px-4 py-3 text-sm font-black uppercase tracking-widest text-espresso hover:bg-slate-100 transition-all">
               Lihat Detail
             </button>
-            <button v-if="order.status === 'pending'" @click="goToPayment(order.id)" class="flex-1 rounded-3xl bg-orange-600 px-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:bg-orange-700 transition-all">
+            <button v-if="order.status === 'pending'" @click="goToPayment(order.id)" class="flex-1 rounded-3xl bg-terracotta px-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:bg-terracottaDark transition-all">
               Bayar Sekarang
             </button>
-            <button v-else class="flex-1 rounded-3xl bg-slate-200 px-4 py-3 text-sm font-black uppercase tracking-widest text-slate-500 cursor-not-allowed">
+            <button v-else class="flex-1 rounded-3xl bg-slate-200 px-4 py-3 text-sm font-black uppercase tracking-widest text-muted cursor-not-allowed">
               {{ order.status === 'paid' ? 'Sedang Dikirim' : 'Pesanan Selesai' }}
             </button>
           </div>
@@ -235,7 +235,7 @@ const statusBadge = (status) => {
     completed: 'bg-emerald-100 text-emerald-700',
     cancelled: 'bg-red-100 text-red-700',
   };
-  return badges[status] || 'bg-slate-100 text-slate-700';
+  return badges[status] || 'bg-slate-100 text-espresso';
 };
 
 const paymentStatus = (status) => {
