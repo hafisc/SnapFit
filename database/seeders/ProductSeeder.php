@@ -496,57 +496,7 @@ class ProductSeeder extends Seeder
                 ]
             );
 
-            // Category-specific curated images
-            $categoryImages = [
-                'batik' => [
-                    'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?w=500&q=80',
-                    'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d44?w=500&q=80',
-                    'https://images.unsplash.com/photo-1609709295948-17d77cb2a69b?w=500&q=80',
-                    'https://images.unsplash.com/photo-1617627143233-0c93f55dda49?w=500&q=80',
-                    'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=500&q=80',
-                ],
-                'fashion' => [
-                    'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&q=80',
-                    'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=500&q=80',
-                    'https://images.unsplash.com/photo-1558171813-01a7b6f4c02d?w=500&q=80',
-                    'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=500&q=80',
-                    'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=500&q=80',
-                ],
-                'kerajinan' => [
-                    'https://images.unsplash.com/photo-1606722590583-6951b5ea92ad?w=500&q=80',
-                    'https://images.unsplash.com/photo-1599409636295-e3cf3d0f8a8a?w=500&q=80',
-                    'https://images.unsplash.com/photo-1615486511484-92e172cc4fe0?w=500&q=80',
-                    'https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=500&q=80',
-                    'https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=500&q=80',
-                ],
-                'aksesoris' => [
-                    'https://images.unsplash.com/photo-1515562141589-67f0d96e1790?w=500&q=80',
-                    'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=500&q=80',
-                    'https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=500&q=80',
-                    'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&q=80',
-                    'https://images.unsplash.com/photo-1601121141418-c1cc38253e09?w=500&q=80',
-                ],
-                'dekorasi' => [
-                    'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=500&q=80',
-                    'https://images.unsplash.com/photo-1567016432779-094069958ea5?w=500&q=80',
-                    'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=500&q=80',
-                    'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500&q=80',
-                    'https://images.unsplash.com/photo-1615529328331-f8917597711f?w=500&q=80',
-                ],
-            ];
-
-            $category = $p['category'];
-            $images = $categoryImages[$category] ?? $categoryImages['batik'];
-            // Cycle through images for each product in the same category
-            $imageIndex = 0;
-            static $categoryCounters = [];
-            if (!isset($categoryCounters[$category])) {
-                $categoryCounters[$category] = 0;
-            }
-            $imageIndex = $categoryCounters[$category] % count($images);
-            $categoryCounters[$category]++;
-
-            $productImage = [$images[$imageIndex]];
+            $productImage = ['/images/baju_batik_pria.png'];
 
             $umkmName = $p['umkm_name'];
             unset($p['umkm_name']);
