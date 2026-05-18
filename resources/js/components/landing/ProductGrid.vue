@@ -11,12 +11,11 @@
           <div class="flex transition-transform duration-700"
             :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
             <div v-for="(slide, index) in promoSlides" :key="index"
-              class="min-w-full h-[180px] md:h-[220px] lg:h-[240px] relative rounded-[24px] overflow-hidden bg-[#9a948c]">
+              class="min-w-full h-[180px] md:h-[220px] lg:h-[240px] relative rounded-[24px] overflow-hidden bg-gradient-to-br from-[#5C4033] via-[#8B6F47] to-[#A0845C]">
               <!-- Background -->
-              <img :src="slide.image" class="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-overlay" @error="$event.target.style.display='none'" />
+              <img :src="slide.image" class="absolute inset-0 w-full h-full object-cover" @error="$event.target.style.display='none'" />
 
-              <!-- Overlay -->
-              <div class="absolute inset-0 bg-black/20"></div>
+              <div class="absolute inset-0 bg-gradient-to-r from-black/50 via-black/30 to-transparent"></div>
 
               <!-- Content Wrapper (BIAR TIDAK NEMPEL) -->
               <div class="relative z-10 h-full flex items-center">

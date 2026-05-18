@@ -3,18 +3,18 @@
     class="fixed top-0 left-0 right-0 z-50 bg-[rgba(255,250,243,0.86)] backdrop-blur-[14px] border-b border-[rgba(232,220,203,0.7)] shadow-sm animate-slide-down">
     <!-- Top inner highlight for premium glass effect -->
     <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent"></div>
-    <nav class="max-w-[1480px] mx-auto px-8 py-2.5 flex items-center relative">
+    <nav class="max-w-[1480px] mx-auto px-8 py-1.5 flex items-center relative">
       <!-- LEFT SECTION: Logo + Menu -->
       <div class="flex items-center gap-12">
         <!-- Logo Section -->
         <a href="/" class="flex items-center gap-3 group cursor-pointer">
           <div
-            class="w-8 h-8 rounded-xl overflow-hidden transform group-hover:scale-105 transition-all duration-300 flex items-center justify-center bg-surface">
+            class="w-7 h-7 rounded-lg overflow-hidden transform group-hover:scale-105 transition-all duration-300 flex items-center justify-center bg-surface">
             <img :src="'/images/logo_snapfit.png'" alt="SnapFit Logo" class="w-full h-full object-cover" />
           </div>
           <div>
             <h1
-              class="font-black text-lg tracking-tight text-espresso leading-none group-hover:text-terracotta transition-colors">
+              class="font-black text-base tracking-tight text-espresso leading-none group-hover:text-terracotta transition-colors">
               SnapFit</h1>
           </div>
         </a>
@@ -46,7 +46,7 @@
         <div class="hidden md:flex relative items-center search-container z-50">
           <input v-model="searchQuery" @input="debouncedSearch" @focus="showSearchResults = searchQuery.length > 0"
             type="text" placeholder="Cari produk khas Indonesia..."
-            class="w-[360px] bg-surface/50 border border-borderSoft/80 text-espresso text-xs rounded-2xl pl-11 pr-4 py-2.5 outline-none focus:border-terracotta focus:bg-surface focus:ring-4 focus:ring-terracotta/20 transition-all placeholder-slate-400 font-medium shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)]" />
+            class="w-[320px] bg-surface/50 border border-borderSoft/80 text-espresso text-xs rounded-2xl pl-11 pr-4 py-2 outline-none focus:border-terracotta focus:bg-surface focus:ring-4 focus:ring-terracotta/20 transition-all placeholder-slate-400 font-medium shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)]" />
           <svg class="w-4 h-4 text-muted absolute left-3.5 pointer-events-none" fill="none" stroke="currentColor"
             viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"

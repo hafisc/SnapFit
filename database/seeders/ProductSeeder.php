@@ -17,8 +17,8 @@ class ProductSeeder extends Seeder
             return;
         }
 
-                        $products = [
-            // BATIK & FASHION
+        $products = [
+            // ═══ BATIK ═══
             [
                 'name'        => 'Batik Parang Heritage',
                 'description' => 'Motif parang klasik yang melambangkan kekuatan dan keteguhan.',
@@ -28,7 +28,7 @@ class ProductSeeder extends Seeder
                 'badges'      => ['Batik Tulis', 'AR Ready'],
                 'rating'      => 4.8,
                 'sold'        => 120,
-                'images'      => ['/images/baju_batik_pria.png'],
+                'images'      => ['https://images.unsplash.com/photo-1620054707166-0b299e5a1b32?q=80&w=800&auto=format&fit=crop'],
                 'is_published'=> true,
                 'umkm_name'   => 'Sanggar Batik Laras'
             ],
@@ -41,10 +41,38 @@ class ProductSeeder extends Seeder
                 'badges'      => ['Batik Tulis', 'Premium'],
                 'rating'      => 4.9,
                 'sold'        => 45,
-                'images'      => ['/images/baju_batik_pria.png'],
+                'images'      => ['https://images.unsplash.com/photo-1598300042247-083623910543?q=80&w=800&auto=format&fit=crop'],
                 'is_published'=> true,
                 'umkm_name'   => 'Batik Pusaka Lasem'
             ],
+            [
+                'name'        => 'Batik Mega Mendung',
+                'description' => 'Motif mega mendung khas Cirebon melambangkan ketenangan dan kesabaran.',
+                'price'       => 475000,
+                'category'    => 'batik',
+                'origin'      => 'Cirebon, Indonesia',
+                'badges'      => ['Batik Cap', 'AR Ready'],
+                'rating'      => 4.7,
+                'sold'        => 88,
+                'images'      => ['https://images.unsplash.com/photo-1585487000160-6ebcfceb0d44?q=80&w=800&auto=format&fit=crop'],
+                'is_published'=> true,
+                'umkm_name'   => 'Batik Trusmi Cirebon'
+            ],
+            [
+                'name'        => 'Batik Sidomukti Solo',
+                'description' => 'Batik motif sidomukti bermakna kemakmuran, cocok untuk acara pernikahan.',
+                'price'       => 680000,
+                'category'    => 'batik',
+                'origin'      => 'Solo, Indonesia',
+                'badges'      => ['Batik Tulis', 'Limited'],
+                'rating'      => 5.0,
+                'sold'        => 32,
+                'images'      => ['https://images.unsplash.com/photo-1569295403830-70cf7e497af6?q=80&w=800&auto=format&fit=crop'],
+                'is_published'=> true,
+                'umkm_name'   => 'Batik Keraton Solo'
+            ],
+
+            // ═══ FASHION ═══
             [
                 'name'        => 'Kemeja Tenun Jepara',
                 'description' => 'Kemeja pria elegan berbahan tenun troso asli Jepara.',
@@ -54,7 +82,7 @@ class ProductSeeder extends Seeder
                 'badges'      => ['Handmade', 'AR Ready'],
                 'rating'      => 4.7,
                 'sold'        => 310,
-                'images'      => ['/images/baju_batik_pria.png'],
+                'images'      => ['https://images.unsplash.com/photo-1583417319070-4a69db38a482?q=80&w=800&auto=format&fit=crop'],
                 'is_published'=> true,
                 'umkm_name'   => 'Tenun Troso Indah'
             ],
@@ -67,7 +95,7 @@ class ProductSeeder extends Seeder
                 'badges'      => ['Premium', 'Limited'],
                 'rating'      => 5.0,
                 'sold'        => 12,
-                'images'      => ['/images/baju_batik_pria.png'],
+                'images'      => ['https://images.unsplash.com/photo-1523906354313-059715560931?q=80&w=800&auto=format&fit=crop'],
                 'is_published'=> true,
                 'umkm_name'   => 'Songket Sriwijaya'
             ],
@@ -80,12 +108,12 @@ class ProductSeeder extends Seeder
                 'badges'      => ['AR Ready'],
                 'rating'      => 4.6,
                 'sold'        => 88,
-                'images'      => ['/images/baju_batik_pria.png'],
+                'images'      => ['https://images.unsplash.com/photo-1594938298603-c8148c4dae35?q=80&w=800&auto=format&fit=crop'],
                 'is_published'=> true,
                 'umkm_name'   => 'Kebaya Keraton'
             ],
-            
-            // KERAJINAN & DEKORASI
+
+            // ═══ KERAJINAN ═══
             [
                 'name'        => 'Tenun Ikat Sumba',
                 'description' => 'Kain tenun handmade dengan warna alam dan motif tradisional Sumba.',
@@ -95,7 +123,7 @@ class ProductSeeder extends Seeder
                 'badges'      => ['Handmade', 'Limited'],
                 'rating'      => 4.9,
                 'sold'        => 85,
-                'images'      => ['/images/baju_batik_pria.png'],
+                'images'      => ['https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=800&auto=format&fit=crop'],
                 'is_published'=> true,
                 'umkm_name'   => 'Rumah Tenun Marapu'
             ],
@@ -108,10 +136,25 @@ class ProductSeeder extends Seeder
                 'badges'      => ['Eco Craft', 'Handmade'],
                 'rating'      => 4.7,
                 'sold'        => 210,
-                'images'      => ['/images/baju_batik_pria.png'],
+                'images'      => ['https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop'],
                 'is_published'=> true,
                 'umkm_name'   => 'Bali Rattan Studio'
             ],
+            [
+                'name'        => 'Wayang Kulit Premium',
+                'description' => 'Wayang kulit asli dari kulit kerbau dengan pewarnaan tradisional.',
+                'price'       => 380000,
+                'category'    => 'kerajinan',
+                'origin'      => 'Yogyakarta, Indonesia',
+                'badges'      => ['Handmade', 'Premium'],
+                'rating'      => 4.8,
+                'sold'        => 55,
+                'images'      => ['https://images.unsplash.com/photo-1558618666-fcd25c85f82e?q=80&w=800&auto=format&fit=crop'],
+                'is_published'=> true,
+                'umkm_name'   => 'Dalang Craft Studio'
+            ],
+
+            // ═══ DEKORASI ═══
             [
                 'name'        => 'Keramik Kasongan',
                 'description' => 'Vas keramik handmade dengan sentuhan natural untuk dekorasi rumah.',
@@ -121,7 +164,7 @@ class ProductSeeder extends Seeder
                 'badges'      => ['Eco Craft'],
                 'rating'      => 4.6,
                 'sold'        => 95,
-                'images'      => ['/images/baju_batik_pria.png'],
+                'images'      => ['https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop'],
                 'is_published'=> true,
                 'umkm_name'   => 'Kasongan Clay Studio'
             ],
@@ -134,7 +177,7 @@ class ProductSeeder extends Seeder
                 'badges'      => ['Handmade', 'Premium'],
                 'rating'      => 4.9,
                 'sold'        => 60,
-                'images'      => ['/images/baju_batik_pria.png'],
+                'images'      => ['https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=800&auto=format&fit=crop'],
                 'is_published'=> true,
                 'umkm_name'   => 'Jepara Woodcraft'
             ],
@@ -147,7 +190,7 @@ class ProductSeeder extends Seeder
                 'badges'      => ['Eco Craft', 'Handmade'],
                 'rating'      => 4.8,
                 'sold'        => 140,
-                'images'      => ['/images/baju_batik_pria.png'],
+                'images'      => ['https://images.unsplash.com/photo-1524484485831-a92ffc0de03f?q=80&w=800&auto=format&fit=crop'],
                 'is_published'=> true,
                 'umkm_name'   => 'Bambu Nusantara'
             ],
@@ -160,12 +203,12 @@ class ProductSeeder extends Seeder
                 'badges'      => ['Eco Craft'],
                 'rating'      => 4.5,
                 'sold'        => 75,
-                'images'      => ['/images/baju_batik_pria.png'],
+                'images'      => ['https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=800&auto=format&fit=crop'],
                 'is_published'=> true,
                 'umkm_name'   => 'Kriya Alam Sejahtera'
             ],
 
-            // AKSESORIS
+            // ═══ AKSESORIS ═══
             [
                 'name'        => 'Gelang Perak Celuk',
                 'description' => 'Gelang perak ukir khas Celuk dengan detail elegan.',
@@ -175,7 +218,7 @@ class ProductSeeder extends Seeder
                 'badges'      => ['Handmade', 'AR Ready'],
                 'rating'      => 4.8,
                 'sold'        => 150,
-                'images'      => ['/images/baju_batik_pria.png'],
+                'images'      => ['https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=800&auto=format&fit=crop'],
                 'is_published'=> true,
                 'umkm_name'   => 'Celuk Silver Art'
             ],
@@ -188,7 +231,7 @@ class ProductSeeder extends Seeder
                 'badges'      => ['Premium', 'Limited'],
                 'rating'      => 4.9,
                 'sold'        => 35,
-                'images'      => ['/images/baju_batik_pria.png'],
+                'images'      => ['https://images.unsplash.com/photo-1574015974293-817f0ebebb74?q=80&w=800&auto=format&fit=crop'],
                 'is_published'=> true,
                 'umkm_name'   => 'Mutiara Mandalika'
             ],
@@ -201,7 +244,7 @@ class ProductSeeder extends Seeder
                 'badges'      => ['Handmade'],
                 'rating'      => 4.7,
                 'sold'        => 420,
-                'images'      => ['/images/baju_batik_pria.png'],
+                'images'      => ['https://images.unsplash.com/photo-1603561591411-07134e71a2a9?q=80&w=800&auto=format&fit=crop'],
                 'is_published'=> true,
                 'umkm_name'   => 'Kokka Craft'
             ],
@@ -214,76 +257,22 @@ class ProductSeeder extends Seeder
                 'badges'      => ['AR Ready'],
                 'rating'      => 4.8,
                 'sold'        => 280,
-                'images'      => ['/images/baju_batik_pria.png'],
+                'images'      => ['https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=800&auto=format&fit=crop'],
                 'is_published'=> true,
                 'umkm_name'   => 'Bali Aksesoris'
             ],
-            
-            // MAKANAN & MINUMAN LOKAL
             [
-                'name'        => 'Kopi Arabika Gayo',
-                'description' => 'Kopi Arabika asli dataran tinggi Gayo Aceh dengan aroma khas rempah.',
-                'price'       => 85000,
-                'category'    => 'minuman',
-                'origin'      => 'Aceh, Indonesia',
-                'badges'      => ['Organic', 'Premium'],
-                'rating'      => 4.9,
-                'sold'        => 650,
-                'images'      => ['/images/baju_batik_pria.png'],
-                'is_published'=> true,
-                'umkm_name'   => 'Gayo Coffee Roastery'
-            ],
-            [
-                'name'        => 'Teh Oolong Halimun',
-                'description' => 'Teh pegunungan Halimun organik kualitas ekspor.',
-                'price'       => 55000,
-                'category'    => 'minuman',
-                'origin'      => 'Jawa Barat, Indonesia',
-                'badges'      => ['Organic'],
-                'rating'      => 4.7,
-                'sold'        => 310,
-                'images'      => ['/images/baju_batik_pria.png'],
-                'is_published'=> true,
-                'umkm_name'   => 'Pusaka Teh Jabar'
-            ],
-            [
-                'name'        => 'Cokelat Ransiki Papua',
-                'description' => 'Dark chocolate 70% asli dari biji kakao premium Ransiki Papua.',
-                'price'       => 45000,
-                'category'    => 'makanan',
-                'origin'      => 'Papua, Indonesia',
-                'badges'      => ['Organic', 'Premium'],
-                'rating'      => 4.8,
-                'sold'        => 480,
-                'images'      => ['/images/baju_batik_pria.png'],
-                'is_published'=> true,
-                'umkm_name'   => 'Papua Cocoa'
-            ],
-            [
-                'name'        => 'Keripik Tempe Sagu',
-                'description' => 'Keripik tempe renyah berlapis sagu, oleh-oleh khas Malang.',
-                'price'       => 20000,
-                'category'    => 'makanan',
-                'origin'      => 'Malang, Indonesia',
-                'badges'      => ['Handmade'],
+                'name'        => 'Anting Etnik Toraja',
+                'description' => 'Anting perak bermotif ukiran Toraja, paduan tradisi dan modernitas.',
+                'price'       => 165000,
+                'category'    => 'aksesoris',
+                'origin'      => 'Toraja, Indonesia',
+                'badges'      => ['Handmade', 'AR Ready'],
                 'rating'      => 4.6,
-                'sold'        => 1200,
-                'images'      => ['/images/baju_batik_pria.png'],
+                'sold'        => 190,
+                'images'      => ['https://images.unsplash.com/photo-1630019852942-f89202989a59?q=80&w=800&auto=format&fit=crop'],
                 'is_published'=> true,
-                'umkm_name'   => 'Oleh Oleh Arema'
-            ],
-            [
-                'name'        => 'Sambal Roa Manado',
-                'description' => 'Sambal botol pedas ikan roa asap khas Sulawesi Utara.',
-                'price'       => 35000,
-                'category'    => 'makanan',
-                'origin'      => 'Manado, Indonesia',
-                'badges'      => ['Handmade'],
-                'rating'      => 4.8,
-                'sold'        => 890,
-                'images'      => ['/images/baju_batik_pria.png'],
-                'is_published'=> true,
-                'umkm_name'   => 'Roa Khas Minahasa'
+                'umkm_name'   => 'Toraja Silver House'
             ],
         ];
 
@@ -310,63 +299,9 @@ class ProductSeeder extends Seeder
 
             $p['user_id'] = $user->id;
             unset($p['umkm_name']);
-            Product::create($p);
-        }
-        
-        return; // Skip the rest of the old seeder
-
-        // Generate tambahan 100 produk dummy dengan Faker
-        $faker = \Faker\Factory::create('id_ID');
-        $categories = ['batik', 'kerajinan', 'aksesoris', 'dekorasi', 'fashion'];
-
-        for ($i = 0; $i < 100; $i++) {
-            $products[] = [
-                'name'        => $faker->words(3, true) . ' Premium',
-                'description' => $faker->paragraph(),
-                'price'       => $faker->numberBetween(50000, 1000000),
-                'category'    => $faker->randomElement($categories),
-                'images'      => ['/images/baju_batik_pria.png'],
-                'is_published' => true,
-            ];
-        }
-
-        $umkmIds = $umkmUsers->pluck('id')->toArray();
-
-        $categoryImages = [
-            'batik'     => [
-                'https://images.unsplash.com/photo-1620054707166-0b299e5a1b32?q=80&w=800&auto=format&fit=crop',
-                'https://images.unsplash.com/photo-1598300042247-083623910543?q=80&w=800&auto=format&fit=crop'
-            ],
-            'kerajinan' => [
-                'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=800&auto=format&fit=crop',
-                'https://images.unsplash.com/photo-1610701596007-11502861dcfa?q=80&w=800&auto=format&fit=crop'
-            ],
-            'aksesoris' => [
-                'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=800&auto=format&fit=crop',
-                'https://images.unsplash.com/photo-1574015974293-817f0ebebb74?q=80&w=800&auto=format&fit=crop'
-            ],
-            'dekorasi'  => [
-                'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop',
-                'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=800&auto=format&fit=crop'
-            ],
-            'fashion'   => [
-                'https://images.unsplash.com/photo-1583417319070-4a69db38a482?q=80&w=800&auto=format&fit=crop',
-                'https://images.unsplash.com/photo-1523906354313-059715560931?q=80&w=800&auto=format&fit=crop'
-            ],
-        ];
-
-        foreach ($products as $index => $data) {
-            // Jika image masih dummy baju_batik, ganti dengan gambar random sesuai kategori
-            if (isset($data['images'][0]) && $data['images'][0] === '/images/baju_batik_pria.png') {
-                $availableImages = $categoryImages[$data['category']] ?? $categoryImages['fashion'];
-                $data['images'] = [$availableImages[array_rand($availableImages)]];
-            }
-
             Product::updateOrCreate(
-                ['name' => $data['name']],
-                array_merge($data, [
-                    'user_id' => $umkmIds[$index % count($umkmIds)],
-                ])
+                ['name' => $p['name']],
+                $p
             );
         }
 
