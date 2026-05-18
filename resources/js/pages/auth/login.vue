@@ -10,70 +10,88 @@
     </button>
 
     <div
-      class="w-full max-w-6xl flex flex-col md:flex-row bg-surface rounded-[3.5rem] overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.06)] border border-white">
+      class="w-full max-w-4xl flex flex-col md:flex-row bg-surface rounded-[3rem] overflow-hidden shadow-[0_30px_80px_-15px_rgba(0,0,0,0.06)] border border-white">
       <!-- Left Branding Panel -->
+      <!-- Left Branding Panel (Hidden on small screens) -->
       <div
-        class="w-full md:w-[45%] bg-slate-900 p-10 md:p-16 flex flex-col justify-between relative overflow-hidden min-h-[400px] md:min-h-0">
+        class="hidden md:flex w-full md:w-[45%] bg-[#2B1E16] p-8 md:p-12 flex-col justify-between relative overflow-hidden">
         
         <!-- Full Screen Batik Background -->
-        <div class="absolute inset-0 bg-cover bg-left bg-no-repeat opacity-40 mix-blend-screen pointer-events-none" 
+        <div class="absolute inset-0 bg-cover bg-left bg-no-repeat opacity-20 mix-blend-overlay pointer-events-none" 
              style="background-image: url('/assets/batik-bg.png');">
         </div>
         
-        <div class="absolute top-0 left-0 w-full h-full opacity-40 pointer-events-none">
-          <div class="absolute -top-24 -left-24 w-96 h-96 bg-terracotta rounded-full blur-[100px] animate-pulse"></div>
-          <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-amber-500 rounded-full blur-[100px]"></div>
+        <div class="absolute inset-0 opacity-40 pointer-events-none">
+          <div class="absolute -top-24 -left-24 w-96 h-96 bg-[#B85C38] rounded-full blur-[120px] animate-pulse"></div>
+          <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-[#D4AF37] rounded-full blur-[120px]"></div>
         </div>
 
         <div class="relative z-10">
           <div class="flex items-center gap-4 mb-16">
             <div
-              class="w-10 h-10 rounded-xl overflow-hidden shadow-sm border border-borderSoft transform group-hover:scale-105 transition-all duration-300 flex items-center justify-center bg-surface">
-              <img :src="'/images/logo.png'" alt="SnapFit Logo" class="w-full h-full object-cover" />
+              class="w-12 h-12 rounded-xl overflow-hidden shadow-sm border border-white/10 transform group-hover:scale-105 transition-all duration-300 flex items-center justify-center bg-white">
+              <img :src="'/images/logo_snapfit.png'" alt="SnapFit Logo" class="w-full h-full object-contain p-1.5" />
             </div>
-            <div class="h-8 w-px bg-surface/20"></div>
-            <span class="text-white font-black tracking-tighter text-2xl italic">SnapFit.</span>
+            <div class="h-8 w-px bg-white/20"></div>
+            <span class="text-white font-black tracking-tighter text-2xl">SnapFit.</span>
           </div>
 
-          <h2 class="text-5xl font-black text-white leading-[1.1] mb-8 tracking-tighter">
-            Dimana <span
-              class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-300 italic">Kreativitas</span>
-            <br />Bertemu Teknologi.
+          <h2 class="text-3xl lg:text-4xl font-black text-white leading-[1.2] mb-6 tracking-tight">
+            Kreativitas Lokal, <br />
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#B85C38] to-[#D4AF37]">Naik Kelas</span> <br />
+            Lewat Teknologi.
           </h2>
 
           <div class="space-y-4">
-            <div v-for="feat in brandFeatures" :key="feat.label" class="flex items-center gap-3 text-slate-400">
-              <div :class="`w-5 h-5 rounded-full bg-${feat.color}-500/20 flex items-center justify-center`">
-                <div :class="`w-1.5 h-1.5 bg-${feat.color}-500 rounded-full`"></div>
+            <div v-for="feat in brandFeatures" :key="feat.label" class="flex items-center gap-3 text-white/70">
+              <div class="w-5 h-5 rounded-full bg-[#B85C38]/20 flex items-center justify-center flex-shrink-0">
+                <div class="w-1.5 h-1.5 bg-[#B85C38] rounded-full"></div>
               </div>
               <p class="text-xs font-bold uppercase tracking-widest">{{ feat.label }}</p>
             </div>
           </div>
         </div>
 
-        <div class="relative z-10 mt-20 md:mt-0 pt-10 border-t border-white/5">
-          <p class="text-[9px] uppercase tracking-[0.4em] text-muted font-black mb-4">Dipercaya oleh Malang Creative
-            Lab</p>
-          <div class="flex gap-6 opacity-20 grayscale brightness-200">
-            <div class="h-5 w-12 bg-surface rounded-md"></div>
-            <div class="h-5 w-20 bg-surface rounded-md"></div>
-            <div class="h-5 w-14 bg-surface rounded-md"></div>
+        <div class="relative z-10 mt-20 pt-10 border-t border-white/10">
+          <div class="flex flex-wrap gap-x-6 gap-y-3 opacity-80">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+              <span class="text-[10px] font-bold tracking-wider text-white">500+ UMKM KREATIF</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+              <span class="text-[10px] font-bold tracking-wider text-white">AI STUDIO READY</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+              <span class="text-[10px] font-bold tracking-wider text-white">AR TRY-ON SUPPORT</span>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- Right Form Panel -->
-      <div class="w-full md:w-[55%] p-8 md:p-20 bg-surface flex items-center">
+      <div class="w-full md:w-[55%] p-6 sm:p-10 md:p-12 bg-[#FFFCF7] flex items-center relative">
         <div class="max-w-md mx-auto w-full">
-          <div class="mb-12">
+          
+          <!-- Mobile Branding (Visible only on mobile) -->
+          <div class="md:hidden flex flex-col items-center mb-10 text-center">
+            <div class="w-14 h-14 rounded-xl overflow-hidden shadow-sm border border-[#E8DCCB] mb-4 flex items-center justify-center bg-white">
+              <img :src="'/images/logo_snapfit.png'" alt="SnapFit Logo" class="w-full h-full object-contain p-1.5" />
+            </div>
+            <h2 class="text-2xl font-black text-[#2B1E16] leading-[1.2] tracking-tight">
+              Kreativitas Lokal, <span class="text-[#B85C38]">Naik Kelas</span> <br/> Lewat Teknologi.
+            </h2>
+          </div>
 
-            <h3 class="text-4xl font-black text-espresso mb-3 tracking-tighter uppercase italic">
-              {{ isLogin ? 'Selamat Datang' : 'Buat Akun' }}
+          <div class="mb-8 md:mb-10 text-center md:text-left">
+            <h3 class="text-2xl font-black text-[#2B1E16] mb-2 tracking-tight">
+              {{ isLogin ? 'Selamat Datang Kembali' : 'Mulai Perjalanan Kreatif Anda' }}
             </h3>
-            <p class="text-slate-400 text-sm font-medium leading-relaxed">
+            <p class="text-[#6F6259] text-[13px] font-medium leading-relaxed">
               {{ isLogin
-                ? 'Akses dashboard Anda dan mulai berkolaborasi hari ini.'
-                : 'Daftarkan diri Anda sebagai bagian dari ekosistem kreatif Malang.' }}
+                ? 'Masuk untuk mengelola pesanan, toko, studio AI, dan kolaborasi kreatif Anda.'
+                : 'Daftar sebagai pembeli terlebih dahulu, lalu buka toko atau bergabung sebagai designer setelah login.' }}
             </p>
           </div>
 
@@ -82,75 +100,75 @@
             <p class="text-xs font-bold text-red-600">{{ errorMessage }}</p>
           </div>
 
-          <form class="space-y-6" @submit.prevent="submit">
+          <form class="space-y-4" @submit.prevent="submit">
             <!-- Name (Register only) -->
             <Transition name="slide-fade">
               <div v-if="!isLogin">
-                <label class="block text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 mb-3 ml-1">Nama
+                <label class="block text-[10px] font-bold uppercase tracking-wider text-[#6F6259] mb-1.5 ml-1">Nama
                   Lengkap</label>
                 <div class="relative group">
                   <span
-                    class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-terracotta transition-colors pointer-events-none">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="absolute left-4 top-1/2 -translate-y-1/2 text-[#E8DCCB] group-focus-within:text-[#B85C38] transition-colors pointer-events-none">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                   </span>
-                  <input v-model="name" type="text" placeholder="John Doe"
-                    class="w-full bg-slate-50 border border-borderSoft rounded-[1.25rem] pl-14 pr-6 py-[1.125rem] outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:bg-surface hover:border-slate-300 transition-colors text-espresso font-semibold placeholder-slate-400 caret-orange-500" />
+                  <input v-model="name" type="text" placeholder="Nama Lengkap"
+                    class="w-full bg-[#FFFCF7] border border-[#E8DCCB] rounded-xl pl-11 pr-5 py-3 text-sm outline-none focus:ring-[3px] focus:ring-[#B85C38]/10 focus:border-[#B85C38] hover:border-[#B85C38]/50 transition-all text-[#2B1E16] font-medium placeholder-[#6F6259]/50 shadow-sm" />
                 </div>
               </div>
             </Transition>
 
             <!-- Email -->
             <div>
-              <label class="block text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 mb-3 ml-1">Alamat
+              <label class="block text-[10px] font-bold uppercase tracking-wider text-[#6F6259] mb-1.5 ml-1">Alamat
                 Email</label>
               <div class="relative group">
                 <span
-                  class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-terracotta transition-colors pointer-events-none">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  class="absolute left-4 top-1/2 -translate-y-1/2 text-[#E8DCCB] group-focus-within:text-[#B85C38] transition-colors pointer-events-none">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-width="2"
                       d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </span>
                 <input v-model="email" type="email" placeholder="name@email.com"
-                  class="w-full bg-slate-50 border border-borderSoft rounded-[1.25rem] pl-14 pr-6 py-[1.125rem] outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:bg-surface hover:border-slate-300 transition-colors text-espresso font-semibold placeholder-slate-400 caret-orange-500" />
+                  class="w-full bg-[#FFFCF7] border border-[#E8DCCB] rounded-xl pl-11 pr-5 py-3 text-sm outline-none focus:ring-[3px] focus:ring-[#B85C38]/10 focus:border-[#B85C38] hover:border-[#B85C38]/50 transition-all text-[#2B1E16] font-medium placeholder-[#6F6259]/50 shadow-sm" />
               </div>
             </div>
 
             <!-- Password -->
             <div>
-              <label class="block text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 mb-3 ml-1">Kata
+              <label class="block text-[10px] font-bold uppercase tracking-wider text-[#6F6259] mb-1.5 ml-1">Kata
                 Sandi</label>
               <div class="relative group">
                 <span
-                  class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-terracotta transition-colors pointer-events-none">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  class="absolute left-4 top-1/2 -translate-y-1/2 text-[#E8DCCB] group-focus-within:text-[#B85C38] transition-colors pointer-events-none">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-width="2"
                       d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>
                 </span>
                 <input v-model="password" :type="showPassword ? 'text' : 'password'" placeholder="••••••••"
-                  class="w-full bg-slate-50 border border-borderSoft rounded-[1.25rem] pl-14 pr-14 py-[1.125rem] outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 focus:bg-surface hover:border-slate-300 transition-colors text-espresso font-semibold placeholder-slate-400 caret-orange-500" />
+                  class="w-full bg-[#FFFCF7] border border-[#E8DCCB] rounded-xl pl-11 pr-11 py-3 text-sm outline-none focus:ring-[3px] focus:ring-[#B85C38]/10 focus:border-[#B85C38] hover:border-[#B85C38]/50 transition-all text-[#2B1E16] font-medium placeholder-[#6F6259]/50 shadow-sm" />
 
                 <!-- Show/Hide Password Toggle -->
                 <button type="button" @click="showPassword = !showPassword"
-                  class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-terracotta transition-colors">
-                  <svg v-if="!showPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-[#6F6259]/70 hover:text-[#B85C38] transition-colors p-1">
+                  <svg v-if="!showPassword" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                   </svg>
-                  <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                   </svg>
                 </button>
               </div>
-              <div class="flex justify-end mt-3">
+              <div class="flex justify-end mt-2">
                 <button v-if="isLogin" type="button"
-                  class="text-[9px] font-black uppercase tracking-widest text-terracotta hover:text-orange-700 underline underline-offset-4 decoration-orange-200">
+                  class="text-[10px] font-bold tracking-wide text-[#B85C38] hover:text-[#9E4B2E] transition-colors underline decoration-[#B85C38]/30 underline-offset-4">
                   Lupa Kata Sandi?
                 </button>
               </div>
@@ -158,14 +176,23 @@
 
             <!-- Submit Button -->
             <button :disabled="loading" type="submit"
-              class="w-full bg-slate-900 text-white py-5 rounded-[1.25rem] font-black tracking-[0.2em] uppercase text-[10px] hover:bg-terracotta hover:shadow-[0_20px_50px_-10px_rgba(234,88,12,0.4)] transition-all duration-500 active:scale-[0.98] disabled:opacity-50 mt-6 overflow-hidden relative group">
-              <div
-                class="absolute inset-0 w-full h-full bg-gradient-to-r from-orange-600 to-amber-500 opacity-0 group-hover:opacity-100 transition-opacity">
-              </div>
-              <span class="relative z-10">
-                {{ loading ? 'Memproses...' : (isLogin ? 'Masuk' : 'Daftar Sekarang') }}
+              class="w-full bg-[#B85C38] text-white py-3.5 rounded-xl font-black tracking-wide text-xs hover:bg-[#9E4B2E] hover:shadow-[0_10px_20px_-10px_rgba(184,92,56,0.5)] transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] disabled:opacity-50 mt-4 overflow-hidden relative group">
+              <span class="relative z-10 flex items-center justify-center gap-2">
+                {{ loading ? 'Memproses...' : (isLogin ? 'Masuk' : 'Daftar') }}
+                <svg v-if="!loading" class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
               </span>
             </button>
+            
+            <!-- Info Card for Register -->
+            <Transition name="slide-fade">
+              <div v-if="!isLogin" class="mt-4 p-4 bg-[#F8F1E7] border border-[#E8DCCB] rounded-xl flex items-start gap-3">
+                <svg class="w-5 h-5 text-[#B85C38] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <p class="text-xs text-[#6F6259] leading-relaxed font-medium">
+                  Akun baru otomatis terdaftar sebagai pembeli.<br/>
+                  Setelah login, Anda bisa <span class="font-bold text-[#2B1E16]">membuka toko UMKM</span> atau <span class="font-bold text-[#2B1E16]">bergabung sebagai designer</span>.
+                </p>
+              </div>
+            </Transition>
 
             <!-- Divider -->
             <div class="relative flex items-center py-2">
@@ -177,8 +204,8 @@
 
             <!-- Google Login Button -->
             <button @click="loginWithGoogle" type="button"
-              class="w-full flex items-center justify-center gap-3 bg-surface border border-borderSoft text-espresso py-4 rounded-[1.25rem] font-bold text-xs hover:bg-slate-50 hover:border-slate-300 hover:shadow-sm transition-all active:scale-[0.98]">
-              <svg class="w-5 h-5" viewBox="0 0 24 24">
+              class="w-full flex items-center justify-center gap-3 bg-[#FFFCF7] border border-[#E8DCCB] text-[#2B1E16] py-3 rounded-xl font-bold text-xs hover:bg-[#F8F1E7] hover:border-[#B85C38]/30 transition-all hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]">
+              <svg class="w-4 h-4" viewBox="0 0 24 24">
                 <path
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                   fill="#4285F4" />
@@ -192,14 +219,14 @@
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   fill="#EA4335" />
               </svg>
-              Masuk dengan Google
+              Lanjutkan dengan Google
             </button>
 
             <div class="pt-4 text-center">
               <p class="text-[11px] text-slate-400 font-bold uppercase tracking-widest">
                 {{ isLogin ? "Belum punya akun?" : "Sudah punya akun?" }}
                 <button type="button" @click="isLogin = !isLogin"
-                  class="ml-2 text-espresso hover:text-terracotta transition-colors border-b-2 border-terracotta/20 hover:border-orange-600 pb-0.5">
+                  class="ml-2 text-[#2B1E16] font-black hover:text-[#B85C38] transition-colors border-b-2 border-[#B85C38]/20 hover:border-[#B85C38] pb-0.5">
                   {{ isLogin ? 'Daftar Sekarang' : 'Masuk Di Sini' }}
                 </button>
               </p>
@@ -226,9 +253,9 @@ const loading = ref(false);
 const errorMessage = ref('');
 
 const brandFeatures = [
-  { label: 'Studio Didukung AI', color: 'orange' },
-  { label: 'Kolaborasi Real-time', color: 'amber' },
-  { label: 'Uji Coba AR di Web', color: 'orange' },
+  { label: 'AI Product Studio' },
+  { label: 'AR Try-On Experience' },
+  { label: 'Kolaborasi Designer Real-time' },
 ];
 
 onMounted(async () => {

@@ -14,7 +14,7 @@
             </div>
             <div class="flex-1 min-w-0">
               <h3 class="text-espresso font-bold text-base truncate">{{ user?.name || 'User' }}</h3>
-              <p class="text-terracotta font-black text-[10px] uppercase tracking-widest mt-1">Premium Member</p>
+              
             </div>
           </div>
           <!-- Progress -->
@@ -390,10 +390,25 @@ const menus = [
   }
 ];
 
-const logout = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
-  router.push('/login');
+const logout = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    if (token) {
+      await fetch('/api/v1/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json'
+        }
+      });
+    }
+  } catch (err) {
+    console.error('Logout error:', err);
+  } finally {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    window.location.href = '/';
+  }
 };
 
 const updateProfile = async () => {
