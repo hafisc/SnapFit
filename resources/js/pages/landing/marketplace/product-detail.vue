@@ -447,12 +447,14 @@ import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useCartStore } from '@/stores/cartStore';
 import { useNotificationStore } from '@/stores/notificationStore';
+import { useWishlistStore } from '@/stores/wishlistStore';
 import Navbar from '@/pages/landing/partials/Navbar.vue';
 
 const route = useRoute();
 const router = useRouter();
 const cartStore = useCartStore();
 const notificationStore = useNotificationStore();
+const wishlistStore = useWishlistStore();
 
 const user = ref(null);
 const product = ref(null);
@@ -461,7 +463,6 @@ const error = ref('');
 const quantity = ref(1);
 const activeImageIndex = ref(0);
 const showArModal = ref(false);
-const isWishlisted = ref(false);
 const relatedProducts = ref([]);
 const variantOptions = ref([]);
 const selectedVariantId = ref(null);
@@ -599,6 +600,7 @@ const loadProduct = async () => {
 const galleryImages = computed(() => product.value?.images ?? []);
 const activeImage = computed(() => galleryImages.value[activeImageIndex.value] ?? '');
 const currentImageLabel = computed(() => `${activeImageIndex.value + 1}/${galleryImages.value.length}`);
+const isWishlisted = computed(() => product.value ? wishlistStore.isWishlisted(product.value.id) : false);
 const selectedVariant = computed(() => variantOptions.value.find((variant) => variant.value === selectedVariantId.value));
 const displayPrice = computed(() => selectedVariant.value?.price ?? product.value?.price ?? 0);
 const selectedStock = computed(() => {
@@ -654,16 +656,10 @@ const buyNow = async () => {
   setTimeout(() => router.push({ path: '/marketplace/checkout', query: { source: 'buy-now' } }), 400);
 };
 
-const toggleWishlist = () => {
-  isWishlisted.value = !isWishlisted.value;
-  const list = JSON.parse(localStorage.getItem('snapfit_wishlist') ?? '[]');
-  if (isWishlisted.value) {
-    list.push({ id: product.value.id, name: product.value.name, image: product.value.images?.[0] });
-  } else {
-    const index = list.findIndex((item) => item.id === product.value.id);
-    if (index >= 0) list.splice(index, 1);
+const toggleWishlist = async () => {
+  if (product.value) {
+    await wishlistStore.toggleWishlist(product.value);
   }
-  localStorage.setItem('snapfit_wishlist', JSON.stringify(list));
 };
 
 const shareProduct = async () => {

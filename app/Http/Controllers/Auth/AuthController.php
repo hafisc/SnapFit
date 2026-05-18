@@ -274,12 +274,17 @@ class AuthController extends Controller
                 Profile::create([
                     'user_id'   => $user->id,
                     'full_name' => $googleUser->getName(),
+                    'avatar_url'=> $googleUser->getAvatar(),
                 ]);
             } else {
                 // User sudah ada
                 if (!$user->google_id) {
                     // Link Google ID jika belum terhubung
                     $user->update(['google_id' => $googleUser->getId()]);
+                }
+
+                if ($user->profile && !$user->profile->avatar_url) {
+                    $user->profile->update(['avatar_url' => $googleUser->getAvatar()]);
                 }
 
                 // Jangan reset active_role - biarkan user tetap di role terakhir mereka

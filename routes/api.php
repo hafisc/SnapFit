@@ -62,10 +62,14 @@ Route::prefix('v1')->group(function () {
         Route::put('profile', [ProfileController::class, 'update']);
         Route::get('profile/role-menu', [ProfileController::class, 'getRoleMenu']);
         Route::post('profile/switch-role', [ProfileController::class, 'switchRole']);
+        Route::post('profile/register-role', [ProfileController::class, 'registerRole']);
 
         // ─── CART ──────────────────────────────────────────────────────────
         Route::prefix('cart')->group(function () {
             Route::get('/', [CartController::class, 'index']);
+            Route::post('/', [CartController::class, 'store']);
+            Route::put('/{id}', [CartController::class, 'update']);
+            Route::delete('/{id}', [CartController::class, 'destroy']);
             Route::post('/sync', [CartController::class, 'sync']);
         });
 

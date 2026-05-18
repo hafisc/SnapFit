@@ -136,14 +136,15 @@
                   <div v-else>
                     <div v-for="notif in notifications" :key="notif.id"
                       class="p-5 border-b border-[#E8DCCB]/50 hover:bg-[#F8F1E7] transition-colors cursor-pointer flex gap-3 relative"
-                      :class="notif.unread ? '' : 'opacity-80'">
+                      :class="!notif.is_read ? '' : 'opacity-80'"
+                      @click="markAsRead(notif)">
                       <!-- Dot unread -->
                       <div class="w-2 h-2 rounded-full mt-1.5 flex-shrink-0 transition-colors duration-300"
-                        :class="notif.unread ? 'bg-[#B85C38]' : 'bg-transparent'"></div>
+                        :class="!notif.is_read ? 'bg-[#B85C38]' : 'bg-transparent'"></div>
                       <div>
-                        <h4 class="text-sm text-[#2B1E16]" :class="notif.unread ? 'font-black' : 'font-medium'">{{ notif.title }}</h4>
-                        <p class="text-xs mt-1 leading-relaxed" :class="notif.unread ? 'text-[#6F6259]' : 'text-[#6F6259]/80'">{{ notif.message }}</p>
-                        <p class="text-[10px] mt-2 font-bold" :class="notif.unread ? 'text-[#6F6259]/80' : 'text-[#6F6259]/50'">{{ notif.time }}</p>
+                        <h4 class="text-sm text-[#2B1E16]" :class="!notif.is_read ? 'font-black' : 'font-medium'">{{ notif.title }}</h4>
+                        <p class="text-xs mt-1 leading-relaxed" :class="!notif.is_read ? 'text-[#6F6259]' : 'text-[#6F6259]/80'">{{ notif.message }}</p>
+                        <p class="text-[10px] mt-2 font-bold" :class="!notif.is_read ? 'text-[#6F6259]/80' : 'text-[#6F6259]/50'">{{ notif.created_at }}</p>
                       </div>
                     </div>
                   </div>
@@ -180,64 +181,70 @@
             leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100 scale-100 translate-y-0"
             leave-to-class="opacity-0 scale-95 -translate-y-2">
             <div v-if="showCart"
-              class="absolute right-0 sm:-right-8 top-full mt-3 w-[320px] sm:w-[380px] bg-surface rounded-3xl shadow-2xl border border-borderSoft overflow-hidden z-50 flex flex-col">
-              <div class="bg-gray-50 px-5 py-4 border-b border-borderSoft flex justify-between items-center">
-                <h3 class="font-black text-espresso text-sm">Keranjang Belanja <span
-                    class="text-muted font-medium">({{ cartCount }})</span></h3>
-              </div>
-              <div class="max-h-[360px] overflow-y-auto hide-scrollbar">
-                <div v-if="cartStore.items.length === 0" class="p-8 text-center flex flex-col items-center">
-                  <div class="w-16 h-16 bg-sand rounded-full flex items-center justify-center mb-3">
-                    <svg class="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                  </div>
-                  <p class="text-sm text-espresso font-black mb-1">Keranjang masih kosong</p>
-                  <p class="text-xs text-muted font-medium">Yuk cari produk impianmu!</p>
+              class="absolute right-[-8px] top-[calc(100%+14px)] w-[320px] sm:w-[380px] bg-[#FFFCF7] rounded-[24px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] border border-[#E8DCCB] z-50">
+              
+              <!-- Arrow -->
+              <div class="absolute -top-[7px] right-[16px] w-3.5 h-3.5 bg-[#FFFCF7] border-t border-l border-[#E8DCCB] transform rotate-45 rounded-tl-[2px] z-0"></div>
+
+              <div class="relative z-10 flex flex-col max-h-[420px] overflow-hidden rounded-[24px]">
+                <div class="sticky top-0 bg-[#FFFCF7] px-5 py-4 border-b border-[#E8DCCB] flex justify-between items-center z-20">
+                  <h3 class="font-black text-[#2B1E16] text-sm">Keranjang Belanja <span
+                      class="text-[#6F6259] font-medium">({{ cartCount }})</span></h3>
                 </div>
-                <div v-else>
-                  <div v-for="item in cartStore.items.slice(0, 4)" :key="`${item.id}-${item.variant}`"
-                    class="p-4 border-b border-gray-50 flex gap-3 relative hover:bg-gray-50/50 transition-colors group">
-                    <img :src="item.image || '/images/placeholder.png'"
-                      class="w-14 h-14 rounded-xl object-cover bg-gray-100 flex-shrink-0" />
-                    <div class="flex-1 min-w-0 flex flex-col justify-center">
-                      <h4 class="text-sm font-bold text-espresso truncate pr-6">{{ item.name }}</h4>
-                      <p class="text-xs font-black text-terracotta mt-0.5">{{ cartStore.formatCurrency(item.price) }}
-                      </p>
-                      <div class="flex items-center gap-1.5 mt-1.5">
-                        <button @click.stop="decrementItem(item)"
-                          class="w-6 h-6 rounded-lg bg-gray-100 hover:bg-sand text-muted hover:text-terracotta flex items-center justify-center text-xs font-black transition-colors">−</button>
-                        <span class="w-7 text-center text-xs font-black text-espresso">{{ item.quantity }}</span>
-                        <button @click.stop="incrementItem(item)"
-                          class="w-6 h-6 rounded-lg bg-gray-100 hover:bg-sand text-muted hover:text-terracotta flex items-center justify-center text-xs font-black transition-colors">+</button>
-                      </div>
-                    </div>
-                    <!-- Tombol hapus -->
-                    <button @click.stop="removeCartItem(item)"
-                      class="absolute top-3 right-3 w-6 h-6 rounded-lg bg-transparent hover:bg-red-50 text-gray-300 hover:text-red-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all"
-                      title="Hapus dari keranjang">
-                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="overflow-y-auto hide-scrollbar flex-1 bg-[#FFFCF7]">
+                  <div v-if="cartStore.items.length === 0" class="p-8 text-center flex flex-col items-center">
+                    <div class="w-16 h-16 bg-[#F8F1E7] rounded-full flex items-center justify-center mb-3">
+                      <svg class="w-8 h-8 text-[#B85C38]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M6 18L18 6M6 6l12 12" />
+                          d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                       </svg>
-                    </button>
+                    </div>
+                    <p class="text-sm text-[#2B1E16] font-black mb-1">Keranjang masih kosong</p>
+                    <p class="text-xs text-[#6F6259] font-medium">Yuk cari produk impianmu!</p>
                   </div>
-                  <div v-if="cartStore.items.length > 4"
-                    class="p-3 text-center text-xs font-bold text-muted bg-gray-50">
-                    + {{ cartStore.items.length - 4 }} produk lainnya
+                  <div v-else>
+                    <div v-for="item in cartStore.items.slice(0, 4)" :key="`${item.id}-${item.variant}`"
+                      class="p-4 border-b border-[#E8DCCB]/50 flex gap-3 relative hover:bg-[#F8F1E7] transition-colors group">
+                      <img :src="item.image || '/images/placeholder.png'"
+                        class="w-14 h-14 rounded-xl object-cover bg-white border border-[#E8DCCB]/30 flex-shrink-0" />
+                      <div class="flex-1 min-w-0 flex flex-col justify-center">
+                        <h4 class="text-sm font-bold text-[#2B1E16] truncate pr-6">{{ item.name }}</h4>
+                        <p class="text-xs font-black text-[#B85C38] mt-0.5">{{ cartStore.formatCurrency(item.price) }}
+                        </p>
+                        <div class="flex items-center gap-1.5 mt-1.5">
+                          <button @click.stop="decrementItem(item)"
+                            class="w-6 h-6 rounded-lg bg-[#FFFCF7] border border-[#E8DCCB] hover:bg-[#F8F1E7] text-[#6F6259] hover:text-[#B85C38] flex items-center justify-center text-xs font-black transition-colors">−</button>
+                          <span class="w-7 text-center text-xs font-black text-[#2B1E16]">{{ item.quantity }}</span>
+                          <button @click.stop="incrementItem(item)"
+                            class="w-6 h-6 rounded-lg bg-[#FFFCF7] border border-[#E8DCCB] hover:bg-[#F8F1E7] text-[#6F6259] hover:text-[#B85C38] flex items-center justify-center text-xs font-black transition-colors">+</button>
+                        </div>
+                      </div>
+                      <!-- Tombol hapus -->
+                      <button @click.stop="removeCartItem(item)"
+                        class="absolute top-3 right-3 w-6 h-6 rounded-lg bg-transparent hover:bg-red-50 text-gray-300 hover:text-red-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all"
+                        title="Hapus dari keranjang">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                    <div v-if="cartStore.items.length > 4"
+                      class="p-3 text-center text-xs font-bold text-[#6F6259] bg-[#F8F1E7]">
+                      + {{ cartStore.items.length - 4 }} produk lainnya
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div v-if="cartStore.items.length > 0" class="p-4 border-t border-borderSoft bg-surface">
-                <div class="flex justify-between items-center mb-3">
-                  <p class="text-xs font-semibold text-muted">Total Harga</p>
-                  <p class="text-sm font-black text-terracotta">{{ cartStore.formatCurrency(cartStore.totalPrice) }}</p>
+                <div v-if="cartStore.items.length > 0" class="sticky bottom-0 p-4 border-t border-[#E8DCCB] bg-[#FFFCF7] z-20">
+                  <div class="flex justify-between items-center mb-3">
+                    <p class="text-xs font-semibold text-[#6F6259]">Total Harga</p>
+                    <p class="text-sm font-black text-[#B85C38]">{{ cartStore.formatCurrency(cartStore.totalPrice) }}</p>
+                  </div>
+                  <button @click="goToCart"
+                    class="w-full bg-[#B85C38] text-white py-2.5 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#9a4b2c] hover:shadow-lg hover:shadow-[#B85C38]/20 transition-all active:scale-[0.98]">
+                    Lihat Keranjang
+                  </button>
                 </div>
-                <button @click="goToCart"
-                  class="w-full bg-terracotta text-white py-2.5 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-terracottaDark hover:shadow-lg transition-all active:scale-[0.98]">
-                  Lihat Keranjang
-                </button>
               </div>
             </div>
           </Transition>
@@ -247,9 +254,9 @@
           <div class="relative user-menu">
             <!-- Avatar Button -->
             <button @click="toggleUserMenu"
-              class="relative w-10 h-10 rounded-xl bg-surface overflow-hidden flex items-center justify-center shadow-sm hover:shadow-md hover:shadow-terracotta/20 hover:scale-105 transition-all duration-300 ring-2 ring-surface border border-borderSoft">
+              class="relative w-8 h-8 rounded-full bg-surface overflow-hidden flex items-center justify-center shadow-sm hover:shadow-md hover:shadow-terracotta/20 hover:scale-105 transition-all duration-300 ring-2 ring-white border border-borderSoft">
               <img
-                :src="user.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}&scale=130&backgroundColor=ffdfbf,c0aede,d1d4f9`"
+                :src="user.profile?.avatar_url || user.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}&scale=130&backgroundColor=ffdfbf,c0aede,d1d4f9`"
                 alt="Avatar" class="w-full h-full object-cover" />
             </button>
 
@@ -266,7 +273,7 @@
                     <div
                       class="w-14 h-14 rounded-2xl overflow-hidden bg-surface flex items-center justify-center shadow-sm border border-borderSoft">
                       <img
-                        :src="user.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}&scale=130&backgroundColor=ffdfbf,c0aede,d1d4f9`"
+                        :src="user.profile?.avatar_url || user.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}&scale=130&backgroundColor=ffdfbf,c0aede,d1d4f9`"
                         alt="Avatar" class="w-full h-full object-cover" />
                     </div>
                     <div>
@@ -433,16 +440,54 @@ const toggleCart = () => {
 
 const toggleMobileMenu = () => { showMobileMenu.value = !showMobileMenu.value; };
 
-// Notifications Dummy Data
-const notifications = ref([
-  { id: 1, title: 'Pesanan Dikirim', message: 'Pesanan #12345 sedang dalam perjalanan ke alamat Anda.', time: '5 mnt lalu', unread: true },
-  { id: 2, title: 'Promo Spesial', message: 'Diskon 50% untuk produk kerajinan hari ini! Yuk cek sekarang.', time: '1 jam lalu', unread: true },
-  { id: 3, title: 'Pembayaran Berhasil', message: 'Pembayaran pesanan #12344 telah dikonfirmasi.', time: 'Kemarin', unread: false },
-]);
-const unreadCount = computed(() => notifications.value.filter(n => n.unread).length);
+// Notifications Data
+const notifications = ref([]);
+const unreadCount = ref(0);
 
-const markAllAsRead = () => {
-  notifications.value.forEach(n => n.unread = false);
+const fetchNotifications = async () => {
+  if (!isLoggedIn.value) return;
+  try {
+    const token = localStorage.getItem('token');
+    const res = await fetch('/api/v1/notifications', {
+      headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      notifications.value = data.data;
+      unreadCount.value = data.unread_count;
+    }
+  } catch (err) {
+    console.error('Failed to fetch notifications', err);
+  }
+};
+
+const markAsRead = async (notif) => {
+  if (notif.is_read) return;
+  try {
+    const token = localStorage.getItem('token');
+    await fetch(`/api/v1/notifications/${notif.id}/read`, {
+      method: 'PATCH',
+      headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' }
+    });
+    notif.is_read = true;
+    unreadCount.value = Math.max(0, unreadCount.value - 1);
+  } catch (err) {
+    console.error('Failed to mark as read', err);
+  }
+};
+
+const markAllAsRead = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    await fetch('/api/v1/notifications/read-all', {
+      method: 'PATCH',
+      headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' }
+    });
+    notifications.value.forEach(n => n.is_read = true);
+    unreadCount.value = 0;
+  } catch (err) {
+    console.error('Failed to mark all as read', err);
+  }
 };
 
 // Search Logic
@@ -540,7 +585,10 @@ const handleClickOutside = (e) => {
   if (!e.target.closest('.search-container')) showSearchResults.value = false;
 };
 
-onMounted(() => document.addEventListener('click', handleClickOutside));
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+  fetchNotifications();
+});
 onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside));
 </script>
 

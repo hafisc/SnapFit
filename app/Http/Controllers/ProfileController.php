@@ -59,6 +59,11 @@ class ProfileController extends Controller
 
         $roles = [];
 
+        // Check pending applications
+        $applications = \App\Models\RoleApplication::where('user_id', $user->id)
+            ->whereIn('status', ['pending', 'rejected'])
+            ->get()->keyBy('requested_role');
+
         // Role UMKM
         if ($user->hasRole('umkm')) {
             $roles[] = [
@@ -69,13 +74,32 @@ class ProfileController extends Controller
                 'url' => '/umkm/dashboard',
             ];
         } else {
-            $roles[] = [
-                'name' => 'umkm',
-                'display_name' => 'Daftar sebagai UMKM',
-                'status' => 'inactive',
-                'action' => 'register',
-                'url' => '/register/umkm',
-            ];
+            $app = $applications['umkm'] ?? null;
+            if ($app && $app->status === 'pending') {
+                $roles[] = [
+                    'name' => 'umkm',
+                    'display_name' => 'Daftar sebagai UMKM',
+                    'status' => 'pending',
+                    'action' => 'wait',
+                ];
+            } else if ($app && $app->status === 'rejected') {
+                $roles[] = [
+                    'name' => 'umkm',
+                    'display_name' => 'Daftar sebagai UMKM',
+                    'status' => 'rejected',
+                    'action' => 'register',
+                    'url' => '/register/umkm',
+                    'rejection_reason' => $app->rejection_reason,
+                ];
+            } else {
+                $roles[] = [
+                    'name' => 'umkm',
+                    'display_name' => 'Daftar sebagai UMKM',
+                    'status' => 'inactive',
+                    'action' => 'register',
+                    'url' => '/register/umkm',
+                ];
+            }
         }
 
         // Role Designer
@@ -88,13 +112,32 @@ class ProfileController extends Controller
                 'url' => '/designer/dashboard',
             ];
         } else {
-            $roles[] = [
-                'name' => 'designer',
-                'display_name' => 'Daftar sebagai Designer',
-                'status' => 'inactive',
-                'action' => 'register',
-                'url' => '/register/designer',
-            ];
+            $app = $applications['designer'] ?? null;
+            if ($app && $app->status === 'pending') {
+                $roles[] = [
+                    'name' => 'designer',
+                    'display_name' => 'Daftar sebagai Designer',
+                    'status' => 'pending',
+                    'action' => 'wait',
+                ];
+            } else if ($app && $app->status === 'rejected') {
+                $roles[] = [
+                    'name' => 'designer',
+                    'display_name' => 'Daftar sebagai Designer',
+                    'status' => 'rejected',
+                    'action' => 'register',
+                    'url' => '/register/designer',
+                    'rejection_reason' => $app->rejection_reason,
+                ];
+            } else {
+                $roles[] = [
+                    'name' => 'designer',
+                    'display_name' => 'Daftar sebagai Designer',
+                    'status' => 'inactive',
+                    'action' => 'register',
+                    'url' => '/register/designer',
+                ];
+            }
         }
 
         return response()->json([
@@ -134,6 +177,57 @@ class ProfileController extends Controller
 
         return response()->json([
             'message' => 'Role berhasil diubah ke: ' . $request->role,
+            'user' => new UserResource($user->fresh()->load('profile', 'roles')),
+        ]);
+    }
+    /**
+     * Register a new role for the user.
+     */
+    public function registerRole(Request $request): JsonResponse
+    {
+        $request->validate([
+            'role' => 'required|string|in:umkm,designer',
+            'data' => 'nullable|array'
+        ]);
+
+        $user = $request->user();
+
+        // Admin cannot register new roles like this
+        if ($user->isAdmin()) {
+            return response()->json([
+                'message' => 'Admin tidak bisa mendaftar role baru.',
+            ], 403);
+        }
+
+        // Check if user already has the role
+        if ($user->hasRole($request->role)) {
+            return response()->json([
+                'message' => 'Anda sudah memiliki role ' . $request->role,
+            ], 400);
+        }
+
+        // Check if application already pending
+        $pending = \App\Models\RoleApplication::where('user_id', $user->id)
+            ->where('requested_role', $request->role)
+            ->where('status', 'pending')
+            ->first();
+
+        if ($pending) {
+            return response()->json([
+                'message' => 'Anda sudah mengajukan pendaftaran untuk role ini. Menunggu verifikasi admin.',
+            ], 400);
+        }
+
+        // Create application
+        \App\Models\RoleApplication::create([
+            'user_id' => $user->id,
+            'requested_role' => $request->role,
+            'status' => 'pending',
+            'data' => $request->data ?? [],
+        ]);
+
+        return response()->json([
+            'message' => 'Pengajuan berhasil dikirim! Silakan tunggu verifikasi dari Admin.',
             'user' => new UserResource($user->fresh()->load('profile', 'roles')),
         ]);
     }
