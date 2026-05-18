@@ -148,7 +148,7 @@ const routes = [
   {
     path: '/designer',
     component: () => import('@/layouts/designer.vue'),
-    meta: { requiresAuth: true, role: 'desainer' },
+    meta: { requiresAuth: true, role: 'designer' },
     children: [
       {
         path: 'dashboard',
@@ -271,8 +271,12 @@ router.beforeEach((to, from) => {
   }
 
   // Require specific role
-  if (to.meta.role && user?.role !== to.meta.role) {
-    return '/';
+  if (to.meta.role && user?.active_role !== to.meta.role) {
+    // Also check if user has the role in their roles array
+    const userRoles = user?.roles?.map(r => r.name || r) || [];
+    if (!userRoles.includes(to.meta.role) && user?.active_role !== to.meta.role) {
+      return '/profile';
+    }
   }
 
   return true;

@@ -59,6 +59,19 @@
         </svg>
         <span>Pengaturan</span>
       </router-link>
+
+      <div class="h-px bg-slate-100 my-5 mx-3"></div>
+
+      <router-link
+        to="/profile"
+        @click="$emit('close')"
+        class="flex items-center gap-3.5 px-3.5 py-3 rounded-xl transition-all duration-200 text-[13px] font-semibold group text-muted hover:text-espresso hover:bg-slate-50"
+      >
+        <svg class="w-5 h-5 flex-shrink-0 text-slate-400 group-hover:text-muted transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+        </svg>
+        <span>Kembali ke Beranda</span>
+      </router-link>
     </nav>
 
     <!-- User -->
