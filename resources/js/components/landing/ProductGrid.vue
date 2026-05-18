@@ -11,11 +11,13 @@
           <div class="flex transition-transform duration-700"
             :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
             <div v-for="(slide, index) in promoSlides" :key="index"
-              class="min-w-full h-[180px] md:h-[220px] lg:h-[240px] relative rounded-[24px] overflow-hidden bg-gradient-to-br from-[#5C4033] via-[#8B6F47] to-[#A0845C]">
+              class="min-w-full h-[160px] md:h-[200px] lg:h-[220px] relative rounded-[24px] overflow-hidden bg-gradient-to-br from-[#5C4033] via-[#8B6F47] to-[#A0845C]">
               <!-- Background -->
               <img :src="slide.image" class="absolute inset-0 w-full h-full object-cover" @error="$event.target.style.display='none'" />
 
-              <div class="absolute inset-0 bg-gradient-to-r from-black/50 via-black/30 to-transparent"></div>
+              <div class="absolute inset-0 bg-gradient-to-r from-black/55 via-black/30 to-transparent"></div>
+              <!-- Decorative batik pattern overlay -->
+              <div class="absolute inset-0 opacity-[0.06] mix-blend-overlay" style="background-image: url('/assets/batik-bg.png'); background-size: 300px; background-repeat: repeat;"></div>
 
               <!-- Content Wrapper (BIAR TIDAK NEMPEL) -->
               <div class="relative z-10 h-full flex items-center">
@@ -27,16 +29,16 @@
                       {{ slide.tag }}
                     </span>
                     
-                    <h3 class="text-2xl md:text-3xl font-black mb-3 leading-tight tracking-tight">
+                    <h3 class="text-xl md:text-2xl lg:text-3xl font-black mb-2 leading-tight tracking-tight">
                       {{ slide.title }}
                     </h3>
 
-                    <p class="text-sm md:text-base text-white/90 mb-6 max-w-lg leading-relaxed">
+                    <p class="text-xs md:text-sm text-white/85 mb-4 max-w-lg leading-relaxed">
                       {{ slide.description }}
                     </p>
 
                     <button
-                      class="bg-terracotta px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-terracottaDark transition-all shadow-lg hover:shadow-terracotta/30">
+                      class="bg-terracotta px-5 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest hover:bg-terracottaDark transition-all shadow-lg hover:shadow-terracotta/30">
                       Jelajahi Koleksi
                     </button>
                   </div>
@@ -115,14 +117,14 @@
       </div>
 
       <!-- Section Title -->
-      <div class="flex items-center justify-between mb-4 mt-8">
-        <h2 class="text-xl md:text-2xl font-black text-espresso flex items-center gap-3">
-          <span class="w-1.5 h-6 bg-terracotta rounded-full"></span>
+      <div class="flex items-center justify-between mb-4 mt-6">
+        <h2 class="text-lg md:text-xl font-black text-espresso flex items-center gap-2.5">
+          <span class="w-1.5 h-5 bg-terracotta rounded-full"></span>
           Koleksi Pilihan Nusantara
         </h2>
-        <a href="#" class="text-xs font-bold text-terracotta hover:text-terracottaDark transition-colors flex items-center gap-1">
+        <a href="#" class="lihat-semua-link text-sm font-extrabold text-terracotta hover:text-terracottaDark transition-all flex items-center gap-1.5 group/link">
           Lihat Semua
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+          <svg class="w-4 h-4 transition-transform group-hover/link:translate-x-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
         </a>
       </div>
 
@@ -145,10 +147,10 @@
 
       <!-- Products Grid -->
       <div v-else class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-        <div v-for="(product, index) in filteredProducts" :key="product.id" @click="viewProductDetail(product)" class="bg-surface border border-borderSoft shadow-sm hover:border-terracotta hover:shadow-xl transition-all duration-300 rounded-3xl group overflow-hidden flex flex-col h-full cursor-pointer hover:-translate-y-1 relative" data-aos="fade-up" :data-aos-delay="(index % 6) * 50">
+        <div v-for="(product, index) in filteredProducts" :key="product.id" @click="viewProductDetail(product)" class="bg-surface border border-borderSoft shadow-sm hover:border-terracotta hover:shadow-xl transition-all duration-300 rounded-2xl group overflow-hidden flex flex-col h-full cursor-pointer hover:-translate-y-1 relative" data-aos="fade-up" :data-aos-delay="(index % 6) * 50">
           
           <!-- Image Section -->
-          <div class="relative w-full h-[180px] bg-gray-100 isolate overflow-hidden border-b border-borderSoft">
+          <div class="relative w-full h-[170px] bg-gray-100 isolate overflow-hidden border-b border-borderSoft">
             <!-- Category Badge -->
             <div class="absolute top-2 left-2 z-20">
               <span class="inline-flex items-center gap-1.5 bg-surface/95 backdrop-blur-md px-2 py-1 rounded-full text-[8px] font-black uppercase tracking-widest shadow-sm border border-terracotta/20">
@@ -184,40 +186,41 @@
           </div>
 
           <!-- Product Info -->
-          <div class="p-3 flex flex-col flex-1">
-            <h3 class="font-bold text-sm mb-1 text-espresso line-clamp-2 leading-tight group-hover:text-terracotta transition-colors">
+          <div class="p-2.5 pb-2 flex flex-col flex-1">
+            <h3 class="font-bold text-[13px] mb-0.5 text-espresso line-clamp-2 leading-snug group-hover:text-terracotta transition-colors">
               {{ product.name }}
             </h3>
             
-            <p v-if="product.origin" class="text-[11px] text-muted flex items-center gap-1 mb-0.5">
-              <svg class="w-3 h-3 text-muted shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-              {{ product.origin }}
+            <div class="flex items-center gap-1.5 text-[10px] text-muted mb-0.5">
+              <span v-if="product.origin" class="flex items-center gap-0.5">
+                <svg class="w-2.5 h-2.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                {{ product.origin }}
+              </span>
+            </div>
+
+            <p v-if="product.umkm_name" class="text-[10px] text-muted mb-1 leading-tight">
+              by <span class="font-semibold text-espresso/70">{{ product.umkm_name }}</span>
             </p>
 
-            <p v-if="product.umkm_name" class="text-[11px] text-muted mb-1.5 flex items-center gap-1">
-              <span class="text-muted">by</span>
-              <span class="font-semibold text-espresso/70">{{ product.umkm_name }}</span>
-            </p>
-
-            <div class="flex items-center gap-1 mb-2">
-              <svg class="w-3 h-3 text-gold fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
-              <span class="text-[11px] font-bold text-espresso">{{ product.rating || '4.8' }}</span>
-              <span class="text-[11px] text-muted">• {{ product.sold || '0' }} terjual</span>
+            <div class="flex items-center gap-1 mb-1">
+              <svg class="w-2.5 h-2.5 text-gold fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+              <span class="text-[10px] font-bold text-espresso">{{ product.rating || '4.8' }}</span>
+              <span class="text-[10px] text-muted">• {{ product.sold || '0' }} terjual</span>
             </div>
             
             <!-- Spacer -->
             <div class="flex-1"></div>
 
-            <div v-if="product.badges && product.badges.length" class="flex flex-wrap gap-1 mb-2">
-              <span v-for="badge in product.badges.slice(0,2)" :key="badge" class="text-[8px] px-1.5 py-0.5 border border-terracotta/30 text-terracotta rounded bg-terracotta/5 font-semibold">
+            <div v-if="product.badges && product.badges.length" class="flex flex-wrap gap-0.5 mb-1">
+              <span v-for="badge in product.badges.slice(0,2)" :key="badge" class="text-[7px] px-1.5 py-px border border-terracotta/25 text-terracotta rounded bg-terracotta/5 font-semibold">
                 {{ badge }}
               </span>
             </div>
 
             <!-- Price -->
-            <div class="flex items-center justify-between mt-auto pt-1">
-              <p class="text-base font-bold text-terracotta tracking-tight">
-                <span class="text-[11px] font-semibold mr-0.5">Rp</span>{{ Number(product.price).toLocaleString('id-ID') }}
+            <div class="flex items-center justify-between mt-auto">
+              <p class="text-[15px] font-bold text-terracotta tracking-tight">
+                <span class="text-[10px] font-semibold mr-0.5">Rp</span>{{ Number(product.price).toLocaleString('id-ID') }}
               </p>
             </div>
           </div>
@@ -401,6 +404,26 @@ onBeforeUnmount(() => {
 /* Smooth Hover Effects */
 .group:hover .group-hover\:scale-110 {
   transform: scale(1.1);
+}
+
+/* Lihat Semua Hover Underline */
+.lihat-semua-link {
+  position: relative;
+  text-decoration: none;
+}
+.lihat-semua-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+  transition: width 0.3s ease;
+}
+.lihat-semua-link:hover::after {
+  width: 100%;
 }
 
 /* Custom Gradient Text */
