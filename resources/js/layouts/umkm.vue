@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#f8f9fb] flex text-espresso font-sans">
+  <div class="min-h-screen bg-[#F5EFE6] flex text-espresso font-sans">
     <!-- Mobile Overlay -->
     <Transition name="fade">
       <div v-if="sidebarOpen" class="fixed inset-0 bg-black/30 backdrop-blur-sm z-30 lg:hidden" @click="sidebarOpen = false"></div>

@@ -167,6 +167,8 @@ Route::prefix('v1')->group(function () {
             Route::post('rooms',               [CocreateRoomController::class, 'store']);
             Route::post('rooms/{room}/join',   [CocreateRoomController::class, 'join']);
             Route::patch('rooms/{room}/close', [CocreateRoomController::class, 'close']);
+            Route::get('rooms/{room}/messages',  [CocreateRoomController::class, 'messages']);
+            Route::post('rooms/{room}/messages', [CocreateRoomController::class, 'sendMessage']);
         });
 
         // ─── ADMIN ONLY ───────────────────────────────────────────────────────

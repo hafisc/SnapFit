@@ -1,110 +1,85 @@
 <template>
-  <div class="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 w-full">
-    
-    <!-- Page Header -->
-    <div class="bg-surface rounded-2xl p-8 flex flex-col sm:flex-row sm:items-center justify-between border border-borderSoft shadow-sm relative overflow-hidden gap-4">
-      <div class="relative z-10">
-        <h2 class="text-3xl font-bold text-espresso tracking-tight mb-1">Daftar Pesanan</h2>
-        <p class="text-muted font-medium text-sm">Kelola dan pantau semua pesanan dari pelangganmu di satu tempat.</p>
+  <div class="max-w-[1400px] mx-auto space-y-5">
+    <!-- Header -->
+    <div class="bg-white rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between border border-[#E8DCCB]/60 gap-4">
+      <div>
+        <h2 class="text-lg font-bold text-[#2B1E16]">Daftar Pesanan</h2>
+        <p class="text-[11px] text-[#8A7A6C] mt-0.5">Pantau pesanan masuk, pengiriman, dan status pelanggan.</p>
       </div>
-      <div class="relative z-10">
-        <button class="bg-slate-50 hover:bg-slate-100 text-muted border border-borderSoft px-6 py-3 rounded-xl text-xs font-bold tracking-wider uppercase transition-colors flex items-center justify-center gap-2 shadow-sm">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-          Export CSV
-        </button>
-      </div>
-      <!-- Decorative Blur -->
-      <div class="absolute -right-10 -top-10 w-40 h-40 bg-sand rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+      <button class="px-4 py-2.5 bg-[#F8F1E7] text-[#2B1E16] border border-[#E8DCCB] rounded-xl text-[12px] font-bold hover:bg-[#E8DCCB]/50 transition-colors flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+        Export CSV
+      </button>
     </div>
 
     <!-- Main Card -->
-    <div class="bg-surface rounded-2xl border border-borderSoft shadow-sm flex flex-col relative z-20">
-      
-      <!-- Toolbar & Filters -->
-      <div class="p-6 border-b border-borderSoft flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-        
-        <!-- Filter Tabs -->
-        <div class="flex overflow-x-auto no-scrollbar gap-2 pb-2 lg:pb-0">
-          <button 
-            v-for="tab in filterTabs" 
-            :key="tab"
-            @click="activeTab = tab"
-            class="px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-wider whitespace-nowrap transition-all"
-            :class="activeTab === tab ? 'bg-sand text-terracotta border border-terracotta/30 shadow-sm' : 'bg-transparent text-slate-400 hover:bg-slate-50 hover:text-muted border border-transparent'"
-          >
+    <div class="bg-white rounded-2xl border border-[#E8DCCB]/60 flex flex-col">
+      <!-- Filters -->
+      <div class="p-5 border-b border-[#E8DCCB]/60 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div class="flex overflow-x-auto no-scrollbar gap-1.5">
+          <button v-for="tab in filterTabs" :key="tab" @click="activeTab = tab"
+            class="px-4 py-2 rounded-xl text-[11px] font-bold whitespace-nowrap transition-all"
+            :class="activeTab === tab ? 'bg-[#B85C38]/10 text-[#B85C38] border border-[#B85C38]/20' : 'text-[#8A7A6C] hover:bg-[#F8F1E7] border border-transparent'">
             {{ tab }}
           </button>
         </div>
-
-        <!-- Search & Sort -->
-        <div class="flex items-center gap-3">
-          <div class="relative w-full lg:w-64">
-            <input type="text" placeholder="Cari ID atau nama pelanggan..." class="w-full bg-slate-50 border border-borderSoft text-sm font-medium text-espresso rounded-xl pl-10 pr-4 py-2.5 outline-none focus:border-orange-500 transition-colors placeholder-slate-400">
-            <svg class="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-          </div>
-          <button class="w-11 h-11 flex items-center justify-center bg-slate-50 border border-borderSoft rounded-xl text-muted hover:bg-slate-100 transition-colors flex-shrink-0">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" /></svg>
-          </button>
+        <div class="relative w-full lg:w-56">
+          <input type="text" v-model="searchQuery" placeholder="Cari ID atau nama pelanggan..." class="w-full bg-[#FFFCF7] border border-[#E8DCCB] text-[12px] font-medium text-[#2B1E16] rounded-xl pl-9 pr-4 py-2.5 outline-none focus:border-[#B85C38] focus:ring-2 focus:ring-[#B85C38]/10 transition-all placeholder-[#8A7A6C]/60">
+          <svg class="w-3.5 h-3.5 text-[#8A7A6C] absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
         </div>
       </div>
 
-      <!-- Table Container -->
+      <!-- Table -->
       <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse min-w-[900px]">
+        <table class="w-full text-left min-w-[800px]">
           <thead>
-            <tr class="bg-slate-50/50">
-              <th class="py-4 px-6 md:px-8 text-[10px] font-bold text-slate-400 uppercase tracking-wider w-24">Order ID</th>
-              <th class="py-4 px-6 md:px-8 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Pelanggan</th>
-              <th class="py-4 px-6 md:px-8 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Produk</th>
-              <th class="py-4 px-6 md:px-8 text-[10px] font-bold text-slate-400 uppercase tracking-wider w-32">Tanggal</th>
-              <th class="py-4 px-6 md:px-8 text-[10px] font-bold text-slate-400 uppercase tracking-wider w-40">Status</th>
-              <th class="py-4 px-6 md:px-8 text-[10px] font-bold text-slate-400 uppercase tracking-wider text-right w-40">Total Tagihan</th>
-              <th class="py-4 px-6 md:px-8 text-[10px] font-bold text-slate-400 uppercase tracking-wider text-center w-20">Aksi</th>
+            <tr class="bg-[#FAF6F0]">
+              <th class="py-3 px-5 text-[10px] font-bold text-[#8A7A6C] uppercase tracking-wider">Order ID</th>
+              <th class="py-3 px-5 text-[10px] font-bold text-[#8A7A6C] uppercase tracking-wider">Pelanggan</th>
+              <th class="py-3 px-5 text-[10px] font-bold text-[#8A7A6C] uppercase tracking-wider">Produk</th>
+              <th class="py-3 px-5 text-[10px] font-bold text-[#8A7A6C] uppercase tracking-wider">Tanggal</th>
+              <th class="py-3 px-5 text-[10px] font-bold text-[#8A7A6C] uppercase tracking-wider">Status</th>
+              <th class="py-3 px-5 text-[10px] font-bold text-[#8A7A6C] uppercase tracking-wider text-right">Total</th>
             </tr>
           </thead>
-          <tbody class="text-sm">
-            <tr v-for="order in filteredOrders" :key="order.id" class="border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-colors group">
-              <td class="py-5 px-6 md:px-8 font-bold text-espresso">{{ order.id }}</td>
-              <td class="py-5 px-6 md:px-8">
-                <p class="font-bold text-espresso truncate max-w-[150px]">{{ order.customer_name }}</p>
-                <p class="text-xs font-medium text-slate-400">{{ order.customer_city }}</p>
+          <tbody>
+            <tr v-for="order in filteredOrders" :key="order.id" class="border-b border-[#E8DCCB]/40 last:border-0 hover:bg-[#FAF6F0] transition-colors">
+              <td class="py-4 px-5 text-[12px] font-bold text-[#2B1E16]">{{ order.id }}</td>
+              <td class="py-4 px-5">
+                <p class="text-[12px] font-semibold text-[#2B1E16] truncate max-w-[140px]">{{ order.customer_name }}</p>
               </td>
-              <td class="py-5 px-6 md:px-8">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 bg-slate-100 rounded-lg overflow-hidden border border-borderSoft flex-shrink-0">
+              <td class="py-4 px-5">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-9 h-9 bg-[#F8F1E7] rounded-lg overflow-hidden border border-[#E8DCCB]/50 flex-shrink-0">
                     <img v-if="order.product_image" :src="order.product_image" class="w-full h-full object-cover" />
+                    <div v-else class="w-full h-full flex items-center justify-center text-[#8A7A6C]">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                    </div>
                   </div>
                   <div>
-                    <p class="font-bold text-espresso truncate max-w-[200px]">{{ order.product_name }}</p>
-                    <p class="text-xs font-medium text-slate-400">Qty: {{ order.qty }}</p>
+                    <p class="text-[12px] font-medium text-[#2B1E16] truncate max-w-[160px]">{{ order.product_name }}</p>
+                    <p class="text-[10px] text-[#8A7A6C]">Qty: {{ order.qty }}</p>
                   </div>
                 </div>
               </td>
-              <td class="py-5 px-6 md:px-8">
-                <p class="font-bold text-muted">{{ formatDate(order.created_at) }}</p>
-                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">{{ formatTime(order.created_at) }}</p>
-              </td>
-              <td class="py-5 px-6 md:px-8">
-                <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border shadow-sm" :class="getStatusClass(order.status)">
+              <td class="py-4 px-5 text-[11px] text-[#8A7A6C] font-medium">{{ formatDate(order.created_at) }}</td>
+              <td class="py-4 px-5">
+                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold" :class="getStatusClass(order.status)">
                   <span class="w-1.5 h-1.5 rounded-full" :class="getDotClass(order.status)"></span>
-                  <span class="text-[10px] font-bold tracking-wider uppercase">{{ order.status }}</span>
-                </div>
+                  {{ order.status }}
+                </span>
               </td>
-              <td class="py-5 px-6 md:px-8 text-right font-bold text-espresso text-base">
-                Rp {{ order.total_price.toLocaleString('id-ID') }}
-              </td>
-              <td class="py-5 px-6 md:px-8 text-center">
-                <button class="w-8 h-8 inline-flex items-center justify-center rounded-lg bg-surface border border-borderSoft text-slate-400 hover:text-terracotta hover:border-terracotta/30 hover:bg-sand transition-all shadow-sm">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                </button>
-              </td>
+              <td class="py-4 px-5 text-right text-[13px] font-bold text-[#2B1E16]">Rp {{ order.total_price.toLocaleString('id-ID') }}</td>
             </tr>
-            
+
+            <!-- Empty -->
             <tr v-if="filteredOrders.length === 0">
-              <td colspan="7" class="py-16 text-center">
-                <div class="w-16 h-16 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 border border-borderSoft">🛒</div>
-                <p class="text-muted font-bold mb-1">Tidak ada pesanan ditemukan</p>
-                <p class="text-xs text-slate-400">Coba ubah filter status atau kata kunci pencarian.</p>
+              <td colspan="6" class="py-16 text-center">
+                <div class="w-14 h-14 bg-[#F8F1E7] rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <svg class="w-6 h-6 text-[#B85C38]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+                </div>
+                <p class="text-sm font-semibold text-[#2B1E16] mb-1">Tidak ada pesanan ditemukan</p>
+                <p class="text-[11px] text-[#8A7A6C]">Pesanan dari marketplace akan muncul di sini setelah pelanggan checkout.</p>
               </td>
             </tr>
           </tbody>
@@ -112,117 +87,76 @@
       </div>
 
       <!-- Pagination -->
-      <div class="p-6 border-t border-borderSoft flex items-center justify-between">
-        <p class="text-xs font-bold text-slate-400">Menampilkan <span class="text-espresso">1 - 10</span> dari <span class="text-espresso">24</span> pesanan</p>
-        <div class="flex items-center gap-2">
-          <button disabled class="w-8 h-8 rounded-lg border border-borderSoft flex items-center justify-center text-slate-300 bg-slate-50 cursor-not-allowed">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-          </button>
-          <button class="w-8 h-8 rounded-lg border border-terracotta/30 flex items-center justify-center text-terracotta bg-sand font-bold text-xs shadow-sm">1</button>
-          <button class="w-8 h-8 rounded-lg border border-borderSoft flex items-center justify-center text-muted hover:bg-slate-50 font-bold text-xs transition-colors">2</button>
-          <button class="w-8 h-8 rounded-lg border border-borderSoft flex items-center justify-center text-muted hover:bg-slate-50 font-bold text-xs transition-colors">3</button>
-          <button class="w-8 h-8 rounded-lg border border-borderSoft flex items-center justify-center text-muted hover:bg-slate-50 transition-colors">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-          </button>
-        </div>
+      <div class="p-5 border-t border-[#E8DCCB]/60 flex items-center justify-between">
+        <p class="text-[11px] text-[#8A7A6C] font-medium">{{ filteredOrders.length }} pesanan</p>
       </div>
-      
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
 const filterTabs = ['Semua Pesanan', 'Diproses', 'Dikirim', 'Selesai', 'Dibatalkan'];
 const activeTab = ref('Semua Pesanan');
-
-// Fetch real orders from API
+const searchQuery = ref('');
 const orders = ref([]);
 
 const fetchOrders = async () => {
   try {
     const token = localStorage.getItem('token');
     const res = await fetch('/api/v1/orders', {
-      headers: { 'Authorization': `Bearer ${token}` }
+      headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' }
     });
     if (res.ok) {
       const data = await res.json();
-      orders.value = data.data.map(o => {
-        const firstItem = o.items && o.items.length > 0 ? o.items[0] : null;
-        const pName = firstItem && firstItem.product ? firstItem.product.name : 'Produk Custom';
-        const pImg = firstItem && firstItem.product ? firstItem.product.image_url : null;
-        
-        // Map English status to Indonesian to match tabs
-        const statusMap = {
-          'pending': 'Menunggu Pembayaran',
-          'paid': 'Diproses',
-          'shipped': 'Dikirim',
-          'completed': 'Selesai',
-          'cancelled': 'Dibatalkan'
-        };
-        
+      orders.value = (data.data || []).map(o => {
+        const firstItem = o.items?.[0];
+        const statusMap = { pending: 'Menunggu', paid: 'Diproses', shipped: 'Dikirim', completed: 'Selesai', cancelled: 'Dibatalkan' };
         return {
-          id: `#ORD-${1000 + o.id}`,
-          customer_name: o.buyer?.name || 'Unknown',
-          customer_city: '-', // Backend doesn't have city yet
-          product_name: o.items?.length > 1 ? `${pName} (+${o.items.length - 1} item)` : pName,
-          product_image: pImg,
-          qty: firstItem ? firstItem.quantity : 1,
-          total_price: o.total_amount,
-          status: statusMap[o.status] || 'Menunggu Pembayaran',
-          created_at: o.created_at
+          id: o.midtrans_order_id || `#ORD-${1000 + o.id}`,
+          customer_name: o.buyer?.profile?.full_name || o.buyer?.name || 'Customer',
+          product_name: o.items?.length > 1 ? `${firstItem?.product?.name || 'Produk'} (+${o.items.length - 1})` : (firstItem?.product?.name || 'Produk'),
+          product_image: firstItem?.product?.image_url || null,
+          qty: firstItem?.quantity || 1,
+          total_price: o.total_amount || 0,
+          status: statusMap[o.status] || 'Menunggu',
+          created_at: o.created_at,
         };
       });
     }
-  } catch (error) {
-    console.error('Failed to fetch orders:', error);
-  }
+  } catch (e) { console.error('Failed to fetch orders:', e); }
 };
 
-import { onMounted } from 'vue';
-onMounted(() => {
-  fetchOrders();
-});
+onMounted(() => { fetchOrders(); });
 
 const filteredOrders = computed(() => {
-  if (activeTab.value === 'Semua Pesanan') return orders.value;
-  return orders.value.filter(o => o.status === activeTab.value);
+  let result = orders.value;
+  if (activeTab.value !== 'Semua Pesanan') result = result.filter(o => o.status === activeTab.value);
+  if (searchQuery.value) {
+    const q = searchQuery.value.toLowerCase();
+    result = result.filter(o => o.id.toLowerCase().includes(q) || o.customer_name.toLowerCase().includes(q));
+  }
+  return result;
 });
 
-// Helper Formatting
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return new Intl.DateTimeFormat('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }).format(date);
-};
+const formatDate = (d) => new Intl.DateTimeFormat('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(d));
 
-const formatTime = (dateString) => {
-  const date = new Date(dateString);
-  return new Intl.DateTimeFormat('id-ID', { hour: '2-digit', minute: '2-digit' }).format(date);
-};
+const getStatusClass = (s) => ({
+  'Menunggu': 'bg-[#F8F1E7] text-[#8A7A6C]',
+  'Diproses': 'bg-[#C98A1A]/10 text-[#C98A1A]',
+  'Dikirim': 'bg-blue-50 text-blue-600',
+  'Selesai': 'bg-[#0F8A4B]/10 text-[#0F8A4B]',
+  'Dibatalkan': 'bg-[#D94A38]/10 text-[#D94A38]',
+}[s] || 'bg-[#F8F1E7] text-[#8A7A6C]');
 
-// Styling Logics
-const getStatusClass = (status) => {
-  const maps = {
-    'Menunggu Pembayaran': 'bg-slate-50 border-borderSoft text-muted',
-    'Diproses': 'bg-sand border-terracotta/30 text-terracotta',
-    'Dikirim': 'bg-blue-50 border-blue-200 text-blue-600',
-    'Selesai': 'bg-emerald-50 border-emerald-200 text-emerald-600',
-    'Dibatalkan': 'bg-red-50 border-red-200 text-red-600',
-  };
-  return maps[status] || 'bg-slate-50 border-borderSoft text-muted';
-};
-
-const getDotClass = (status) => {
-  const maps = {
-    'Menunggu Pembayaran': 'bg-slate-400',
-    'Diproses': 'bg-terracotta animate-pulse',
-    'Dikirim': 'bg-blue-500',
-    'Selesai': 'bg-emerald-500',
-    'Dibatalkan': 'bg-red-500',
-  };
-  return maps[status] || 'bg-slate-400';
-};
+const getDotClass = (s) => ({
+  'Menunggu': 'bg-[#8A7A6C]',
+  'Diproses': 'bg-[#C98A1A]',
+  'Dikirim': 'bg-blue-500',
+  'Selesai': 'bg-[#0F8A4B]',
+  'Dibatalkan': 'bg-[#D94A38]',
+}[s] || 'bg-[#8A7A6C]');
 </script>
 
 <style scoped>

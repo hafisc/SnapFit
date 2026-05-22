@@ -106,4 +106,50 @@ class CocreateRoomController extends Controller
 
         return response()->json(['message' => 'Room telah ditutup.']);
     }
+
+    /**
+     * Get messages for a room.
+     */
+    public function messages(CocreateRoom $room): JsonResponse
+    {
+        $messages = \App\Models\RoomMessage::with('user')
+            ->where('room_id', $room->id)
+            ->orderBy('created_at', 'asc')
+            ->limit(100)
+            ->get();
+
+        return response()->json([
+            'data' => $messages->map(fn($m) => [
+                'id' => $m->id,
+                'user_id' => $m->user_id,
+                'message' => $m->message,
+                'user' => ['id' => $m->user->id, 'name' => $m->user->name],
+                'created_at' => $m->created_at->toDateTimeString(),
+            ]),
+        ]);
+    }
+
+    /**
+     * Send a message to a room.
+     */
+    public function sendMessage(Request $request, CocreateRoom $room): JsonResponse
+    {
+        $request->validate(['message' => 'required|string|max:1000']);
+
+        $msg = \App\Models\RoomMessage::create([
+            'room_id' => $room->id,
+            'user_id' => $request->user()->id,
+            'message' => $request->message,
+        ]);
+
+        return response()->json([
+            'data' => [
+                'id' => $msg->id,
+                'user_id' => $msg->user_id,
+                'message' => $msg->message,
+                'user' => ['id' => $request->user()->id, 'name' => $request->user()->name],
+                'created_at' => $msg->created_at->toDateTimeString(),
+            ],
+        ], 201);
+    }
 }
