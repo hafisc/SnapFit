@@ -88,12 +88,6 @@
 
         <!-- Icons Container -->
         <div class="flex items-center gap-4">
-          <!-- Mobile Menu Button -->
-          <button @click="toggleMobileMenu" class="lg:hidden p-2 rounded-lg hover:bg-sand transition-colors">
-            <svg class="w-5 h-5 text-espresso" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
 
           <!-- Notification Bell (Always Visible) -->
         <div class="relative notification-menu">
@@ -369,33 +363,28 @@
           </div>
         </template>
 
-        <button v-else @click="goToLogin"
-          class="group relative bg-gray-900 text-white px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-terracotta transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-terracotta/20/50 hover:-translate-y-0.5">
-          <span class="relative z-10">Sign In</span>
-        </button>
+        <template v-else>
+          <!-- Desktop Sign In Button -->
+          <button @click="goToLogin"
+            class="hidden md:inline-flex group relative bg-espresso text-white px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-terracotta transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-terracotta/30 hover:-translate-y-0.5 items-center justify-center">
+            <span class="relative z-10">Sign In</span>
+          </button>
+
+          <!-- Mobile Sign In Icon Button -->
+          <button @click="goToLogin"
+            class="md:hidden p-1.5 rounded-lg hover:bg-sand transition-colors group flex items-center justify-center"
+            title="Sign In">
+            <svg class="w-4 h-4 text-muted group-hover:text-terracotta transition-colors" fill="none"
+              stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          </button>
+        </template>
         </div>
       </div>
     </nav>
 
-    <!-- Mobile Menu -->
-    <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 -translate-y-4"
-      enter-to-class="opacity-100 translate-y-0" leave-active-class="transition ease-in duration-150"
-      leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 -translate-y-4">
-      <div v-if="showMobileMenu" class="lg:hidden border-t border-borderSoft/60 bg-[rgba(255,250,243,0.95)] backdrop-blur-xl">
-        <div class="max-w-7xl mx-auto px-6 py-4 space-y-1">
-          <a href="#marketplace"
-            class="block px-4 py-3 rounded-xl text-sm font-bold text-terracotta hover:bg-sand hover:text-terracotta transition-all">Marketplace</a>
-          <a href="#ai-studio"
-            class="block px-4 py-3 rounded-xl text-sm font-semibold text-espresso hover:bg-sand hover:text-terracotta transition-all">AI Studio</a>
-          <a href="#ar-tryon"
-            class="block px-4 py-3 rounded-xl text-sm font-semibold text-espresso hover:bg-sand hover:text-terracotta transition-all">Coba AR</a>
-          <a href="#co-create"
-            class="block px-4 py-3 rounded-xl text-sm font-semibold text-espresso hover:bg-sand hover:text-terracotta transition-all">Co-Create</a>
-          <a href="#buka-toko"
-            class="block px-4 py-3 rounded-xl text-sm font-semibold text-espresso hover:bg-sand hover:text-terracotta transition-all">Buka Toko</a>
-        </div>
-      </div>
-    </Transition>
   </header>
 </template>
 
@@ -417,7 +406,7 @@ const props = defineProps({
 const emit = defineEmits(['logout', 'goToLogin', 'goToProfile', 'goToOrders']);
 
 const showUserMenu = ref(false);
-const showMobileMenu = ref(false);
+
 const showNotifications = ref(false);
 const showCart = ref(false);
 const isLoggedIn = computed(() => !!props.user);
@@ -438,7 +427,7 @@ const toggleCart = () => {
   if (showCart.value) { showUserMenu.value = false; showNotifications.value = false; }
 };
 
-const toggleMobileMenu = () => { showMobileMenu.value = !showMobileMenu.value; };
+
 
 // Notifications Data
 const notifications = ref([]);

@@ -34,7 +34,6 @@ const routes = [
     path: '/marketplace/product/:id',
     name: 'marketplace.product.detail',
     component: () => import('@/pages/landing/marketplace/product-detail.vue'),
-    meta: { requiresAuth: true },
   },
   {
     path: '/marketplace/cart',

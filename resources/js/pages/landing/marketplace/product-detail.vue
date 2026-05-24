@@ -19,8 +19,8 @@
 
       <div class="flex flex-col lg:grid gap-6 lg:gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-start">
         <div class="contents lg:block lg:space-y-6">
-          <div class="order-1 lg:order-none bg-surface rounded-[2rem] p-3 sm:p-4 shadow-sm border border-borderSoft overflow-hidden">
-            <div class="grid gap-4">
+          <div class="order-1 lg:order-none bg-transparent lg:bg-surface rounded-none lg:rounded-[2rem] p-0 lg:p-4 shadow-none lg:shadow-sm border-none lg:border lg:border-borderSoft overflow-hidden">
+            <div class="grid gap-3 lg:gap-4">
               <div class="relative overflow-hidden rounded-[2rem] bg-slate-100">
                 <img
                   v-if="activeImage"
@@ -33,7 +33,7 @@
                 </div>
               </div>
 
-              <div class="flex flex-row gap-3 overflow-x-auto hide-scrollbar rounded-[2rem] bg-slate-50 p-2 sm:p-3 border border-borderSoft">
+              <div class="flex flex-row gap-3 overflow-x-auto hide-scrollbar rounded-[2rem] bg-transparent lg:bg-slate-50 p-0 py-1 lg:p-3 border-none lg:border lg:border-borderSoft">
                 <button
                   v-for="(image, index) in galleryImages"
                   :key="index"
@@ -50,7 +50,7 @@
 
           <div class="order-3 lg:order-none grid gap-6 lg:grid-cols-[1.5fr_1fr]">
             <!-- Product Story Tabs -->
-            <div class="rounded-3xl bg-surface p-1 shadow-sm border border-borderSoft overflow-hidden flex flex-col">
+            <div class="rounded-3xl bg-transparent lg:bg-surface p-0 lg:p-1 shadow-none lg:shadow-sm border-none lg:border lg:border-borderSoft overflow-hidden flex flex-col">
               <div class="flex overflow-x-auto hide-scrollbar border-b border-borderSoft px-2 pt-2 gap-1 sm:gap-2">
                 <button v-for="tab in ['Deskripsi', 'Cerita Budaya', 'Material', 'Profil UMKM']" :key="tab"
                   @click="activeTab = tab"
@@ -60,7 +60,7 @@
                   {{ tab }}
                 </button>
               </div>
-              <div class="p-5 sm:p-6 bg-white flex-1 rounded-b-3xl">
+              <div class="p-0 py-4 lg:p-6 bg-transparent lg:bg-white flex-1 rounded-b-3xl">
                 <div v-if="activeTab === 'Deskripsi'" class="animate-fade-in">
                   <p class="text-espresso text-sm leading-relaxed whitespace-pre-line">{{ product?.description }}</p>
                 </div>
@@ -84,7 +84,7 @@
             </div>
 
             <!-- Enhanced Seller Info -->
-            <div class="rounded-3xl bg-surface p-6 shadow-sm border border-borderSoft flex flex-col">
+            <div class="rounded-3xl bg-transparent lg:bg-surface p-0 lg:p-6 shadow-none lg:shadow-sm border-none lg:border lg:border-borderSoft flex flex-col mt-6 lg:mt-0">
               <h3 class="text-base font-bold tracking-tight text-espresso mb-4">Informasi Penjual</h3>
               <div class="flex items-center gap-4 mb-5">
                 <div class="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 overflow-hidden border border-borderSoft">
@@ -120,7 +120,7 @@
             </div>
           </div>
 
-          <div class="order-5 lg:order-none rounded-3xl bg-surface p-5 sm:p-6 shadow-sm border border-borderSoft">
+          <div class="order-5 lg:order-none rounded-3xl bg-transparent lg:bg-surface p-0 lg:p-6 shadow-none lg:shadow-sm border-none lg:border lg:border-borderSoft mt-6 lg:mt-0">
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-base sm:text-lg font-bold tracking-tight text-espresso">Produk Terkait</h3>
               <button
@@ -148,7 +148,7 @@
         </div>
 
         <div class="contents lg:block lg:space-y-6">
-          <div class="order-2 lg:order-none rounded-[2rem] bg-surface p-5 sm:p-6 shadow-sm border border-borderSoft">
+          <div class="order-2 lg:order-none rounded-[2rem] bg-transparent lg:bg-surface p-0 lg:p-6 shadow-none lg:shadow-sm border-none lg:border lg:border-borderSoft">
             <div class="mb-5">
               <p class="text-xs font-bold uppercase tracking-[0.25em] text-terracotta">Marketplace</p>
               <h1 class="mt-3 text-2xl sm:text-3xl font-black tracking-tight text-[#2B1E16] leading-tight">{{ product?.name ?? 'Loading produk...' }}</h1>
@@ -172,11 +172,6 @@
               </div>
             </div>
 
-            <div class="flex flex-wrap gap-2 items-center text-xs font-medium text-muted mb-6 pb-6 border-b border-borderSoft">
-              <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-50 border border-borderSoft px-3 py-1.5">
-                <svg class="w-3.5 h-3.5 text-slate-400" fill="currentColor" viewBox="0 0 20 20"><path d="M4 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V5z" /></svg>
-                {{ product?.category ?? 'Batik & Kerajinan' }}
-              </span>
             </div>
 
             <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -184,7 +179,7 @@
                 <p class="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-1">Harga</p>
                 <p class="text-3xl sm:text-4xl font-extrabold tracking-tight text-terracotta">Rp {{ formatCurrency(displayPrice) }}</p>
               </div>
-              <div class="rounded-2xl bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-600 border border-emerald-100">Stok: {{ selectedStock }}</div>
+              <div class="self-start sm:self-auto rounded-2xl bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-600 border border-emerald-100">Stok: {{ selectedStock }}</div>
             </div>
 
             <div class="space-y-4">
@@ -203,61 +198,44 @@
                 </div>
               </div>
 
-              <div class="grid gap-4 sm:grid-cols-[auto_1fr] items-end pb-6">
+              <!-- Quantity Selector (Refined Layout) -->
+              <div class="flex flex-wrap items-center gap-4 pb-6">
                 <div>
                   <label class="block text-xs font-bold text-muted mb-2 uppercase tracking-wider">Kuantitas</label>
-                  <div class="flex items-center gap-2 rounded-2xl border border-borderSoft bg-surface p-1.5 shadow-sm">
+                  <div class="w-fit flex items-center gap-2 rounded-2xl border border-borderSoft bg-surface p-1.5 shadow-sm">
                     <button type="button" @click="decrementQuantity" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-muted transition hover:bg-slate-100 font-medium">-</button>
                     <input type="number" v-model.number="quantity" min="1" :max="selectedStock" class="w-12 border-none bg-transparent text-center text-sm font-bold text-espresso p-0 focus:ring-0" />
                     <button type="button" @click="incrementQuantity" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-muted transition hover:bg-slate-100 font-medium">+</button>
                   </div>
                 </div>
-                <div class="text-xs text-slate-400 pb-3">Max {{ selectedStock }} pcs</div>
+                <div class="text-xs text-slate-400 pt-5">Max {{ selectedStock }} pcs</div>
               </div>
 
-              <div class="grid gap-3 sm:grid-cols-2">
-                <button
-                  type="button"
-                  @click="addToCart"
-                  :disabled="!canAddToCart"
-                  class="rounded-2xl bg-[#2B1E16] px-5 py-3.5 text-sm font-bold text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-60 shadow-lg shadow-[#2B1E16]/20"
-                >
-                  Tambah ke Keranjang
-                </button>
-                <button
-                  type="button"
-                  @click="buyNow"
-                  :disabled="!canAddToCart"
-                  class="rounded-2xl bg-terracotta px-5 py-3.5 text-sm font-bold text-white transition hover:bg-terracottaDark disabled:cursor-not-allowed disabled:opacity-60 shadow-lg shadow-terracotta/20"
-                >
-                  Beli Sekarang
-                </button>
-              </div>
-
-              <div class="grid gap-3 sm:grid-cols-2 mt-2">
-                <button
-                  type="button"
-                  @click="openArModal"
-                  class="sm:col-span-2 relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#2B1E16] to-terracotta px-5 py-4 text-left transition hover:shadow-lg hover:-translate-y-0.5 group"
-                >
-                  <div class="absolute right-0 top-0 bottom-0 w-32 bg-white/5 skew-x-12 -mr-10 group-hover:bg-white/10 transition"></div>
-                  <div class="flex items-center justify-between relative z-10">
-                    <div class="flex items-center gap-3">
-                      <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[#D4AF37]">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                      </div>
-                      <div>
-                        <p class="text-white font-bold text-sm">Coba dengan AR</p>
-                        <p class="text-white/70 text-[10px] mt-0.5">Lihat produk secara virtual sebelum membeli</p>
-                      </div>
-                    </div>
-                    <svg class="w-5 h-5 text-white/50 group-hover:text-white transition group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                  </div>
-                </button>
+              <!-- Desktop Buttons (Hidden on mobile) -->
+              <div class="hidden lg:flex flex-col gap-3">
+                <div class="grid gap-3 sm:grid-cols-2">
+                  <button
+                    type="button"
+                    @click="addToCart"
+                    :disabled="!canAddToCart"
+                    class="rounded-2xl bg-[#2B1E16] px-5 py-3.5 text-sm font-bold text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-60 shadow-lg shadow-[#2B1E16]/20"
+                  >
+                    Tambah ke Keranjang
+                  </button>
+                  <button
+                    type="button"
+                    @click="buyNow"
+                    :disabled="!canAddToCart"
+                    class="rounded-2xl bg-terracotta px-5 py-3.5 text-sm font-bold text-white transition hover:bg-terracottaDark disabled:cursor-not-allowed disabled:opacity-60 shadow-lg shadow-terracotta/20"
+                  >
+                    Beli Sekarang
+                  </button>
+                </div>
+                
                 <button
                   type="button"
                   @click="toggleWishlist"
-                  class="sm:col-span-2 rounded-2xl border border-borderSoft bg-surface px-5 py-3.5 text-sm font-bold text-espresso transition hover:bg-slate-50 hover:border-slate-300"
+                  class="w-full rounded-2xl border border-borderSoft bg-surface px-5 py-3.5 text-sm font-bold text-espresso transition hover:bg-slate-50 hover:border-slate-300"
                 >
                   <span class="flex items-center justify-center gap-2">
                     <svg class="w-4 h-4" :class="isWishlisted ? 'fill-red-500 text-red-500' : 'fill-none text-slate-400'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
@@ -265,18 +243,40 @@
                   </span>
                 </button>
               </div>
+
+              <!-- AR Try-On Banner (Visible on both mobile & desktop) -->
+              <button
+                type="button"
+                @click="openArModal"
+                class="w-full relative overflow-hidden rounded-2xl bg-[#2B1E16] px-5 py-4 text-left transition hover:shadow-lg hover:-translate-y-0.5 group mt-2"
+              >
+                <div class="absolute right-0 top-0 bottom-0 w-32 bg-white/5 skew-x-12 -mr-10 group-hover:bg-white/10 transition"></div>
+                <div class="flex items-center justify-between relative z-10">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[#D4AF37]">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <div>
+                      <p class="text-white font-bold text-sm">Coba dengan AR</p>
+                      <p class="text-white/70 text-[10px] mt-0.5">Lihat produk secara virtual sebelum membeli</p>
+                    </div>
+                  </div>
+                  <svg class="w-5 h-5 text-white/50 group-hover:text-white transition group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+              </button>
             </div>
 
-            <div class="mt-6 space-y-3 text-muted text-sm">
-              <button type="button" @click="shareProduct" class="inline-flex items-center gap-2 text-espresso hover:text-espresso">
+            <!-- Share Info -->
+            <div class="mt-6 space-y-2 text-muted text-[11px] lg:text-sm">
+              <button type="button" @click="shareProduct" class="inline-flex items-center gap-2 text-espresso hover:text-espresso font-bold">
                 <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path d="M15 8a3 3 0 10-2.83-4H7.83A3 3 0 105 8c0 .19.02.38.06.56L3.3 10.4a3 3 0 101.2 1.2l1.8-1.54A3.02 3.02 0 008 11a3 3 0 103 3 2.99 2.99 0 00-1.68-.57l-1.8 1.54a3 3 0 10.55 1.18l1.75-1.5a3.02 3.02 0 001.83.64A3 3 0 1015 8z"/></svg>
                 Bagikan produk
               </button>
-              <p class="text-xs text-slate-400">Link ini akan tersalin ke clipboard jika share API tidak tersedia.</p>
+              <p class="text-[10px] text-slate-400">Link ini akan tersalin ke clipboard jika share API tidak tersedia.</p>
             </div>
           </div>
 
-          <div class="order-4 lg:order-none rounded-3xl bg-surface p-5 sm:p-6 shadow-sm border border-borderSoft">
+          <div class="order-4 lg:order-none rounded-3xl bg-transparent lg:bg-surface p-0 lg:p-6 shadow-none lg:shadow-sm border-none lg:border lg:border-borderSoft mt-6 lg:mt-0">
             <div class="mb-5 flex items-center justify-between">
               <div>
                 <h3 class="text-base sm:text-lg font-bold tracking-tight text-espresso">Ulasan Pelanggan</h3>
@@ -387,13 +387,13 @@
 
           <div v-if="analysisResult" class="flex-1 flex flex-col gap-4 animate-fade-in">
             <!-- Score Card -->
-            <div class="bg-gradient-to-br from-orange-500 to-amber-500 rounded-3xl p-5 text-white shadow-lg shadow-terracotta/20">
+            <div class="bg-terracotta rounded-3xl p-5 text-white shadow-md">
               <div class="flex items-center justify-between">
                 <div>
-                  <p class="text-orange-100 text-xs uppercase tracking-widest font-bold mb-1">Tingkat Kecocokan</p>
-                  <h3 class="text-4xl font-black">{{ analysisResult.match_score }}<span class="text-2xl text-orange-200">%</span></h3>
+                  <p class="text-white/80 text-xs uppercase tracking-widest font-bold mb-1">Tingkat Kecocokan</p>
+                  <h3 class="text-4xl font-black">{{ analysisResult.match_score }}<span class="text-2xl text-white/80">%</span></h3>
                 </div>
-                <div class="w-16 h-16 bg-surface/20 rounded-full flex items-center justify-center backdrop-blur-md">
+                <div class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-md">
                   <span class="text-2xl">{{ analysisResult.match_score >= 80 ? '🔥' : (analysisResult.match_score >= 60 ? '✨' : '👍') }}</span>
                 </div>
               </div>
@@ -440,6 +440,41 @@
       </div>
     </div>
   </section>
+
+  <!-- Mobile Sticky Bottom Bar (Visible only on mobile) -->
+  <div class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-surface/95 backdrop-blur-md border-t border-borderSoft p-4 pb-6 flex items-center gap-3 shadow-[0_-10px_30px_rgba(0,0,0,0.06)]">
+    <!-- Wishlist Button -->
+    <button
+      type="button"
+      @click="toggleWishlist"
+      class="w-12 h-12 rounded-xl border border-borderSoft flex items-center justify-center transition active:scale-95 bg-surface text-espresso"
+      :class="isWishlisted ? 'text-red-500 border-red-200 bg-red-50/50' : 'text-espresso'"
+    >
+      <svg class="w-5 h-5" :class="isWishlisted ? 'fill-current' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+      </svg>
+    </button>
+
+    <!-- Tambah ke Keranjang -->
+    <button
+      type="button"
+      @click="addToCart"
+      :disabled="!canAddToCart"
+      class="flex-1 py-3 bg-[#2B1E16] text-white rounded-xl font-bold text-xs uppercase tracking-widest transition active:scale-95 disabled:opacity-50"
+    >
+      + Keranjang
+    </button>
+
+    <!-- Beli Sekarang -->
+    <button
+      type="button"
+      @click="buyNow"
+      :disabled="!canAddToCart"
+      class="flex-1 py-3 bg-terracotta text-white font-bold text-xs uppercase tracking-widest transition active:scale-95 disabled:opacity-50 shadow-md shadow-terracotta/20"
+    >
+      Beli Sekarang
+    </button>
+  </div>
 </template>
 
 <script setup>
@@ -652,6 +687,17 @@ const buyNow = async () => {
   }
   const variant = selectedVariant.value?.label ?? null;
   await cartStore.addItem(product.value, quantity.value, variant);
+  
+  const token = localStorage.getItem('token');
+  const userStored = localStorage.getItem('user');
+  const isAuthenticated = !!(token && userStored);
+
+  if (!isAuthenticated) {
+    notificationStore.info('Silakan login terlebih dahulu untuk melakukan checkout.');
+    router.push({ name: 'login', query: { redirect: '/marketplace/checkout?source=buy-now' } });
+    return;
+  }
+
   notificationStore.success('Membuka checkout...');
   setTimeout(() => router.push({ path: '/marketplace/checkout', query: { source: 'buy-now' } }), 400);
 };

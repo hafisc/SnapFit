@@ -1,7 +1,8 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center p-4 md:p-10 bg-[#FAFAFA] font-sans selection:bg-sand">
+  <div class="min-h-screen flex flex-col md:justify-center md:items-center p-0 md:p-10 bg-[#2B1E16] md:bg-[#FAFAFA] font-sans selection:bg-sand">
+    <!-- Back Button: absolute on mobile inside the dark header, fixed on desktop -->
     <button @click="goToLanding"
-      class="fixed top-8 left-8 z-50 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 hover:text-terracotta transition-all group bg-surface/50 backdrop-blur-md px-5 py-3 rounded-full border border-borderSoft shadow-sm">
+      class="absolute md:fixed top-6 left-6 md:top-8 md:left-8 z-50 flex items-center gap-2 md:gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-white/80 md:text-slate-400 hover:text-[#D4AF37] md:hover:text-terracotta transition-all group bg-white/10 md:bg-surface/50 backdrop-blur-md px-4 py-2.5 md:px-5 md:py-3 rounded-full border border-white/10 md:border-borderSoft shadow-sm">
       <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor"
         viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -10,20 +11,14 @@
     </button>
 
     <div
-      class="w-full max-w-4xl flex flex-col md:flex-row bg-surface rounded-[3rem] overflow-hidden shadow-[0_30px_80px_-15px_rgba(0,0,0,0.06)] border border-white">
-      <!-- Left Branding Panel -->
+      class="w-full max-w-4xl flex flex-col md:flex-row bg-[#2B1E16] md:bg-surface md:rounded-[3rem] overflow-hidden md:shadow-[0_30px_80px_-15px_rgba(0,0,0,0.06)] md:border md:border-white min-h-screen md:min-h-0">
       <!-- Left Branding Panel (Hidden on small screens) -->
       <div
         class="hidden md:flex w-full md:w-[45%] bg-[#2B1E16] p-8 md:p-12 flex-col justify-between relative overflow-hidden">
         
         <!-- Full Screen Batik Background -->
-        <div class="absolute inset-0 bg-cover bg-left bg-no-repeat opacity-20 mix-blend-overlay pointer-events-none" 
+        <div class="absolute inset-0 bg-cover bg-left bg-no-repeat opacity-[0.08] pointer-events-none" 
              style="background-image: url('/assets/batik-bg.png');">
-        </div>
-        
-        <div class="absolute inset-0 opacity-40 pointer-events-none">
-          <div class="absolute -top-24 -left-24 w-96 h-96 bg-[#B85C38] rounded-full blur-[120px] animate-pulse"></div>
-          <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-[#D4AF37] rounded-full blur-[120px]"></div>
         </div>
 
         <div class="relative z-10">
@@ -38,7 +33,7 @@
 
           <h2 class="text-3xl lg:text-4xl font-black text-white leading-[1.2] mb-6 tracking-tight">
             Kreativitas Lokal, <br />
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#B85C38] to-[#D4AF37]">Naik Kelas</span> <br />
+            <span class="text-gold">Naik Kelas</span> <br />
             Lewat Teknologi.
           </h2>
 
@@ -55,35 +50,43 @@
         <div class="relative z-10 mt-20 pt-10 border-t border-white/10">
           <div class="flex flex-wrap gap-x-6 gap-y-3 opacity-80">
             <div class="flex items-center gap-2">
-              <svg class="w-4 h-4 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+              <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
               <span class="text-[10px] font-bold tracking-wider text-white">500+ UMKM KREATIF</span>
             </div>
             <div class="flex items-center gap-2">
-              <svg class="w-4 h-4 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+              <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
               <span class="text-[10px] font-bold tracking-wider text-white">AI STUDIO READY</span>
             </div>
             <div class="flex items-center gap-2">
-              <svg class="w-4 h-4 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+              <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
               <span class="text-[10px] font-bold tracking-wider text-white">AR TRY-ON SUPPORT</span>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- Mobile Branding Panel (Visible only on mobile) -->
+      <div class="md:hidden w-full bg-[#2B1E16] pt-20 pb-14 px-8 flex flex-col justify-center items-center text-center relative overflow-hidden">
+        <!-- Full Screen Batik Background -->
+        <div class="absolute inset-0 bg-cover bg-left bg-no-repeat opacity-[0.08] pointer-events-none" 
+             style="background-image: url('/assets/batik-bg.png');">
+        </div>
+
+        <!-- Content -->
+        <div class="relative z-10 flex flex-col items-center">
+          <div class="w-12 h-12 rounded-xl overflow-hidden shadow-sm border border-white/10 mb-4 flex items-center justify-center bg-white">
+            <img :src="'/images/logo_snapfit.png'" alt="SnapFit Logo" class="w-full h-full object-contain p-1.5" />
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-white leading-snug tracking-tight">
+            Kreativitas Lokal, <span class="text-gold">Naik Kelas</span> <br/> Lewat Teknologi.
+          </h2>
+        </div>
+      </div>
+
       <!-- Right Form Panel -->
-      <div class="w-full md:w-[55%] p-6 sm:p-10 md:p-12 bg-[#FFFCF7] flex items-center relative">
+      <div class="w-full md:w-[55%] bg-[#FFFCF7] flex items-center relative rounded-t-[2.5rem] -mt-6 md:-mt-0 z-20 px-6 py-10 sm:p-10 md:p-12 shadow-[0_-15px_30px_rgba(0,0,0,0.04)] md:shadow-none flex-grow">
         <div class="max-w-md mx-auto w-full">
           
-          <!-- Mobile Branding (Visible only on mobile) -->
-          <div class="md:hidden flex flex-col items-center mb-10 text-center">
-            <div class="w-14 h-14 rounded-xl overflow-hidden shadow-sm border border-[#E8DCCB] mb-4 flex items-center justify-center bg-white">
-              <img :src="'/images/logo_snapfit.png'" alt="SnapFit Logo" class="w-full h-full object-contain p-1.5" />
-            </div>
-            <h2 class="text-2xl font-black text-[#2B1E16] leading-[1.2] tracking-tight">
-              Kreativitas Lokal, <span class="text-[#B85C38]">Naik Kelas</span> <br/> Lewat Teknologi.
-            </h2>
-          </div>
-
           <div class="mb-8 md:mb-10 text-center md:text-left">
             <h3 class="text-2xl font-black text-[#2B1E16] mb-2 tracking-tight">
               {{ isLogin ? 'Selamat Datang Kembali' : 'Mulai Perjalanan Kreatif Anda' }}
@@ -288,7 +291,10 @@ onMounted(async () => {
         // Bersihkan URL parameter agar token tidak terlihat
         window.history.replaceState({}, document.title, window.location.pathname);
 
-        // Redirect sesuai role
+        // Redirect ke redirect query jika ada, jika tidak sesuai role
+        const redirectPath = route.query.redirect;
+        if (redirectPath) return router.push(redirectPath);
+
         if (role === 'admin') return router.push('/admin/dashboard');
         if (role === 'umkm') return router.push('/umkm/dashboard');
         if (role === 'desainer') return router.push('/designer/dashboard');
@@ -345,7 +351,10 @@ const submit = async () => {
     localStorage.setItem('user', JSON.stringify(data.user));
     localStorage.setItem('token', data.token);
 
-    // Role-based redirect
+    // Redirect ke redirect query jika ada, jika tidak sesuai role
+    const redirectPath = route.query.redirect;
+    if (redirectPath) return router.push(redirectPath);
+
     const role = data.user?.role;
     if (role === 'admin') return router.push('/admin/dashboard');
     if (role === 'umkm') return router.push('/umkm/dashboard');
