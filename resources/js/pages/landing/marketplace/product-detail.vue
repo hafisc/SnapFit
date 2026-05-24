@@ -460,42 +460,79 @@ const normalizeProduct = (raw) => {
   const item = raw?.product ?? raw;
   const images = safeParseArray(item.images ?? item.gallery ?? item.image_url ?? []).filter(Boolean);
   
+  const price = item.price ? Number(item.price) : 349000;
   const mockVariants = [
-    { id: 1, name: 'S', price: 349000 },
-    { id: 2, name: 'M', price: 349000 },
-    { id: 3, name: 'L', price: 349000 },
-    { id: 4, name: 'XL', price: 349000 }
+    { id: 1, name: 'S', price: price },
+    { id: 2, name: 'M', price: price },
+    { id: 3, name: 'L', price: price },
+    { id: 4, name: 'XL', price: price }
   ];
   
   const variants = mockVariants;
   const reviews = Array.isArray(item.reviews) ? item.reviews : [];
 
-  const dbName = item.name ?? item.title ?? '';
-  // Force override for prototype display
-  const isDemo = true;
+  const dbName = item.name ?? '';
+  const category = item.category ?? 'batik';
+
+  // Dynamic cultural stories based on name & category
+  let culturalStory = 'Karya seni warisan nusantara hasil kurasi UMKM lokal terpilih dengan standar kualitas tinggi.';
+  let motifMeaning = 'Setiap produk membawa identitas budaya lokal yang membanggakan.';
+  let materialCare = 'Perawatan:\nIkuti petunjuk perawatan khusus pada label kemasan produk.';
+
+  if (category === 'batik') {
+    if (dbName.includes('Parang')) {
+      culturalStory = 'Motif Parang dikenal sebagai simbol kekuatan, keteguhan, dan semangat yang terus bergerak maju. Motif ini banyak digunakan dalam karya batik Yogyakarta dan Solo.';
+      motifMeaning = 'Garis diagonal pada motif Parang menggambarkan kesinambungan dan perjuangan. Filosofinya cocok untuk pengguna yang ingin membawa kesan kuat, elegan, dan berkarakter.';
+    } else if (dbName.includes('Mega Mendung') || dbName.includes('MegaMendung')) {
+      culturalStory = 'Motif Mega Mendung merupakan ikon batik Cirebon yang melambangkan ketenangan, kesabaran, dan kebijaksanaan seperti awan mendung yang menyejukkan.';
+      motifMeaning = 'Bentuk awan berlapis melambangkan dunia atas yang membawa hujan pembawa berkah, serta kesabaran dalam menahan amarah.';
+    } else if (dbName.includes('Lasem')) {
+      culturalStory = 'Batik Lasem sangat dipengaruhi oleh akulturasi budaya Tionghoa dan Jawa pesisir, menghasilkan warna merah khas (merah darah ayam) yang legendaris.';
+      motifMeaning = 'Motif burung phoenix (lokcan) melambangkan keabadian dan keberuntungan, berpadu dengan motif tumbuhan khas Jawa.';
+    } else {
+      culturalStory = 'Batik tradisional nusantara yang dibuat oleh pengrajin berpengalaman dengan melestarikan keahlian tulis/cap turun-temurun.';
+      motifMeaning = 'Tiap goresan lilin malam pada kain ini memiliki makna filosofis mendalam tentang keseimbangan hidup dan keselarasan dengan alam.';
+    }
+    materialCare = 'Material:\nKatun premium dengan tekstur lembut dan nyaman digunakan.\n\nPerawatan:\nCuci manual dengan air dingin, hindari pemutih, dan jemur di tempat teduh agar warna tetap awet.';
+  } else if (category === 'kerajinan') {
+    culturalStory = 'Karya tenun ikat tradisional yang ditenun secara manual menggunakan alat tenun bukan mesin (ATBM) serta benang dengan pewarnaan alami.';
+    motifMeaning = 'Motif geometris khas suku nusantara yang menceritakan tentang hubungan harmonis manusia dengan leluhur dan alam sekitar.';
+    materialCare = 'Material:\nBenang tenun katun premium dengan pewarna alami.\n\nPerawatan:\nDry clean sangat disarankan, atau cuci tangan perlahan tanpa diperas keras.';
+  } else if (category === 'aksesoris') {
+    culturalStory = 'Aksesoris tradisional hasil karya seniman logam Kotagede dan Celuk yang dipahat dan dibentuk secara manual dengan ketelitian tinggi.';
+    motifMeaning = 'Sentuhan motif ukiran klasik khas kerajaan nusantara yang melambangkan kemewahan, kehormatan, dan keanggunan.';
+    materialCare = 'Material:\nPerak murni 925 / Alpaka berkualitas.\n\nPerawatan:\nHindari kontak langsung dengan parfum, simpan di wadah kedap udara, dan bersihkan dengan kain microfiber.';
+  } else if (category === 'dekorasi') {
+    culturalStory = 'Elemen interior rumah yang menggabungkan motif batik klasik dengan desain fungsional modern untuk memperindah ruang tinggal Anda.';
+    motifMeaning = 'Simbol kehangatan keluarga dan estetika warisan budaya yang membawa aura ketenangan di dalam rumah.';
+    materialCare = 'Material:\nKain katun batik premium tebal.\n\nPerawatan:\nCuci dengan deterjen lembut tanpa pemutih, setrika dengan suhu sedang.';
+  }
+
+  const sellerName = item.umkm_name ?? item.owner?.profile?.business_name ?? item.owner?.name ?? 'Sanggar Batik Laras';
+  const sellerLocation = item.origin ?? 'Yogyakarta, Indonesia';
 
   return {
     id: item.id,
-    name: 'Kemeja Batik Parang Heritage',
-    price: 349000,
-    description: 'Kemeja batik premium dengan motif Parang klasik, dirancang untuk tampilan formal maupun casual. Dibuat dari kain katun nyaman dengan detail motif khas Indonesia.',
-    category: 'Batik / Fashion',
+    name: dbName || 'Kemeja Batik Parang Heritage',
+    price: price,
+    description: item.description ?? 'Kemeja batik premium dengan motif klasik, dirancang untuk tampilan formal maupun casual. Dibuat dari kain berkualitas tinggi.',
+    category: category,
     sku: item.sku ?? item.code ?? 'N/A',
     rating: item.rating ?? item.average_rating ?? 4.8,
     average_rating: item.average_rating ?? item.rating ?? 4.8,
     reviews,
     seller: {
-      name: isDemo ? 'Sanggar Batik Laras' : (item.seller?.name ?? item.seller_name ?? 'UMKM Lokal'),
-      location: isDemo ? 'Yogyakarta, Indonesia' : (item.seller?.location ?? item.seller_location ?? 'Indonesia'),
+      name: sellerName,
+      location: sellerLocation,
       rating: 4.9,
-      sold: 120,
+      sold: item.sold ?? 120,
     },
-    cultural_story: 'Motif Parang dikenal sebagai simbol kekuatan, keteguhan, dan semangat yang terus bergerak maju. Motif ini banyak digunakan dalam karya batik Yogyakarta dan Solo.',
-    motif_meaning: 'Garis diagonal pada motif Parang menggambarkan kesinambungan dan perjuangan. Filosofinya cocok untuk pengguna yang ingin membawa kesan kuat, elegan, dan berkarakter.',
-    material_care: 'Material:\nKatun premium dengan tekstur lembut dan nyaman digunakan.\n\nPerawatan:\nCuci manual dengan air dingin, hindari pemutih, dan jemur di tempat teduh agar warna tetap awet.',
-    artisan_info: 'Dibuat oleh Sanggar Batik Laras, UMKM batik asal Yogyakarta yang berfokus pada motif klasik dengan sentuhan desain modern.',
-    badges: isDemo ? ['Batik Tulis', 'AR Ready', 'Handmade'] : [],
-    images: images.length ? (isDemo ? [images[0], images[0], images[0], images[0]] : images) : ['/images/placeholder-product.png'],
+    cultural_story: culturalStory,
+    motif_meaning: motifMeaning,
+    material_care: materialCare,
+    artisan_info: `Dibuat oleh ${sellerName}, UMKM asal ${sellerLocation} yang berfokus pada pelestarian kerajinan nusantara dengan sentuhan desain modern.`,
+    badges: item.badges ? (typeof item.badges === 'string' ? safeParseArray(item.badges) : item.badges) : ['Handmade', 'Premium', 'AR Ready'],
+    images: images.length ? [images[0], images[0], images[0], images[0]] : ['/images/placeholder-product.png'],
     stock: Math.max(1, item.stock ?? item.quantity ?? 999),
     variants,
   };

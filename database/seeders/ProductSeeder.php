@@ -510,7 +510,51 @@ class ProductSeeder extends Seeder
                 );
             }
 
-            $productImage = ['/images/baju_batik_pria.png'];
+            // Assign specific images to key products, otherwise use category-wide fallbacks
+            $imageName = null;
+            $pName = $p['name'] ?? '';
+            $pCat = $p['category'] ?? '';
+
+            if ($pName === 'Batik Parang Heritage') {
+                $imageName = 'batik_parang.png';
+            } elseif ($pName === 'Batik Tulis Lasem') {
+                $imageName = 'batik_lasem.png';
+            } elseif ($pName === 'Batik Mega Mendung') {
+                $imageName = 'batik_megamendung.png';
+            } elseif ($pName === 'Batik Sidomukti Solo') {
+                $imageName = 'batik_sidomukti.png';
+            } elseif ($pName === 'Batik Kawung Kencana') {
+                $imageName = 'batik_kawung.png';
+            } elseif ($pName === 'Kain Tenun Ikat Sumba') {
+                $imageName = 'tenun_ikat.png';
+            } elseif ($pName === 'Kain Songket Palembang Emas') {
+                $imageName = 'songket_palembang.png';
+            } elseif ($pName === 'Gelang Perak Motif Batik Celuk') {
+                $imageName = 'gelang_perak.png';
+            } elseif ($pName === 'Bros Kebaya Batik Alpaka') {
+                $imageName = 'bros_kebaya.png';
+            } elseif ($pName === 'Bantal Sofa Batik Parang') {
+                $imageName = 'bantal_batik.png';
+            } elseif ($pName === 'Runner Meja Batik Mega Mendung') {
+                $imageName = 'runner_meja.png';
+            } else {
+                // Category-wise fallback
+                if ($pCat === 'batik') {
+                    $imageName = 'batik_fallback.png';
+                } elseif ($pCat === 'fashion') {
+                    $imageName = 'fashion_fallback.png';
+                } elseif ($pCat === 'kerajinan') {
+                    $imageName = 'kerajinan_fallback.png';
+                } elseif ($pCat === 'aksesoris') {
+                    $imageName = 'aksesoris_fallback.png';
+                } elseif ($pCat === 'dekorasi') {
+                    $imageName = 'dekorasi_fallback.png';
+                } else {
+                    $imageName = 'batik_fallback.png';
+                }
+            }
+
+            $productImage = ["/images/products/{$imageName}"];
 
             Product::create(array_merge($p, [
                 'user_id' => $user->id,
