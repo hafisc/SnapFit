@@ -1,0 +1,1 @@
+import{E as e,s as t,u as n}from"./runtime-core.esm-bundler-DRhdThM2.js";import{r}from"./app-B_fLK1Hu.js";var i={},a={class:`p-8 animate-in fade-in`};function o(r,i){return e(),n(`div`,a,[...i[0]||=[t(`h2`,{class:`text-2xl font-black text-espresso`},`Under Construction`,-1),t(`p`,{class:`text-muted`},`Page: register.vue`,-1)]])}var s=r(i,[[`render`,o]]);export{s as default};
