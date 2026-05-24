@@ -313,128 +313,54 @@
     </div>
 
     <div v-if="showArModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 overflow-y-auto">
-      <div class="w-full max-w-4xl rounded-[2rem] bg-surface shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[500px]">
-        
-        <!-- Left Side: Camera & AR -->
-        <div class="w-full md:w-1/2 bg-slate-900 relative flex flex-col justify-center items-center p-6 border-r border-borderSoft">
-          <div class="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-black shadow-inner">
-            <!-- Video Feed (Hidden, used as source for MediaPipe) -->
-            <video ref="videoElement" autoplay playsinline class="hidden"></video>
-            
-            <!-- Canvas (Shows video + AR filter real-time) -->
-            <canvas ref="canvasElement" class="absolute inset-0 w-full h-full object-cover" :class="{'opacity-50': isCapturing || capturedImage}"></canvas>
+      <div class="w-full max-w-md rounded-[2rem] bg-surface shadow-2xl overflow-hidden flex flex-col p-6 relative">
+        <!-- Close Button -->
+        <button type="button" @click="closeArModal" class="absolute top-4 right-4 rounded-full bg-slate-100 p-2 text-espresso hover:bg-slate-200 transition z-30">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
 
-            <!-- Captured Image Overlay (When Paused) -->
-            <img v-if="capturedImage" :src="capturedImage" class="absolute inset-0 w-full h-full object-cover z-10" />
+        <div class="mb-4 pr-10">
+          <h2 class="text-xl font-black text-[#2B1E16] leading-none">AI AR Try-On</h2>
+          <p class="text-muted text-xs mt-1.5 leading-relaxed">Posisikan tubuh Anda di depan kamera untuk melihat kemeja secara virtual.</p>
+        </div>
 
-            <!-- Loading State -->
-            <div v-if="isAnalyzing || isInitializingAR" class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm text-white">
-              <svg class="w-10 h-10 animate-spin text-terracotta mb-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-              <p class="font-bold">{{ isInitializingAR ? 'Memuat Model AR...' : 'AI Sedang Menganalisis...' }}</p>
-              <p class="text-xs text-slate-300 mt-1">{{ isInitializingAR ? 'Mendeteksi postur tubuh' : 'Mencocokkan warna & gaya' }}</p>
-            </div>
-            
-            <div v-if="!isCameraReady && !isCameraDenied && !capturedImage && !isInitializingAR" class="absolute inset-0 flex items-center justify-center">
-              <p class="text-white text-sm font-semibold animate-pulse">Menyiapkan Kamera...</p>
-            </div>
-            
-            <div v-if="isCameraDenied" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-              <div class="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center text-red-500 mb-3">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-              </div>
-              <p class="text-white font-bold mb-1">Akses Kamera Ditolak</p>
-              <p class="text-slate-400 text-xs">Mohon izinkan akses kamera pada browser Anda untuk menggunakan fitur ini.</p>
-            </div>
+        <!-- Camera & AR Canvas -->
+        <div class="bg-slate-950 relative w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-inner">
+          <!-- Video Feed (Hidden, used as source for MediaPipe) -->
+          <video ref="videoElement" autoplay playsinline class="hidden"></video>
+          
+          <!-- Canvas (Shows video + AR filter real-time) -->
+          <canvas ref="canvasElement" class="absolute inset-0 w-full h-full object-cover"></canvas>
+
+          <!-- Loading State -->
+          <div v-if="isInitializingAR" class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm text-white p-4 text-center">
+            <svg class="w-10 h-10 animate-spin text-terracotta mb-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            <p class="font-bold text-sm">Menyiapkan Fitur AR...</p>
+            <p class="text-white/60 text-[10px] mt-1 leading-relaxed">Mengunduh aset model AI & mendeteksi postur tubuh Anda</p>
           </div>
-
-          <!-- Camera Controls -->
-          <div class="mt-6 flex justify-center w-full gap-3 z-30 relative">
-            <button v-if="!capturedImage && isCameraReady" @click="captureAndAnalyze" :disabled="isAnalyzing" class="bg-terracotta hover:bg-terracottaDark text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg transition-transform active:scale-95 border-4 border-white">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-            </button>
-            <button v-if="capturedImage" @click="retake" :disabled="isAnalyzing" class="bg-slate-700 hover:bg-slate-600 text-white rounded-full px-6 py-3 font-semibold text-sm transition-colors shadow-lg">
-              Coba Lagi
-            </button>
+          
+          <div v-if="!isCameraReady && !isCameraDenied && !isInitializingAR" class="absolute inset-0 flex items-center justify-center z-10 bg-slate-955">
+            <p class="text-white/80 text-xs font-semibold animate-pulse">Menghubungkan Kamera...</p>
+          </div>
+          
+          <div v-if="isCameraDenied" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center z-20 bg-slate-950/95 text-white">
+            <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center text-red-500 mb-3">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </div>
+            <p class="font-bold text-sm mb-1">Akses Kamera Ditolak</p>
+            <p class="text-slate-400 text-[10px] leading-relaxed">Mohon izinkan akses kamera pada pengaturan browser Anda untuk mencoba fitur ini.</p>
           </div>
         </div>
 
-        <!-- Right Side: Analysis & Details -->
-        <div class="w-full md:w-1/2 p-8 flex flex-col bg-slate-50 relative h-[500px] overflow-y-auto">
-          <!-- Close Button -->
-          <button type="button" @click="closeArModal" class="absolute top-4 right-4 rounded-full bg-slate-200 p-2 text-espresso hover:bg-slate-300 transition-colors">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        <!-- Action Buttons -->
+        <div class="mt-5 flex gap-3">
+          <button @click="addToCart" class="flex-1 py-3 bg-[#2B1E16] text-white rounded-xl font-bold text-xs uppercase tracking-widest transition active:scale-95">
+            + Keranjang
           </button>
-
-          <h2 class="text-2xl font-black text-espresso mb-1">AI AR Try-On</h2>
-          <p class="text-muted text-sm mb-6">Analisis kecocokan secara virtual</p>
-
-          <div v-if="!analysisResult && !isAnalyzing" class="flex-1 flex flex-col items-center justify-center text-center p-6 border-2 border-dashed border-slate-300 rounded-3xl bg-surface">
-            <div class="w-16 h-16 bg-sand text-terracotta rounded-full flex items-center justify-center mb-4">
-              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-            </div>
-            <h3 class="font-bold text-espresso mb-2">Siap untuk Analisis</h3>
-            <p class="text-sm text-muted">Ambil foto Anda menggunakan kamera, AI akan menganalisis kecocokan produk ini dengan Anda.</p>
-          </div>
-
-          <div v-if="isAnalyzing" class="flex-1 flex flex-col items-center justify-center">
-            <div class="w-64 h-2 bg-slate-200 rounded-full overflow-hidden mb-4">
-              <div class="h-full bg-terracotta rounded-full animate-pulse" style="width: 100%"></div>
-            </div>
-            <p class="text-muted text-sm animate-pulse">Menghubungkan ke Groq AI...</p>
-          </div>
-
-          <div v-if="analysisResult" class="flex-1 flex flex-col gap-4 animate-fade-in">
-            <!-- Score Card -->
-            <div class="bg-terracotta rounded-3xl p-5 text-white shadow-md">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-white/80 text-xs uppercase tracking-widest font-bold mb-1">Tingkat Kecocokan</p>
-                  <h3 class="text-4xl font-black">{{ analysisResult.match_score }}<span class="text-2xl text-white/80">%</span></h3>
-                </div>
-                <div class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center backdrop-blur-md">
-                  <span class="text-2xl">{{ analysisResult.match_score >= 80 ? '🔥' : (analysisResult.match_score >= 60 ? '✨' : '👍') }}</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Analysis Content -->
-            <div class="space-y-4 mt-2">
-              <div class="bg-surface rounded-2xl p-4 shadow-sm border border-borderSoft">
-                <h4 class="text-sm font-bold text-espresso mb-2 flex items-center gap-2">
-                  <svg class="w-4 h-4 text-terracotta" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                  Tampilan & Gaya
-                </h4>
-                <p class="text-sm text-muted leading-relaxed">{{ analysisResult.how_it_looks }}</p>
-              </div>
-
-              <div class="bg-surface rounded-2xl p-4 shadow-sm border border-borderSoft">
-                <h4 class="text-sm font-bold text-espresso mb-2 flex items-center gap-2">
-                  <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                  Rekomendasi Styling
-                </h4>
-                <p class="text-sm text-muted leading-relaxed">{{ analysisResult.styling_recommendation }}</p>
-              </div>
-
-              <div v-if="analysisResult.pairing_suggestions?.length" class="bg-surface rounded-2xl p-4 shadow-sm border border-borderSoft">
-                <h4 class="text-sm font-bold text-espresso mb-2 flex items-center gap-2">
-                  <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                  Paduan yang Cocok
-                </h4>
-                <ul class="list-disc list-inside text-sm text-muted space-y-1">
-                  <li v-for="(tip, idx) in analysisResult.pairing_suggestions" :key="idx">{{ tip }}</li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="mt-6 pt-4 border-t border-borderSoft flex gap-3">
-              <button @click="addToCart" class="flex-1 bg-slate-900 text-white rounded-2xl py-3 font-bold text-sm hover:bg-black transition-colors">
-                Tambah Keranjang
-              </button>
-            </div>
-          </div>
+          <button @click="buyNow" class="flex-1 py-3 bg-terracotta text-white font-bold text-xs uppercase tracking-widest transition active:scale-95 shadow-md shadow-terracotta/20">
+            Beli Sekarang
+          </button>
         </div>
-
       </div>
     </div>
   </section>
