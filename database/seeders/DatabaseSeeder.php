@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Seed CoCreate Room demo
-        $umkm     = User::where('active_role', 'umkm')->first();
-        $desainer = User::where('active_role', 'desainer')->first();
+        $umkm     = User::whereHas('roles', function($q) { $q->where('name', 'umkm'); })->first();
+        $desainer = User::whereHas('roles', function($q) { $q->where('name', 'designer'); })->first();
 
         if ($umkm && $desainer) {
             $room = CocreateRoom::updateOrCreate(
@@ -65,11 +65,8 @@ class DatabaseSeeder extends Seeder
         $this->command->table(
             ['Role', 'Email', 'Password'],
             [
-                ['Admin',   'admin@snapfit.id',   'password'],
-                ['UMKM',    'sari@snapfit.id',     'password'],
-                ['UMKM',    'budi@snapfit.id',     'password'],
-                ['Desainer','reza@snapfit.id',     'password'],
-                ['Pembeli', 'pembeli@snapfit.id',  'password'],
+                ['Admin',   'admin@snapfit.id',   'password123'],
+                ['User (Buyer, UMKM, Designer)',    'user@snapfit.id',     'password123'],
             ]
         );
     }

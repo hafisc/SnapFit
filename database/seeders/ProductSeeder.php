@@ -10,7 +10,7 @@ class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        $umkmUsers = User::where('active_role', 'umkm')->get();
+        $umkmUsers = User::whereHas('roles', function($q) { $q->where('name', 'umkm'); })->get();
 
         if ($umkmUsers->isEmpty()) {
             $this->command->warn('Tidak ada user UMKM. Jalankan UserSeeder dulu.');
@@ -475,31 +475,42 @@ class ProductSeeder extends Seeder
             ],
         ];
 
+        $demoUser = User::where('email', 'user@snapfit.id')->first();
+        $umkmRole = \App\Models\Role::where('name', 'umkm')->first();
+
         foreach ($products as $index => $p) {
-            // Find or create user for this UMKM
-            $user = User::firstOrCreate(
-                ['email' => strtolower(str_replace([' ', '.', ',', '\''], '', $p['umkm_name'])) . '@umkm.com'],
-                [
-                    'name' => $p['umkm_name'],
-                    'password' => bcrypt('password'),
-                    'active_role' => 'umkm'
-                ]
-            );
-
-            // Create or update profile
-            \App\Models\Profile::updateOrCreate(
-                ['user_id' => $user->id],
-                [
-                    'full_name' => $p['umkm_name'],
-                    'business_name' => $p['umkm_name'],
-                    'phone' => '08' . rand(1000000000, 9999999999)
-                ]
-            );
-
-            $productImage = ['/images/baju_batik_pria.png'];
-
             $umkmName = $p['umkm_name'];
             unset($p['umkm_name']);
+
+            if ($demoUser && $umkmName === 'Sanggar Batik Laras') {
+                $user = $demoUser;
+            } else {
+                // Find or create user for this UMKM
+                $user = User::firstOrCreate(
+                    ['email' => strtolower(str_replace([' ', '.', ',', '\''], '', $umkmName)) . '@umkm.com'],
+                    [
+                        'name' => $umkmName,
+                        'password' => bcrypt('password'),
+                        'active_role' => 'umkm'
+                    ]
+                );
+
+                if ($umkmRole) {
+                    $user->roles()->syncWithoutDetaching([$umkmRole->id]);
+                }
+
+                // Create or update profile
+                \App\Models\Profile::updateOrCreate(
+                    ['user_id' => $user->id],
+                    [
+                        'full_name' => $umkmName,
+                        'business_name' => $umkmName,
+                        'phone' => '08' . rand(1000000000, 9999999999)
+                    ]
+                );
+            }
+
+            $productImage = ['/images/baju_batik_pria.png'];
 
             Product::create(array_merge($p, [
                 'user_id' => $user->id,
