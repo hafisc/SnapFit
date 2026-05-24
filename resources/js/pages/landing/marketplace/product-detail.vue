@@ -1,5 +1,5 @@
 <template>
-  <section class="snapfit-heritage-bg min-h-screen text-espresso pb-10 relative overflow-hidden">
+  <section class="snapfit-heritage-bg min-h-screen text-espresso pb-32 lg:pb-10 relative overflow-hidden">
     <!-- Navbar -->
     <Navbar
       :user="user"
@@ -170,8 +170,6 @@
                 <span class="text-slate-300">•</span>
                 <span class="text-muted hover:text-espresso cursor-pointer underline-offset-4 hover:underline transition">{{ reviewCount }} ulasan</span>
               </div>
-            </div>
-
             </div>
 
             <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
