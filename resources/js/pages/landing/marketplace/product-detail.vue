@@ -19,27 +19,27 @@
 
       <div class="flex flex-col lg:grid gap-6 lg:gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-start">
         <div class="contents lg:block lg:space-y-6">
-          <div class="order-1 lg:order-none bg-transparent lg:bg-surface rounded-none lg:rounded-[2rem] p-0 lg:p-4 shadow-none lg:shadow-sm border-none lg:border lg:border-borderSoft overflow-hidden">
+          <div class="order-1 lg:order-none bg-transparent lg:bg-surface rounded-none lg:rounded-3xl p-0 lg:p-4 shadow-none lg:shadow-sm border-none lg:border lg:border-borderSoft overflow-hidden">
             <div class="grid gap-3 lg:gap-4">
-              <div class="relative overflow-hidden rounded-[2rem] bg-slate-100">
+              <div class="relative overflow-hidden rounded-3xl bg-slate-100 aspect-square lg:aspect-[4/5]">
                 <img
                   v-if="activeImage"
                   :src="activeImage"
                   :alt="product?.name ?? 'Product image'"
-                  class="w-full aspect-[4/5] sm:aspect-square object-cover transition duration-300 ease-out hover:scale-105"
+                  class="w-full h-full object-cover transition duration-300 ease-out hover:scale-105"
                 />
-                <div class="absolute right-4 top-4 rounded-full bg-surface/80 px-3 py-2 text-xs font-semibold text-espresso backdrop-blur">
+                <div class="absolute right-4 top-4 rounded-full bg-surface/85 px-3 py-1.5 text-xs font-semibold text-espresso backdrop-blur">
                   {{ currentImageLabel }}
                 </div>
               </div>
 
-              <div class="flex flex-row gap-3 overflow-x-auto hide-scrollbar rounded-[2rem] bg-transparent lg:bg-slate-50 p-0 py-1 lg:p-3 border-none lg:border lg:border-borderSoft">
+              <div class="flex flex-row gap-3 overflow-x-auto hide-scrollbar rounded-2xl bg-transparent lg:bg-slate-50 p-0 py-1 lg:p-2.5 border-none lg:border lg:border-borderSoft">
                 <button
                   v-for="(image, index) in galleryImages"
                   :key="index"
                   type="button"
                   @click="activeImageIndex = index"
-                  class="group flex-shrink-0 w-20 h-20 flex items-center justify-center overflow-hidden rounded-2xl sm:rounded-3xl border transition-all duration-200"
+                  class="group flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center overflow-hidden rounded-xl sm:rounded-2xl border transition-all duration-200"
                   :class="index === activeImageIndex ? 'border-terracotta ring-2 ring-terracotta/20' : 'border-borderSoft hover:border-terracotta/50'"
                 >
                   <img :src="image" :alt="`Gallery ${index + 1}`" class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
@@ -148,48 +148,48 @@
         </div>
 
         <div class="contents lg:block lg:space-y-6">
-          <div class="order-2 lg:order-none rounded-[2rem] bg-transparent lg:bg-surface p-0 lg:p-6 shadow-none lg:shadow-sm border-none lg:border lg:border-borderSoft">
-            <div class="mb-5">
-              <p class="text-xs font-bold uppercase tracking-[0.25em] text-terracotta">Marketplace</p>
-              <h1 class="mt-3 text-2xl sm:text-3xl font-black tracking-tight text-[#2B1E16] leading-tight">{{ product?.name ?? 'Loading produk...' }}</h1>
+          <div class="order-2 lg:order-none rounded-3xl bg-transparent lg:bg-surface p-0 lg:p-6 shadow-none lg:shadow-sm border-none lg:border lg:border-borderSoft">
+            <div class="mb-4">
+              <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-terracotta">Marketplace</p>
+              <h1 class="mt-2 text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-[#2B1E16] leading-tight">{{ product?.name ?? 'Loading produk...' }}</h1>
               
               <!-- Badges -->
-              <div v-if="product?.badges?.length" class="mt-3 flex flex-wrap gap-2">
-                <span v-for="badge in product.badges" :key="badge" class="inline-flex items-center rounded-lg bg-[#2B1E16] px-2.5 py-1 text-[10px] font-bold text-[#D4AF37] uppercase tracking-wider">
+              <div v-if="product?.badges?.length" class="mt-2.5 flex flex-wrap gap-1.5">
+                <span v-for="badge in product.badges" :key="badge" class="inline-flex items-center rounded-lg border border-terracotta/20 bg-[#F8F1E7]/60 px-2.5 py-0.5 text-[9px] font-bold text-terracotta uppercase tracking-wider leading-none">
                   {{ badge }}
                 </span>
               </div>
 
-              <div class="mt-4 flex flex-wrap items-center gap-3 text-sm text-muted">
-                <div class="flex items-center gap-1.5">
-                  <svg class="w-4 h-4 text-amber-400" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.95a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.388 2.46a1 1 0 00-.363 1.118l1.287 3.95c.3.921-.755 1.688-1.54 1.118l-3.388-2.46a1 1 0 00-1.175 0l-3.388 2.46c-.784.57-1.838-.197-1.539-1.118l1.287-3.95a1 1 0 00-.363-1.118L2.098 9.377c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.95z"/></svg>
+              <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted">
+                <div class="flex items-center gap-1">
+                  <svg class="w-3.5 h-3.5 text-amber-400" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.95a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.388 2.46a1 1 0 00-.363 1.118l1.287 3.95c.3.921-.755 1.688-1.54 1.118l-3.388-2.46a1 1 0 00-1.175 0l-3.388 2.46c-.784.57-1.838-.197-1.539-1.118l1.287-3.95a1 1 0 00-.363-1.118L2.098 9.377c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.95z"/></svg>
                   <span class="font-bold text-espresso">{{ product?.rating?.toFixed(1) ?? product?.average_rating?.toFixed(1) ?? '0.0' }}</span>
                 </div>
-                <span class="text-slate-300">•</span>
-                <span class="text-muted">{{ product?.seller?.sold ?? 120 }} terjual</span>
-                <span class="text-slate-300">•</span>
-                <span class="text-muted hover:text-espresso cursor-pointer underline-offset-4 hover:underline transition">{{ reviewCount }} ulasan</span>
+                <span class="text-slate-300/60">•</span>
+                <span>{{ product?.seller?.sold ?? 120 }} terjual</span>
+                <span class="text-slate-300/60">•</span>
+                <span class="hover:text-espresso cursor-pointer underline-offset-4 hover:underline transition">{{ reviewCount }} ulasan</span>
               </div>
             </div>
 
-            <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div class="mb-5 flex flex-col gap-2.5 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p class="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-1">Harga</p>
-                <p class="text-3xl sm:text-4xl font-extrabold tracking-tight text-terracotta">Rp {{ formatCurrency(displayPrice) }}</p>
+                <p class="text-[10px] font-bold uppercase tracking-wider text-muted/60 mb-0.5">Harga</p>
+                <p class="text-2xl sm:text-3xl font-extrabold tracking-tight text-terracotta">Rp {{ formatCurrency(displayPrice) }}</p>
               </div>
-              <div class="self-start sm:self-auto rounded-2xl bg-emerald-50 px-4 py-2 text-xs font-bold text-emerald-600 border border-emerald-100">Stok: {{ selectedStock }}</div>
+              <div class="self-start sm:self-auto rounded-xl bg-emerald-50/60 px-3 py-1.5 text-[11px] font-bold text-emerald-700 border border-emerald-500/10 shadow-sm">Stok: {{ selectedStock }}</div>
             </div>
 
             <div class="space-y-4">
               <div v-if="variantOptions.length" class="mb-4">
-                <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Pilih Varian</label>
-                <div class="flex flex-wrap gap-2">
+                <label class="block text-[10px] font-bold uppercase tracking-wider text-muted/60 mb-2">Pilih Varian</label>
+                <div class="flex flex-wrap gap-1.5">
                   <button 
                     v-for="variant in variantOptions" 
                     :key="variant.value"
                     @click="selectedVariantId = variant.value"
-                    class="px-5 py-2.5 rounded-xl border text-sm font-bold transition-all duration-200"
-                    :class="selectedVariantId === variant.value ? 'border-terracotta bg-terracotta text-white shadow-md shadow-terracotta/20' : 'border-borderSoft hover:border-slate-300 text-espresso bg-surface'"
+                    class="px-4 py-2 rounded-xl border text-xs font-bold transition-all duration-200"
+                    :class="selectedVariantId === variant.value ? 'border-terracotta bg-terracotta text-white shadow-sm' : 'border-borderSoft hover:border-terracotta/30 text-espresso bg-[#F8F1E7]/10'"
                   >
                     {{ variant.label }}
                   </button>
@@ -197,26 +197,26 @@
               </div>
 
               <!-- Quantity Selector (Refined Layout) -->
-              <div class="flex flex-wrap items-center gap-4 pb-6">
+              <div class="flex flex-wrap items-center gap-3 pb-5">
                 <div>
-                  <label class="block text-xs font-bold text-muted mb-2 uppercase tracking-wider">Kuantitas</label>
-                  <div class="w-fit flex items-center gap-2 rounded-2xl border border-borderSoft bg-surface p-1.5 shadow-sm">
-                    <button type="button" @click="decrementQuantity" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-muted transition hover:bg-slate-100 font-medium">-</button>
-                    <input type="number" v-model.number="quantity" min="1" :max="selectedStock" class="w-12 border-none bg-transparent text-center text-sm font-bold text-espresso p-0 focus:ring-0" />
-                    <button type="button" @click="incrementQuantity" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-muted transition hover:bg-slate-100 font-medium">+</button>
+                  <label class="block text-[10px] font-bold text-muted/60 mb-1.5 uppercase tracking-wider">Kuantitas</label>
+                  <div class="w-fit flex items-center gap-1.5 rounded-xl border border-borderSoft bg-surface p-1 shadow-sm">
+                    <button type="button" @click="decrementQuantity" class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 text-muted transition hover:bg-slate-100 font-medium">-</button>
+                    <input type="number" v-model.number="quantity" min="1" :max="selectedStock" class="w-10 border-none bg-transparent text-center text-xs font-bold text-espresso p-0 focus:ring-0" />
+                    <button type="button" @click="incrementQuantity" class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 text-muted transition hover:bg-slate-100 font-medium">+</button>
                   </div>
                 </div>
-                <div class="text-xs text-slate-400 pt-5">Max {{ selectedStock }} pcs</div>
+                <div class="text-[10px] text-muted/50 pt-5">Max {{ selectedStock }} pcs</div>
               </div>
 
               <!-- Desktop Buttons (Hidden on mobile) -->
-              <div class="hidden lg:flex flex-col gap-3">
-                <div class="grid gap-3 sm:grid-cols-2">
+              <div class="hidden lg:flex flex-col gap-2.5">
+                <div class="grid gap-2.5 sm:grid-cols-2">
                   <button
                     type="button"
                     @click="addToCart"
                     :disabled="!canAddToCart"
-                    class="rounded-2xl bg-[#2B1E16] px-5 py-3.5 text-sm font-bold text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-60 shadow-lg shadow-[#2B1E16]/20"
+                    class="rounded-xl bg-[#2B1E16] px-5 py-3 text-xs font-bold text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-60 shadow-sm"
                   >
                     Tambah ke Keranjang
                   </button>
@@ -224,7 +224,7 @@
                     type="button"
                     @click="buyNow"
                     :disabled="!canAddToCart"
-                    class="rounded-2xl bg-terracotta px-5 py-3.5 text-sm font-bold text-white transition hover:bg-terracottaDark disabled:cursor-not-allowed disabled:opacity-60 shadow-lg shadow-terracotta/20"
+                    class="rounded-xl bg-terracotta px-5 py-3 text-xs font-bold text-white transition hover:bg-terracottaDark disabled:cursor-not-allowed disabled:opacity-60 shadow-sm"
                   >
                     Beli Sekarang
                   </button>
@@ -233,10 +233,10 @@
                 <button
                   type="button"
                   @click="toggleWishlist"
-                  class="w-full rounded-2xl border border-borderSoft bg-surface px-5 py-3.5 text-sm font-bold text-espresso transition hover:bg-slate-50 hover:border-slate-300"
+                  class="w-full rounded-xl border border-borderSoft bg-surface px-5 py-3 text-xs font-bold text-espresso transition hover:bg-slate-50 hover:border-slate-300"
                 >
                   <span class="flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4" :class="isWishlisted ? 'fill-red-500 text-red-500' : 'fill-none text-slate-400'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    <svg class="w-3.5 h-3.5" :class="isWishlisted ? 'fill-red-500 text-red-500' : 'fill-none text-slate-400'" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
                     {{ isWishlisted ? 'Tersimpan' : 'Wishlist' }}
                   </span>
                 </button>
@@ -246,31 +246,31 @@
               <button
                 type="button"
                 @click="openArModal"
-                class="w-full relative overflow-hidden rounded-2xl bg-[#2B1E16] px-5 py-4 text-left transition hover:shadow-lg hover:-translate-y-0.5 group mt-2"
+                class="w-full relative overflow-hidden rounded-xl bg-[#2B1E16] px-4 py-3.5 text-left transition hover:shadow-md hover:-translate-y-0.5 group mt-2"
               >
                 <div class="absolute right-0 top-0 bottom-0 w-32 bg-white/5 skew-x-12 -mr-10 group-hover:bg-white/10 transition"></div>
                 <div class="flex items-center justify-between relative z-10">
-                  <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[#D4AF37]">
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[#D4AF37]">
+                      <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                     </div>
                     <div>
-                      <p class="text-white font-bold text-sm">Coba dengan AR</p>
-                      <p class="text-white/70 text-[10px] mt-0.5">Lihat produk secara virtual sebelum membeli</p>
+                      <p class="text-white font-bold text-xs">Coba dengan AR</p>
+                      <p class="text-white/60 text-[9px] mt-0.5">Lihat produk secara virtual sebelum membeli</p>
                     </div>
                   </div>
-                  <svg class="w-5 h-5 text-white/50 group-hover:text-white transition group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                  <svg class="w-4 h-4 text-white/50 group-hover:text-white transition group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </div>
               </button>
             </div>
 
             <!-- Share Info -->
-            <div class="mt-6 space-y-2 text-muted text-[11px] lg:text-sm">
-              <button type="button" @click="shareProduct" class="inline-flex items-center gap-2 text-espresso hover:text-espresso font-bold">
-                <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path d="M15 8a3 3 0 10-2.83-4H7.83A3 3 0 105 8c0 .19.02.38.06.56L3.3 10.4a3 3 0 101.2 1.2l1.8-1.54A3.02 3.02 0 008 11a3 3 0 103 3 2.99 2.99 0 00-1.68-.57l-1.8 1.54a3 3 0 10.55 1.18l1.75-1.5a3.02 3.02 0 001.83.64A3 3 0 1015 8z"/></svg>
+            <div class="mt-5 space-y-1.5 text-muted text-[10px] lg:text-xs">
+              <button type="button" @click="shareProduct" class="inline-flex items-center gap-1.5 text-espresso hover:text-espresso font-bold">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor"><path d="M15 8a3 3 0 10-2.83-4H7.83A3 3 0 105 8c0 .19.02.38.06.56L3.3 10.4a3 3 0 101.2 1.2l1.8-1.54A3.02 3.02 0 008 11a3 3 0 103 3 2.99 2.99 0 00-1.68-.57l-1.8 1.54a3 3 0 10.55 1.18l1.75-1.5a3.02 3.02 0 001.83.64A3 3 0 1015 8z"/></svg>
                 Bagikan produk
               </button>
-              <p class="text-[10px] text-slate-400">Link ini akan tersalin ke clipboard jika share API tidak tersedia.</p>
+              <p class="text-[9px] text-muted/50">Link ini akan tersalin ke clipboard jika share API tidak tersedia.</p>
             </div>
           </div>
 
