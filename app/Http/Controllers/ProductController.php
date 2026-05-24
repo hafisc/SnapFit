@@ -38,11 +38,18 @@ class ProductController extends Controller
         }
 
         // Sort
-        $sortBy  = $request->get('sort_by', 'created_at');
-        $sortDir = $request->get('sort_dir', 'desc');
-        $allowedSorts = ['created_at', 'price', 'views', 'name'];
-        if (in_array($sortBy, $allowedSorts)) {
-            $query->orderBy($sortBy, $sortDir === 'asc' ? 'asc' : 'desc');
+        if ($request->filled('sort_by')) {
+            $sortBy  = $request->get('sort_by');
+            $sortDir = $request->get('sort_dir', 'desc');
+            $allowedSorts = ['created_at', 'price', 'views', 'name', 'random'];
+            if ($sortBy === 'random') {
+                $query->inRandomOrder();
+            } elseif (in_array($sortBy, $allowedSorts)) {
+                $query->orderBy($sortBy, $sortDir === 'asc' ? 'asc' : 'desc');
+            }
+        } else {
+            // Default to random order if no sort is specified to randomize on refresh
+            $query->inRandomOrder();
         }
 
         $products = $query->paginate($request->get('per_page', 12));
