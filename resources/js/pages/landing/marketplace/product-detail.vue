@@ -352,15 +352,6 @@
           </div>
         </div>
 
-        <!-- Action Buttons -->
-        <div class="mt-5 flex gap-3">
-          <button @click="addToCart" class="flex-1 py-3 bg-[#2B1E16] text-white rounded-xl font-bold text-xs uppercase tracking-widest transition active:scale-95">
-            + Keranjang
-          </button>
-          <button @click="buyNow" class="flex-1 py-3 bg-terracotta text-white font-bold text-xs uppercase tracking-widest transition active:scale-95 shadow-md shadow-terracotta/20">
-            Beli Sekarang
-          </button>
-        </div>
       </div>
     </div>
   </section>
