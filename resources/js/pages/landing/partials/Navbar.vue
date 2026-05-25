@@ -20,7 +20,7 @@
         </a>
 
         <!-- Main Navigation Menu -->
-        <div class="hidden lg:flex items-center gap-8">
+        <!-- <div class="hidden lg:flex items-center gap-8">
 
         <a href="#ai-studio" class="relative px-3 py-2 text-[13px] font-semibold text-muted hover:text-terracotta transition-colors">
           AI Studio
@@ -34,7 +34,7 @@
         <a href="#buka-toko" class="px-4 py-1.5 text-[12px] font-bold text-terracotta bg-cream border border-terracotta/30 rounded-full hover:bg-terracotta hover:text-white transition-all shadow-sm">
           Buka Toko
         </a>
-      </div>
+      </div> -->
       </div>
 
       <!-- RIGHT SECTION: Search + Icons -->
@@ -71,7 +71,7 @@
               </div>
               <div v-else class="max-h-[60vh] overflow-y-auto hide-scrollbar">
                 <a v-for="item in searchResults" :key="item.id" href="javascript:void(0)"
-                  @click.prevent="goToProduct(item.id)"
+                  @click.prevent="goToProduct(item)"
                   class="flex items-center gap-3 p-3 hover:bg-sand transition-colors border-b border-gray-50 last:border-0">
                   <img :src="item.images?.[0] ?? item.image_url ?? '/images/placeholder.png'"
                     class="w-10 h-10 rounded-lg object-cover bg-gray-100 flex-shrink-0" />
@@ -523,10 +523,13 @@ const debouncedSearch = () => {
   }, 300);
 };
 
-const goToProduct = (id) => {
+const goToProduct = (item) => {
   showSearchResults.value = false;
   searchQuery.value = '';
-  router.push({ name: 'product.detail', params: { id } });
+  const slug = item.name.toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+  router.push(`/${slug}-i.${item.id}`);
 };
 
 // Cart item manipulation

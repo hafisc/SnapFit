@@ -140,19 +140,19 @@
             <span class="w-1.5 h-5 bg-terracotta rounded-full"></span>
             Koleksi Pilihan Nusantara
           </h2>
-          <a href="#"
+          <!-- <a href="#"
             class="lihat-semua-link text-xs md:text-sm font-extrabold text-terracotta hover:text-terracottaDark transition-all flex items-center gap-1.5 group/link">
             Lihat Semua
             <svg class="w-3.5 h-3.5 md:w-4 md:h-4 transition-transform group-hover/link:translate-x-0.5" fill="none" stroke="currentColor"
               stroke-width="2.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
-          </a>
+          </a> -->
         </div>
         <!-- Tagline / Subtitle -->
-        <p class="text-[10px] md:text-xs text-muted mt-1 font-medium pl-4">
+        <!-- <p class="text-[10px] md:text-xs text-muted mt-1 font-medium pl-4">
           Produk autentik hasil kurasi langsung dari pengrajin terbaik Indonesia.
-        </p>
+        </p> -->
       </div>
 
 
@@ -350,7 +350,10 @@ const toggleWishlist = async (product) => {
 };
 
 const viewProductDetail = (product) => {
-  router.push({ name: 'product.detail', params: { id: product.id } });
+  const slug = product.name.toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+  router.push(`/${slug}-i.${product.id}`);
 };
 
 const filteredProducts = computed(() => {

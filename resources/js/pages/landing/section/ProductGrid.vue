@@ -414,7 +414,10 @@ const addToCart = async (product) => { await cartStore.addItem(product); };
 const isWishlisted = (productId) => wishlistStore.isWishlisted(productId);
 const toggleWishlist = async (product) => { await wishlistStore.toggleWishlist(product); };
 const viewProductDetail = (product) => {
-  router.push({ name: 'product.detail', params: { id: product.id } });
+  const slug = product.name.toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+  router.push(`/${slug}-i.${product.id}`);
 };
 
 // ─── Lifecycle ────────────────────────────────────────────────────────────────

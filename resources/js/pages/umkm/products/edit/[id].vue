@@ -32,11 +32,13 @@
           <div>
             <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Kategori</label>
             <select v-model="form.category" required class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-espresso outline-none focus:ring-2 focus:ring-orange-200 transition-all cursor-pointer">
-              <option value="Pakaian">Pakaian</option>
-              <option value="Kerajinan">Kerajinan Tangan</option>
-              <option value="Aksesoris">Aksesoris</option>
-              <option value="Makanan">Makanan/Minuman</option>
-              <option value="Lainnya">Lainnya</option>
+              <option value="batik">Batik & Tenun</option>
+              <option value="fashion">Fashion / Pakaian</option>
+              <option value="kerajinan">Kerajinan Tangan</option>
+              <option value="aksesoris">Aksesoris</option>
+              <option value="dekorasi">Dekorasi Rumah</option>
+              <option value="makanan">Makanan</option>
+              <option value="minuman">Minuman</option>
             </select>
           </div>
 
@@ -102,7 +104,7 @@ const form = ref({
   description: '',
   price: '',
   stock: '',
-  category: 'Pakaian',
+  category: 'fashion',
   image_url: '',
   is_published: false
 });

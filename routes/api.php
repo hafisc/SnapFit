@@ -43,6 +43,7 @@ Route::prefix('v1')->group(function () {
     // Marketplace publik
     Route::get('products',                        [ProductController::class, 'index']);
     Route::get('products/{product}',              [ProductController::class, 'show']);
+    Route::post('products/{product}/generate-3d', [ProductController::class, 'generate3d']);
     Route::get('products/{product}/reviews',      [ReviewController::class, 'index']);
 
     // Midtrans Webhook (public, verified via signature)

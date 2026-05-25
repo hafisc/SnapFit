@@ -31,8 +31,7 @@ const routes = [
   },
   {
     path: '/product/:id',
-    name: 'product.detail',
-    component: () => import('@/pages/landing/marketplace/product-detail.vue'),
+    redirect: to => `/${to.params.id}`,
   },
   {
     path: '/cart',
@@ -229,6 +228,18 @@ const routes = [
         component: () => import('@/pages/admin/roles/index.vue'),
       },
     ],
+  },
+
+  // ─── PRODUCT DETAIL (ROOT LEVEL SEO) ────────────
+  {
+    path: '/:id(\\d+)',
+    name: 'product.detail',
+    component: () => import('@/pages/landing/marketplace/product-detail.vue'),
+  },
+  {
+    path: '/:slug-i.:id(\\d+)',
+    name: 'product.detail.seo',
+    component: () => import('@/pages/landing/marketplace/product-detail.vue'),
   },
 
   // ─── FALLBACK ───────────────────────────────────

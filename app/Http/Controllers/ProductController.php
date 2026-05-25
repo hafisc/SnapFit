@@ -159,4 +159,40 @@ class ProductController extends Controller
             'is_published' => $product->is_published,
         ]);
     }
+
+    /**
+     * Generate 3D model menggunakan AI secara simulasi, simpan ke database, dan return.
+     */
+    public function generate3d(Product $product): JsonResponse
+    {
+        if ($product->ar_model_url) {
+            return response()->json([
+                'message' => 'Model 3D sudah tersedia.',
+                'ar_model_url' => $product->ar_model_url,
+            ]);
+        }
+
+        // Simulasi delay pemrosesan AI 3 detik
+        sleep(3);
+
+        // Pilih model berdasarkan kategori produk
+        $category = strtolower($product->category);
+        if ($category === 'dekorasi') {
+            $modelUrl = 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/SheenChair/glTF-Binary/SheenChair.glb';
+        } elseif ($category === 'aksesoris') {
+            $modelUrl = 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/ToyCar/glTF-Binary/ToyCar.glb';
+        } else {
+            // Default/Kerajinan
+            $modelUrl = 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/Lantern/glTF-Binary/Lantern.glb';
+        }
+
+        $product->update([
+            'ar_model_url' => $modelUrl,
+        ]);
+
+        return response()->json([
+            'message' => 'Model 3D berhasil di-generate menggunakan AI!',
+            'ar_model_url' => $modelUrl,
+        ]);
+    }
 }

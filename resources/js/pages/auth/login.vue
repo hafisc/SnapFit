@@ -47,7 +47,7 @@
           </div>
         </div>
 
-        <div class="relative z-10 mt-20 pt-10 border-t border-white/10">
+        <!-- <div class="relative z-10 mt-20 pt-10 border-t border-white/10">
           <div class="flex flex-wrap gap-x-6 gap-y-3 opacity-80">
             <div class="flex items-center gap-2">
               <svg class="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
@@ -62,7 +62,7 @@
               <span class="text-[10px] font-bold tracking-wider text-white">AR TRY-ON SUPPORT</span>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
 
       <!-- Mobile Branding Panel (Visible only on mobile) -->

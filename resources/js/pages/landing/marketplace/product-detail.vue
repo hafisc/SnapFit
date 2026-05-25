@@ -140,7 +140,7 @@
                 <router-link
                   v-for="item in relatedProducts"
                   :key="item.id"
-                  :to="{ name: 'product.detail', params: { id: item.id } }"
+                  :to="getProductLink(item)"
                   class="group block rounded-3xl border border-borderSoft bg-slate-50 p-4 transition hover:-translate-y-1 hover:shadow-lg"
                 >
                   <img :src="item.images?.[0] ?? item.image_url" :alt="item.name" class="h-32 w-full rounded-3xl object-cover" />
@@ -252,6 +252,7 @@
 
                 <!-- AR Try-On Banner -->
                 <button
+                  v-if="product?.category === 'batik' || product?.category === 'fashion'"
                   type="button"
                   @click="openArModal"
                   class="w-full relative overflow-hidden rounded-xl bg-[#2B1E16] px-4 py-3.5 text-left transition hover:shadow-md hover:-translate-y-0.5 group mt-2"
@@ -265,6 +266,28 @@
                       <div>
                         <p class="text-white font-bold text-xs">Coba dengan AR</p>
                         <p class="text-white/60 text-[9px] mt-0.5">Lihat produk secara virtual sebelum membeli</p>
+                      </div>
+                    </div>
+                    <svg class="w-4 h-4 text-white/50 group-hover:text-white transition group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                  </div>
+                </button>
+
+                <!-- 3D Model Viewer Banner (for Crafts, Decor, Accessories) -->
+                <button
+                  v-else
+                  type="button"
+                  @click="open3dModal"
+                  class="w-full relative overflow-hidden rounded-xl bg-[#2B1E16] px-4 py-3.5 text-left transition hover:shadow-md hover:-translate-y-0.5 group mt-2"
+                >
+                  <div class="absolute right-0 top-0 bottom-0 w-32 bg-white/5 skew-x-12 -mr-10 group-hover:bg-white/10 transition"></div>
+                  <div class="flex items-center justify-between relative z-10">
+                    <div class="flex items-center gap-2.5">
+                      <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[#D4AF37]">
+                        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                      </div>
+                      <div>
+                        <p class="text-white font-bold text-xs">Lihat Detail 3D</p>
+                        <p class="text-white/60 text-[9px] mt-0.5">Putar dan telusuri detail produk secara 3D interaktif</p>
                       </div>
                     </div>
                     <svg class="w-4 h-4 text-white/50 group-hover:text-white transition group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
@@ -288,18 +311,24 @@
                   <h3 class="text-base sm:text-lg font-bold tracking-tight text-espresso">Ulasan Pelanggan</h3>
                   <p class="text-sm text-muted mt-1">{{ reviewCount }} ulasan terverifikasi</p>
                 </div>
-                <div class="flex items-center gap-1 bg-amber-50 px-3 py-1.5 rounded-full border border-amber-100">
+                <div class="flex items-center gap-2">
+                  <button
+                    @click="openReviewModal"
+                    class="px-4 py-2 rounded-xl bg-emerald-600 text-white font-bold text-xs hover:bg-emerald-700 transition active:scale-95 shadow-sm"
+                  >
+                    Tulis Ulasan
+                  </button>
+                  <div class="flex items-center gap-1 bg-amber-50 px-3 py-1.5 rounded-full border border-amber-100">
                   <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.95a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.388 2.46a1 1 0 00-.363 1.118l1.287 3.95c.3.921-.755 1.688-1.54 1.118l-3.388-2.46a1 1 0 00-1.175 0l-3.388 2.46c-.784.57-1.838-.197-1.539-1.118l1.287-3.95a1 1 0 00-.363-1.118L2.098 9.377c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.95z"/></svg>
                   <span class="font-bold text-amber-700 text-sm">{{ product?.rating?.toFixed(1) }}</span>
                 </div>
               </div>
-              <div v-if="reviews.length" class="space-y-4">
+            </div>
+            <div v-if="reviews.length" class="space-y-4">
                 <div v-for="review in reviews.slice(0, 3)" :key="review.id" class="rounded-2xl border border-borderSoft bg-slate-50 p-4">
                   <div class="flex items-center justify-between gap-4 mb-2">
                     <div class="flex items-center gap-2">
-                      <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-muted uppercase">
-                        {{ (review.author ?? review.user_name ?? 'P')[0] }}
-                      </div>
+                      <img :src="getAvatarUrl(review)" class="w-8 h-8 rounded-full object-cover border border-borderSoft bg-slate-100" />
                       <div>
                         <p class="text-sm font-bold text-espresso">{{ review.author ?? review.user_name ?? 'Pembeli' }}</p>
                         <p class="text-[10px] text-slate-400">{{ formatDate(review.date ?? review.created_at) }}</p>
@@ -389,7 +418,11 @@
             </div>
 
             <!-- Glowing AR banner on Mobile -->
-            <button @click="openArModal" class="w-full relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#2B1E16] to-[#453124] p-4 text-left shadow-lg border border-amber-500/20 active:scale-[0.98] transition">
+            <button
+              v-if="product?.category === 'batik' || product?.category === 'fashion'"
+              @click="openArModal"
+              class="w-full relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#2B1E16] to-[#453124] p-4 text-left shadow-lg border border-amber-500/20 active:scale-[0.98] transition"
+            >
               <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-amber-500/10 rounded-full blur-xl"></div>
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
@@ -402,6 +435,30 @@
                       <span class="inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                     </h4>
                     <p class="text-[9px] text-white/60 mt-0.5">Coba produk secara virtual langsung ke tubuh Anda</p>
+                  </div>
+                </div>
+                <svg class="w-4 h-4 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+              </div>
+            </button>
+
+            <!-- Glowing 3D banner on Mobile -->
+            <button
+              v-else
+              @click="open3dModal"
+              class="w-full relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#2B1E16] to-[#453124] p-4 text-left shadow-lg border border-amber-500/20 active:scale-[0.98] transition"
+            >
+              <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-amber-500/10 rounded-full blur-xl"></div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#D4AF37] to-[#F3E5AB] flex items-center justify-center text-espresso shadow">
+                    <svg class="w-5 h-5 text-[#2B1E16]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                  </div>
+                  <div>
+                    <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
+                      Interactive 3D Detail
+                      <span class="inline-flex h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                    </h4>
+                    <p class="text-[9px] text-white/60 mt-0.5">Putar dan lihat detail produk dari berbagai sudut</p>
                   </div>
                 </div>
                 <svg class="w-4 h-4 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
@@ -514,13 +571,17 @@
                   <span class="text-[10px] font-bold text-amber-700">{{ product?.rating?.toFixed(1) }}</span>
                 </div>
               </div>
+              <button
+                @click="openReviewModal"
+                class="w-full py-2.5 rounded-xl border border-emerald-600 text-emerald-600 font-bold text-xs hover:bg-emerald-50 transition active:scale-95 mb-3"
+              >
+                Tulis Ulasan
+              </button>
               <div v-if="reviews.length" class="space-y-3">
                 <div v-for="review in reviews.slice(0, 2)" :key="review.id" class="rounded-xl border border-slate-100 bg-slate-50/50 p-3.5">
                   <div class="flex items-center justify-between gap-4 mb-1.5">
                     <div class="flex items-center gap-2">
-                      <div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold text-muted uppercase">
-                        {{ (review.author ?? review.user_name ?? 'P')[0] }}
-                      </div>
+                      <img :src="getAvatarUrl(review)" class="w-6 h-6 rounded-full object-cover border border-slate-100 bg-slate-100" />
                       <div>
                         <p class="text-xs font-bold text-espresso leading-none">{{ review.author ?? review.user_name ?? 'Pembeli' }}</p>
                         <p class="text-[8px] text-slate-400 mt-0.5">{{ formatDate(review.date ?? review.created_at) }}</p>
@@ -548,7 +609,7 @@
                 <router-link
                   v-for="item in relatedProducts"
                   :key="item.id"
-                  :to="{ name: 'product.detail', params: { id: item.id } }"
+                  :to="getProductLink(item)"
                   class="flex-shrink-0 w-36 block rounded-2xl border border-slate-100 bg-white p-3 transition active:scale-95 shadow-sm"
                 >
                   <div class="aspect-square w-full rounded-xl overflow-hidden bg-slate-50">
@@ -707,6 +768,155 @@
       </button>
     </div>
   </div>
+
+  <!-- 3D Model Modal -->
+  <div v-if="show3dModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 overflow-y-auto">
+    <div class="w-full max-w-2xl rounded-[2rem] bg-surface shadow-2xl overflow-hidden flex flex-col p-6 relative border border-borderSoft">
+      <!-- Close Button -->
+      <button type="button" @click="close3dModal" class="absolute top-4 right-4 rounded-full bg-slate-100 p-2 text-espresso hover:bg-slate-200 transition z-30">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+
+      <div class="mb-4 pr-10">
+        <h2 class="text-xl font-black text-[#2B1E16] leading-none">Detail Produk 3D</h2>
+        <p class="text-muted text-xs mt-1.5 leading-relaxed">Geser untuk memutar produk, atau cubit untuk memperbesar/memperkecil detail kerajinan.</p>
+      </div>
+
+      <!-- 3D Model Viewer Canvas -->
+      <div class="bg-[#F8F1E7]/40 relative w-full aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden border border-borderSoft/60 shadow-inner flex items-center justify-center p-6">
+        
+        <!-- AI Generator Interface -->
+        <div v-if="isGenerating3d" class="w-full max-w-md flex flex-col items-center justify-center text-center p-8 bg-white/95 rounded-3xl border border-amber-100 shadow-lg animate-pulse-slow">
+          <!-- Animated AI Pulse Icon -->
+          <div class="relative w-20 h-20 mb-6 flex items-center justify-center">
+            <span class="absolute inline-flex h-full w-full rounded-full bg-terracotta/10 animate-ping"></span>
+            <span class="absolute inline-flex h-16 w-16 rounded-full bg-terracotta/20 animate-pulse"></span>
+            <div class="relative w-12 h-12 rounded-full bg-gradient-to-tr from-terracotta to-amber-500 flex items-center justify-center text-white shadow-lg">
+              <svg class="w-6 h-6 animate-spin-slow" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 9.172V5L8 4z"></path>
+              </svg>
+            </div>
+          </div>
+
+          <h3 class="text-espresso font-black text-sm mb-1 uppercase tracking-wider">AI 3D Model Generator</h3>
+          <p class="text-xs text-muted mb-6 leading-normal max-w-xs">Mengonversi foto produk menjadi model 3D interaktif secara otomatis menggunakan AI.</p>
+          
+          <!-- Progress Bar -->
+          <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden mb-3 border border-slate-200/50">
+            <div 
+              class="h-full bg-gradient-to-r from-terracotta to-amber-500 rounded-full transition-all duration-300 ease-out"
+              :style="{ width: `${generationProgress}%` }"
+            ></div>
+          </div>
+          
+          <div class="flex items-center justify-between w-full text-[10px] font-bold text-muted uppercase tracking-wider">
+            <span>{{ generationStatus }}</span>
+            <span class="text-terracotta">{{ generationProgress }}%</span>
+          </div>
+        </div>
+
+        <!-- 3D Model Viewer -->
+        <model-viewer
+          v-else-if="show3dModal && product?.ar_model_url"
+          :src="product.ar_model_url"
+          alt="Model 3D Produk"
+          shadow-intensity="1"
+          camera-controls
+          auto-rotate
+          ar
+          class="w-full h-full"
+          style="background-color: transparent;"
+        >
+          <div slot="poster" class="absolute inset-0 flex items-center justify-center bg-sand/30 backdrop-blur-sm">
+            <div class="flex flex-col items-center">
+              <svg class="w-10 h-10 animate-spin text-terracotta mb-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+              <p class="text-xs font-bold text-espresso">Memuat Model 3D...</p>
+            </div>
+          </div>
+        </model-viewer>
+      </div>
+    </div>
+  </div>
+
+  <!-- Review Submission Modal -->
+  <div v-if="showReviewModal" class="fixed inset-0 z-50 flex items-center justify-center bg-[#2B1E16]/45 backdrop-blur-sm p-4 animate-fade-in">
+    <div class="w-full max-w-md bg-surface rounded-[2rem] p-6 shadow-2xl border border-borderSoft overflow-hidden relative">
+      <!-- Close button -->
+      <button type="button" @click="closeReviewModal" class="absolute top-4 right-4 rounded-full bg-slate-100 p-2 text-espresso hover:bg-slate-200 transition z-30">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+
+      <h3 class="text-lg font-black text-espresso mb-4 pb-2 border-b border-borderSoft">Tulis Ulasan Produk</h3>
+
+      <!-- Product Summary in review modal -->
+      <div class="flex gap-4 mb-5 bg-[#F8F1E7]/25 p-3 rounded-2xl border border-borderSoft">
+        <div class="w-16 h-16 rounded-xl bg-slate-100 overflow-hidden flex-shrink-0">
+          <img :src="product?.images?.[0] || '/images/placeholder-product.png'" class="w-full h-full object-cover" />
+        </div>
+        <div class="flex-1 min-w-0">
+          <h4 class="font-bold text-espresso line-clamp-1 leading-snug">{{ product?.name }}</h4>
+          <p class="text-xs text-muted mt-1 uppercase tracking-wider font-semibold">{{ product?.category }}</p>
+        </div>
+      </div>
+
+      <form @submit.prevent="submitReview" class="space-y-4">
+        <!-- Star selector -->
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Beri Bintang</label>
+          <div class="flex gap-2">
+            <button
+              v-for="star in 5"
+              :key="star"
+              type="button"
+              @click="reviewForm.rating = star"
+              @mouseenter="hoveredStar = star"
+              @mouseleave="hoveredStar = 0"
+              class="text-2xl transition duration-150 hover:scale-125 focus:outline-none"
+            >
+              <svg
+                class="w-8 h-8"
+                :class="(hoveredStar ? star <= hoveredStar : star <= reviewForm.rating) ? 'text-amber-400 fill-current' : 'text-slate-200 fill-none'"
+                stroke="currentColor"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+              </svg>
+            </button>
+          </div>
+          <p v-if="reviewFormError.rating" class="text-red-500 text-[10px] mt-1 font-bold">{{ reviewFormError.rating }}</p>
+        </div>
+
+        <!-- Comment input -->
+        <div>
+          <label for="comment" class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Komentar Ulasan</label>
+          <textarea
+            id="comment"
+            v-model="reviewForm.comment"
+            rows="4"
+            maxlength="300"
+            class="w-full rounded-2xl border border-borderSoft bg-slate-50/50 p-4 text-xs font-medium text-espresso placeholder:text-slate-400 focus:bg-white focus:border-terracotta focus:ring-1 focus:ring-terracotta transition"
+            placeholder="Tuliskan pengalaman Anda menggunakan produk ini secara jujur dan detail..."
+          ></textarea>
+          <div class="flex justify-between mt-1 text-[10px] text-slate-400">
+            <span class="text-red-500 font-bold" v-if="reviewFormError.comment">{{ reviewFormError.comment }}</span>
+            <span v-else></span>
+            <span>{{ reviewForm.comment.length }}/300 karakter</span>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          :disabled="isSubmittingReview"
+          class="w-full rounded-2xl bg-emerald-600 text-white py-3.5 font-bold text-xs uppercase tracking-widest hover:bg-emerald-700 transition active:scale-[0.98] disabled:opacity-60 flex items-center justify-center gap-2 shadow-md shadow-emerald-500/10"
+        >
+          <svg v-if="isSubmittingReview" class="w-4 h-4 animate-spin text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+          Kirim Ulasan
+        </button>
+      </form>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -730,6 +940,11 @@ const error = ref('');
 const quantity = ref(1);
 const activeImageIndex = ref(0);
 const showArModal = ref(false);
+const show3dModal = ref(false);
+const isGenerating3d = ref(false);
+const generationProgress = ref(0);
+const generationStatus = ref('');
+const showReviewModal = ref(false);
 const relatedProducts = ref([]);
 const variantOptions = ref([]);
 const selectedVariantId = ref(null);
@@ -770,6 +985,13 @@ const isAnalyzing = ref(false);
 const analysisResult = ref(null);
 const isInitializingAR = ref(false);
 
+// Review state
+const hoveredStar = ref(0);
+const isSubmittingReview = ref(false);
+const reviewForm = ref({ rating: 0, comment: '' });
+const reviewFormError = ref({ rating: '', comment: '' });
+const productReviews = ref([]);
+
 // MediaPipe State
 let pose = null;
 let camera = null;
@@ -801,18 +1023,37 @@ const normalizeProduct = (raw) => {
   const images = safeParseArray(item.images ?? item.gallery ?? item.image_url ?? []).filter(Boolean);
   
   const price = item.price ? Number(item.price) : 349000;
-  const mockVariants = [
-    { id: 1, name: 'S', price: price },
-    { id: 2, name: 'M', price: price },
-    { id: 3, name: 'L', price: price },
-    { id: 4, name: 'XL', price: price }
-  ];
+  const category = item.category ?? 'batik';
+
+  let mockVariants = [];
+  if (category === 'batik' || category === 'fashion') {
+    mockVariants = [
+      { id: 1, name: 'S', price: price },
+      { id: 2, name: 'M', price: price },
+      { id: 3, name: 'L', price: price },
+      { id: 4, name: 'XL', price: price }
+    ];
+  } else if (category === 'kerajinan' || category === 'dekorasi') {
+    mockVariants = [
+      { id: 1, name: 'Kecil (Small)', price: Math.round(price * 0.8) },
+      { id: 2, name: 'Sedang (Medium)', price: price },
+      { id: 3, name: 'Besar (Large)', price: Math.round(price * 1.25) }
+    ];
+  } else if (category === 'aksesoris') {
+    mockVariants = [
+      { id: 1, name: 'Standar (One Size)', price: price },
+      { id: 2, name: 'Kustom (Custom Size)', price: Math.round(price * 1.15) }
+    ];
+  } else {
+    mockVariants = [
+      { id: 1, name: 'Standar', price: price }
+    ];
+  }
   
   const variants = mockVariants;
   const reviews = Array.isArray(item.reviews) ? item.reviews : [];
 
   const dbName = item.name ?? '';
-  const category = item.category ?? 'batik';
 
   // Dynamic cultural stories based on name & category
   let culturalStory = 'Karya seni warisan nusantara hasil kurasi UMKM lokal terpilih dengan standar kualitas tinggi.';
@@ -861,6 +1102,7 @@ const normalizeProduct = (raw) => {
     rating: item.rating ?? item.average_rating ?? 4.8,
     average_rating: item.average_rating ?? item.rating ?? 4.8,
     reviews,
+    ar_model_url: item.ar_model_url,
     seller: {
       name: sellerName,
       location: sellerLocation,
@@ -879,11 +1121,27 @@ const normalizeProduct = (raw) => {
 };
 
 const loadProduct = async () => {
+  const rawId = route.params.id;
+  // Extract numeric ID from format "slug-i.id" or use rawId if it's already just a number
+  const match = String(rawId).match(/(?:-i\.)?(\d+)$/);
+  const id = match ? match[1] : rawId;
+
+  // If product is already loaded and has the same ID, just canonicalize URL if needed and return
+  if (product.value && String(product.value.id) === String(id)) {
+    const slug = product.value.name.toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+    const expectedPath = `/${slug}-i.${product.value.id}`;
+    if (route.path !== expectedPath) {
+      router.replace({ path: expectedPath, query: route.query });
+    }
+    return;
+  }
+
   isLoading.value = true;
   error.value = '';
 
   try {
-    const id = route.params.id;
     const payload = await fetchJson(`/api/v1/products/${id}`);
     const normalized = normalizeProduct(payload);
 
@@ -904,6 +1162,23 @@ const loadProduct = async () => {
       selectedVariantId.value = variantOptions.value[0].value;
     }
 
+    // Load reviews
+    try {
+      const reviewsPayload = await fetchJson(`/api/v1/products/${id}/reviews`);
+      const rawReviews = reviewsPayload.data ?? reviewsPayload ?? [];
+      productReviews.value = rawReviews.map(r => ({
+        id: r.id,
+        author: r.user?.name ?? 'Pembeli',
+        avatar: r.user?.avatar_url ?? null,
+        rating: r.rating,
+        comment: r.comment ?? 'Ulasan tidak tersedia.',
+        created_at: r.created_at
+      }));
+    } catch (err) {
+      console.warn('Gagal memuat ulasan:', err);
+      productReviews.value = [];
+    }
+
     const related = await fetchJson('/api/v1/products');
     const list = Array.isArray(related) ? related : related.data ?? [];
     const relatedNames = ['Outer Batik Mega Mendung', 'Kemeja Batik Kawung', 'Scarf Batik Cirebon', 'Blouse Batik Lasem'];
@@ -916,12 +1191,35 @@ const loadProduct = async () => {
         norm.name = relatedNames[idx] || norm.name;
         return norm;
       });
+
+    // Canonicalize URL to Shopee-like format: /slug-i.id
+    const slug = normalized.name.toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+    const expectedPath = `/${slug}-i.${normalized.id}`;
+    if (route.path !== expectedPath) {
+      router.replace({ path: expectedPath, query: route.query });
+    }
   } catch (err) {
     console.error(err);
     error.value = 'Gagal memuat data produk. Silakan coba lagi.';
   } finally {
     isLoading.value = false;
   }
+};
+
+const getProductLink = (item) => {
+  if (!item) return '#';
+  const slug = item.name.toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+  return `/${slug}-i.${item.id}`;
+};
+
+const getAvatarUrl = (review) => {
+  if (review.avatar) return review.avatar;
+  const name = encodeURIComponent(review.author || 'Pembeli');
+  return `https://api.dicebear.com/7.x/initials/svg?seed=${name}`;
 };
 
 const galleryImages = computed(() => product.value?.images ?? []);
@@ -934,8 +1232,8 @@ const selectedStock = computed(() => {
   const stock = selectedVariant.value?.stock ?? product.value?.stock ?? 0;
   return Math.max(1, stock);
 });
-const reviews = computed(() => product.value?.reviews ?? []);
-const reviewCount = computed(() => reviews.value.length);
+const reviews = computed(() => productReviews.value);
+const reviewCount = computed(() => product.value?.reviews_count ?? productReviews.value.length);
 const canAddToCart = computed(() => selectedStock.value > 0 && !isLoading.value);
 
 const formatCurrency = (value) => {
@@ -968,7 +1266,8 @@ const addToCart = async () => {
     return;
   }
   const variant = selectedVariant.value?.label ?? null;
-  await cartStore.addItem(product.value, quantity.value, variant);
+  const price = selectedVariant.value?.price ?? product.value.price;
+  await cartStore.addItem(product.value, quantity.value, variant, price);
   notificationStore.success('Berhasil menambahkan ke keranjang', 3000, 'Success');
 };
 
@@ -1058,6 +1357,142 @@ const logout = () => {
   localStorage.removeItem('token');
   user.value = null;
   router.push('/');
+};
+
+// 3D Model Modal Functions
+const open3dModal = async () => {
+  show3dModal.value = true;
+  
+  if (!product.value?.ar_model_url) {
+    isGenerating3d.value = true;
+    generationProgress.value = 0;
+    generationStatus.value = 'Menginisialisasi AI Engine...';
+    
+    // Animate the progress bar simulation
+    const interval = setInterval(() => {
+      if (generationProgress.value < 95) {
+        generationProgress.value += Math.floor(Math.random() * 8) + 4;
+        if (generationProgress.value > 95) generationProgress.value = 95;
+        
+        // Update status text based on progress
+        if (generationProgress.value < 25) {
+          generationStatus.value = 'Menganalisis foto produk...';
+        } else if (generationProgress.value < 50) {
+          generationStatus.value = 'Mengekstrak geometri & tekstur warna...';
+        } else if (generationProgress.value < 75) {
+          generationStatus.value = 'Membangun model mesh 3D...';
+        } else {
+          generationStatus.value = 'Melakukan rendering detail & tekstur PBR...';
+        }
+      }
+    }, 200);
+    
+    try {
+      const id = product.value.id;
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/v1/products/${id}/generate-3d`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || 'Gagal generate 3D');
+      }
+      
+      // Wait for progress simulation to finish
+      clearInterval(interval);
+      generationProgress.value = 100;
+      generationStatus.value = 'Menyimpan model 3D ke database!';
+      
+      // Let it sit at 100% for 500ms
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Save the generated URL back to our local product ref
+      product.value.ar_model_url = data.ar_model_url;
+      
+    } catch (err) {
+      console.error(err);
+      notificationStore.error(err.message || 'Gagal men-generate model 3D.');
+      clearInterval(interval);
+      show3dModal.value = false;
+    } finally {
+      isGenerating3d.value = false;
+    }
+  }
+};
+
+const close3dModal = () => {
+  show3dModal.value = false;
+  isGenerating3d.value = false;
+};
+
+// Review Modal Functions
+const openReviewModal = () => {
+  if (!user.value) {
+    notificationStore.info('Silakan login terlebih dahulu untuk menulis ulasan.');
+    router.push({ name: 'login', query: { redirect: route.fullPath } });
+    return;
+  }
+  reviewForm.value = { rating: 0, comment: '' };
+  reviewFormError.value = { rating: '', comment: '' };
+  showReviewModal.value = true;
+};
+
+const closeReviewModal = () => {
+  showReviewModal.value = false;
+};
+
+const submitReview = async () => {
+  reviewFormError.value = { rating: '', comment: '' };
+  
+  if (reviewForm.value.rating === 0) {
+    reviewFormError.value.rating = 'Pilih rating bintang terlebih dahulu.';
+    return;
+  }
+  
+  if (!reviewForm.value.comment.trim()) {
+    reviewFormError.value.comment = 'Silakan tulis komentar ulasan Anda.';
+    return;
+  }
+  
+  isSubmittingReview.value = true;
+  try {
+    const token = localStorage.getItem('token');
+    const id = product.value?.id;
+    const response = await fetch(`/api/v1/products/${id}/reviews`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(reviewForm.value)
+    });
+    
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || 'Gagal mengirim ulasan');
+    }
+    
+    notificationStore.success('Ulasan Anda berhasil dikirim!');
+    closeReviewModal();
+    await loadProduct();
+    
+    if (route.query.review) {
+      const newQuery = { ...route.query };
+      delete newQuery.review;
+      router.replace({ query: newQuery });
+    }
+  } catch (err) {
+    notificationStore.error(err.message || 'Gagal mengirim ulasan.');
+  } finally {
+    isSubmittingReview.value = false;
+  }
 };
 
 // AR Try-On Functions
@@ -1379,7 +1814,6 @@ const captureAndAnalyze = async () => {
   const canvas = canvasElement.value;
   
   // Get base64 image (JPEG format)
-  // The canvas already contains the mirrored video + multiply-blended clothing filter!
   const base64Image = canvas.toDataURL('image/jpeg', 0.8);
   capturedImage.value = base64Image;
   
@@ -1398,7 +1832,6 @@ const analyzeWithAI = async (base64Image) => {
   try {
     const token = localStorage.getItem('token');
     
-    // We send base64 data to backend
     const response = await fetch('/api/v1/ar-try-on/analyze', {
       method: 'POST',
       headers: {
@@ -1436,10 +1869,22 @@ watch(
   }
 );
 
+watch(
+  () => route.query.review,
+  (val) => {
+    if (val === 'true') {
+      openReviewModal();
+    }
+  }
+);
+
 onMounted(() => {
   const stored = localStorage.getItem('user');
   if (stored) user.value = JSON.parse(stored);
   loadProduct();
+  if (route.query.review === 'true') {
+    openReviewModal();
+  }
 });
 </script>
 
@@ -1473,5 +1918,20 @@ onMounted(() => {
   .mobile-view-container {
     display: none !important;
   }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
 }
 </style>

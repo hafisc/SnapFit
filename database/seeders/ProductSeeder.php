@@ -4,7 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Review;
+use App\Models\Profile;
+use App\Models\Role;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ProductSeeder extends Seeder
 {
@@ -17,11 +21,83 @@ class ProductSeeder extends Seeder
             return;
         }
 
-        // Clear old products
-        \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        // Clear old products, reviews, orders, and order_items
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Product::truncate();
-        \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        Review::truncate();
+        \App\Models\Order::truncate();
+        \App\Models\OrderItem::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
+        // 1. Seed Mock Buyer Users for Reviews
+        $buyerRole = Role::where('name', 'buyer')->first();
+        $buyers = [];
+        $buyersData = [
+            ['name' => 'Budi Santoso', 'email' => 'budi@gmail.com'],
+            ['name' => 'Ani Wijaya', 'email' => 'ani@gmail.com'],
+            ['name' => 'Joko Susilo', 'email' => 'joko@gmail.com'],
+            ['name' => 'Siti Aminah', 'email' => 'siti@gmail.com'],
+            ['name' => 'Rian Hidayat', 'email' => 'rian@gmail.com'],
+        ];
+
+        foreach ($buyersData as $data) {
+            $u = User::firstOrCreate(
+                ['email' => $data['email']],
+                [
+                    'name' => $data['name'],
+                    'password' => bcrypt('password123'),
+                    'active_role' => 'buyer'
+                ]
+            );
+            if ($buyerRole) {
+                $u->roles()->syncWithoutDetaching([$buyerRole->id]);
+            }
+            // Ensure profile exists
+            Profile::firstOrCreate(
+                ['user_id' => $u->id],
+                [
+                    'full_name' => $data['name'],
+                    'phone' => '08' . rand(1000000000, 9999999999),
+                    'address' => 'Jl. Merdeka No. ' . rand(1, 100) . ', Malang, Jawa Timur'
+                ]
+            );
+            $buyers[] = $u;
+        }
+
+        // Review templates based on product categories
+        $reviewsPool = [
+            'batik' => [
+                ['rating' => 5, 'comment' => 'Sangat puas! Motif batik Parang-nya rapi sekali dan bahannya adem untuk dipakai formal.'],
+                ['rating' => 5, 'comment' => 'Kualitas premium, jahitannya sangat kuat dan rapi. Pengiriman cepat.'],
+                ['rating' => 5, 'comment' => 'Batiknya sangat elegan, warnanya pas tidak norak. Recommended!'],
+                ['rating' => 4, 'comment' => 'Bahan bagus dan motif cantik, tapi pengiriman agak lambat sedikit.'],
+                ['rating' => 4, 'comment' => 'Kemeja pas di badan, sayangnya varian warna kurang banyak. Tapi overall mantap.'],
+            ],
+            'fashion' => [
+                ['rating' => 5, 'comment' => 'Potongan slim fit-nya pas sekali di badan saya. Terlihat sangat modern dan stylish.'],
+                ['rating' => 5, 'comment' => 'Jahitan sangat presisi, bahannya halus tidak gampang kusut. Cocok untuk ngantor.'],
+                ['rating' => 4, 'comment' => 'Sangat bagus, warna sesuai dengan gambar. Pengemasan sangat rapi.'],
+            ],
+            'kerajinan' => [
+                ['rating' => 5, 'comment' => 'Kain tenun ikatnya luar biasa indah! Pewarnaan alaminya terasa sangat estetik.'],
+                ['rating' => 5, 'comment' => 'Pahatannya sangat detail dan pengerjaan yang halus. Benar-benar karya seni terbaik.'],
+                ['rating' => 5, 'comment' => 'Sangat puas dengan kualitas kerajinan tangan ini, pengemasan sangat aman.'],
+                ['rating' => 4, 'comment' => 'Sangat berseni, tetapi warnanya sedikit berbeda dari foto karena pencahayaan.'],
+                ['rating' => 4, 'comment' => 'Kainnya bagus, tapi agak kaku sedikit di awal. Setelah dicuci baru terasa lembut.'],
+            ],
+            'dekorasi' => [
+                ['rating' => 5, 'comment' => 'Bantal sofa batiknya menambah kehangatan ruang tamu kami. Estetis sekali.'],
+                ['rating' => 5, 'comment' => 'Runner mejanya sangat mewah, motifnya lurus dan rapi. Suka sekali dengan paduan warnanya.'],
+                ['rating' => 5, 'comment' => 'Kualitas kain tebal, awet, dan motif batik Mega Mendung-nya sangat menyala.'],
+                ['rating' => 4, 'comment' => 'Sangat mempercantik ruangan, tapi ukurannya sedikit lebih pendek dari meja saya.'],
+            ],
+            'aksesoris' => [
+                ['rating' => 5, 'comment' => 'Gelang peraknya cantik sekali! Ukirannya sangat detail dan tidak gampang kusam.'],
+                ['rating' => 5, 'comment' => 'Brosnya sangat berkilau dan mewah, pas disandingkan dengan kebaya kutubaru.'],
+                ['rating' => 5, 'comment' => 'Pengerjaan handmade yang sangat presisi. Seniman peraknya juara!'],
+                ['rating' => 4, 'comment' => 'Cantik sekali, tapi ukuran gelangnya agak sedikit ketat di tangan saya.'],
+            ],
+        ];
 
         $products = [
             [
@@ -34,6 +110,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.9,
                 'sold'        => 120,
                 'umkm_name'   => 'Sanggar Batik Laras',
+                'ar_model_url'=> null,
             ],
             [
                 'name'        => 'Batik Tulis Lasem',
@@ -45,6 +122,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.9,
                 'sold'        => 45,
                 'umkm_name'   => 'Batik Pusaka Lasem',
+                'ar_model_url'=> null,
             ],
             [
                 'name'        => 'Batik Mega Mendung',
@@ -56,6 +134,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.7,
                 'sold'        => 88,
                 'umkm_name'   => 'Batik Trusmi Cirebon',
+                'ar_model_url'=> null,
             ],
             [
                 'name'        => 'Batik Sidomukti Solo',
@@ -67,6 +146,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 5.0,
                 'sold'        => 32,
                 'umkm_name'   => 'Batik Keraton Solo',
+                'ar_model_url'=> null,
             ],
             [
                 'name'        => 'Batik Kawung Kencana',
@@ -78,10 +158,11 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.8,
                 'sold'        => 67,
                 'umkm_name'   => 'Omah Batik Kawung',
+                'ar_model_url'=> null,
             ],
             [
                 'name'        => 'Kemeja Batik Slim Fit Modern',
-                'description' => 'Kemeja batik pria bergaya kasual kontemporer dengan potongan slim fit modern dan motif abstrak dinamis yang elegan untuk acara semi-formal.',
+                'description' => 'Kemeja batik pria bergaya kasual kontemporer dengan potongan slim fit modern and motif abstrak dinamis yang elegan untuk acara semi-formal.',
                 'price'       => 285000,
                 'category'    => 'fashion',
                 'origin'      => 'Bandung',
@@ -89,6 +170,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.7,
                 'sold'        => 520,
                 'umkm_name'   => 'Batik Urban Studio',
+                'ar_model_url'=> null,
             ],
             [
                 'name'        => 'Kain Tenun Ikat Sumba',
@@ -96,10 +178,11 @@ class ProductSeeder extends Seeder
                 'price'       => 520000,
                 'category'    => 'kerajinan',
                 'origin'      => 'Sumba',
-                'badges'      => ['Handmade', 'Eco Craft'],
+                'badges'      => ['Handmade', 'Eco Craft', '3D Detail'],
                 'rating'      => 4.9,
                 'sold'        => 85,
                 'umkm_name'   => 'Rumah Tenun Marapu',
+                'ar_model_url'=> null,
             ],
             [
                 'name'        => 'Kain Songket Palembang Emas',
@@ -107,10 +190,11 @@ class ProductSeeder extends Seeder
                 'price'       => 1250000,
                 'category'    => 'kerajinan',
                 'origin'      => 'Palembang',
-                'badges'      => ['Premium', 'Limited'],
+                'badges'      => ['Premium', 'Limited', '3D Detail'],
                 'rating'      => 5.0,
                 'sold'        => 12,
                 'umkm_name'   => 'Songket Sriwijaya',
+                'ar_model_url'=> null,
             ],
             [
                 'name'        => 'Gelang Perak Motif Batik Celuk',
@@ -118,10 +202,11 @@ class ProductSeeder extends Seeder
                 'price'       => 189000,
                 'category'    => 'aksesoris',
                 'origin'      => 'Bali',
-                'badges'      => ['Handmade', 'Silver 925'],
+                'badges'      => ['Handmade', 'Silver 925', '3D Detail'],
                 'rating'      => 4.8,
                 'sold'        => 150,
                 'umkm_name'   => 'Celuk Silver Art',
+                'ar_model_url'=> null,
             ],
             [
                 'name'        => 'Bros Kebaya Batik Alpaka',
@@ -129,10 +214,11 @@ class ProductSeeder extends Seeder
                 'price'       => 125000,
                 'category'    => 'aksesoris',
                 'origin'      => 'Yogyakarta',
-                'badges'      => ['AR Ready', 'Handmade'],
+                'badges'      => ['3D Detail', 'Handmade'],
                 'rating'      => 4.8,
                 'sold'        => 280,
                 'umkm_name'   => 'Jogja Aksesoris Craft',
+                'ar_model_url'=> null,
             ],
             [
                 'name'        => 'Bantal Sofa Batik Parang',
@@ -140,10 +226,11 @@ class ProductSeeder extends Seeder
                 'price'       => 95000,
                 'category'    => 'dekorasi',
                 'origin'      => 'Solo',
-                'badges'      => ['Eco Craft', 'Best Seller'],
+                'badges'      => ['Eco Craft', 'Best Seller', '3D Detail'],
                 'rating'      => 4.5,
                 'sold'        => 230,
                 'umkm_name'   => 'Batik Home Living',
+                'ar_model_url'=> null,
             ],
             [
                 'name'        => 'Runner Meja Batik Mega Mendung',
@@ -151,15 +238,16 @@ class ProductSeeder extends Seeder
                 'price'       => 135000,
                 'category'    => 'dekorasi',
                 'origin'      => 'Cirebon',
-                'badges'      => ['Eco Craft'],
+                'badges'      => ['Eco Craft', '3D Detail'],
                 'rating'      => 4.6,
                 'sold'        => 158,
                 'umkm_name'   => 'Cirebon Home Decor',
+                'ar_model_url'=> null,
             ],
         ];
 
         $demoUser = User::where('email', 'user@snapfit.id')->first();
-        $umkmRole = \App\Models\Role::where('name', 'umkm')->first();
+        $umkmRole = Role::where('name', 'umkm')->first();
 
         foreach ($products as $index => $p) {
             $umkmName = $p['umkm_name'];
@@ -183,7 +271,7 @@ class ProductSeeder extends Seeder
                 }
 
                 // Create or update profile
-                \App\Models\Profile::updateOrCreate(
+                Profile::updateOrCreate(
                     ['user_id' => $user->id],
                     [
                         'full_name' => $umkmName,
@@ -239,13 +327,61 @@ class ProductSeeder extends Seeder
 
             $productImage = ["/images/products/{$imageName}"];
 
-            Product::create(array_merge($p, [
+            $product = Product::create(array_merge($p, [
                 'user_id' => $user->id,
                 'images'  => $productImage,
                 'is_published' => true,
             ]));
+
+            // Seed 3-4 Reviews per product
+            $catReviews = $reviewsPool[$pCat] ?? $reviewsPool['batik'];
+            shuffle($catReviews);
+            shuffle($buyers);
+            $numReviews = rand(3, 4);
+
+            for ($i = 0; $i < $numReviews; $i++) {
+                if (isset($buyers[$i]) && isset($catReviews[$i])) {
+                    Review::create([
+                        'user_id'    => $buyers[$i]->id,
+                        'product_id' => $product->id,
+                        'rating'     => $catReviews[$i]['rating'],
+                        'comment'    => $catReviews[$i]['comment'],
+                    ]);
+                }
+            }
+
+            // Recalculate Rating and Reviews Count Cache in Product model
+            $avg = $product->reviews()->avg('rating');
+            $count = $product->reviews()->count();
+            $product->update([
+                'avg_rating'    => round($avg, 2),
+                'rating'        => round($avg, 1),
+                'reviews_count' => $count
+            ]);
         }
 
-        $this->command->info('✅ Products seeded (' . count($products) . ' produk batik & fashion Nusantara)');
+        // Seed completed orders for all users in the database on all products, so any logged-in user can submit reviews
+        $allUsers = User::all();
+        $allProducts = Product::all();
+        foreach ($allUsers as $user) {
+            foreach ($allProducts as $prod) {
+                $order = \App\Models\Order::create([
+                    'buyer_id' => $user->id,
+                    'midtrans_order_id' => 'DEMO-ORDER-' . $user->id . '-' . $prod->id . '-' . uniqid(),
+                    'total_amount' => $prod->price,
+                    'status' => 'completed',
+                ]);
+
+                \App\Models\OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $prod->id,
+                    'quantity' => 1,
+                    'price' => $prod->price,
+                    'variant' => 'Standard',
+                ]);
+            }
+        }
+
+        $this->command->info('✅ Products, Customer Reviews & Demo Orders seeded successfully!');
     }
 }

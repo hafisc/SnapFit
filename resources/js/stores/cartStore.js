@@ -106,7 +106,7 @@ export const useCartStore = defineStore('cart', () => {
     saveToLocalStorage();
   };
 
-  const addItem = async (product, quantity = 1, variant = null) => {
+  const addItem = async (product, quantity = 1, variant = null, price = null) => {
     const existingIndex = items.value.findIndex(item =>
       item.id === product.id &&
       item.variant === variant
@@ -114,11 +114,14 @@ export const useCartStore = defineStore('cart', () => {
 
     if (existingIndex >= 0) {
       items.value[existingIndex].quantity += quantity;
+      if (price !== null) {
+        items.value[existingIndex].price = price;
+      }
     } else {
       const newItem = {
         id: product.id,
         name: product.name,
-        price: product.price,
+        price: price !== null ? price : product.price,
         image: product.images?.[0] || product.image_url,
         quantity: quantity,
         variant: variant,

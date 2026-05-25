@@ -14,7 +14,13 @@ export default defineConfig({
             refresh: true,
         }),
 
-        vue(),
+        vue({
+            template: {
+                compilerOptions: {
+                    isCustomElement: (tag) => tag === 'model-viewer'
+                }
+            }
+        }),
 
         tailwindcss(),
     ],
