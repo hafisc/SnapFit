@@ -68,7 +68,7 @@
               <span class="text-[11px] text-slate-400 font-medium">{{ u.joined }}</span>
             </td>
             <td class="px-5 py-3.5 text-right">
-              <div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div class="flex items-center justify-end gap-1 opacity-100">
                 <router-link :to="`/admin/users/edit/${u.id}`" class="w-7 h-7 rounded-md bg-slate-100 hover:bg-slate-200 text-muted flex items-center justify-center transition-colors">
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                 </router-link>

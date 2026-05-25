@@ -93,6 +93,22 @@ const statusTabs = ref([
 
 const products = ref([]);
 
+const getProductImage = (p) => {
+  const imgs = p?.images;
+  if (Array.isArray(imgs) && imgs.length > 0) return imgs[0];
+  if (typeof imgs === 'string') {
+    try {
+      const parsed = JSON.parse(imgs);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed[0];
+      if (typeof parsed === 'string' && parsed) return parsed;
+    } catch {
+      if (imgs) return imgs;
+    }
+  }
+  if (p?.image_url) return p.image_url;
+  return '/images/products/kerajinan_fallback.png';
+};
+
 const fetchProducts = async () => {
   try {
     const token = localStorage.getItem('token') || '';
@@ -110,7 +126,7 @@ const fetchProducts = async () => {
         status: p.is_published ? 'approved' : 'pending',
         date: new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(p.created_at)),
         description: p.description,
-        image: p.image_url || 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&fit=crop'
+        image: getProductImage(p)
       }));
       
       statusTabs.value[0].count = products.value.length;

@@ -49,7 +49,7 @@
       <div v-for="product in products" :key="product.id" class="bg-white rounded-2xl border border-[#E8DCCB]/60 overflow-hidden group hover:shadow-lg hover:border-[#E8DCCB] transition-all duration-200">
         <!-- Image -->
         <div class="relative h-48 w-full bg-[#F8F1E7] overflow-hidden">
-          <img :src="product.image_url" :alt="product.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          <img :src="getProductImage(product)" :alt="product.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
           
           <!-- Actions overlay -->
           <div class="absolute top-3 right-3 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -90,6 +90,22 @@ import { ref, onMounted } from 'vue';
 
 const products = ref([]);
 const loading = ref(true);
+
+const getProductImage = (product) => {
+  const imgs = product?.images;
+  if (Array.isArray(imgs) && imgs.length > 0) return imgs[0];
+  if (typeof imgs === 'string') {
+    try {
+      const parsed = JSON.parse(imgs);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed[0];
+      if (typeof parsed === 'string' && parsed) return parsed;
+    } catch {
+      if (imgs) return imgs;
+    }
+  }
+  if (product?.image_url) return product.image_url;
+  return '/images/products/kerajinan_fallback.png';
+};
 
 const fetchProducts = async () => {
   loading.value = true;
