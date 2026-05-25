@@ -381,8 +381,8 @@
     </div>
 
     <!-- Custom Delete Account Modal -->
-    <div v-if="showDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
-      <div class="bg-surface rounded-3xl w-full max-w-md p-6 sm:p-8 shadow-2xl border border-borderSoft transform scale-100 transition-transform">
+    <div v-if="showDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2B1E16]/40 backdrop-blur-md animate-fade-in">
+      <div class="bg-surface rounded-3xl w-full max-w-md p-6 sm:p-8 shadow-[0_25px_60px_-15px_rgba(43,30,22,0.25)] border border-borderSoft transform scale-100 transition-transform">
         <div class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center text-red-500 mb-6 mx-auto">
           <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
         </div>
@@ -403,8 +403,8 @@
     </div>
 
     <!-- 2FA Setup Modal -->
-    <div v-if="show2FAModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
-      <div class="bg-surface rounded-3xl w-full max-w-md p-6 sm:p-8 shadow-2xl border border-borderSoft transform scale-100 transition-transform">
+    <div v-if="show2FAModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2B1E16]/40 backdrop-blur-md animate-fade-in">
+      <div class="bg-surface rounded-3xl w-full max-w-md p-6 sm:p-8 shadow-[0_25px_60px_-15px_rgba(43,30,22,0.25)] border border-borderSoft transform scale-100 transition-transform">
         <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center text-blue-500 mb-6 mx-auto">
           <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
         </div>
@@ -437,8 +437,8 @@
     </div>
 
     <!-- Disable 2FA Confirmation Modal -->
-    <div v-if="showDisable2FAModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-      <div class="bg-surface rounded-3xl w-full max-w-sm p-6 sm:p-8 shadow-2xl border border-borderSoft">
+    <div v-if="showDisable2FAModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#2B1E16]/40 backdrop-blur-md">
+      <div class="bg-surface rounded-3xl w-full max-w-sm p-6 sm:p-8 shadow-[0_25px_60px_-15px_rgba(43,30,22,0.25)] border border-borderSoft">
         <div class="w-14 h-14 bg-red-50 rounded-full flex items-center justify-center text-red-500 mb-5 mx-auto">
           <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
         </div>

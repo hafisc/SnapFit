@@ -708,40 +708,49 @@
   </div>
 
   <!-- Beli Sekarang (Buy Now) Variation Modal -->
-  <div v-if="showBuyNowModal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-espresso/40 backdrop-blur-sm p-0 sm:p-4">
+  <div v-if="showBuyNowModal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-[#2B1E16]/40 backdrop-blur-md p-0 sm:p-4">
     <!-- Backdrop Close Trigger -->
     <div class="absolute inset-0" @click="showBuyNowModal = false"></div>
     
     <!-- Modal Content -->
-    <div class="relative w-full sm:max-w-md bg-surface rounded-t-[2rem] sm:rounded-[2rem] p-6 shadow-2xl border-t sm:border border-borderSoft overflow-hidden animate-slide-up sm:animate-fade-in flex flex-col max-h-[90vh]">
+    <div class="relative w-full sm:max-w-md bg-surface rounded-t-[2rem] sm:rounded-3xl p-6 shadow-[0_25px_60px_-15px_rgba(43,30,22,0.25)] border-t sm:border border-borderSoft/60 overflow-hidden animate-slide-up sm:animate-fade-in flex flex-col max-h-[90vh]">
       <!-- Header -->
       <div class="flex items-center justify-between pb-4 border-b border-borderSoft mb-4">
-        <h3 class="text-lg font-black text-espresso">Beli Sekarang</h3>
-        <button @click="showBuyNowModal = false" class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:text-espresso transition-colors">✕</button>
+        <h3 class="text-base font-black text-espresso uppercase tracking-wider">Beli Sekarang</h3>
+        <button @click="showBuyNowModal = false" type="button" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-espresso hover:bg-slate-100 active:scale-95 transition-all duration-150">
+          <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
       </div>
 
       <!-- Product Preview -->
-      <div class="flex gap-4 mb-6">
-        <div class="w-20 h-20 bg-slate-100 rounded-2xl overflow-hidden flex-shrink-0">
+      <div class="flex gap-4 mb-6 bg-slate-50/50 p-3 rounded-2xl border border-borderSoft/40">
+        <div class="w-20 h-20 bg-slate-100 rounded-xl overflow-hidden flex-shrink-0 border border-borderSoft/40">
           <img :src="product?.images?.[0] || '/images/placeholder-product.png'" class="w-full h-full object-cover" />
         </div>
-        <div class="flex-1 min-w-0">
-          <h4 class="font-bold text-espresso line-clamp-2 leading-snug">{{ product?.name }}</h4>
-          <p class="text-lg font-black text-terracotta mt-2">Rp {{ formatCurrency(displayPrice) }}</p>
-          <p class="text-[10px] font-semibold text-slate-400 mt-1">Stok: {{ selectedStock }}</p>
+        <div class="flex-1 min-w-0 flex flex-col justify-between py-0.5">
+          <h4 class="font-bold text-espresso line-clamp-1 leading-snug">{{ product?.name }}</h4>
+          <div>
+            <p class="text-lg font-extrabold text-terracotta leading-none">Rp {{ formatCurrency(displayPrice) }}</p>
+            <p class="text-[10px] font-semibold text-slate-400 mt-1.5 flex items-center gap-1">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              Stok Tersedia: {{ selectedStock }}
+            </p>
+          </div>
         </div>
       </div>
 
       <!-- Variant Selector -->
       <div v-if="variantOptions.length" class="mb-6">
-        <label class="block text-xs font-black uppercase tracking-wider text-slate-400 mb-2.5">Pilih Ukuran / Varian</label>
+        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 ml-1">Pilih Ukuran / Varian</label>
         <div class="flex flex-wrap gap-2">
           <button 
             v-for="variant in variantOptions" 
             :key="variant.value"
             @click="selectedVariantId = variant.value"
             class="px-4 py-2.5 rounded-xl border text-xs font-bold transition-all duration-200 active:scale-95"
-            :class="selectedVariantId === variant.value ? 'border-terracotta bg-[#F8F1E7] text-terracotta shadow-sm' : 'border-slate-200 text-espresso bg-white'"
+            :class="selectedVariantId === variant.value ? 'border-terracotta bg-[#F8F1E7]/50 text-terracotta shadow-sm' : 'border-slate-200 text-espresso bg-white hover:border-slate-300'"
           >
             {{ variant.label }}
           </button>
@@ -750,7 +759,7 @@
 
       <!-- Quantity Stepper -->
       <div class="flex items-center justify-between pb-6 border-b border-borderSoft mb-6">
-        <span class="text-xs font-black uppercase tracking-wider text-slate-400">Jumlah</span>
+        <span class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Jumlah</span>
         <div class="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
           <button type="button" @click="decrementQuantity" class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-50 text-muted transition hover:bg-slate-100 font-bold">-</button>
           <input type="number" v-model.number="quantity" min="1" :max="selectedStock" class="w-10 border-none bg-transparent text-center text-xs font-bold text-espresso p-0 focus:ring-0" />
@@ -762,7 +771,7 @@
       <button 
         @click="confirmBuyNow"
         :disabled="quantity > selectedStock"
-        class="w-full rounded-2xl bg-terracotta text-white py-4 font-black text-xs uppercase tracking-widest hover:bg-terracottaDark transition active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-terracotta/20"
+        class="w-full rounded-xl bg-terracotta text-white py-4 font-black text-xs uppercase tracking-widest hover:bg-terracottaDark transition active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-terracotta/20"
       >
         Lanjutkan ke Checkout
       </button>
@@ -770,23 +779,25 @@
   </div>
 
   <!-- 3D Model Modal -->
-  <div v-if="show3dModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 overflow-y-auto">
-    <div class="w-full max-w-2xl rounded-[2rem] bg-surface shadow-2xl overflow-hidden flex flex-col p-6 relative border border-borderSoft">
+  <div v-if="show3dModal" class="fixed inset-0 z-50 flex items-center justify-center bg-[#2B1E16]/40 backdrop-blur-md p-4 overflow-y-auto">
+    <div class="w-full max-w-2xl rounded-3xl bg-surface shadow-[0_25px_60px_-15px_rgba(43,30,22,0.25)] overflow-hidden flex flex-col p-6 relative border border-borderSoft/60 animate-fade-in">
       <!-- Close Button -->
-      <button type="button" @click="close3dModal" class="absolute top-4 right-4 rounded-full bg-slate-100 p-2 text-espresso hover:bg-slate-200 transition z-30">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      <button @click="close3dModal" type="button" class="absolute top-4 right-4 rounded-full flex items-center justify-center text-slate-400 hover:text-espresso hover:bg-slate-100 active:scale-95 transition-all duration-150 z-30">
+        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
       </button>
 
       <div class="mb-4 pr-10">
-        <h2 class="text-xl font-black text-[#2B1E16] leading-none">Detail Produk 3D</h2>
+        <h2 class="text-base font-black text-[#2B1E16] uppercase tracking-wider">Detail Produk 3D</h2>
         <p class="text-muted text-xs mt-1.5 leading-relaxed">Geser untuk memutar produk, atau cubit untuk memperbesar/memperkecil detail kerajinan.</p>
       </div>
 
       <!-- 3D Model Viewer Canvas -->
-      <div class="bg-[#F8F1E7]/40 relative w-full aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden border border-borderSoft/60 shadow-inner flex items-center justify-center p-6">
+      <div class="bg-[#F8F1E7]/20 relative w-full aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden border border-borderSoft/40 shadow-inner flex items-center justify-center p-6">
         
         <!-- AI Generator Interface -->
-        <div v-if="isGenerating3d" class="w-full max-w-md flex flex-col items-center justify-center text-center p-8 bg-white/95 rounded-3xl border border-amber-100 shadow-lg animate-pulse-slow">
+        <div v-if="isGenerating3d" class="w-full max-w-md flex flex-col items-center justify-center text-center p-8 bg-white/95 rounded-3xl border border-amber-100 shadow-[0_15px_30px_rgba(245,158,11,0.05)] animate-pulse-slow">
           <!-- Animated AI Pulse Icon -->
           <div class="relative w-20 h-20 mb-6 flex items-center justify-center">
             <span class="absolute inline-flex h-full w-full rounded-full bg-terracotta/10 animate-ping"></span>
@@ -839,30 +850,32 @@
   </div>
 
   <!-- Review Submission Modal -->
-  <div v-if="showReviewModal" class="fixed inset-0 z-50 flex items-center justify-center bg-[#2B1E16]/45 backdrop-blur-sm p-4 animate-fade-in">
-    <div class="w-full max-w-md bg-surface rounded-[2rem] p-6 shadow-2xl border border-borderSoft overflow-hidden relative">
+  <div v-if="showReviewModal" class="fixed inset-0 z-50 flex items-center justify-center bg-[#2B1E16]/40 backdrop-blur-md p-4 animate-fade-in">
+    <div class="w-full max-w-md bg-surface rounded-3xl p-6 shadow-[0_25px_60px_-15px_rgba(43,30,22,0.25)] border border-borderSoft/60 overflow-hidden relative">
       <!-- Close button -->
-      <button type="button" @click="closeReviewModal" class="absolute top-4 right-4 rounded-full bg-slate-100 p-2 text-espresso hover:bg-slate-200 transition z-30">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      <button @click="closeReviewModal" type="button" class="absolute top-4 right-4 rounded-full flex items-center justify-center text-slate-400 hover:text-espresso hover:bg-slate-100 active:scale-95 transition-all duration-150 z-30">
+        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
       </button>
 
-      <h3 class="text-lg font-black text-espresso mb-4 pb-2 border-b border-borderSoft">Tulis Ulasan Produk</h3>
+      <h3 class="text-base font-black text-espresso mb-4 pb-2 border-b border-borderSoft uppercase tracking-wider">Tulis Ulasan Produk</h3>
 
       <!-- Product Summary in review modal -->
-      <div class="flex gap-4 mb-5 bg-[#F8F1E7]/25 p-3 rounded-2xl border border-borderSoft">
-        <div class="w-16 h-16 rounded-xl bg-slate-100 overflow-hidden flex-shrink-0">
+      <div class="flex gap-4 mb-5 bg-[#F8F1E7]/25 p-3 rounded-2xl border border-borderSoft/40">
+        <div class="w-16 h-16 rounded-xl bg-slate-100 overflow-hidden flex-shrink-0 border border-borderSoft/20">
           <img :src="product?.images?.[0] || '/images/placeholder-product.png'" class="w-full h-full object-cover" />
         </div>
-        <div class="flex-1 min-w-0">
+        <div class="flex-1 min-w-0 flex flex-col justify-center">
           <h4 class="font-bold text-espresso line-clamp-1 leading-snug">{{ product?.name }}</h4>
-          <p class="text-xs text-muted mt-1 uppercase tracking-wider font-semibold">{{ product?.category }}</p>
+          <p class="text-[10px] text-muted mt-1 uppercase tracking-wider font-bold text-terracotta">{{ product?.category }}</p>
         </div>
       </div>
 
       <form @submit.prevent="submitReview" class="space-y-4">
         <!-- Star selector -->
         <div>
-          <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Beri Bintang</label>
+          <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2.5 ml-1">Beri Bintang</label>
           <div class="flex gap-2">
             <button
               v-for="star in 5"
@@ -889,7 +902,7 @@
 
         <!-- Comment input -->
         <div>
-          <label for="comment" class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Komentar Ulasan</label>
+          <label for="comment" class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2.5 ml-1">Komentar Ulasan</label>
           <textarea
             id="comment"
             v-model="reviewForm.comment"
@@ -898,7 +911,7 @@
             class="w-full rounded-2xl border border-borderSoft bg-slate-50/50 p-4 text-xs font-medium text-espresso placeholder:text-slate-400 focus:bg-white focus:border-terracotta focus:ring-1 focus:ring-terracotta transition"
             placeholder="Tuliskan pengalaman Anda menggunakan produk ini secara jujur dan detail..."
           ></textarea>
-          <div class="flex justify-between mt-1 text-[10px] text-slate-400">
+          <div class="flex justify-between mt-1.5 text-[10px] text-slate-400">
             <span class="text-red-500 font-bold" v-if="reviewFormError.comment">{{ reviewFormError.comment }}</span>
             <span v-else></span>
             <span>{{ reviewForm.comment.length }}/300 karakter</span>
@@ -909,7 +922,7 @@
         <button
           type="submit"
           :disabled="isSubmittingReview"
-          class="w-full rounded-2xl bg-emerald-600 text-white py-3.5 font-bold text-xs uppercase tracking-widest hover:bg-emerald-700 transition active:scale-[0.98] disabled:opacity-60 flex items-center justify-center gap-2 shadow-md shadow-emerald-500/10"
+          class="w-full rounded-xl bg-emerald-600 text-white py-3.5 font-bold text-xs uppercase tracking-widest hover:bg-emerald-700 transition active:scale-[0.98] disabled:opacity-60 flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/10"
         >
           <svg v-if="isSubmittingReview" class="w-4 h-4 animate-spin text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
           Kirim Ulasan
