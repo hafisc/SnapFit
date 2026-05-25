@@ -83,7 +83,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 
 const search = ref('');
 const statusFilter = ref('all');
