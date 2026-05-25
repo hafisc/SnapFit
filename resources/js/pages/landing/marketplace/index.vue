@@ -11,7 +11,7 @@
 
     <main class="pt-16">
       <section class="bg-surface border-b border-borderSoft pt-6 pb-6 mt-2">
-        <div class="max-w-[1440px] mx-auto px-6">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-5">
             <div>
               <h1 class="text-2xl md:text-3xl font-black text-espresso mb-1.5">Katalog Produk Nusantara</h1>
@@ -46,7 +46,7 @@
       </section>
 
       <section ref="productSection" class="bg-slate-50 pt-8 pb-24">
-        <div class="max-w-[1440px] mx-auto px-6">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <ProductGrid :products="products" :isLoading="isLoading" :isLoadingMore="isLoadingMore" :hasMore="hasMore" @load-more="fetchMore" :is-homepage="false" />
         </div>
       </section>

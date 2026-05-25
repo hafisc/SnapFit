@@ -4,7 +4,7 @@
       <!-- Header -->
       <div class="mb-8">
         <div class="flex items-center gap-3 mb-4">
-          <router-link to="/marketplace" class="text-muted hover:text-espresso transition">
+          <router-link to="/" class="text-muted hover:text-espresso transition">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
@@ -33,7 +33,7 @@
           <h2 class="text-2xl font-black text-espresso mb-3">Keranjang Kosong</h2>
           <p class="text-muted mb-6">Belum ada produk di keranjang belanja Anda.</p>
           <router-link
-            to="/marketplace"
+            to="/"
             class="inline-flex items-center gap-2 bg-terracotta text-white px-6 py-3 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-terracottaDark transition-all"
           >
             Mulai Belanja
@@ -160,7 +160,7 @@
               </button>
 
               <router-link
-                to="/marketplace"
+                to="/"
                 class="w-full bg-slate-100 hover:bg-slate-200 text-espresso py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-colors text-center block"
               >
                 Lanjut Belanja
@@ -202,7 +202,7 @@ const allSelected = computed(() => {
 
 const proceedToCheckout = () => {
   if (cartStore.selectedCount > 0) {
-    router.push({ path: '/marketplace/checkout', query: { source: 'cart' } });
+    router.push({ path: '/checkout', query: { source: 'cart' } });
   }
 };
 </script>

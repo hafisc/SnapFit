@@ -2,7 +2,7 @@
   <div class="snapfit-heritage-bg min-h-screen font-sans">
     <Navbar :user="user" />
 
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 pt-28">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-28">
       <!-- Header -->
       <div class="text-center mb-10">
         <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">

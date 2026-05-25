@@ -121,6 +121,13 @@
                 Track Package
               </button>
               <button
+                v-if="order.status === 'pending'"
+                @click="payOrder"
+                class="w-full rounded-3xl bg-terracotta px-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:bg-terracottaDark transition-all"
+              >
+                Bayar Sekarang
+              </button>
+              <button
                 @click="buyAgain"
                 class="w-full rounded-3xl bg-slate-900 px-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:bg-slate-800 transition-all"
               >
@@ -169,9 +176,11 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useNotificationStore } from '@/stores/notificationStore';
 
 const route = useRoute();
 const router = useRouter();
+const notificationStore = useNotificationStore();
 const order = ref(null);
 const loading = ref(true);
 const showCancelModal = ref(false);
@@ -184,6 +193,45 @@ const apiHeaders = () => {
   };
   if (token) headers.Authorization = `Bearer ${token}`;
   return headers;
+};
+
+const payOrder = async () => {
+  if (!order.value) return;
+  try {
+    const res = await fetch(`/api/v1/payment/orders/${order.value.id}/snap-token`, {
+      method: 'POST',
+      headers: apiHeaders(),
+    });
+    if (!res.ok) {
+      throw new Error('Gagal mendapatkan token pembayaran.');
+    }
+    const data = await res.json();
+    const snapToken = data.snap_token;
+    
+    if (window.snap?.pay) {
+      window.snap.pay(snapToken, {
+        onSuccess: () => {
+          notificationStore.success('Pembayaran sukses! 🎉');
+          fetchOrder();
+        },
+        onPending: () => {
+          notificationStore.info('Menunggu pembayaran Anda...');
+          fetchOrder();
+        },
+        onError: () => {
+          notificationStore.error('Pembayaran gagal.');
+        },
+        onClose: () => {
+          notificationStore.warning('Anda menutup pembayaran.');
+        }
+      });
+    } else {
+      window.location.href = data.redirect_url;
+    }
+  } catch (err) {
+    console.error('Payment error:', err);
+    notificationStore.error(err.message || 'Gagal memproses pembayaran.');
+  }
 };
 
 const fetchOrder = async () => {
@@ -251,7 +299,7 @@ const formatCurrency = (amount) => {
 };
 
 const goBack = () => {
-  router.push('/marketplace/orders');
+  router.push('/orders');
 };
 
 const openTrackingLink = () => {
@@ -264,14 +312,14 @@ const buyAgain = () => {
   if (!order.value) return;
   const buyAgainItems = order.value.items.map((item) => ({ product_id: item.product?.id, quantity: item.quantity }));
   sessionStorage.setItem('buyAgainItems', JSON.stringify(buyAgainItems));
-  router.push('/marketplace/cart?buyAgain=true');
+  router.push('/cart?buyAgain=true');
 };
 
 const writeReview = () => {
   if (!order.value?.items?.length) return;
   const product = order.value.items[0].product;
   if (!product) return;
-  router.push(`/marketplace/product/${product.id}?review=true`);
+  router.push(`/product/${product.id}?review=true`);
 };
 
 const cancelOrder = async () => {

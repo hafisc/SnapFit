@@ -1,10 +1,10 @@
 <template>
-  <section id="marketplace" class="pt-3 md:pt-10 pb-16 md:pb-24 relative overflow-hidden bg-transparent">
+  <section id="marketplace" class="pt-4 md:pt-4 pb-16 md:pb-24 relative overflow-hidden bg-transparent">
     <!-- Clean background, elements removed to keep it simple -->
 
-    <div class="max-w-[1520px] mx-auto px-6 relative z-10">
+    <div class="max-w-[1520px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <!-- PROMO CAROUSEL -->
-      <div v-if="isHomepage" class="mb-7 px-2 md:px-0" data-aos="fade-up">
+      <div v-if="isHomepage" class="mb-7" data-aos="fade-up">
         <div class="overflow-hidden rounded-3xl relative">
 
           <!-- Slides -->
@@ -29,7 +29,7 @@
 
               <!-- Content Wrapper (BIAR TIDAK NEMPEL) -->
               <div class="relative z-10 h-full flex items-center">
-                <div class="w-full max-w-[1520px] mx-auto px-6 md:px-10">
+                <div class="w-full max-w-[1520px] mx-auto px-4 sm:px-6 lg:px-8">
 
                   <div class="max-w-2xl text-white">
                     <span v-if="slide.tag"
@@ -82,29 +82,29 @@
 
       <!-- INNOVATION FEATURES SECTION (Only for Homepage) -->
       <div v-if="isHomepage" 
-        class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar gap-4 pb-4 mb-6 -mx-6 px-6 md:mx-0 md:px-0 md:pb-0 md:grid md:grid-cols-3 md:gap-4 md:mb-9" 
+        class="grid grid-cols-3 gap-2.5 sm:gap-4 mb-6 md:mb-9" 
         data-aos="fade-up" data-aos-delay="50">
 
         <!-- AI Studio -->
         <div
-          class="bg-surface border border-borderSoft min-h-[82px] p-4 rounded-2xl shadow-sm hover:shadow-md hover:border-terracotta transition-all duration-300 flex items-center gap-4 cursor-pointer min-w-[280px] md:min-w-0 shrink-0 snap-center flex-1">
-          <div class="w-10 h-10 rounded-xl bg-terracotta/10 flex items-center justify-center shrink-0">
-            <svg class="w-5 h-5 text-terracotta" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          class="bg-surface border border-borderSoft p-3 sm:p-4 rounded-2xl shadow-sm hover:shadow-md hover:border-terracotta transition-all duration-300 flex flex-col items-center text-center justify-center md:flex-row md:items-center md:text-left md:justify-start cursor-pointer w-full min-h-[96px] md:min-h-[82px] gap-2 md:gap-4">
+          <div class="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-xl bg-terracotta/10 flex items-center justify-center shrink-0">
+            <svg class="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 text-terracotta" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
             </svg>
           </div>
           <div>
-            <h3 class="text-sm font-black text-espresso mb-0.5">AI Product Studio</h3>
-            <p class="text-[11px] text-muted leading-tight">Analisis tren & optimasi metadata otomatis untuk UMKM.</p>
+            <h3 class="text-[10px] sm:text-xs md:text-sm font-black text-espresso mb-0.5 leading-tight">AI Product Studio</h3>
+            <p class="hidden md:block text-[11px] text-muted leading-tight">Analisis tren & optimasi metadata otomatis untuk UMKM.</p>
           </div>
         </div>
 
         <!-- AR Try-On -->
         <div
-          class="bg-surface border border-borderSoft min-h-[82px] p-4 rounded-2xl shadow-sm hover:shadow-md hover:border-indigo transition-all duration-300 flex items-center gap-4 cursor-pointer min-w-[280px] md:min-w-0 shrink-0 snap-center flex-1">
-          <div class="w-10 h-10 rounded-xl bg-indigo/10 flex items-center justify-center shrink-0">
-            <svg class="w-5 h-5 text-indigo" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          class="bg-surface border border-borderSoft p-3 sm:p-4 rounded-2xl shadow-sm hover:shadow-md hover:border-indigo transition-all duration-300 flex flex-col items-center text-center justify-center md:flex-row md:items-center md:text-left md:justify-start cursor-pointer w-full min-h-[96px] md:min-h-[82px] gap-2 md:gap-4">
+          <div class="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-xl bg-indigo/10 flex items-center justify-center shrink-0">
+            <svg class="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 text-indigo" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -112,30 +112,25 @@
             </svg>
           </div>
           <div>
-            <h3 class="text-sm font-black text-espresso mb-0.5">AR Try-On</h3>
-            <p class="text-[11px] text-muted leading-tight">Visualisasikan kerajinan & dekorasi langsung di ruanganmu.
-            </p>
+            <h3 class="text-[10px] sm:text-xs md:text-sm font-black text-espresso mb-0.5 leading-tight">AR Try-On</h3>
+            <p class="hidden md:block text-[11px] text-muted leading-tight">Visualisasikan kerajinan & dekorasi langsung di ruanganmu.</p>
           </div>
         </div>
 
         <!-- Co-Create Room -->
         <div
-          class="bg-surface border border-borderSoft min-h-[82px] p-4 rounded-2xl shadow-sm hover:shadow-md hover:border-olive transition-all duration-300 flex items-center gap-4 cursor-pointer min-w-[280px] md:min-w-0 shrink-0 snap-center flex-1">
-          <div class="w-10 h-10 rounded-xl bg-olive/10 flex items-center justify-center shrink-0">
-            <svg class="w-5 h-5 text-olive" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          class="bg-surface border border-borderSoft p-3 sm:p-4 rounded-2xl shadow-sm hover:shadow-md hover:border-olive transition-all duration-300 flex flex-col items-center text-center justify-center md:flex-row md:items-center md:text-left md:justify-start cursor-pointer w-full min-h-[96px] md:min-h-[82px] gap-2 md:gap-4">
+          <div class="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-xl bg-olive/10 flex items-center justify-center shrink-0">
+            <svg class="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 text-olive" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
           </div>
           <div>
-            <h3 class="text-sm font-black text-espresso mb-0.5">Co-Create Room</h3>
-            <p class="text-[11px] text-muted leading-tight">Kolaborasi desain custom langsung dengan pengrajin lokal.
-            </p>
+            <h3 class="text-[10px] sm:text-xs md:text-sm font-black text-espresso mb-0.5 leading-tight">Co-Create Room</h3>
+            <p class="hidden md:block text-[11px] text-muted leading-tight">Kolaborasi desain custom langsung dengan pengrajin lokal.</p>
           </div>
         </div>
-
-        <!-- Spacer element to fix right scroll padding clipping -->
-        <div class="w-6 shrink-0 md:hidden"></div>
       </div>
 
       <!-- Section Title -->
@@ -355,7 +350,7 @@ const toggleWishlist = async (product) => {
 };
 
 const viewProductDetail = (product) => {
-  router.push({ name: 'marketplace.product.detail', params: { id: product.id } });
+  router.push({ name: 'product.detail', params: { id: product.id } });
 };
 
 const filteredProducts = computed(() => {

@@ -3,7 +3,7 @@
     <!-- Menggunakan Navbar bawaan SnapFit -->
     <Navbar :user="user" />
 
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 pt-28 flex flex-col md:flex-row gap-6 lg:gap-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-28 flex flex-col md:flex-row gap-6 lg:gap-8">
       <!-- Sidebar -->
       <aside class="w-full md:w-72 flex-shrink-0 space-y-6">
         <!-- Profile Card -->
@@ -262,7 +262,7 @@
           <div v-else>
             <h3 class="text-2xl font-bold text-espresso mb-6">Wishlist Tersimpan</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              <div v-for="item in wishlistStore.items" :key="item.product_id" @click="router.push(`/marketplace/product/${item.product_id}`)" class="group bg-surface border border-borderSoft rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col relative">
+              <div v-for="item in wishlistStore.items" :key="item.product_id" @click="router.push(`/product/${item.product_id}`)" class="group bg-surface border border-borderSoft rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col relative">
                 <div class="h-48 bg-slate-100 overflow-hidden relative">
                   <!-- Fallback to placeholder if parsing fails or no image -->
                   <img :src="(item.product?.images && typeof item.product.images === 'string' && item.product.images.startsWith('[')) ? JSON.parse(item.product.images)[0] : (item.product?.images?.[0] || '/images/placeholder.png')" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
@@ -423,15 +423,16 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import Navbar from '@/pages/landing/partials/Navbar.vue';
 import RoleWorkspaceMenu from './RoleWorkspaceMenu.vue';
 import { useWishlistStore } from '@/stores/wishlistStore';
 
 const router = useRouter();
+const route = useRoute();
 const wishlistStore = useWishlistStore();
 const user = ref(null);
-const activeMenu = ref('profile');
+const activeMenu = ref(route.query.tab || 'profile');
 
 const form = ref({
   name: '',
@@ -584,13 +585,19 @@ const statusLabel = (status) => {
 const selectedOrder = ref(null);
 
 const viewOrderDetail = (order) => {
-  selectedOrder.value = order;
+  router.push({ name: 'order.detail', params: { id: order.id } });
 };
 
 watch(activeMenu, (newVal) => {
   if (newVal === 'orders' && orders.value.length === 0) fetchOrders();
   if (newVal === 'cart' && cartItems.value.length === 0) fetchCart();
   if (newVal === 'wishlist' && wishlistStore.items.length === 0) wishlistStore.loadWishlist();
+});
+
+watch(() => route.query.tab, (newTab) => {
+  if (newTab && ['profile', 'roles', 'orders', 'cart', 'wishlist', 'settings'].includes(newTab)) {
+    activeMenu.value = newTab;
+  }
 });
 
 onMounted(() => {
@@ -610,6 +617,11 @@ onMounted(() => {
   }
 
   fetchProfileData();
+
+  // Fetch initial tab data
+  if (activeMenu.value === 'orders') fetchOrders();
+  else if (activeMenu.value === 'cart') fetchCart();
+  else if (activeMenu.value === 'wishlist') wishlistStore.loadWishlist();
 });
 
 const saveSettings = () => {

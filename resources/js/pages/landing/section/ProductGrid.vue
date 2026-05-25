@@ -414,7 +414,7 @@ const addToCart = async (product) => { await cartStore.addItem(product); };
 const isWishlisted = (productId) => wishlistStore.isWishlisted(productId);
 const toggleWishlist = async (product) => { await wishlistStore.toggleWishlist(product); };
 const viewProductDetail = (product) => {
-  router.push({ name: 'marketplace.product.detail', params: { id: product.id } });
+  router.push({ name: 'product.detail', params: { id: product.id } });
 };
 
 // ─── Lifecycle ────────────────────────────────────────────────────────────────

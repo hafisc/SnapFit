@@ -9,7 +9,7 @@
     />
 
     <main class="pt-20 pb-24">
-      <div class="max-w-[1400px] mx-auto px-6">
+      <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p class="text-sm font-black uppercase tracking-[0.25em] text-terracotta mb-2">Wishlist</p>
@@ -101,12 +101,12 @@ const removeFromWishlist = async (productId) => {
 };
 
 const browseMarketplace = () => {
-  router.push('/marketplace');
+  router.push('/');
 };
 
 const goToLogin = () => router.push('/login');
 const goToProfile = () => console.log('Navigate to profile');
-const goToOrders = () => router.push('/marketplace/orders');
+const goToOrders = () => router.push('/orders');
 const logout = () => {
   localStorage.removeItem('user');
   localStorage.removeItem('token');

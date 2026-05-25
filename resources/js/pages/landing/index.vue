@@ -11,7 +11,7 @@
       @goToOrders="goToOrders"
     />
 
-    <main class="pt-16">
+    <main class="pt-[52px] md:pt-[64px]">
       <!-- Marketplace / Product Grid -->
       <ProductGrid
         :products="products"
@@ -119,7 +119,7 @@ const fetchMore = async () => {
 /* ── Navigation ───────────────────────────────────────── */
 const goToLogin   = () => router.push('/login');
 const goToProfile = () => console.log('Navigate to profile');
-const goToOrders  = () => router.push('/marketplace/orders');
+const goToOrders  = () => router.push('/orders');
 
 const logout = () => {
   localStorage.removeItem('user');

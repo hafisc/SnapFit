@@ -80,6 +80,7 @@ class OrderController extends Controller
                 'total_amount'       => $totalAmount,
                 'status'             => 'pending',
                 'midtrans_order_id'  => 'SNAPFIT-' . strtoupper(Str::random(10)),
+                'shipping_courier'   => $request->shipping_courier,
             ]);
 
             // Buat order items
@@ -87,6 +88,7 @@ class OrderController extends Controller
                 OrderItem::create([
                     'order_id'   => $order->id,
                     'product_id' => $item['product_id'],
+                    'variant'    => $item['variant'] ?? null,
                     'quantity'   => $item['quantity'],
                     'price'      => $products[$item['product_id']]->price,
                 ]);

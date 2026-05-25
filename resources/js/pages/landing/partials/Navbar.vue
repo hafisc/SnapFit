@@ -3,18 +3,18 @@
     class="fixed top-0 left-0 right-0 z-50 bg-[rgba(255,250,243,0.86)] backdrop-blur-[14px] border-b border-[rgba(232,220,203,0.7)] shadow-sm animate-slide-down">
     <!-- Top inner highlight for premium glass effect -->
     <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent"></div>
-    <nav class="max-w-[1480px] mx-auto px-8 py-1.5 flex items-center relative">
+    <nav class="max-w-[1480px] mx-auto px-4 sm:px-6 lg:px-8 py-1.5 flex items-center relative">
       <!-- LEFT SECTION: Logo + Menu -->
       <div class="flex items-center gap-12">
         <!-- Logo Section -->
-        <a href="/" class="flex items-center gap-3 group cursor-pointer">
+        <a href="/" class="flex items-center gap-2 group cursor-pointer">
           <div
-            class="w-7 h-7 rounded-lg overflow-hidden transform group-hover:scale-105 transition-all duration-300 flex items-center justify-center bg-surface">
+            class="w-6 h-6 rounded-md overflow-hidden transform group-hover:scale-105 transition-all duration-300 flex items-center justify-center bg-surface">
             <img :src="'/images/logo_snapfit.png'" alt="SnapFit Logo" class="w-full h-full object-cover" />
           </div>
           <div>
             <h1
-              class="font-black text-base tracking-tight text-espresso leading-none group-hover:text-terracotta transition-colors">
+              class="font-black text-sm tracking-tight text-espresso leading-none group-hover:text-terracotta transition-colors">
               SnapFit</h1>
           </div>
         </a>
@@ -520,7 +520,7 @@ const debouncedSearch = () => {
 const goToProduct = (id) => {
   showSearchResults.value = false;
   searchQuery.value = '';
-  router.push({ name: 'marketplace.product.detail', params: { id } });
+  router.push({ name: 'product.detail', params: { id } });
 };
 
 // Cart item manipulation
@@ -542,8 +542,8 @@ const removeCartItem = (item) => {
 
 const goToLogin = () => emit('goToLogin');
 const goToProfile = () => { showUserMenu.value = false; router.push('/profile'); };
-const goToOrders = () => { showUserMenu.value = false; router.push('/marketplace/orders'); };
-const goToCart = () => { showCart.value = false; router.push('/marketplace/cart'); };
+const goToOrders = () => { showUserMenu.value = false; router.push('/profile?tab=orders'); };
+const goToCart = () => { showCart.value = false; router.push('/cart'); };
 const logout = async () => {
   try {
     const token = localStorage.getItem('token');
