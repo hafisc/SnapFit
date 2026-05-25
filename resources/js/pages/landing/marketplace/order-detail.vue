@@ -1,5 +1,4 @@
 <template>
-<<<<<<< Updated upstream
   <div class="snapfit-heritage-bg min-h-screen text-espresso font-sans relative pb-20">
     <Navbar :user="user" />
 
@@ -9,14 +8,6 @@
         <button @click="goBack" class="inline-flex items-center gap-2 text-slate-500 hover:text-espresso transition-colors font-bold text-sm mb-3 md:mb-4">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-=======
-  <section class="snapfit-heritage-bg min-h-screen text-espresso p-6 lg:p-10 overflow-x-hidden relative">
-    <div class="max-w-6xl mx-auto">
-      <div class="mb-8">
-        <button @click="goBack" class="inline-flex items-center gap-2 text-muted hover:text-espresso transition mb-6">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
->>>>>>> Stashed changes
           </svg>
           Kembali ke Pesanan
         </button>
@@ -415,12 +406,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-<<<<<<< Updated upstream
 /* Additional style overrides if needed */
 </style>
-=======
-.animate-spin {
-  border-width: 4px;
-}
-</style>
->>>>>>> Stashed changes
