@@ -1,4 +1,5 @@
 <template>
+<<<<<<< Updated upstream
   <div class="snapfit-heritage-bg min-h-screen text-espresso selection:bg-terracotta selection:text-white font-sans relative pb-20">
     
     <main class="max-w-6xl mx-auto px-4 py-8 md:py-12">
@@ -12,6 +13,18 @@
         </button>
         <h1 class="text-3xl md:text-4xl font-black text-espresso tracking-tight">Checkout Pembayaran</h1>
         <p class="text-slate-500 mt-2 text-sm md:text-base">Selesaikan pesanan Anda dengan aman menggunakan gerbang pembayaran Midtrans.</p>
+=======
+  <section class="snapfit-heritage-bg min-h-screen text-espresso p-6 lg:p-10 overflow-x-hidden relative">
+    <div class="max-w-6xl mx-auto">
+      <div class="mb-8">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 class="text-4xl font-black text-espresso">Checkout</h1>
+            <p class="text-muted mt-2">Lengkapi alamat dan pilih pengiriman sebelum melanjutkan ke pembayaran.</p>
+          </div>
+          <div class="rounded-full bg-sand px-4 py-2 text-sm font-semibold text-orange-700">Source: {{ sourceLabel }}</div>
+        </div>
+>>>>>>> Stashed changes
       </div>
 
       <!-- Main Layout Grid -->

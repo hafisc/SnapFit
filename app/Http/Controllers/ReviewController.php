@@ -78,6 +78,7 @@ class ReviewController extends Controller
             'product_id' => $product->id,
             'rating'     => $request->rating,
             'comment'    => $request->comment,
+            'image_url'  => $request->image_url,
         ]);
 
         // Update avg_rating & reviews_count di tabel products (denormalized)
@@ -103,6 +104,7 @@ class ReviewController extends Controller
         $review->update([
             'rating'  => $request->rating,
             'comment' => $request->comment,
+            'image_url' => $request->image_url,
         ]);
 
         $this->updateProductRatingCache($product);

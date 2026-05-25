@@ -16,6 +16,7 @@ class StoreReviewRequest extends FormRequest
         return [
             'rating'  => ['required', 'integer', 'min:1', 'max:5'],
             'comment' => ['nullable', 'string', 'max:1000'],
+            'image_url' => ['nullable', 'string', 'max:2048'],
         ];
     }
 
@@ -26,6 +27,7 @@ class StoreReviewRequest extends FormRequest
             'rating.min'      => 'Rating minimal 1 bintang.',
             'rating.max'      => 'Rating maksimal 5 bintang.',
             'comment.max'     => 'Komentar maksimal 1000 karakter.',
+            'image_url.max'   => 'URL gambar ulasan terlalu panjang.',
         ];
     }
 }

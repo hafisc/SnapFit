@@ -119,4 +119,25 @@ class UploadController extends Controller
             'filename' => $file->getClientOriginalName(),
         ], 201);
     }
+
+    /**
+     * Upload gambar untuk ulasan produk.
+     */
+    public function uploadReviewImage(Request $request): JsonResponse
+    {
+        $request->validate([
+            'image' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'], // max 5MB
+        ]);
+
+        $file     = $request->file('image');
+        $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+        $path     = $file->storeAs('reviews', $filename, 'public');
+
+        return response()->json([
+            'message'  => 'Gambar ulasan berhasil diupload.',
+            'url'      => Storage::url($path),
+            'path'     => $path,
+            'filename' => $filename,
+        ], 201);
+    }
 }

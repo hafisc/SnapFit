@@ -88,6 +88,7 @@ Route::prefix('v1')->group(function () {
         Route::prefix('upload')->group(function () {
             Route::post('avatar',        [UploadController::class, 'uploadAvatar']);
             Route::post('product-image', [UploadController::class, 'uploadProductImage']);
+            Route::post('review-image',  [UploadController::class, 'uploadReviewImage']);
             Route::post('ai-source',     [UploadController::class, 'uploadAiSource']);
             Route::post('ar-model',      [UploadController::class, 'uploadArModel']);
             Route::post('role-document', [UploadController::class, 'uploadRoleDocument']);

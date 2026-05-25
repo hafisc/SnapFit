@@ -261,6 +261,20 @@ const brandFeatures = [
   { label: 'Kolaborasi Designer Real-time' },
 ];
 
+const resolveUserRole = (user) => {
+  const activeRole = user?.active_role;
+  if (activeRole === 'admin' || activeRole === 'umkm' || activeRole === 'designer' || activeRole === 'desainer') {
+    return activeRole;
+  }
+
+  const ownedRoles = user?.owned_roles || user?.roles?.map(r => r?.name || r) || [];
+  if (ownedRoles.includes('admin')) return 'admin';
+  if (ownedRoles.includes('umkm')) return 'umkm';
+  if (ownedRoles.includes('designer') || ownedRoles.includes('desainer')) return 'designer';
+
+  return 'buyer';
+};
+
 onMounted(async () => {
   // Tangkap callback dari Google OAuth (berupa query string parameter)
   const urlParams = new URLSearchParams(window.location.search);
@@ -295,9 +309,10 @@ onMounted(async () => {
         const redirectPath = route.query.redirect;
         if (redirectPath) return router.push(redirectPath);
 
-        if (role === 'admin') return router.push('/admin/dashboard');
-        if (role === 'umkm') return router.push('/umkm/dashboard');
-        if (role === 'desainer') return router.push('/designer/dashboard');
+        const userRole = resolveUserRole(data.user);
+        if (userRole === 'admin') return router.push('/admin/dashboard');
+        if (userRole === 'umkm') return router.push('/umkm/dashboard');
+        if (userRole === 'designer' || userRole === 'desainer') return router.push('/designer/dashboard');
         router.push('/');
       } else {
         errorMessage.value = 'Gagal memverifikasi sesi Google.';
@@ -355,10 +370,10 @@ const submit = async () => {
     const redirectPath = route.query.redirect;
     if (redirectPath) return router.push(redirectPath);
 
-    const role = data.user?.role;
+    const role = resolveUserRole(data.user);
     if (role === 'admin') return router.push('/admin/dashboard');
     if (role === 'umkm') return router.push('/umkm/dashboard');
-    if (role === 'desainer') return router.push('/designer/dashboard');
+    if (role === 'designer' || role === 'desainer') return router.push('/designer/dashboard');
     router.push('/');
 
   } catch (err) {

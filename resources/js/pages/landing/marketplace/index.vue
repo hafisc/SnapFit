@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-slate-50 text-espresso overflow-x-hidden">
+  <div class="snapfit-heritage-bg min-h-screen text-espresso overflow-x-hidden relative">
     <!-- Navbar -->
     <Navbar
       :user="user"

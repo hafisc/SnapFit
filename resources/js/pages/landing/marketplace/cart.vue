@@ -1,5 +1,5 @@
 <template>
-  <section class="min-h-screen bg-slate-50 text-espresso p-6 lg:p-10">
+  <section class="snapfit-heritage-bg min-h-screen text-espresso p-6 lg:p-10 overflow-x-hidden relative">
     <div class="max-w-6xl mx-auto">
       <!-- Header -->
       <div class="mb-8">

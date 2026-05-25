@@ -341,6 +341,12 @@
                     </div>
                   </div>
                   <p class="text-espresso text-sm">{{ review.comment ?? review.message ?? 'Ulasan tidak tersedia.' }}</p>
+                  <img
+                    v-if="review.image_url"
+                    :src="review.image_url"
+                    alt="Foto ulasan"
+                    class="mt-3 w-full max-w-[220px] rounded-xl border border-borderSoft/60 object-cover"
+                  />
                 </div>
               </div>
               <p v-else class="text-sm text-muted">Belum ada ulasan untuk produk ini.</p>
@@ -594,6 +600,12 @@
                     </div>
                   </div>
                   <p class="text-espresso text-xs leading-normal">{{ review.comment ?? review.message }}</p>
+                  <img
+                    v-if="review.image_url"
+                    :src="review.image_url"
+                    alt="Foto ulasan"
+                    class="mt-2.5 w-full max-w-[180px] rounded-lg border border-slate-200 object-cover"
+                  />
                 </div>
               </div>
               <p v-else class="text-xs text-muted">Belum ada ulasan untuk produk ini.</p>
@@ -918,6 +930,21 @@
           </div>
         </div>
 
+        <div>
+          <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2.5 ml-1">Foto Ulasan (Opsional)</label>
+          <input
+            ref="reviewImageInput"
+            type="file"
+            accept="image/*"
+            @change="onReviewImageChange"
+            class="block w-full text-xs text-espresso file:mr-3 file:rounded-lg file:border-0 file:bg-[#F8F1E7] file:px-3 file:py-2 file:font-bold file:text-terracotta hover:file:bg-[#f2e5d5]"
+          />
+          <div v-if="reviewImagePreview" class="mt-2">
+            <img :src="reviewImagePreview" alt="Preview foto ulasan" class="w-28 h-28 rounded-xl object-cover border border-borderSoft" />
+          </div>
+          <p v-if="reviewFormError.image" class="text-red-500 text-[10px] mt-1 font-bold">{{ reviewFormError.image }}</p>
+        </div>
+
         <!-- Submit Button -->
         <button
           type="submit"
@@ -1001,9 +1028,12 @@ const isInitializingAR = ref(false);
 // Review state
 const hoveredStar = ref(0);
 const isSubmittingReview = ref(false);
-const reviewForm = ref({ rating: 0, comment: '' });
-const reviewFormError = ref({ rating: '', comment: '' });
+const reviewForm = ref({ rating: 0, comment: '', image_url: '' });
+const reviewFormError = ref({ rating: '', comment: '', image: '' });
 const productReviews = ref([]);
+const reviewImageInput = ref(null);
+const reviewImageFile = ref(null);
+const reviewImagePreview = ref('');
 
 // MediaPipe State
 let pose = null;
@@ -1185,6 +1215,7 @@ const loadProduct = async () => {
         avatar: r.user?.avatar_url ?? null,
         rating: r.rating,
         comment: r.comment ?? 'Ulasan tidak tersedia.',
+        image_url: r.image_url ?? null,
         created_at: r.created_at
       }));
     } catch (err) {
@@ -1451,8 +1482,11 @@ const openReviewModal = () => {
     router.push({ name: 'login', query: { redirect: route.fullPath } });
     return;
   }
-  reviewForm.value = { rating: 0, comment: '' };
-  reviewFormError.value = { rating: '', comment: '' };
+  reviewForm.value = { rating: 0, comment: '', image_url: '' };
+  reviewFormError.value = { rating: '', comment: '', image: '' };
+  reviewImageFile.value = null;
+  reviewImagePreview.value = '';
+  if (reviewImageInput.value) reviewImageInput.value.value = '';
   showReviewModal.value = true;
 };
 
@@ -1460,8 +1494,49 @@ const closeReviewModal = () => {
   showReviewModal.value = false;
 };
 
+const onReviewImageChange = (event) => {
+  reviewFormError.value.image = '';
+  const file = event.target.files?.[0];
+  if (!file) {
+    reviewImageFile.value = null;
+    reviewImagePreview.value = '';
+    return;
+  }
+
+  if (!file.type.startsWith('image/')) {
+    reviewFormError.value.image = 'File harus berupa gambar.';
+    reviewImageFile.value = null;
+    reviewImagePreview.value = '';
+    return;
+  }
+
+  reviewImageFile.value = file;
+  reviewImagePreview.value = URL.createObjectURL(file);
+};
+
+const uploadReviewImage = async () => {
+  if (!reviewImageFile.value) return '';
+
+  const token = localStorage.getItem('token');
+  const formData = new FormData();
+  formData.append('image', reviewImageFile.value);
+
+  const res = await fetch('/api/v1/upload/review-image', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || 'Gagal upload gambar ulasan');
+  return data.url || '';
+};
+
 const submitReview = async () => {
-  reviewFormError.value = { rating: '', comment: '' };
+  reviewFormError.value = { rating: '', comment: '', image: '' };
   
   if (reviewForm.value.rating === 0) {
     reviewFormError.value.rating = 'Pilih rating bintang terlebih dahulu.';
@@ -1477,6 +1552,16 @@ const submitReview = async () => {
   try {
     const token = localStorage.getItem('token');
     const id = product.value?.id;
+    let imageUrl = '';
+    if (reviewImageFile.value) {
+      imageUrl = await uploadReviewImage();
+    }
+
+    const payload = {
+      ...reviewForm.value,
+      image_url: imageUrl || reviewForm.value.image_url || ''
+    };
+
     const response = await fetch(`/api/v1/products/${id}/reviews`, {
       method: 'POST',
       headers: {
@@ -1484,7 +1569,7 @@ const submitReview = async () => {
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify(reviewForm.value)
+      body: JSON.stringify(payload)
     });
     
     const data = await response.json();

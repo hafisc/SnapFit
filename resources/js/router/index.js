@@ -259,6 +259,14 @@ const router = createRouter({
   },
 });
 
+const getRoleHome = (user) => {
+  const role = user?.active_role;
+  if (role === 'admin') return '/admin/dashboard';
+  if (role === 'umkm') return '/umkm/dashboard';
+  if (role === 'designer' || role === 'desainer') return '/designer/dashboard';
+  return '/';
+};
+
 /* ── Navigation Guard ─────────────────────────── */
 router.beforeEach((to, from) => {
   const user  = JSON.parse(localStorage.getItem('user') ?? 'null');
@@ -267,7 +275,7 @@ router.beforeEach((to, from) => {
 
   // Redirect logged-in user away from guest-only pages
   if (to.meta.guestOnly && isAuthenticated) {
-    return '/';
+    return getRoleHome(user);
   }
 
   // Require authentication
@@ -278,7 +286,7 @@ router.beforeEach((to, from) => {
   // Require specific role
   if (to.meta.role && user?.active_role !== to.meta.role) {
     // Also check if user has the role in their roles array
-    const userRoles = user?.roles?.map(r => r.name || r) || [];
+    const userRoles = user?.owned_roles || user?.roles?.map(r => r.name || r) || [];
     if (!userRoles.includes(to.meta.role) && user?.active_role !== to.meta.role) {
       return '/profile';
     }
