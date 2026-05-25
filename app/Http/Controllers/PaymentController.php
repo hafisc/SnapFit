@@ -33,6 +33,10 @@ class PaymentController extends Controller
         // Load items dan produk untuk item_details Midtrans
         $order->load(['items.product', 'buyer.profile']);
 
+        // Regenerate midtrans_order_id to avoid "order_id has already been taken" error in Midtrans Sandbox/Production
+        $order->midtrans_order_id = 'SNAPFIT-' . $order->id . '-' . strtoupper(\Illuminate\Support\Str::random(6));
+        $order->save();
+
         try {
             $snap = $this->midtrans->createSnapToken($order, $request->user());
 
@@ -116,6 +120,9 @@ class PaymentController extends Controller
         if ($order->buyer_id !== $request->user()->id && !$request->user()->isAdmin()) {
             return response()->json(['message' => 'Forbidden.'], 403);
         }
+
+        // Sinkronkan status pembayaran secara real-time dari Midtrans
+        $this->midtrans->checkAndSyncStatus($order);
 
         return response()->json([
             'order_id'          => $order->midtrans_order_id,

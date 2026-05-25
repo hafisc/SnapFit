@@ -1,187 +1,234 @@
 <template>
-  <section class="min-h-screen bg-slate-50 text-espresso p-6 lg:p-10">
-    <div class="max-w-6xl mx-auto">
-      <div class="mb-8">
-        <button @click="goBack" class="inline-flex items-center gap-2 text-muted hover:text-espresso transition mb-6">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+  <div class="snapfit-heritage-bg min-h-screen text-espresso font-sans relative pb-20">
+    <Navbar :user="user" />
+
+    <main class="max-w-6xl mx-auto px-4 py-6 md:py-10 pt-24 md:pt-28">
+      <!-- Back button and Title Header -->
+      <div class="mb-6 md:mb-8" data-aos="fade-down">
+        <button @click="goBack" class="inline-flex items-center gap-2 text-slate-500 hover:text-espresso transition-colors font-bold text-sm mb-3 md:mb-4">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
-          Back to Orders
+          Kembali ke Pesanan
         </button>
-
-        <div class="rounded-[2rem] bg-surface p-8 shadow-sm border border-borderSoft">
-          <div class="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6">
+        
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 class="text-2xl md:text-3xl font-extrabold text-espresso tracking-tight">Detail Pesanan</h1>
+            <p class="text-slate-500 mt-1.5 text-xs md:text-sm font-normal">Pantau status pembayaran, kurir pengiriman, dan rincian produk pesanan Anda.</p>
+          </div>
+          <div class="bg-surface px-4 py-3 rounded-2xl border border-borderSoft shadow-sm flex items-center justify-between md:justify-end gap-6 w-full md:w-auto">
             <div>
-              <h1 class="text-3xl font-black text-espresso mb-2">Order Detail</h1>
-              <p class="text-muted">Review the status, shipping, and payment information for your order.</p>
+              <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">ID Pesanan</p>
+              <p class="text-sm font-bold text-espresso select-all">{{ order?.midtrans_order_id || 'N/A' }}</p>
             </div>
-            <div class="text-right">
-              <p class="text-sm text-muted">Order ID</p>
-              <p class="text-xl font-black text-espresso">{{ order?.midtrans_order_id || 'N/A' }}</p>
-              <p class="text-sm text-muted mt-2">{{ formatDate(order?.created_at) }}</p>
+            <div class="text-right border-l border-dashed border-borderSoft pl-6">
+              <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Tanggal</p>
+              <p class="text-sm font-bold text-espresso">{{ formatDate(order?.created_at) }}</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div v-if="loading" class="rounded-[2rem] bg-surface p-8 shadow-sm border border-borderSoft text-center">
+      <!-- Loading State -->
+      <div v-if="loading" class="rounded-3xl bg-surface p-12 shadow-md border border-borderSoft text-center">
         <div class="flex justify-center mb-4">
-          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-terracotta"></div>
         </div>
-        <p class="text-muted font-semibold">Loading order details...</p>
+        <p class="text-slate-500 font-medium">Memuat detail pesanan...</p>
       </div>
 
-      <div v-else-if="order" class="space-y-6">
-        <div class="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
-          <div class="rounded-[2rem] bg-surface p-8 shadow-sm border border-borderSoft">
-            <h2 class="text-xl font-black text-espresso mb-6">Status Timeline</h2>
-            <div class="space-y-4">
-              <div v-for="(item, index) in timeline" :key="item.label" class="flex gap-4 items-start">
-                <div class="flex flex-col items-center">
-                  <div :class="item.completed ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-muted'" class="w-10 h-10 rounded-full flex items-center justify-center font-black">
-                    {{ item.completed ? '✓' : item.icon }}
-                  </div>
-                  <div v-if="index < timeline.length - 1" class="w-px flex-1 bg-slate-200 mt-2"></div>
-                </div>
-                <div class="flex-1 pt-1">
-                  <p class="font-black text-espresso">{{ item.label }}</p>
-                  <p class="text-sm text-muted mt-1">{{ item.description }}</p>
-                  <p v-if="item.date" class="text-xs text-slate-400 mt-2">{{ item.date }}</p>
-                </div>
+      <!-- Error State -->
+      <div v-else-if="!order" class="rounded-3xl bg-surface p-12 shadow-md border border-borderSoft text-center">
+        <p class="text-red-650 font-medium mb-6">Pesanan tidak ditemukan atau Anda tidak memiliki akses ke pesanan ini.</p>
+        <button @click="goBack" class="inline-flex items-center justify-center rounded-full bg-slate-900 px-6 py-3 text-sm font-bold text-white hover:bg-slate-800 transition-all duration-300">
+          Kembali ke Pesanan
+        </button>
+      </div>
+
+      <!-- Main Grid Layout (Reordered on mobile so transaction card/payment details come first) -->
+      <div v-else class="grid gap-6 md:gap-8 lg:grid-cols-[1.6fr_1fr] items-start">
+        
+        <!-- Right Column: Shipping & Payment Summary Sticky Sidebar (order-1 on mobile so it displays first) -->
+        <div class="space-y-6 order-1 lg:order-2 lg:sticky lg:top-28">
+          <div class="rounded-3xl bg-surface p-4 sm:p-6 md:p-8 shadow-md border border-borderSoft hover:shadow-lg transition-all duration-300">
+            <h2 class="text-base md:text-lg font-bold text-espresso mb-4 md:mb-6 pb-3 md:pb-4 border-b border-borderSoft">Detail Transaksi</h2>
+            
+            <div class="space-y-4 mb-6">
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-slate-400 font-semibold">ID Transaksi</span>
+                <span class="font-bold text-espresso select-all bg-slate-50 px-2.5 py-1 rounded-lg border border-borderSoft text-xs">{{ order.midtrans_order_id || 'N/A' }}</span>
+              </div>
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-slate-400 font-semibold">Waktu Pemesanan</span>
+                <span class="font-medium text-espresso">{{ formatDate(order.created_at) }}</span>
+              </div>
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-slate-400 font-semibold">Kurir Pengiriman</span>
+                <span class="font-bold text-espresso uppercase bg-sand text-orange-700 px-2.5 py-0.5 rounded-lg border border-terracotta/10 text-xs">{{ order.shipping_courier || '-' }}</span>
+              </div>
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-slate-400 font-semibold">Nomor Resi</span>
+                <span class="font-bold text-espresso break-all bg-slate-50 px-2.5 py-1 rounded-lg border border-borderSoft text-xs select-all">{{ order.tracking_number || 'Belum Tersedia' }}</span>
+              </div>
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-slate-400 font-semibold">Status Pembayaran</span>
+                <span class="px-2.5 py-0.5 rounded-md text-xs font-bold uppercase tracking-wider"
+                      :class="order.status === 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-emerald-100 text-emerald-700'">
+                  {{ paymentStatus }}
+                </span>
               </div>
             </div>
-          </div>
 
-          <div class="rounded-[2rem] bg-surface p-8 shadow-sm border border-borderSoft">
-            <h2 class="text-xl font-black text-espresso mb-6">Shipping & Payment</h2>
-            <div class="space-y-4">
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div class="rounded-3xl bg-slate-50 p-5 border border-borderSoft">
-                  <p class="text-xs text-muted uppercase tracking-[0.12em] font-black mb-2">Courier</p>
-                  <p class="text-sm font-black text-espresso">{{ order.shipping_courier || 'Not available' }}</p>
-                </div>
-                <div class="rounded-3xl bg-slate-50 p-5 border border-borderSoft">
-                  <p class="text-xs text-muted uppercase tracking-[0.12em] font-black mb-2">Tracking Number</p>
-                  <p class="text-sm font-black text-espresso break-all">{{ order.tracking_number || 'Not available' }}</p>
-                </div>
-              </div>
-              <div class="rounded-3xl bg-slate-50 p-5 border border-borderSoft">
-                <p class="text-xs text-muted uppercase tracking-[0.12em] font-black mb-2">Payment Status</p>
-                <p class="text-sm font-black text-espresso">{{ paymentStatus }}</p>
-              </div>
-              <div class="rounded-3xl bg-slate-50 p-5 border border-borderSoft">
-                <p class="text-xs text-muted uppercase tracking-[0.12em] font-black mb-2">Order Total</p>
-                <p class="text-2xl font-black text-terracotta">{{ formatCurrency(order.total_amount) }}</p>
+            <div class="border-t border-dashed border-borderSoft pt-4 mb-6">
+              <div class="flex justify-between items-center">
+                <span class="text-espresso font-bold">Total Pembayaran</span>
+                <span class="text-xl md:text-2xl font-extrabold text-terracotta">{{ formatCurrency(order.total_amount) }}</span>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div class="rounded-[2rem] bg-surface p-8 shadow-sm border border-borderSoft">
-          <h2 class="text-xl font-black text-espresso mb-6">Products</h2>
-          <div class="space-y-4">
-            <div v-for="item in order.items" :key="item.id" class="grid gap-4 sm:grid-cols-[auto_1fr_auto] items-center rounded-3xl bg-slate-50 p-5 border border-borderSoft">
-              <div class="flex items-center gap-4">
-                <img v-if="item.product?.image_url" :src="item.product.image_url" class="h-20 w-20 rounded-2xl object-cover" :alt="item.product?.name" />
-                <div v-else class="h-20 w-20 rounded-2xl bg-slate-200"></div>
-                <div>
-                  <p class="font-black text-espresso">{{ item.product?.name || 'Product' }}</p>
-                  <p class="text-sm text-muted mt-1">Quantity: {{ item.quantity }}</p>
-                </div>
-              </div>
-              <div class="text-sm text-muted">
-                <p>Unit price</p>
-                <p class="font-black text-espresso mt-1">{{ formatCurrency(item.price) }}</p>
-              </div>
-              <div class="text-right text-espresso font-black text-lg">
-                {{ formatCurrency(item.price * item.quantity) }}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid gap-6 lg:grid-cols-[1.4fr_0.6fr]">
-          <div class="rounded-[2rem] bg-surface p-8 shadow-sm border border-borderSoft">
-            <h2 class="text-xl font-black text-espresso mb-6">Shipping Address</h2>
-            <div class="rounded-3xl bg-slate-50 p-6 border border-borderSoft">
-              <p class="font-black text-espresso mb-2">{{ order.buyer?.profile?.full_name || 'Buyer' }}</p>
-              <p class="text-muted leading-relaxed">{{ order.buyer?.profile?.address || 'No address provided' }}</p>
-              <p class="text-muted mt-3">Phone: {{ order.buyer?.profile?.phone || order.buyer?.phone_number || '-' }}</p>
-            </div>
-          </div>
-
-          <div class="rounded-[2rem] bg-surface p-8 shadow-sm border border-borderSoft">
-            <h2 class="text-xl font-black text-espresso mb-6">Actions</h2>
-            <div class="space-y-4">
-              <button
-                v-if="order.status === 'shipped'"
-                @click="openTrackingLink"
-                class="w-full rounded-3xl bg-blue-600 px-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:bg-blue-700 transition-all"
-              >
-                Track Package
-              </button>
+            <!-- Action Buttons -->
+            <div class="space-y-3">
               <button
                 v-if="order.status === 'pending'"
                 @click="payOrder"
-                class="w-full rounded-3xl bg-terracotta px-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:bg-terracottaDark transition-all"
+                class="w-full rounded-full bg-terracotta px-6 py-3 text-sm font-bold uppercase tracking-wider text-white hover:bg-terracottaDark transition-all duration-300 shadow-md shadow-terracotta/20 active:scale-[0.98]"
               >
                 Bayar Sekarang
               </button>
               <button
-                @click="buyAgain"
-                class="w-full rounded-3xl bg-slate-900 px-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:bg-slate-800 transition-all"
+                v-if="order.status === 'shipped' && order.tracking_number"
+                @click="openTrackingLink"
+                class="w-full rounded-full bg-blue-600 px-6 py-3 text-sm font-bold uppercase tracking-wider text-white hover:bg-blue-700 transition-all duration-300 shadow-md shadow-blue-500/10 active:scale-[0.98]"
               >
-                Buy Again
+                Lacak Paket
+              </button>
+              <button
+                @click="buyAgain"
+                class="w-full rounded-full bg-slate-900 px-6 py-3 text-sm font-bold uppercase tracking-wider text-white hover:bg-slate-800 transition-all duration-300 shadow-md shadow-slate-950/10 active:scale-[0.98]"
+              >
+                Beli Lagi
               </button>
               <button
                 v-if="order.status === 'completed'"
                 @click="writeReview"
-                class="w-full rounded-3xl bg-emerald-600 px-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:bg-emerald-700 transition-all"
+                class="w-full rounded-full bg-emerald-600 px-6 py-3 text-sm font-bold uppercase tracking-wider text-white hover:bg-emerald-700 transition-all duration-300 shadow-md shadow-emerald-500/10 active:scale-[0.98]"
               >
-                Write Review
+                Tulis Ulasan
               </button>
               <button
                 v-if="order.status === 'pending'"
                 @click="showCancelModal = true"
-                class="w-full rounded-3xl bg-red-600 px-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:bg-red-700 transition-all"
+                class="w-full rounded-full bg-red-50 text-red-650 hover:bg-red-100/70 border border-red-200 px-6 py-3 text-sm font-bold uppercase tracking-wider transition-all duration-300 active:scale-[0.98]"
               >
-                Cancel Order
+                Batalkan Pesanan
               </button>
             </div>
           </div>
         </div>
-      </div>
 
-      <div v-else class="rounded-[2rem] bg-surface p-8 shadow-sm border border-borderSoft text-center">
-        <p class="text-red-600 font-semibold mb-4">Order not found or you don't have access to this order.</p>
-        <button @click="goBack" class="inline-flex items-center justify-center rounded-3xl bg-slate-200 px-6 py-3 text-sm font-black text-espresso hover:bg-slate-300 transition-all">
-          Back to Orders
-        </button>
-      </div>
-    </div>
+        <!-- Left Column: Timeline, Products, Shipping Address (order-2 on mobile so it displays below summary) -->
+        <div class="space-y-6 order-2 lg:order-1">
+          
+          <!-- Section 1: Timeline -->
+          <div class="rounded-3xl bg-surface p-4 sm:p-6 md:p-8 shadow-md border border-borderSoft hover:shadow-lg transition-all duration-300">
+            <h2 class="text-base md:text-lg font-bold text-espresso mb-6 flex items-center gap-2.5">
+              <span class="w-6 h-6 rounded-full bg-sand flex items-center justify-center text-xs text-orange-700 font-bold">1</span>
+              Status Perjalanan Pesanan
+            </h2>
+            
+            <div class="relative pl-6 border-l-2 border-slate-100 ml-3 space-y-8 py-2">
+              <div v-for="(item, index) in timeline" :key="item.label" class="relative">
+                <!-- Icon marker -->
+                <div class="absolute -left-[35px] top-0.5 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shadow-sm"
+                     :class="item.completed ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-400'">
+                  {{ item.completed ? '✓' : index + 1 }}
+                </div>
+                <div>
+                  <p class="font-bold text-espresso text-sm md:text-base" :class="item.completed ? 'text-espresso' : 'text-slate-400'">
+                    {{ item.label }}
+                  </p>
+                  <p class="text-xs text-slate-500 mt-1 font-normal leading-relaxed">{{ item.description }}</p>
+                  <p v-if="item.date" class="text-[10px] text-terracotta font-bold mt-1.5 bg-sand/30 px-2 py-0.5 rounded-md inline-block">
+                    {{ item.date }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
 
+          <!-- Section 2: Products -->
+          <div class="rounded-3xl bg-surface p-4 sm:p-6 md:p-8 shadow-md border border-borderSoft hover:shadow-lg transition-all duration-300">
+            <h2 class="text-base md:text-lg font-bold text-espresso mb-6 flex items-center gap-2.5">
+              <span class="w-6 h-6 rounded-full bg-sand flex items-center justify-center text-xs text-orange-700 font-bold">2</span>
+              Produk yang Dipesan
+            </h2>
+            
+            <div class="space-y-4">
+              <div v-for="item in order.items" :key="item.id" class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl bg-slate-50/50 p-4 border border-borderSoft hover:bg-slate-50 transition-all duration-300">
+                <div class="flex items-center gap-4">
+                  <img v-if="item.product?.image_url" :src="item.product.image_url" class="h-20 w-20 rounded-xl object-cover border border-borderSoft shadow-sm" :alt="item.product?.name" />
+                  <div v-else class="h-20 w-20 rounded-xl bg-slate-200 flex items-center justify-center text-slate-400 text-xs font-bold border border-borderSoft">No Image</div>
+                  <div>
+                    <p class="font-bold text-espresso text-base">{{ item.product?.name || 'Produk' }}</p>
+                    <div class="flex flex-wrap items-center gap-3 mt-1.5 text-xs text-slate-500 font-semibold">
+                      <span class="bg-sand text-orange-700 px-2.5 py-0.5 rounded-full border border-terracotta/10" v-if="item.variant">Varian: {{ item.variant }}</span>
+                      <span>Jumlah: {{ item.quantity }}x</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex sm:flex-col items-baseline sm:items-end justify-between sm:justify-center border-t sm:border-t-0 border-dashed border-borderSoft pt-3 sm:pt-0">
+                  <span class="text-xs text-slate-400 sm:hidden">Total Harga:</span>
+                  <div class="text-right">
+                    <p class="text-xs text-slate-400 font-medium mb-0.5">@{{ formatCurrency(item.price) }}</p>
+                    <p class="text-base font-bold text-espresso">{{ formatCurrency(item.price * item.quantity) }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: Shipping Address -->
+          <div class="rounded-3xl bg-surface p-4 sm:p-6 md:p-8 shadow-md border border-borderSoft hover:shadow-lg transition-all duration-300">
+            <h2 class="text-base md:text-lg font-bold text-espresso mb-6 flex items-center gap-2.5">
+              <span class="w-6 h-6 rounded-full bg-sand flex items-center justify-center text-xs text-orange-700 font-bold">3</span>
+              Alamat Pengiriman
+            </h2>
+            <div class="rounded-2xl bg-[#F8F1E7]/10 p-5 border border-borderSoft">
+              <p class="font-bold text-espresso text-base mb-2">{{ order.buyer?.profile?.full_name || order.buyer?.name || 'Penerima' }}</p>
+              <p class="text-sm text-espresso/80 font-normal leading-relaxed mb-3">{{ order.buyer?.profile?.address || 'Alamat tidak tersedia' }}</p>
+              <p class="text-xs text-slate-400 font-semibold">HP: {{ order.buyer?.profile?.phone || order.buyer?.phone_number || '-' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Cancel Order Confirmation Modal -->
     <div v-if="showCancelModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
       <div class="w-full max-w-md rounded-[2rem] bg-surface p-6 shadow-2xl border border-borderSoft">
-        <h3 class="text-xl font-black text-espresso mb-3">Cancel Order</h3>
-        <p class="text-muted mb-6">Are you sure you want to cancel this order? This action cannot be undone.</p>
+        <h3 class="text-xl font-bold text-espresso mb-3">Batalkan Pesanan</h3>
+        <p class="text-slate-500 text-sm leading-relaxed mb-6">Apakah Anda yakin ingin membatalkan pesanan ini? Tindakan ini tidak dapat dibatalkan.</p>
         <div class="flex gap-3">
-          <button @click="showCancelModal = false" class="flex-1 rounded-3xl border border-borderSoft bg-surface px-4 py-3 text-sm font-black uppercase tracking-widest text-espresso hover:bg-slate-50 transition-all">No, Keep It</button>
-          <button @click="cancelOrder" class="flex-1 rounded-3xl bg-red-600 px-4 py-3 text-sm font-black uppercase tracking-widest text-white hover:bg-red-700 transition-all">Yes, Cancel</button>
+          <button @click="showCancelModal = false" class="flex-1 rounded-full border border-borderSoft bg-surface px-4 py-3 text-sm font-bold uppercase tracking-wider text-espresso hover:bg-slate-50 transition-all">Kembali</button>
+          <button @click="cancelOrder" class="flex-1 rounded-full bg-red-600 px-4 py-3 text-sm font-bold uppercase tracking-wider text-white hover:bg-red-700 transition-all">Ya, Batalkan</button>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import Navbar from '@/pages/landing/partials/Navbar.vue';
 import { useNotificationStore } from '@/stores/notificationStore';
 
 const route = useRoute();
 const router = useRouter();
 const notificationStore = useNotificationStore();
 const order = ref(null);
+const user = ref(null);
 const loading = ref(true);
 const showCancelModal = ref(false);
 
@@ -193,6 +240,17 @@ const apiHeaders = () => {
   };
   if (token) headers.Authorization = `Bearer ${token}`;
   return headers;
+};
+
+const fetchUser = () => {
+  const userData = localStorage.getItem('user');
+  if (userData) {
+    try {
+      user.value = JSON.parse(userData);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 };
 
 const payOrder = async () => {
@@ -259,13 +317,13 @@ const fetchOrder = async () => {
 const timeline = computed(() => {
   if (!order.value) return [];
   const phases = [
-    { status: 'pending', label: 'Pending Payment', description: 'Waiting for payment confirmation', icon: '⏳' },
-    { status: 'paid', label: 'Processing', description: 'Order is being prepared', icon: '🔄' },
-    { status: 'shipped', label: 'Shipped', description: 'Order is on the way', icon: '📦' },
-    { status: 'completed', label: 'Delivered', description: 'Order has been delivered', icon: '✓' },
+    { status: 'pending', label: 'Menunggu Pembayaran', description: 'Silakan lakukan pembayaran agar pesanan segera diproses', icon: '⏳' },
+    { status: 'paid', label: 'Pesanan Diproses', description: 'Penjual sedang menyiapkan produk Anda', icon: '🔄' },
+    { status: 'shipped', label: 'Pesanan Dikirim', description: 'Kurir sedang mengirimkan paket ke alamat Anda', icon: '📦' },
+    { status: 'completed', label: 'Pesanan Selesai', description: 'Paket telah diterima dengan sukses', icon: '✓' },
   ];
 
-  return phases.map((phase) => ({
+  return phases.map((phase, index) => ({
     ...phase,
     completed: ['pending', 'paid', 'shipped', 'completed'].indexOf(phase.status) <= ['pending', 'paid', 'shipped', 'completed'].indexOf(order.value.status),
     date: phase.status === order.value.status ? formatDate(order.value.updated_at || order.value.created_at) : null,
@@ -273,9 +331,9 @@ const timeline = computed(() => {
 });
 
 const paymentStatus = computed(() => {
-  if (!order.value) return 'Unknown';
-  if (order.value.status === 'pending') return 'Awaiting Payment';
-  return 'Paid';
+  if (!order.value) return 'Tidak Diketahui';
+  if (order.value.status === 'pending') return 'Menunggu Pembayaran';
+  return 'Sudah Dibayar';
 });
 
 const formatDate = (value) => {
@@ -299,7 +357,7 @@ const formatCurrency = (amount) => {
 };
 
 const goBack = () => {
-  router.push('/orders');
+  router.push('/profile?tab=orders');
 };
 
 const openTrackingLink = () => {
@@ -341,11 +399,12 @@ const cancelOrder = async () => {
   }
 };
 
-onMounted(fetchOrder);
+onMounted(() => {
+  fetchOrder();
+  fetchUser();
+});
 </script>
 
 <style scoped>
-.animate-spin {
-  border-width: 4px;
-}
+/* Additional style overrides if needed */
 </style>

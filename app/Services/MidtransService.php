@@ -5,6 +5,7 @@ namespace App\Services;
 use Midtrans\Config;
 use Midtrans\Snap;
 use Midtrans\Notification;
+use Midtrans\Transaction;
 
 class MidtransService
 {
@@ -78,5 +79,53 @@ class MidtransService
             in_array($transactionStatus, ['deny', 'cancel', 'expire'])  => 'pending',
             default                                                       => 'pending',
         };
+    }
+
+    /**
+     * Cek status transaksi dari Midtrans API dan sinkronkan dengan database local.
+     *
+     * @param  \App\Models\Order  $order
+     * @return string Status order terbaru
+     */
+    public function checkAndSyncStatus($order): string
+    {
+        if (!$order->midtrans_order_id) {
+            return $order->status;
+        }
+
+        if ($order->status === 'pending') {
+            try {
+                $statusResponse = Transaction::status($order->midtrans_order_id);
+                if ($statusResponse) {
+                    $transactionStatus = $statusResponse->transaction_status;
+                    $fraudStatus = $statusResponse->fraud_status ?? '';
+
+                    $newStatus = $this->mapStatus($transactionStatus, $fraudStatus);
+                    if ($newStatus !== $order->status) {
+                        $order->update(['status' => $newStatus]);
+                    }
+                }
+            } catch (\Exception $e) {
+                // Abaikan error (misal: 404 karena transaksi belum dibuat di Midtrans)
+            }
+        }
+
+        // Pastikan notifikasi "Pembayaran Berhasil" dibuat jika order sudah berstatus paid
+        if ($order->status === 'paid') {
+            $notificationExists = \App\Models\Notification::where('user_id', $order->buyer_id)
+                ->where('message', 'like', "%#{$order->midtrans_order_id}%")
+                ->exists();
+
+            if (!$notificationExists) {
+                \App\Models\Notification::create([
+                    'user_id' => $order->buyer_id,
+                    'title'   => 'Pembayaran Berhasil! 🎉',
+                    'message' => "Pembayaran untuk order #{$order->midtrans_order_id} telah dikonfirmasi. Pesanan Anda sedang diproses.",
+                    'is_read' => false,
+                ]);
+            }
+        }
+
+        return $order->status;
     }
 }

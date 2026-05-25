@@ -389,7 +389,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCartStore } from '@/stores/cartStore';
 
@@ -449,6 +449,12 @@ const fetchNotifications = async () => {
     console.error('Failed to fetch notifications', err);
   }
 };
+
+watch(isLoggedIn, (newVal) => {
+  if (newVal) {
+    fetchNotifications();
+  }
+}, { immediate: true });
 
 const markAsRead = async (notif) => {
   if (notif.is_read) return;

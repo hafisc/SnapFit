@@ -151,6 +151,58 @@
                   </div>
                 </div>
 
+                <!-- Shipping Status Stepper -->
+                <div v-if="order.status !== 'cancelled'" class="mb-5 flex items-center justify-between px-2 sm:px-6 mt-4">
+                  <div class="flex items-center w-full relative">
+                    <!-- Step 1: Dibuat -->
+                    <div class="flex flex-col items-center flex-1 relative z-10">
+                      <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-extrabold transition-all duration-300 shadow-sm"
+                           :class="['pending', 'paid', 'shipped', 'completed'].includes(order.status) ? 'bg-espresso text-white' : 'bg-slate-200 text-slate-400'">
+                        1
+                      </div>
+                      <span class="text-[9px] font-bold mt-1 text-slate-500">Dibuat</span>
+                    </div>
+
+                    <!-- Line 1-2 -->
+                    <div class="absolute left-[12.5%] right-[62.5%] top-[11px] h-[2px] -z-0 transition-all duration-300"
+                         :class="['paid', 'shipped', 'completed'].includes(order.status) ? 'bg-espresso' : 'bg-slate-200'"></div>
+
+                    <!-- Step 2: Diproses -->
+                    <div class="flex flex-col items-center flex-1 relative z-10">
+                      <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-extrabold transition-all duration-300 shadow-sm"
+                           :class="['paid', 'shipped', 'completed'].includes(order.status) ? 'bg-espresso text-white' : 'bg-slate-200 text-slate-400'">
+                        2
+                      </div>
+                      <span class="text-[9px] font-bold mt-1 text-slate-500">Diproses</span>
+                    </div>
+
+                    <!-- Line 2-3 -->
+                    <div class="absolute left-[37.5%] right-[37.5%] top-[11px] h-[2px] -z-0 transition-all duration-300"
+                         :class="['shipped', 'completed'].includes(order.status) ? 'bg-espresso' : 'bg-slate-200'"></div>
+
+                    <!-- Step 3: Dikirim -->
+                    <div class="flex flex-col items-center flex-1 relative z-10">
+                      <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-extrabold transition-all duration-300 shadow-sm"
+                           :class="['shipped', 'completed'].includes(order.status) ? 'bg-espresso text-white' : 'bg-slate-200 text-slate-400'">
+                        3
+                      </div>
+                      <span class="text-[9px] font-bold mt-1 text-slate-500">Dikirim</span>
+                    </div>
+
+                    <!-- Line 3-4 -->
+                    <div class="absolute left-[62.5%] right-[12.5%] top-[11px] h-[2px] -z-0 transition-all duration-300"
+                         :class="order.status === 'completed' ? 'bg-espresso' : 'bg-slate-200'"></div>
+
+                    <!-- Step 4: Selesai -->
+                    <div class="flex flex-col items-center flex-1 relative z-10">
+                      <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-extrabold transition-all duration-300 shadow-sm"
+                           :class="order.status === 'completed' ? 'bg-espresso text-white' : 'bg-slate-200 text-slate-400'">
+                        4
+                      </div>
+                      <span class="text-[9px] font-bold mt-1 text-slate-500">Selesai</span>
+                    </div>
+                  </div>
+                </div>
                 <!-- Order Items Preview -->
                 <div v-if="order.items?.length" class="flex gap-2 mb-4 overflow-x-auto pb-2">
                   <div v-for="item in order.items.slice(0, 4)" :key="item.id" class="w-14 h-14 rounded-lg overflow-hidden bg-slate-100 flex-shrink-0 border border-borderSoft">
@@ -580,6 +632,34 @@ const statusLabel = (status) => {
     cancelled: 'Dibatalkan'
   };
   return labels[status] || status;
+};
+
+const getShippingStatusTitle = (status) => {
+  const titles = {
+    pending: 'Menunggu Pembayaran',
+    paid: 'Pesanan Diproses',
+    shipped: 'Pesanan Sedang Dikirim',
+    completed: 'Pesanan Selesai',
+    cancelled: 'Pesanan Dibatalkan'
+  };
+  return titles[status] || status;
+};
+
+const getShippingStatusDesc = (order) => {
+  if (order.status === 'pending') {
+    return 'Selesaikan pembayaran Anda agar pesanan dapat segera diproses oleh penjual.';
+  } else if (order.status === 'paid') {
+    return 'Pembayaran dikonfirmasi. Penjual sedang menyiapkan produk kreatif Anda.';
+  } else if (order.status === 'shipped') {
+    const courier = order.shipping_courier ? order.shipping_courier.toUpperCase() : 'Kurir';
+    const resi = order.tracking_number ? ` (Resi: ${order.tracking_number})` : '';
+    return `Paket Anda sedang dikirim menggunakan jasa ekspedisi ${courier}${resi}.`;
+  } else if (order.status === 'completed') {
+    return 'Paket telah sukses diterima. Terima kasih telah berbelanja kreatif!';
+  } else if (order.status === 'cancelled') {
+    return 'Pesanan telah dibatalkan.';
+  }
+  return '';
 };
 
 const selectedOrder = ref(null);

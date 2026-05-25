@@ -43,6 +43,11 @@ class OrderController extends Controller
             return response()->json(['message' => 'Forbidden.'], 403);
         }
 
+        // Sinkronkan status pembayaran secara real-time dari Midtrans jika status pending
+        if ($order->status === 'pending' && $order->midtrans_order_id) {
+            app(\App\Services\MidtransService::class)->checkAndSyncStatus($order);
+        }
+
         $order->load(['items.product', 'buyer.profile']);
 
         return response()->json(['data' => new OrderResource($order)]);
