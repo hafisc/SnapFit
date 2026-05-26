@@ -313,10 +313,18 @@
                 </div>
                 <div class="flex items-center gap-2">
                   <button
+                    v-if="!hasUserReviewed"
                     @click="openReviewModal"
                     class="px-4 py-2 rounded-xl bg-emerald-600 text-white font-bold text-xs hover:bg-emerald-700 transition active:scale-95 shadow-sm"
                   >
                     Tulis Ulasan
+                  </button>
+                  <button
+                    v-else
+                    disabled
+                    class="px-4 py-2 rounded-xl bg-slate-100 text-slate-400 font-bold text-xs cursor-not-allowed shadow-sm border border-slate-200"
+                  >
+                    Sudah Diulas
                   </button>
                   <div class="flex items-center gap-1 bg-amber-50 px-3 py-1.5 rounded-full border border-amber-100">
                   <svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.95a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.388 2.46a1 1 0 00-.363 1.118l1.287 3.95c.3.921-.755 1.688-1.54 1.118l-3.388-2.46a1 1 0 00-1.175 0l-3.388 2.46c-.784.57-1.838-.197-1.539-1.118l1.287-3.95a1 1 0 00-.363-1.118L2.098 9.377c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.95z"/></svg>
@@ -578,10 +586,18 @@
                 </div>
               </div>
               <button
+                v-if="!hasUserReviewed"
                 @click="openReviewModal"
                 class="w-full py-2.5 rounded-xl border border-emerald-600 text-emerald-600 font-bold text-xs hover:bg-emerald-50 transition active:scale-95 mb-3"
               >
                 Tulis Ulasan
+              </button>
+              <button
+                v-else
+                disabled
+                class="w-full py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-400 font-bold text-xs cursor-not-allowed mb-3"
+              >
+                Sudah Diulas
               </button>
               <div v-if="reviews.length" class="space-y-3">
                 <div v-for="review in reviews.slice(0, 2)" :key="review.id" class="rounded-xl border border-slate-100 bg-slate-50/50 p-3.5">
@@ -1211,6 +1227,7 @@ const loadProduct = async () => {
       const rawReviews = reviewsPayload.data ?? reviewsPayload ?? [];
       productReviews.value = rawReviews.map(r => ({
         id: r.id,
+        user_id: r.user?.id,
         author: r.user?.name ?? 'Pembeli',
         avatar: r.user?.avatar_url ?? null,
         rating: r.rating,
@@ -1278,6 +1295,9 @@ const selectedStock = computed(() => {
 });
 const reviews = computed(() => productReviews.value);
 const reviewCount = computed(() => product.value?.reviews_count ?? productReviews.value.length);
+const hasUserReviewed = computed(() => {
+  return !!(user.value && productReviews.value.some(r => r.user_id === user.value.id));
+});
 const canAddToCart = computed(() => selectedStock.value > 0 && !isLoading.value);
 
 const formatCurrency = (value) => {
@@ -1357,8 +1377,7 @@ const confirmBuyNow = async () => {
   };
   sessionStorage.setItem('buy_now_item', JSON.stringify(buyNowItem));
 
-  notificationStore.success('Membuka checkout...');
-  setTimeout(() => router.push({ path: '/checkout', query: { source: 'buy-now' } }), 400);
+  router.push({ path: '/checkout', query: { source: 'buy-now' } });
 };
 
 const toggleWishlist = async () => {
@@ -1574,6 +1593,11 @@ const submitReview = async () => {
     
     const data = await response.json();
     if (!response.ok) {
+      if (response.status === 422 && data.errors) {
+        reviewFormError.value.rating = data.errors.rating?.[0] || '';
+        reviewFormError.value.comment = data.errors.comment?.[0] || '';
+        reviewFormError.value.image = data.errors.image_url?.[0] || '';
+      }
       throw new Error(data.message || 'Gagal mengirim ulasan');
     }
     
