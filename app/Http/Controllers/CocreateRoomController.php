@@ -152,4 +152,35 @@ class CocreateRoomController extends Controller
             ],
         ], 201);
     }
+
+    /**
+     * Get canvas data for a room.
+     */
+    public function getCanvas(CocreateRoom $room): JsonResponse
+    {
+        return response()->json([
+            'canvas_data' => $room->canvas_data,
+            'canvas_updated_at' => $room->canvas_updated_at ? $room->canvas_updated_at->toDateTimeString() : null,
+        ]);
+    }
+
+    /**
+     * Save canvas data for a room.
+     */
+    public function saveCanvas(Request $request, CocreateRoom $room): JsonResponse
+    {
+        $request->validate([
+            'canvas_data' => 'required|string',
+        ]);
+
+        $room->update([
+            'canvas_data' => $request->canvas_data,
+            'canvas_updated_at' => now(),
+        ]);
+
+        return response()->json([
+            'message' => 'Kanvas berhasil disimpan.',
+            'canvas_updated_at' => $room->canvas_updated_at->toDateTimeString(),
+        ]);
+    }
 }

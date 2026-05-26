@@ -79,27 +79,38 @@
     </div>
 
     <!-- Active Rooms Section -->
-    <div v-if="activeTab === 'active'" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div v-for="room in activeRooms" :key="room.id"
-        class="bg-surface rounded-2xl border border-borderSoft/60 p-6 hover:shadow-md transition-all duration-300 group cursor-pointer relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-32 h-32 bg-sand rounded-full blur-3xl opacity-50 pointer-events-none"></div>
-        <div class="relative z-10">
-          <div class="flex items-center justify-between mb-4">
-            <span class="px-3 py-1.5 bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase tracking-wider rounded-xl flex items-center gap-1.5">
-              <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Live
-            </span>
-            <span class="text-[10px] font-medium text-slate-400">{{ room.timeAgo }}</span>
-          </div>
-          <h3 class="text-lg font-bold text-espresso mb-2 group-hover:text-terracotta transition-colors">{{ room.name }}</h3>
-          <p class="text-xs text-muted font-medium mb-4 leading-relaxed">{{ room.description }}</p>
-          <div class="flex items-center justify-between">
-            <div class="flex -space-x-2">
-              <div v-for="(m, mIdx) in room.members.slice(0, 5)" :key="mIdx" class="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-[9px] font-bold text-white shadow-sm" :class="m.color">{{ m.name.charAt(0) }}</div>
-              <div v-if="room.members.length > 5" class="w-8 h-8 rounded-full border-2 border-white bg-slate-200 flex items-center justify-center text-[10px] font-bold text-muted">+{{ room.members.length - 5 }}</div>
+    <div v-if="activeTab === 'active'">
+      <div v-if="loadingRooms" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div v-for="i in 2" :key="i" class="bg-surface rounded-2xl border border-borderSoft/60 p-6 animate-pulse h-44"></div>
+      </div>
+      <div v-else-if="activeRooms.length === 0" class="bg-surface rounded-2xl border border-borderSoft p-16 text-center">
+        <div class="text-6xl mb-4">🚪</div>
+        <h3 class="text-lg font-bold text-espresso mb-2">Belum Ada Ruang Aktif</h3>
+        <p class="text-sm text-muted font-medium">Anda belum bergabung di ruangan kolaborasi manapun.</p>
+      </div>
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div v-for="room in activeRooms" :key="room.id" @click="joinRoom(room.id)"
+          class="bg-surface rounded-2xl border border-borderSoft/60 p-6 hover:shadow-md transition-all duration-300 group cursor-pointer relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-sand rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+          <div class="relative z-10">
+            <div class="flex items-center justify-between mb-4">
+              <span class="px-3 py-1.5 bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase tracking-wider rounded-xl flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Live
+              </span>
+              <span class="text-[10px] font-medium text-slate-400">Aktif</span>
             </div>
-            <button class="px-4 py-2.5 bg-sand hover:bg-sand text-terracotta text-[10px] font-bold uppercase tracking-wider rounded-xl transition-colors border border-terracotta/20">
-              Masuk Room →
-            </button>
+            <h3 class="text-lg font-bold text-espresso mb-2 group-hover:text-terracotta transition-colors">{{ room.name }}</h3>
+            <p class="text-xs text-muted font-medium mb-4 leading-relaxed line-clamp-2">{{ room.description || 'Tidak ada deskripsi.' }}</p>
+            <div class="flex items-center justify-between">
+              <div class="flex -space-x-2">
+                <div class="w-8 h-8 rounded-full border-2 border-white bg-[#E8DCCB] flex items-center justify-center text-xs font-bold text-[#6F6259]">
+                  {{ (room.creator?.name || 'U').charAt(0).toUpperCase() }}
+                </div>
+              </div>
+              <button @click.stop="joinRoom(room.id)" class="px-4 py-2.5 bg-sand hover:bg-sand text-terracotta text-[10px] font-bold uppercase tracking-wider rounded-xl transition-colors border border-terracotta/20">
+                Masuk Room →
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -130,8 +141,10 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const activeTab = ref('pending');
 const tabs = computed(() => [
   { key: 'pending', label: 'Undangan', count: pendingInvitations.value.length },
@@ -145,12 +158,8 @@ const pendingInvitations = ref([
   { id: 3, umkmName: 'Keramik Dinoyo Craft', projectName: 'Social Media Content Design', category: 'Social Media', timeAgo: '1 hari lalu', deadline: '10 Jul 2026', budget: 1500000, description: 'Desain konten visual untuk Instagram dan TikTok. Template story, feed post, dan carousel yang konsisten.', avatarClass: 'bg-gradient-to-br from-blue-400 to-indigo-500' },
 ]);
 
-const activeRooms = ref([
-  { id: 1, name: 'Packaging Batik Tulis Premium', description: 'Kolaborasi desain packaging premium untuk Batik Sari Malang. Sedang dalam tahap mockup 3D.', timeAgo: '5 min lalu', members: [{ name: 'Sari', color: 'bg-orange-400' }, { name: 'Reza', color: 'bg-terracotta' }, { name: 'Andi', color: 'bg-blue-400' }] },
-  { id: 2, name: 'Branding Rotan Craft', description: 'Brand identity dan panduan visual untuk Rotan Craft Arjosari.', timeAgo: '1 jam lalu', members: [{ name: 'Budi', color: 'bg-emerald-500' }, { name: 'Reza', color: 'bg-terracotta' }] },
-  { id: 3, name: 'Visual Kit Kopi Arjuno', description: 'Konten sosial media Instagram & TikTok untuk brand kopi lokal.', timeAgo: '3 jam lalu', members: [{ name: 'Dewi', color: 'bg-amber-500' }, { name: 'Reza', color: 'bg-terracotta' }, { name: 'Fajar', color: 'bg-pink-400' }, { name: 'Gita', color: 'bg-teal-400' }, { name: 'Heru', color: 'bg-indigo-400' }, { name: 'Indah', color: 'bg-red-400' }] },
-  { id: 4, name: 'Product Photography Keramik', description: 'Style guide foto produk untuk marketplace online.', timeAgo: '6 jam lalu', members: [{ name: 'Lina', color: 'bg-cyan-500' }, { name: 'Reza', color: 'bg-terracotta' }, { name: 'Maya', color: 'bg-rose-400' }] },
-]);
+const activeRooms = ref([]);
+const loadingRooms = ref(true);
 
 const completedRooms = ref([
   { id: 1, name: 'Logo Redesign Tempe Malang', umkmName: 'Tempe Sanan Craft', completedDate: '28 Apr 2026', rating: 5 },
@@ -160,6 +169,40 @@ const completedRooms = ref([
   { id: 5, name: 'Product Catalog Digital', umkmName: 'Anyaman Bamboo Batu', completedDate: '1 Apr 2026', rating: 5 },
 ]);
 
+const fetchRooms = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const res = await fetch('/api/v1/cocreate/rooms', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      activeRooms.value = data.data;
+    }
+  } catch (e) {
+    console.error('Failed to fetch rooms:', e);
+  } finally {
+    loadingRooms.value = false;
+  }
+};
+
+const joinRoom = async (roomId) => {
+  try {
+    const token = localStorage.getItem('token');
+    await fetch(`/api/v1/cocreate/rooms/${roomId}/join`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    router.push(`/designer/cocreate/${roomId}`);
+  } catch (error) {
+    console.error('Failed to join room:', error);
+  }
+};
+
 const acceptInvitation = (id) => { pendingInvitations.value = pendingInvitations.value.filter(i => i.id !== id); };
 const declineInvitation = (id) => { pendingInvitations.value = pendingInvitations.value.filter(i => i.id !== id); };
+
+onMounted(() => {
+  fetchRooms();
+});
 </script>

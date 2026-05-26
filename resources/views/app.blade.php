@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' * data: blob: 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src 'self' 'unsafe-inline' *; font-src 'self' data: *; img-src 'self' data: blob: *; frame-src 'self' *; connect-src 'self' * blob: ws: wss:;">
 
     <title>SnapFit - Indonesian Craft Marketplace</title>
-    <link rel="icon" type="image/png" href="/images/logo_snapfit.png">
+    <link rel="icon" type="image/png" href="/images/logo1.png">
 
     <!-- Midtrans Snap JS -->
     <script type="text/javascript"

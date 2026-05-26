@@ -71,7 +71,7 @@
               <p class="text-[10px] text-slate-400 truncate">{{ inv.projectName }}</p>
             </div>
             <template v-if="inv.status === 'pending'">
-              <button class="px-2.5 py-1 bg-terracotta hover:bg-terracotta text-white text-[10px] font-bold rounded-md transition-colors">Terima</button>
+              <button @click="acceptInvitation(inv.id)" class="px-2.5 py-1 bg-terracotta hover:bg-terracotta text-white text-[10px] font-bold rounded-md transition-colors">Terima</button>
             </template>
             <span v-else-if="inv.status === 'accepted'" class="text-[10px] font-semibold text-emerald-500">✓ Diterima</span>
             <span v-else class="text-[10px] font-semibold text-slate-400">Selesai</span>
@@ -89,7 +89,7 @@
           <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
         </div>
         <div class="space-y-3">
-          <div v-for="room in activeRooms" :key="room.id" class="p-3 rounded-xl border border-borderSoft hover:border-terracotta/30 hover:bg-sand/30 transition-all cursor-pointer group">
+          <div v-for="room in activeRooms" :key="room.id" @click="goToRoom(room.id)" class="p-3 rounded-xl border border-borderSoft hover:border-terracotta/30 hover:bg-sand/30 transition-all cursor-pointer group">
             <div class="flex items-center justify-between mb-2">
               <h4 class="text-[12px] font-semibold text-espresso group-hover:text-terracotta transition-colors truncate">{{ room.name }}</h4>
               <span class="text-[9px] font-bold text-emerald-500 bg-emerald-50 px-1.5 py-0.5 rounded">Live</span>
@@ -130,38 +130,81 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 const user = ref(JSON.parse(localStorage.getItem('user') || '{}'));
-const stats = ref({ completedProjects: 8, activeRooms: 3, totalUMKMPartners: 15, portfolioViews: 284 });
+const stats = ref({ completedProjects: 0, activeRooms: 0, totalUMKMPartners: 0, portfolioViews: 0 });
 
 const statCards = computed(() => [
-  { title: 'Proyek Selesai', value: stats.value.completedProjects, emoji: '🎯', bgClass: 'bg-sand', trend: '+3 bulan ini', trendClass: 'bg-emerald-50 text-emerald-600' },
+  { title: 'Proyek Selesai', value: stats.value.completedProjects, emoji: '🎯', bgClass: 'bg-sand', trend: 'Selesai', trendClass: 'bg-emerald-50 text-emerald-600' },
   { title: 'Room Aktif', value: stats.value.activeRooms, emoji: '🔗', bgClass: 'bg-emerald-50', trend: 'Live', trendClass: 'bg-emerald-50 text-emerald-600' },
-  { title: 'Mitra UMKM', value: stats.value.totalUMKMPartners, emoji: '🤝', bgClass: 'bg-blue-50', trend: '+5 total', trendClass: 'bg-blue-50 text-blue-600' },
-  { title: 'Views Portofolio', value: stats.value.portfolioViews, emoji: '👁️', bgClass: 'bg-amber-50', trend: '+12%', trendClass: 'bg-amber-50 text-amber-600' },
+  { title: 'Mitra UMKM', value: stats.value.totalUMKMPartners, emoji: '🤝', bgClass: 'bg-blue-50', trend: 'Mitra', trendClass: 'bg-blue-50 text-blue-600' },
+  { title: 'Views Portofolio', value: stats.value.portfolioViews, emoji: '👁️', bgClass: 'bg-amber-50', trend: 'Total', trendClass: 'bg-amber-50 text-amber-600' },
 ]);
 
 const chartData = ref([
-  { label: 'Jan', completed: 2, inProgress: 1, completedPct: 30, inProgressPct: 15 },
-  { label: 'Feb', completed: 3, inProgress: 2, completedPct: 45, inProgressPct: 20 },
-  { label: 'Mar', completed: 1, inProgress: 3, completedPct: 15, inProgressPct: 35 },
-  { label: 'Apr', completed: 4, inProgress: 1, completedPct: 55, inProgressPct: 10 },
-  { label: 'Mei', completed: 5, inProgress: 2, completedPct: 70, inProgressPct: 15 },
-  { label: 'Jun', completed: 8, inProgress: 3, completedPct: 100, inProgressPct: 20 },
+  { label: 'Jan', completed: 0, inProgress: 0, completedPct: 0, inProgressPct: 0 },
+  { label: 'Feb', completed: 0, inProgress: 0, completedPct: 0, inProgressPct: 0 },
+  { label: 'Mar', completed: 0, inProgress: 0, completedPct: 0, inProgressPct: 0 },
+  { label: 'Apr', completed: 0, inProgress: 0, completedPct: 0, inProgressPct: 0 },
+  { label: 'Mei', completed: 0, inProgress: 0, completedPct: 0, inProgressPct: 0 },
+  { label: 'Jun', completed: 0, inProgress: 0, completedPct: 0, inProgressPct: 0 },
 ]);
 
-const invitations = ref([
-  { id: 1, umkmName: 'Batik Sari Malang', projectName: 'Redesign Label & Packaging Batik Tulis', status: 'pending', avatarClass: 'bg-gradient-to-br from-orange-400 to-red-400' },
-  { id: 2, umkmName: 'Rotan Craft Arjosari', projectName: 'Branding Identity & Catalog Design', status: 'pending', avatarClass: 'bg-gradient-to-br from-emerald-400 to-teal-500' },
-  { id: 3, umkmName: 'Kopi Gunung Arjuno', projectName: 'Social Media Visual Kit 2026', status: 'accepted', avatarClass: 'bg-gradient-to-br from-amber-500 to-orange-500' },
-  { id: 4, umkmName: 'Kampoeng Keramik', projectName: 'Product Photography Style Guide', status: 'completed', avatarClass: 'bg-gradient-to-br from-blue-400 to-indigo-500' },
-]);
+const invitations = ref([]);
+const activeRooms = ref([]);
+const skills = ref([]);
 
-const activeRooms = ref([
-  { id: 1, name: 'Packaging Batik Tulis', timeAgo: '5 min lalu', members: [{ name: 'Sari', color: 'bg-orange-400' }, { name: 'Reza', color: 'bg-blue-500' }, { name: 'Andi', color: 'bg-emerald-500' }] },
-  { id: 2, name: 'Branding Rotan Craft', timeAgo: '1 jam lalu', members: [{ name: 'Budi', color: 'bg-emerald-500' }, { name: 'Reza', color: 'bg-blue-500' }] },
-  { id: 3, name: 'Visual Kit Kopi Arjuno', timeAgo: '3 jam lalu', members: [{ name: 'Dewi', color: 'bg-amber-500' }, { name: 'Reza', color: 'bg-blue-500' }, { name: 'Fajar', color: 'bg-pink-400' }, { name: 'Gita', color: 'bg-teal-400' }] },
-]);
+const fetchDashboardData = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) return;
 
-const skills = ref(['UI/UX Design', 'Packaging', 'Branding', 'Product Photography', 'Social Media', 'Typography', 'Illustration', 'Logo Design', 'Figma', 'Adobe Photoshop', 'Print Design']);
+    const res = await fetch('/api/v1/designer/dashboard', {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      }
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      stats.value = data.stats || stats.value;
+      chartData.value = data.chartData || chartData.value;
+      invitations.value = data.invitations || invitations.value;
+      activeRooms.value = data.activeRooms || activeRooms.value;
+      skills.value = data.skills || skills.value;
+    }
+  } catch (e) {
+    console.error('Gagal mengambil data dashboard desainer:', e);
+  }
+};
+
+const acceptInvitation = async (roomId) => {
+  try {
+    const token = localStorage.getItem('token');
+    const res = await fetch(`/api/v1/cocreate/rooms/${roomId}/join`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      }
+    });
+    if (res.ok) {
+      router.push(`/designer/cocreate/${roomId}`);
+    }
+  } catch (e) {
+    console.error('Gagal menerima undangan:', e);
+  }
+};
+
+const goToRoom = (roomId) => {
+  router.push(`/designer/cocreate/${roomId}`);
+};
+
+onMounted(() => {
+  fetchDashboardData();
+});
 </script>

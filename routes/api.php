@@ -16,6 +16,7 @@ use App\Http\Controllers\UploadController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\UmkmDashboardController;
+use App\Http\Controllers\DesignerDashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -155,8 +156,7 @@ Route::prefix('v1')->group(function () {
 
         // ─── DESIGNER ONLY ────────────────────────────────────────────────────
         Route::middleware('role:designer')->prefix('designer')->group(function () {
-            // Dashboard & Portfolio akan ditambahkan nanti
-            // Route::get('dashboard', [DesignerDashboardController::class, 'index']);
+            Route::get('dashboard', [DesignerDashboardController::class, 'index']);
             
             // Register as Designer (upgrade dari buyer)
             Route::post('register', [AuthController::class, 'registerDesigner']);
@@ -171,6 +171,8 @@ Route::prefix('v1')->group(function () {
             Route::patch('rooms/{room}/close', [CocreateRoomController::class, 'close']);
             Route::get('rooms/{room}/messages',  [CocreateRoomController::class, 'messages']);
             Route::post('rooms/{room}/messages', [CocreateRoomController::class, 'sendMessage']);
+            Route::get('rooms/{room}/canvas',    [CocreateRoomController::class, 'getCanvas']);
+            Route::post('rooms/{room}/canvas',   [CocreateRoomController::class, 'saveCanvas']);
         });
 
         // ─── ADMIN ONLY ───────────────────────────────────────────────────────
@@ -189,6 +191,11 @@ Route::prefix('v1')->group(function () {
             Route::patch('orders/{order}/status', [OrderController::class, 'updateStatus']);
             Route::delete('products/{product}',   [ProductController::class, 'destroy']);
             Route::delete('reviews/{review}',     [ReviewController::class, 'destroy']);
+
+            // Role Applications
+            Route::get('role-applications',                 [AdminDashboardController::class, 'roleApplications']);
+            Route::post('role-applications/{id}/approve',   [AdminDashboardController::class, 'approveRoleApplication']);
+            Route::post('role-applications/{id}/reject',    [AdminDashboardController::class, 'rejectRoleApplication']);
         });
     });
 });

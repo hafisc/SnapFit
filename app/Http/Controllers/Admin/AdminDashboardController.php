@@ -190,4 +190,80 @@ class AdminDashboardController extends Controller
             ],
         ]);
     }
+
+    /**
+     * List pengajuan role UMKM & Desainer.
+     */
+    public function roleApplications(Request $request): JsonResponse
+    {
+        $apps = \App\Models\RoleApplication::with('user.profile')
+            ->when($request->filled('status'), fn($q) => $q->where('status', $request->status))
+            ->latest()
+            ->paginate(15);
+
+        return response()->json([
+            'data'       => $apps->items(),
+            'pagination' => [
+                'total'        => $apps->total(),
+                'current_page' => $apps->currentPage(),
+                'last_page'    => $apps->lastPage(),
+            ],
+        ]);
+    }
+
+    /**
+     * Setujui pengajuan role.
+     */
+    public function approveRoleApplication(Request $request, $id): JsonResponse
+    {
+        $app = \App\Models\RoleApplication::findOrFail($id);
+        if ($app->status === 'approved') {
+            return response()->json(['message' => 'Pengajuan sudah disetujui sebelumnya.'], 400);
+        }
+
+        $user = $app->user;
+        $roleName = $app->requested_role;
+
+        // Hubungkan role ke user
+        $role = \App\Models\Role::where('name', $roleName)->first();
+        if ($role && !$user->roles()->where('role_id', $role->id)->exists()) {
+            $user->roles()->attach($role->id);
+        }
+
+        // Set active role langsung agar bisa dipakai
+        $user->update(['active_role' => $roleName]);
+
+        $app->update([
+            'status' => 'approved',
+            'reviewed_at' => now(),
+        ]);
+
+        return response()->json([
+            'message' => 'Pengajuan berhasil disetujui. Role pengguna telah diaktifkan.',
+            'application' => $app,
+        ]);
+    }
+
+    /**
+     * Tolak pengajuan role.
+     */
+    public function rejectRoleApplication(Request $request, $id): JsonResponse
+    {
+        $request->validate([
+            'rejection_reason' => 'required|string|max:1000',
+        ]);
+
+        $app = \App\Models\RoleApplication::findOrFail($id);
+
+        $app->update([
+            'status' => 'rejected',
+            'rejection_reason' => $request->rejection_reason,
+            'reviewed_at' => now(),
+        ]);
+
+        return response()->json([
+            'message' => 'Pengajuan ditolak.',
+            'application' => $app,
+        ]);
+    }
 }

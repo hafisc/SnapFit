@@ -692,9 +692,48 @@
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
             </div>
             <p class="font-bold text-sm mb-1">Akses Kamera Ditolak</p>
-            <p class="text-slate-400 text-[10px] leading-relaxed">Mohon izinkan akses kamera pada pengaturan browser Anda untuk mencoba fitur ini.</p>
+            <p class="text-slate-400 text-[10px] leading-relaxed mb-3">Mohon izinkan akses kamera pada pengaturan browser Anda untuk mencoba fitur ini.</p>
+            <button 
+              type="button" 
+              @click="triggerArFileUpload" 
+              class="px-4 py-2 bg-white text-espresso font-bold text-xs rounded-xl hover:bg-slate-100 transition active:scale-95 shadow text-[#2B1E16]"
+            >
+              Atau Gunakan Upload Foto
+            </button>
           </div>
         </div>
+
+        <!-- AR Action Footer / Fallback Controls -->
+        <div class="mt-4 flex items-center justify-between gap-3">
+          <button 
+            v-if="!isUploadedPhotoActive"
+            type="button" 
+            @click="triggerArFileUpload" 
+            class="flex-1 py-3 px-4 rounded-xl border border-borderSoft text-espresso font-bold text-xs hover:bg-slate-50 transition active:scale-95 flex items-center justify-center gap-1.5 shadow-sm text-[#2B1E16] border-[#E8DCCB]"
+          >
+            <svg class="w-4 h-4 text-terracotta" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+            Upload Foto Fallback
+          </button>
+          
+          <button 
+            v-else
+            type="button" 
+            @click="resetArPhoto" 
+            class="flex-1 py-3 px-4 rounded-xl bg-terracotta text-white font-bold text-xs hover:bg-terracottaDark transition active:scale-95 flex items-center justify-center gap-1.5 shadow-md shadow-terracotta/20"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a5 5 0 015 5v2M3 10l4-4M3 10l4 4" /></svg>
+            Kembali ke Kamera Live
+          </button>
+        </div>
+
+        <!-- Hidden input for file upload -->
+        <input 
+          ref="arFileInput" 
+          type="file" 
+          accept="image/*" 
+          class="hidden" 
+          @change="handleArFileUpload" 
+        />
 
       </div>
     </div>
@@ -1032,6 +1071,9 @@ const scrollToImage = (idx) => {
 // AR Try-On State
 const videoElement = ref(null);
 const canvasElement = ref(null);
+const arFileInput = ref(null);
+const isUploadedPhotoActive = ref(false);
+const uploadedPhotoSrc = ref(null);
 const stream = ref(null);
 const isCameraReady = ref(false);
 const isCameraDenied = ref(false);
@@ -1055,6 +1097,7 @@ const reviewImagePreview = ref('');
 let pose = null;
 let camera = null;
 let productImgObj = null;
+let productImgBounds = null;
 
 // Smoothing state untuk landmark tracking yang halus
 let smoothedLandmarks = null;
@@ -1633,12 +1676,105 @@ const closeArModal = () => {
   isAnalyzing.value = false;
   isInitializingAR.value = false;
   smoothedLandmarks = null;
+  isUploadedPhotoActive.value = false;
+  uploadedPhotoSrc.value = null;
+};
+
+const triggerArFileUpload = () => {
+  arFileInput.value?.click();
+};
+
+const handleArFileUpload = (event) => {
+  const file = event.target.files?.[0];
+  if (!file) return;
+
+  isInitializingAR.value = true;
+  isUploadedPhotoActive.value = true;
+  stopCamera(); // Turn off camera feed
+
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    uploadedPhotoSrc.value = e.target.result;
+
+    const img = new Image();
+    img.onload = async () => {
+      isInitializingAR.value = false;
+      isCameraReady.value = true;
+      isCameraDenied.value = false;
+
+      await loadMediaPipe();
+
+      if (!pose) {
+        pose = new window.Pose({
+          locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
+        });
+        pose.setOptions({
+          modelComplexity: 0,
+          smoothLandmarks: true,
+          enableSegmentation: false,
+          smoothSegmentation: false,
+          minDetectionConfidence: 0.5,
+          minTrackingConfidence: 0.5
+        });
+        pose.onResults(onPoseResults);
+      }
+
+      await pose.send({ image: img });
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+  event.target.value = ''; // Reset input to allow uploading the same file
+};
+
+const resetArPhoto = async () => {
+  isUploadedPhotoActive.value = false;
+  uploadedPhotoSrc.value = null;
+  smoothedLandmarks = null;
+  isInitializingAR.value = true;
+  await startCamera();
+};
+
+const calculateVisibleBounds = (canvas) => {
+  const ctx = canvas.getContext('2d');
+  const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imgData.data;
+  
+  let minX = canvas.width;
+  let minY = canvas.height;
+  let maxX = 0;
+  let maxY = 0;
+  
+  for (let y = 0; y < canvas.height; y++) {
+    for (let x = 0; x < canvas.width; x++) {
+      const alpha = data[(y * canvas.width + x) * 4 + 3];
+      if (alpha > 10) { // Piksel tidak transparan
+        if (x < minX) minX = x;
+        if (y < minY) minY = y;
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
+      }
+    }
+  }
+  
+  if (maxX < minX || maxY < minY) {
+    return { x: 0, y: 0, w: canvas.width, h: canvas.height };
+  }
+  
+  return {
+    x: minX,
+    y: minY,
+    w: maxX - minX + 1,
+    h: maxY - minY + 1
+  };
 };
 
 const initProductImage = () => {
   return new Promise((resolve) => {
-    const imgUrl = product.value?.images?.[0];
-    if (!imgUrl) { console.warn('[AR] Tidak ada gambar produk'); resolve(); return; }
+    const baseImgUrl = product.value?.images?.[0];
+    if (!baseImgUrl) { console.warn('[AR] Tidak ada gambar produk'); resolve(); return; }
+    // Tambahkan cache buster agar browser tidak memakai cache non-CORS yang menodai kanvas (SecurityError)
+    const imgUrl = baseImgUrl + (baseImgUrl.includes('?') ? '&' : '?') + 'ar_cb=' + Date.now();
 
     console.log('[AR] Memuat gambar produk:', imgUrl);
 
@@ -1662,42 +1798,108 @@ const initProductImage = () => {
         // Test apakah bisa getImageData (CORS check)
         ctx.getImageData(0, 0, 1, 1);
 
-        // Berhasil — lakukan background removal sederhana
+        // Berhasil — lakukan background removal menggunakan BFS flood fill untuk membersihkan background & bayangan luar tanpa melubangi baju
         const imageData = ctx.getImageData(0, 0, c.width, c.height);
         const d = imageData.data;
-        for (let i = 0; i < d.length; i += 4) {
-          const r = d[i], g = d[i+1], b = d[i+2];
+        const w = c.width;
+        const h = c.height;
+
+        const visited = new Uint8Array(w * h);
+        const queue = [];
+
+        // Helper untuk mendeteksi apakah pixel adalah bagian dari background/bayangan netral
+        const isBgPixel = (x, y) => {
+          const idx = (y * w + x) * 4;
+          const r = d[idx];
+          const g = d[idx + 1];
+          const b = d[idx + 2];
           const brightness = (r + g + b) / 3;
           const saturation = Math.max(r, g, b) - Math.min(r, g, b);
-          // Hapus pixel yang sangat terang dan tidak berwarna (putih/abu-abu muda)
-          if (brightness > 200 && saturation < 30) {
-            d[i+3] = 0;
-          } else if (brightness > 170 && saturation < 20) {
-            d[i+3] = 100;
+          // Pixel dianggap background/bayangan jika warnanya netral (saturasi rendah)
+          // dan tingkat kecerahannya di atas 55 (tidak terlalu gelap/hitam)
+          return saturation < 35 && brightness > 55;
+        };
+
+        // Inisialisasi BFS dari semua pixel di tepi gambar (border)
+        for (let x = 0; x < w; x++) {
+          if (isBgPixel(x, 0)) {
+            const idx = x;
+            if (!visited[idx]) { visited[idx] = 1; queue.push(idx); }
+          }
+          if (isBgPixel(x, h - 1)) {
+            const idx = (h - 1) * w + x;
+            if (!visited[idx]) { visited[idx] = 1; queue.push(idx); }
+          }
+        }
+        for (let y = 0; y < h; y++) {
+          if (isBgPixel(0, y)) {
+            const idx = y * w;
+            if (!visited[idx]) { visited[idx] = 1; queue.push(idx); }
+          }
+          if (isBgPixel(w - 1, y)) {
+            const idx = y * w + (w - 1);
+            if (!visited[idx]) { visited[idx] = 1; queue.push(idx); }
+          }
+        }
+
+        // BFS flood fill untuk membuat background & bayangan di luar kemeja menjadi transparan
+        let head = 0;
+        const dx = [1, -1, 0, 0];
+        const dy = [0, 0, 1, -1];
+
+        while (head < queue.length) {
+          const idx = queue[head++];
+          const x = idx % w;
+          const y = Math.floor(idx / w);
+
+          d[idx * 4 + 3] = 0; // Transparan
+
+          for (let i = 0; i < 4; i++) {
+            const nx = x + dx[i];
+            const ny = y + dy[i];
+            if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
+              const nidx = ny * w + nx;
+              if (!visited[nidx] && isBgPixel(nx, ny)) {
+                visited[nidx] = 1;
+                queue.push(nidx);
+              }
+            }
+          }
+        }
+
+        // Pastikan area kemeja (yang tidak dikunjungi flood fill) tetap 100% solid
+        for (let idx = 0; idx < w * h; idx++) {
+          if (!visited[idx]) {
+            d[idx * 4 + 3] = 255;
           }
         }
         ctx.putImageData(imageData, 0, 0);
         productImgObj = c;
-        console.log('[AR] Background removal berhasil');
+        
+        // Hitung bounding box baju riil tanpa margin transparan agar penempatan presisi
+        productImgBounds = calculateVisibleBounds(c);
+        console.log('[AR] Background removal & bounding box berhasil:', productImgBounds);
       } catch(e) {
         console.warn('[AR] CORS issue, pakai gambar mentah (tanpa bg removal):', e.message);
         productImgObj = img;
+        productImgBounds = { x: 0, y: 0, w: img.width, h: img.height };
       }
       resolve();
     };
 
     img.onerror = () => {
       console.warn('[AR] Gagal load dengan CORS, coba tanpa crossOrigin...');
-      // Fallback: load tanpa crossOrigin — tidak bisa processing pixel, tapi bisa di-render
       const img2 = new Image();
       img2.onload = () => {
         console.log('[AR] Gambar berhasil dimuat tanpa CORS');
         productImgObj = img2;
+        productImgBounds = { x: 0, y: 0, w: img2.width, h: img2.height };
         resolve();
       };
       img2.onerror = () => {
         console.error('[AR] Gambar produk gagal total dimuat');
         productImgObj = null;
+        productImgBounds = null;
         resolve();
       };
       img2.src = imgUrl;
@@ -1746,10 +1948,14 @@ const onPoseResults = (results) => {
   ctx.save();
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-  // Mirror untuk selfie view
-  ctx.translate(canvas.width, 0);
-  ctx.scale(-1, 1);
-  ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
+  // Mirror untuk selfie view jika bukan foto upload
+  if (isUploadedPhotoActive.value) {
+    ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
+  } else {
+    ctx.translate(canvas.width, 0);
+    ctx.scale(-1, 1);
+    ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
+  }
   
   // Overlay baju jika landmark terdeteksi
   if (!productImgObj) {
@@ -1803,20 +2009,72 @@ const onPoseResults = (results) => {
       const shoulderY = (s.lSy + s.rSy) / 2;
       const angle = Math.atan2(s.lSy - s.rSy, s.lSx - s.rSx);
       
-      // Baju lebih lebar dari bahu (menutupi lengan atas)
-      const clothW = shoulderW * 2.2;
-      // Tinggi baju dari torso
-      const clothH = s.torsoH * 1.55;
+      // Ambil bounding box baju yang valid (tanpa padding kosong)
+      const bounds = productImgBounds || { x: 0, y: 0, w: productImgObj.width, h: productImgObj.height };
+      const shirtAspect = bounds.w / bounds.h;
+
+      // Ambil ukuran varian yang dipilih untuk menskalakan kemeja (S, M, L, XL)
+      const sizeName = selectedVariant.value?.label ?? 'M';
+      let sizeFactor = 1.0;
+      if (sizeName.includes('S')) sizeFactor = 0.94;
+      else if (sizeName.includes('XL')) sizeFactor = 1.12;
+      else if (sizeName.includes('L')) sizeFactor = 1.06;
+      else if (sizeName.includes('M')) sizeFactor = 1.00;
+
+      // Sesuaikan tinggi baju berdasarkan tinggi torso, lalu lebar disesuaikan dengan aspek rasio kemeja asli agar pas di badan
+      const clothH = s.torsoH * 1.22 * sizeFactor;
+      const clothW = clothH * shirtAspect;
       
+      // Simpan state sebelum transformasi lokal
+      ctx.save();
       ctx.translate(centerX, shoulderY);
-      ctx.rotate(angle * 0.4);
+      ctx.rotate(angle);
       
       // Posisi Y: mulai sedikit di atas bahu (kerah baju)
-      const drawY = -clothH * 0.08;
+      const drawY = -clothH * 0.14; // Dinaikkan agar menutupi kerah/leher asli dengan pas
       
-      ctx.globalAlpha = 0.88;
-      ctx.drawImage(productImgObj, -clothW / 2, drawY, clothW, clothH);
-      ctx.globalAlpha = 1.0;
+      // 1. Efek Bayangan Lembut (Drop Shadow) agar baju terlihat menempel di badan dengan kedalaman nyata (3D Filter)
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.22)';
+      ctx.shadowBlur = 15;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 8;
+      
+      // 2. Clipping Path untuk memotong lubang leher (Neck Cutout) secara dinamis agar dagu/leher asli pengguna tidak tertutup
+      ctx.beginPath();
+      // Kotak luar pembatas baju (diperlebar sedikit agar efek bayangan tidak terpotong)
+      ctx.rect(-clothW / 2 - 40, drawY - 40, clothW + 80, clothH + 80);
+      
+      // Bentuk elips lubang leher di bagian atas tengah baju
+      const neckRadiusX = shoulderW * 0.18; // Lebar lubang leher
+      const neckRadiusY = shoulderW * 0.09; // Kedalaman lubang leher
+      ctx.ellipse(0, drawY + neckRadiusY * 0.1, neckRadiusX, neckRadiusY, 0, 0, 2 * Math.PI, true);
+      
+      // Gunakan 'evenodd' untuk mengecualikan lubang leher dari penggambaran kemeja
+      ctx.clip('evenodd');
+      
+      // Gambar kemeja dengan pemotongan presisi agar kerah pas di bahu/leher
+      ctx.globalAlpha = 0.95;
+      ctx.drawImage(
+        productImgObj, 
+        bounds.x, bounds.y, bounds.w, bounds.h, 
+        -clothW / 2, drawY, clothW, clothH
+      );
+      
+      // 3. Efek Pencahayaan Silinder (3D Cylindrical Lighting Overlay) agar baju terlihat memeluk lekuk tubuh bulat (3D wrap)
+      const gradient = ctx.createLinearGradient(-clothW / 2, 0, clothW / 2, 0);
+      gradient.addColorStop(0, 'rgba(0, 0, 0, 0.15)');          // Bayangan tepi kiri
+      gradient.addColorStop(0.25, 'rgba(255, 255, 255, 0.08)');  // Sorotan dada kiri
+      gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0)');      // Tengah normal
+      gradient.addColorStop(0.75, 'rgba(255, 255, 255, 0.05)');  // Sorotan dada kanan
+      gradient.addColorStop(1, 'rgba(0, 0, 0, 0.18)');          // Bayangan tepi kanan
+      
+      // Gunakan 'source-atop' agar gradasi bayangan hanya menimpa area kemeja yang digambar
+      ctx.globalCompositeOperation = 'source-atop';
+      ctx.fillStyle = gradient;
+      ctx.fillRect(-clothW / 2, drawY, clothW, clothH);
+      
+      // Kembalikan state transformasi dan clipping
+      ctx.restore();
     }
   }
   

@@ -182,7 +182,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.9,
                 'sold'        => 85,
                 'umkm_name'   => 'Rumah Tenun Marapu',
-                'ar_model_url'=> null,
+                'ar_model_url'=> 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/Lantern/glTF-Binary/Lantern.glb',
             ],
             [
                 'name'        => 'Kain Songket Palembang Emas',
@@ -194,7 +194,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 5.0,
                 'sold'        => 12,
                 'umkm_name'   => 'Songket Sriwijaya',
-                'ar_model_url'=> null,
+                'ar_model_url'=> 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/Lantern/glTF-Binary/Lantern.glb',
             ],
             [
                 'name'        => 'Gelang Perak Motif Batik Celuk',
@@ -206,7 +206,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.8,
                 'sold'        => 150,
                 'umkm_name'   => 'Celuk Silver Art',
-                'ar_model_url'=> null,
+                'ar_model_url'=> 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/ToyCar/glTF-Binary/ToyCar.glb',
             ],
             [
                 'name'        => 'Bros Kebaya Batik Alpaka',
@@ -218,7 +218,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.8,
                 'sold'        => 280,
                 'umkm_name'   => 'Jogja Aksesoris Craft',
-                'ar_model_url'=> null,
+                'ar_model_url'=> 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/ToyCar/glTF-Binary/ToyCar.glb',
             ],
             [
                 'name'        => 'Bantal Sofa Batik Parang',
@@ -230,7 +230,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.5,
                 'sold'        => 230,
                 'umkm_name'   => 'Batik Home Living',
-                'ar_model_url'=> null,
+                'ar_model_url'=> 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/SheenChair/glTF-Binary/SheenChair.glb',
             ],
             [
                 'name'        => 'Runner Meja Batik Mega Mendung',
@@ -242,7 +242,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.6,
                 'sold'        => 158,
                 'umkm_name'   => 'Cirebon Home Decor',
-                'ar_model_url'=> null,
+                'ar_model_url'=> 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/SheenChair/glTF-Binary/SheenChair.glb',
             ],
         ];
 

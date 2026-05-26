@@ -8,7 +8,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CocreateRoom extends Model
 {
-    protected $fillable = ['name', 'creator_id', 'description', 'status'];
+    protected $fillable = ['name', 'creator_id', 'description', 'status', 'canvas_data', 'canvas_updated_at'];
+
+    protected $casts = [
+        'canvas_updated_at' => 'datetime',
+    ];
 
     public function creator(): BelongsTo
     {

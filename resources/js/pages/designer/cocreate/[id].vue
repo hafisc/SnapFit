@@ -1,8 +1,7 @@
 <template>
-  <div class="p-8 animate-in fade-in">
-    <h2 class="text-2xl font-black text-espresso">Under Construction</h2>
-    <p class="text-muted">Page: [id].vue</p>
-  </div>
+  <CoCreateWorkspace role="designer" />
 </template>
+
 <script setup>
+import CoCreateWorkspace from '@/components/CoCreateWorkspace.vue';
 </script>
