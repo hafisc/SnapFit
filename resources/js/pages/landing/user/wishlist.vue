@@ -93,7 +93,6 @@ const loadWishlist = async () => {
 const addToCart = async (product) => {
   if (!product) return;
   await cartStore.addItem(product, 1);
-  notificationStore.success('Berhasil menambahkan produk ke keranjang', 3000, 'Success');
 };
 
 const removeFromWishlist = async (productId) => {

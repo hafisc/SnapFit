@@ -26,6 +26,12 @@ const routes = [
     meta: { guestOnly: true },
   },
   {
+    path: '/password/reset/:token',
+    name: 'password.reset',
+    component: () => import('@/pages/auth/reset-password.vue'),
+    meta: { guestOnly: true },
+  },
+  {
     path: '/marketplace',
     redirect: '/',
   },
@@ -64,6 +70,11 @@ const routes = [
     name: 'profile',
     component: () => import('@/pages/landing/profile/index.vue'),
     meta: { requiresAuth: true },
+  },
+  {
+    path: '/shop/:id',
+    name: 'shop.detail',
+    component: () => import('@/pages/landing/marketplace/shop.vue'),
   },
   {
     path: '/register/umkm',

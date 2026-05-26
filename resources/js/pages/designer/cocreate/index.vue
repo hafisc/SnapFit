@@ -4,7 +4,7 @@
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
       <div>
         <h2 class="text-2xl font-bold text-espresso tracking-tight">Co-Create Room</h2>
-        <p class="text-sm text-muted font-medium mt-1">Terima undangan dan kolaborasi bersama UMKM Malang</p>
+        <p class="text-sm text-muted font-medium mt-1">Terima undangan dan kolaborasi bersama UMKM Partner</p>
       </div>
       <div class="flex items-center gap-3">
         <div class="flex bg-surface rounded-2xl border border-borderSoft overflow-hidden">
@@ -18,51 +18,46 @@
       </div>
     </div>
 
-    <!-- Pending Invitations Section -->
-    <div v-if="activeTab === 'pending'" class="space-y-5">
-      <div v-for="inv in pendingInvitations" :key="inv.id"
-        class="bg-surface rounded-2xl border border-borderSoft/60 p-6 md:p-8 hover:shadow-md transition-all duration-300 group">
-        <div class="flex flex-col lg:flex-row items-start lg:items-center gap-6">
-          <!-- UMKM Info -->
-          <div class="flex items-center gap-4 flex-1 min-w-0">
-            <div class="w-14 h-14 rounded-2xl flex-shrink-0 flex items-center justify-center font-bold text-xl text-white shadow-md" :class="inv.avatarClass">
-              {{ inv.umkmName.charAt(0) }}
-            </div>
-            <div class="min-w-0">
-              <div class="flex items-center gap-2 mb-1">
-                <h3 class="text-lg font-bold text-espresso truncate">{{ inv.umkmName }}</h3>
-                <span class="flex-shrink-0 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider rounded-lg bg-sand text-terracotta">{{ inv.category }}</span>
+    <!-- Pending & Sent Invitations Section -->
+    <div v-if="activeTab === 'pending'" class="space-y-6">
+      
+      <!-- Undangan Masuk (Incoming) -->
+      <div v-if="pendingInvitations.length > 0" class="space-y-4">
+        <h3 class="text-[11px] font-black uppercase tracking-[0.2em] text-[#8A7A6C] mb-2 ml-1">Undangan Masuk</h3>
+        <div v-for="inv in pendingInvitations" :key="inv.id"
+          class="bg-surface rounded-2xl border border-borderSoft/60 p-6 md:p-8 hover:shadow-md transition-all duration-300 group">
+          <div class="flex flex-col lg:flex-row items-start lg:items-center gap-6">
+            <!-- Creator Info -->
+            <div class="flex items-center gap-4 flex-1 min-w-0">
+              <div class="w-14 h-14 rounded-2xl flex-shrink-0 flex items-center justify-center font-bold text-xl text-white shadow-md bg-gradient-to-br from-terracotta to-orange-500">
+                {{ (inv.creator?.name || 'U').charAt(0).toUpperCase() }}
               </div>
-              <p class="text-sm text-muted font-medium truncate">{{ inv.projectName }}</p>
-              <div class="flex items-center gap-4 mt-2 text-[11px] text-slate-400 font-medium">
-                <span class="flex items-center gap-1">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                  {{ inv.timeAgo }}
-                </span>
-                <span class="flex items-center gap-1">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                  Deadline: {{ inv.deadline }}
-                </span>
+              <div class="min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                  <h3 class="text-lg font-bold text-espresso truncate">{{ inv.creator?.name || 'Kolaborator' }}</h3>
+                  <span class="flex-shrink-0 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider rounded-lg bg-sand text-terracotta">Undangan</span>
+                </div>
+                <p class="text-sm text-espresso font-black truncate">{{ inv.name }}</p>
+                <div class="flex items-center gap-4 mt-2 text-[11px] text-slate-400 font-medium">
+                  <span class="flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    Dibuat pada: {{ inv.created_at }}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Description -->
-          <div class="flex-1 min-w-0 hidden xl:block">
-            <p class="text-xs text-muted leading-relaxed line-clamp-3">{{ inv.description }}</p>
-          </div>
-
-          <!-- Budget & Actions -->
-          <div class="flex items-center gap-4 flex-shrink-0">
-            <div class="text-right hidden sm:block">
-              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Budget</p>
-              <p class="text-lg font-bold text-espresso">Rp {{ inv.budget.toLocaleString('id-ID') }}</p>
+            <!-- Description -->
+            <div class="flex-1 min-w-0">
+              <p class="text-xs text-muted leading-relaxed line-clamp-3">{{ inv.description || 'Tidak ada deskripsi.' }}</p>
             </div>
-            <div class="flex items-center gap-2">
-              <button @click="acceptInvitation(inv.id)" class="px-6 py-3 bg-terracotta hover:bg-terracotta text-white text-[10px] font-bold uppercase tracking-wider rounded-2xl transition-all shadow-sm shadow-terracotta/50/20 hover:shadow-md active:scale-95">
+
+            <!-- Actions -->
+            <div class="flex items-center gap-2 flex-shrink-0">
+              <button @click="acceptInvitation(inv.id)" class="px-6 py-3 bg-terracotta hover:bg-orange-850 text-white text-[10px] font-bold uppercase tracking-wider rounded-2xl transition-all shadow-sm active:scale-95 cursor-pointer">
                 ✓ Terima
               </button>
-              <button @click="declineInvitation(inv.id)" class="px-6 py-3 bg-slate-100 hover:bg-red-50 text-muted hover:text-red-500 text-[10px] font-bold uppercase tracking-wider rounded-2xl transition-all">
+              <button @click="declineInvitation(inv.id)" class="px-6 py-3 bg-slate-100 hover:bg-red-50 text-muted hover:text-red-500 text-[10px] font-bold uppercase tracking-wider rounded-2xl transition-all cursor-pointer">
                 ✕ Tolak
               </button>
             </div>
@@ -70,11 +65,55 @@
         </div>
       </div>
 
+      <!-- Undangan Dikirim (Outgoing) -->
+      <div v-if="sentInvitations.length > 0" class="space-y-4">
+        <h3 class="text-[11px] font-black uppercase tracking-[0.2em] text-[#8A7A6C] mb-2 ml-1">Permintaan Dikirim</h3>
+        <div v-for="inv in sentInvitations" :key="inv.id"
+          class="bg-surface rounded-2xl border border-borderSoft/60 p-6 md:p-8 opacity-90 transition-all duration-300">
+          <div class="flex flex-col lg:flex-row items-start lg:items-center gap-6">
+            <!-- Invited User Info -->
+            <div class="flex items-center gap-4 flex-1 min-w-0">
+              <div class="w-14 h-14 rounded-2xl flex-shrink-0 flex items-center justify-center font-bold text-xl text-[#6F6259] bg-[#F8F1E7] border border-borderSoft">
+                {{ (inv.invited_user?.name || 'U').charAt(0).toUpperCase() }}
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                  <h3 class="text-lg font-bold text-espresso truncate">{{ inv.invited_user?.name || 'UMKM Partner' }}</h3>
+                  <span class="flex-shrink-0 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider rounded-lg bg-[#F8F1E7] text-[#6F6259]">Terkirim</span>
+                </div>
+                <p class="text-sm text-espresso font-black truncate">{{ inv.name }}</p>
+                <div class="flex items-center gap-4 mt-2 text-[11px] text-slate-400 font-medium">
+                  <span class="flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    Dikirim pada: {{ inv.created_at }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="flex-1 min-w-0">
+              <p class="text-xs text-muted leading-relaxed line-clamp-3">{{ inv.description || 'Tidak ada deskripsi.' }}</p>
+            </div>
+
+            <!-- Status / Cancel -->
+            <div class="flex items-center gap-4 flex-shrink-0">
+              <span class="text-xs font-bold text-orange-600 animate-pulse bg-orange-50 px-3 py-1.5 rounded-xl border border-orange-100 flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 bg-orange-500 rounded-full"></span> Menunggu Persetujuan...
+              </span>
+              <button @click="declineInvitation(inv.id)" class="px-5 py-3 bg-red-50 hover:bg-red-100 text-red-600 text-[10px] font-bold uppercase tracking-wider rounded-2xl transition-all cursor-pointer">
+                Batalkan
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Empty State -->
-      <div v-if="pendingInvitations.length === 0" class="bg-surface rounded-2xl border border-borderSoft p-16 text-center">
+      <div v-if="pendingInvitations.length === 0 && sentInvitations.length === 0" class="bg-surface rounded-2xl border border-borderSoft p-16 text-center">
         <div class="text-6xl mb-4">📭</div>
-        <h3 class="text-lg font-bold text-espresso mb-2">Belum Ada Undangan Baru</h3>
-        <p class="text-sm text-muted font-medium">Undangan dari UMKM akan muncul di sini.</p>
+        <h3 class="text-lg font-bold text-espresso mb-2">Belum Ada Undangan</h3>
+        <p class="text-sm text-muted font-medium">Undangan masuk dan permintaan kolaborasi yang dikirim akan muncul di sini.</p>
       </div>
     </div>
 
@@ -118,21 +157,23 @@
 
     <!-- Completed Section -->
     <div v-if="activeTab === 'completed'" class="space-y-4">
-      <div v-for="room in completedRooms" :key="room.id" class="bg-surface rounded-2xl border border-borderSoft/60 p-6 hover:shadow-md transition-all duration-300">
+      <div v-if="loadingRooms" class="space-y-4">
+        <div v-for="i in 2" :key="i" class="bg-surface rounded-2xl border border-borderSoft/60 p-6 animate-pulse h-16"></div>
+      </div>
+      <div v-else-if="completedRooms.length === 0" class="bg-surface rounded-2xl border border-borderSoft p-16 text-center">
+        <div class="text-6xl mb-4">✅</div>
+        <h3 class="text-lg font-bold text-espresso mb-2">Belum Ada Kolaborasi Selesai</h3>
+        <p class="text-sm text-muted font-medium">Kolaborasi yang selesai akan tersimpan di sini.</p>
+      </div>
+      <div v-else v-for="room in completedRooms" :key="room.id" class="bg-surface rounded-2xl border border-borderSoft/60 p-6 hover:shadow-md transition-all duration-300">
         <div class="flex items-center gap-4">
           <div class="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center text-xl bg-slate-100">✅</div>
           <div class="flex-1 min-w-0">
             <h4 class="text-sm font-bold text-espresso truncate">{{ room.name }}</h4>
-            <p class="text-xs text-muted font-medium">{{ room.umkmName }} · Selesai {{ room.completedDate }}</p>
+            <p class="text-xs text-muted font-medium">Kolaborator: {{ room.creator?.name || 'Partner' }} · Selesai pada {{ room.created_at }}</p>
           </div>
           <div class="flex items-center gap-3">
-            <div class="text-right hidden sm:block">
-              <div class="flex items-center gap-1 text-amber-500 text-sm">
-                <span v-for="i in 5" :key="i">{{ i <= room.rating ? '★' : '☆' }}</span>
-              </div>
-              <p class="text-[10px] text-slate-400 font-medium mt-0.5">{{ room.rating }}/5 rating</p>
-            </div>
-            <button class="px-4 py-2 bg-slate-50 hover:bg-sand text-muted hover:text-terracotta text-[10px] font-bold uppercase tracking-wider rounded-xl transition-colors border border-borderSoft">Detail</button>
+            <button @click="joinRoom(room.id)" class="px-4 py-2 bg-slate-50 hover:bg-sand text-muted hover:text-terracotta text-[10px] font-bold uppercase tracking-wider rounded-xl transition-colors border border-borderSoft">Detail</button>
           </div>
         </div>
       </div>
@@ -152,37 +193,99 @@ const tabs = computed(() => [
   { key: 'completed', label: 'Selesai', count: completedRooms.value.length },
 ]);
 
-const pendingInvitations = ref([
-  { id: 1, umkmName: 'Batik Sari Malang', projectName: 'Redesign Label & Packaging Batik Tulis Premium', category: 'Packaging', timeAgo: '2 jam lalu', deadline: '15 Jun 2026', budget: 2500000, description: 'Kami membutuhkan desainer kreatif untuk memperbarui label kemasan batik tulis premium. Harus mencerminkan warisan budaya Malang dengan sentuhan modern.', avatarClass: 'bg-gradient-to-br from-orange-400 to-red-400' },
-  { id: 2, umkmName: 'Rotan Craft Arjosari', projectName: 'Branding Identity & Product Catalog', category: 'Branding', timeAgo: '5 jam lalu', deadline: '20 Jun 2026', budget: 3000000, description: 'Membangun brand identity lengkap meliputi logo, color palette, typography, dan product catalog digital.', avatarClass: 'bg-gradient-to-br from-emerald-400 to-teal-500' },
-  { id: 3, umkmName: 'Keramik Dinoyo Craft', projectName: 'Social Media Content Design', category: 'Social Media', timeAgo: '1 hari lalu', deadline: '10 Jul 2026', budget: 1500000, description: 'Desain konten visual untuk Instagram dan TikTok. Template story, feed post, dan carousel yang konsisten.', avatarClass: 'bg-gradient-to-br from-blue-400 to-indigo-500' },
-]);
-
+const pendingInvitations = ref([]);
+const sentInvitations = ref([]);
 const activeRooms = ref([]);
+const completedRooms = ref([]);
 const loadingRooms = ref(true);
 
-const completedRooms = ref([
-  { id: 1, name: 'Logo Redesign Tempe Malang', umkmName: 'Tempe Sanan Craft', completedDate: '28 Apr 2026', rating: 5 },
-  { id: 2, name: 'Packaging Kripik Tempe', umkmName: 'Tempe Sanan Craft', completedDate: '20 Apr 2026', rating: 4 },
-  { id: 3, name: 'Instagram Feed Template', umkmName: 'Kopi Gunung Arjuno', completedDate: '15 Apr 2026', rating: 5 },
-  { id: 4, name: 'Banner Marketplace', umkmName: 'Batik Cap Malangan', completedDate: '8 Apr 2026', rating: 4 },
-  { id: 5, name: 'Product Catalog Digital', umkmName: 'Anyaman Bamboo Batu', completedDate: '1 Apr 2026', rating: 5 },
-]);
-
-const fetchRooms = async () => {
+const fetchInvitations = async () => {
   try {
     const token = localStorage.getItem('token');
-    const res = await fetch('/api/v1/cocreate/rooms', {
+    const res = await fetch('/api/v1/cocreate/rooms/invitations', {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     if (res.ok) {
       const data = await res.json();
-      activeRooms.value = data.data;
+      pendingInvitations.value = data.incoming;
+      sentInvitations.value = data.outgoing;
+    }
+  } catch (e) {
+    console.error('Failed to fetch invitations:', e);
+  }
+};
+
+const fetchRooms = async () => {
+  loadingRooms.value = true;
+  try {
+    const token = localStorage.getItem('token');
+    
+    // Fetch active
+    const activeRes = await fetch('/api/v1/cocreate/rooms?status=active', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (activeRes.ok) {
+      const activeData = await activeRes.json();
+      activeRooms.value = activeData.data;
+    }
+
+    // Fetch completed
+    const completedRes = await fetch('/api/v1/cocreate/rooms?status=completed', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (completedRes.ok) {
+      const completedData = await completedRes.json();
+      completedRooms.value = completedData.data;
     }
   } catch (e) {
     console.error('Failed to fetch rooms:', e);
   } finally {
     loadingRooms.value = false;
+  }
+};
+
+const acceptInvitation = async (roomId) => {
+  try {
+    const token = localStorage.getItem('token');
+    const res = await fetch(`/api/v1/cocreate/rooms/${roomId}/accept`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    if (res.ok) {
+      await fetchInvitations();
+      await fetchRooms();
+      activeTab.value = 'active';
+    } else {
+      const data = await res.json();
+      alert(data.message || 'Gagal menyetujui undangan.');
+    }
+  } catch (e) {
+    console.error('Accept invitation error:', e);
+  }
+};
+
+const declineInvitation = async (roomId) => {
+  try {
+    const token = localStorage.getItem('token');
+    const res = await fetch(`/api/v1/cocreate/rooms/${roomId}/decline`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    if (res.ok) {
+      await fetchInvitations();
+      await fetchRooms();
+    } else {
+      const data = await res.json();
+      alert(data.message || 'Gagal menolak/membatalkan undangan.');
+    }
+  } catch (e) {
+    console.error('Decline invitation error:', e);
   }
 };
 
@@ -199,10 +302,8 @@ const joinRoom = async (roomId) => {
   }
 };
 
-const acceptInvitation = (id) => { pendingInvitations.value = pendingInvitations.value.filter(i => i.id !== id); };
-const declineInvitation = (id) => { pendingInvitations.value = pendingInvitations.value.filter(i => i.id !== id); };
-
 onMounted(() => {
+  fetchInvitations();
   fetchRooms();
 });
 </script>

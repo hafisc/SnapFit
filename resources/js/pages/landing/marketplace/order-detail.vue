@@ -279,9 +279,7 @@ const payOrder = async () => {
         onError: () => {
           notificationStore.error('Pembayaran gagal.');
         },
-        onClose: () => {
-          notificationStore.warning('Anda menutup pembayaran.');
-        }
+        onClose: () => {}
       });
     } else {
       window.location.href = data.redirect_url;

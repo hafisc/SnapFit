@@ -338,6 +338,10 @@ const filterChips = [
 ];
 
 const addToCart = async (product) => {
+  if (product.variants && product.variants.length > 0) {
+    viewProductDetail(product);
+    return;
+  }
   await cartStore.addItem(product);
 };
 

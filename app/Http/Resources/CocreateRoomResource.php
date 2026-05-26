@@ -20,6 +20,10 @@ class CocreateRoomResource extends JsonResource
                 'name' => $this->creator->name,
                 'role' => $this->creator->role,
             ]),
+            'invited_user'     => $this->whenLoaded('invitedUser', fn() => [
+                'id'   => $this->invitedUser->id,
+                'name' => $this->invitedUser->name,
+            ]),
             'participants_count' => $this->whenCounted('participants'),
             'participants'       => $this->whenLoaded('participants', fn() =>
                 $this->participants->map(fn($p) => [

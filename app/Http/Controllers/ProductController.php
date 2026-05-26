@@ -195,4 +195,31 @@ class ProductController extends Controller
             'ar_model_url' => $modelUrl,
         ]);
     }
+
+    /**
+     * Get public shop profile and products.
+     */
+    public function shop(\App\Models\User $user): JsonResponse
+    {
+        $user->load('profile');
+        
+        $products = Product::where('user_id', $user->id)
+            ->where('is_published', true)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json([
+            'seller' => [
+                'id'         => $user->id,
+                'name'       => $user->profile?->business_name ?? $user->name,
+                'location'   => $user->profile?->address ?? 'Yogyakarta, Indonesia',
+                'bio'        => $user->profile?->bio ?? 'Pelestari kerajinan nusantara berkualitas tinggi.',
+                'avatar_url' => $user->profile?->avatar_url,
+                'phone'      => $user->profile?->phone,
+                'rating'     => round($user->products()->avg('rating') ?? 4.8, 1),
+                'sold'       => (int) $user->products()->sum('sold'),
+            ],
+            'products' => ProductResource::collection($products),
+        ]);
+    }
 }

@@ -244,6 +244,102 @@ class ProductSeeder extends Seeder
                 'umkm_name'   => 'Cirebon Home Decor',
                 'ar_model_url'=> 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/SheenChair/glTF-Binary/SheenChair.glb',
             ],
+            [
+                'name'        => 'Batik Serat Jati Madiun',
+                'description' => 'Kemeja batik khas Madiun dengan motif serat kayu jati dan kombinasi kelor bunga pecilan, melambangkan kekuatan alam serta keteguhan budi pekerti masyarakat Madiun.',
+                'price'       => 295000,
+                'category'    => 'batik',
+                'origin'      => 'Madiun',
+                'badges'      => ['Khas Madiun', 'Katun Prima', 'Batik Cap'],
+                'rating'      => 4.8,
+                'sold'        => 92,
+                'umkm_name'   => 'Batik Retno Dumilah',
+                'ar_model_url'=> null,
+            ],
+            [
+                'name'        => 'Tenun Ikat Bandar Kediri',
+                'description' => 'Kemeja premium pria yang dibuat dari kain tenun ikat tradisional Bandar Kidul Kediri, ditenun secara presisi oleh pengrajin lokal menggunakan Alat Tenun Bukan Mesin (ATBM).',
+                'price'       => 380000,
+                'category'    => 'fashion',
+                'origin'      => 'Kediri',
+                'badges'      => ['Tenun ATBM', 'Khas Kediri', 'Handmade'],
+                'rating'      => 4.9,
+                'sold'        => 110,
+                'umkm_name'   => 'Tenun Bandar Lestari',
+                'ar_model_url'=> null,
+            ],
+            [
+                'name'        => 'Batik Papua Cendrawasih',
+                'description' => 'Kemeja batik katun eksotis dengan motif Burung Cendrawasih yang ikonik dari tanah Papua, dikombinasikan dengan ornamen tifa dan ukiran etnik suku Kamoro yang artistik.',
+                'price'       => 425000,
+                'category'    => 'batik',
+                'origin'      => 'Jayapura',
+                'badges'      => ['Motif Papua', 'Premium', 'Cultural Heritage'],
+                'rating'      => 4.9,
+                'sold'        => 75,
+                'umkm_name'   => 'Batik Papua Asli',
+                'ar_model_url'=> null,
+            ],
+            [
+                'name'        => 'Batik Gentongan Madura',
+                'description' => 'Kain batik tulis Gentongan klasik dari Madura dengan warna-warna berani merah-biru yang sangat awet, diproses melalui perendaman gentong batu tradisional selama berbulan-bulan.',
+                'price'       => 950000,
+                'category'    => 'batik',
+                'origin'      => 'Bangkalan',
+                'badges'      => ['Gentongan', 'Batik Tulis', 'Collector Item'],
+                'rating'      => 5.0,
+                'sold'        => 18,
+                'umkm_name'   => 'Batik Gentong Madura',
+                'ar_model_url'=> null,
+            ],
+            [
+                'name'        => 'Kebaya Kutubaru Klasik Jawa',
+                'description' => 'Setelan kebaya kutubaru khas Jawa Timur dengan bahan brokat katun halus berwarna merah marun berhias detail bef dada tradisional, memancarkan keanggunan abadi.',
+                'price'       => 350000,
+                'category'    => 'fashion',
+                'origin'      => 'Surabaya',
+                'badges'      => ['Kebaya', 'Jawa Timur', 'Elegant Fit'],
+                'rating'      => 4.8,
+                'sold'        => 134,
+                'umkm_name'   => 'Kebaya Cantik Nusantara',
+                'ar_model_url'=> null,
+            ],
+            [
+                'name'        => 'Surjan Lurik Tradisional',
+                'description' => 'Baju surjan pria bermotif lurik garis cokelat-hitam klasik khas Yogyakarta, dibuat dari kain katun ATBM yang lembut, adem, dan sangat nyaman dipakai untuk acara adat.',
+                'price'       => 145000,
+                'category'    => 'fashion',
+                'origin'      => 'Klaten',
+                'badges'      => ['Tenun Lurik', 'Khas Jogja', 'Best Seller'],
+                'rating'      => 4.7,
+                'sold'        => 340,
+                'umkm_name'   => 'Lurik Klaten Indah',
+                'ar_model_url'=> null,
+            ],
+            [
+                'name'        => 'Kemeja Sasirangan Banjar',
+                'description' => 'Kemeja pria lengan pendek bermotif Sasirangan khas Banjar Kalimantan Selatan, diproses dengan teknik jelujur handmade menggunakan bahan pewarna ramah lingkungan.',
+                'price'       => 320000,
+                'category'    => 'fashion',
+                'origin'      => 'Banjarmasin',
+                'badges'      => ['Sasirangan', 'Eco Craft', 'Handmade'],
+                'rating'      => 4.8,
+                'sold'        => 85,
+                'umkm_name'   => 'Sasirangan Lestari',
+                'ar_model_url'=> null,
+            ],
+            [
+                'name'        => 'Baju Kurung Basiba Minang',
+                'description' => 'Baju kurung basiba longgar khas wanita Minangkabau Sumatera Barat, dihiasi dengan bordir sulaman benang emas yang detail dan anggun di bagian leher serta lengan.',
+                'price'       => 450000,
+                'category'    => 'fashion',
+                'origin'      => 'Padang',
+                'badges'      => ['Minang Authentic', 'Sulaman Emas', 'Premium Fit'],
+                'rating'      => 5.0,
+                'sold'        => 40,
+                'umkm_name'   => 'Sulaman Minang Sakato',
+                'ar_model_url'=> null,
+            ],
         ];
 
         $demoUser = User::where('email', 'user@snapfit.id')->first();
@@ -308,6 +404,22 @@ class ProductSeeder extends Seeder
                 $imageName = 'bantal_batik.png';
             } elseif ($pName === 'Runner Meja Batik Mega Mendung') {
                 $imageName = 'runner_meja.png';
+            } elseif ($pName === 'Batik Serat Jati Madiun') {
+                $imageName = 'batik_madiun.png';
+            } elseif ($pName === 'Tenun Ikat Bandar Kediri') {
+                $imageName = 'tenun_kediri.png';
+            } elseif ($pName === 'Batik Papua Cendrawasih') {
+                $imageName = 'batik_papua.png';
+            } elseif ($pName === 'Batik Gentongan Madura') {
+                $imageName = 'batik_madura.png';
+            } elseif ($pName === 'Kebaya Kutubaru Klasik Jawa') {
+                $imageName = 'kebaya_kutubaru.png';
+            } elseif ($pName === 'Surjan Lurik Tradisional') {
+                $imageName = 'surjan_lurik.png';
+            } elseif ($pName === 'Kemeja Sasirangan Banjar') {
+                $imageName = 'sasirangan_banjar.png';
+            } elseif ($pName === 'Baju Kurung Basiba Minang') {
+                $imageName = 'kurung_basiba.png';
             } else {
                 // Category-wise fallback
                 if ($pCat === 'batik') {

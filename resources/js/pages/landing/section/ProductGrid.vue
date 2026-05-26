@@ -410,7 +410,13 @@ const startCountdown = () => {
 };
 
 // ─── Cart & Wishlist ──────────────────────────────────────────────────────────
-const addToCart = async (product) => { await cartStore.addItem(product); };
+const addToCart = async (product) => {
+  if (product.variants && product.variants.length > 0) {
+    viewProductDetail(product);
+    return;
+  }
+  await cartStore.addItem(product);
+};
 const isWishlisted = (productId) => wishlistStore.isWishlisted(productId);
 const toggleWishlist = async (product) => { await wishlistStore.toggleWishlist(product); };
 const viewProductDetail = (product) => {

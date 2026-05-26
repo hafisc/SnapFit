@@ -46,6 +46,7 @@ Route::prefix('v1')->group(function () {
     Route::get('products/{product}',              [ProductController::class, 'show']);
     Route::post('products/{product}/generate-3d', [ProductController::class, 'generate3d']);
     Route::get('products/{product}/reviews',      [ReviewController::class, 'index']);
+    Route::get('shops/{user}',                    [ProductController::class, 'shop']);
 
     // Midtrans Webhook (public, verified via signature)
     Route::post('payment/webhook', [PaymentController::class, 'webhook']);
@@ -164,10 +165,13 @@ Route::prefix('v1')->group(function () {
 
         // ─── CO-CREATE ROOM (UMKM + DESIGNER) ──────────────────────────────────
         Route::middleware('role:umkm,designer')->prefix('cocreate')->group(function () {
-            Route::get('rooms',                [CocreateRoomController::class, 'index']);
-            Route::get('rooms/{room}',         [CocreateRoomController::class, 'show']);
-            Route::post('rooms',               [CocreateRoomController::class, 'store']);
-            Route::post('rooms/{room}/join',   [CocreateRoomController::class, 'join']);
+            Route::get('rooms/invitations',      [CocreateRoomController::class, 'invitations']);
+            Route::get('rooms',                  [CocreateRoomController::class, 'index']);
+            Route::get('rooms/{room}',           [CocreateRoomController::class, 'show']);
+            Route::post('rooms',                 [CocreateRoomController::class, 'store']);
+            Route::post('rooms/{room}/accept',   [CocreateRoomController::class, 'accept']);
+            Route::post('rooms/{room}/decline',  [CocreateRoomController::class, 'decline']);
+            Route::post('rooms/{room}/join',     [CocreateRoomController::class, 'join']);
             Route::patch('rooms/{room}/close', [CocreateRoomController::class, 'close']);
             Route::get('rooms/{room}/messages',  [CocreateRoomController::class, 'messages']);
             Route::post('rooms/{room}/messages', [CocreateRoomController::class, 'sendMessage']);

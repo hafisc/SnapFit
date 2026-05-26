@@ -34,6 +34,8 @@ class ProductResource extends JsonResource
                     'business_name' => $this->owner->profile?->business_name,
                     'avatar_url'    => $this->owner->profile?->avatar_url,
                 ],
+                'rating' => round($this->owner->products()->avg('rating') ?? 4.8, 1),
+                'sold'   => (int) $this->owner->products()->sum('sold'),
             ]),
         ];
     }

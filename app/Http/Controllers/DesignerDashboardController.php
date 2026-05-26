@@ -83,15 +83,12 @@ class DesignerDashboardController extends Controller
         }
 
         // ─── UNDANGAN MASUK ──────────────────────────────────────────────────
-        // Mengambil room aktif yang belum diikuti desainer ini sebagai undangan potensial
-        $realInvitations = CocreateRoom::where('status', 'active')
-            ->where('creator_id', '!=', $user->id)
-            ->whereDoesntHave('participants', function ($q) use ($user) {
-                $q->where('user_id', $user->id);
-            })
+        // Mengambil room pending yang mengundang desainer ini
+        $realInvitations = CocreateRoom::where('status', 'pending')
+            ->where('invited_user_id', $user->id)
             ->with('creator')
             ->latest()
-            ->limit(3)
+            ->limit(4)
             ->get()
             ->map(function ($room) {
                 return [
@@ -121,7 +118,7 @@ class DesignerDashboardController extends Controller
             ]
         ]);
 
-        $invitations = $realInvitations->concat($mockInvitations)->slice(0, 4);
+        $invitations = $realInvitations->isEmpty() ? $mockInvitations : $realInvitations;
 
         // ─── ACTIVE ROOMS ────────────────────────────────────────────────────
         $activeRooms = CocreateRoom::where('status', 'active')

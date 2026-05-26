@@ -105,8 +105,8 @@
 
         <!-- Role & Workspace -->
         <div v-else-if="activeMenu === 'roles'" class="bg-surface rounded-[2rem] p-6 sm:p-10 border border-borderSoft shadow-sm animate-fade-in">
-          <h3 class="text-2xl font-bold text-espresso mb-2">Role & Workspace</h3>
-          <p class="text-muted text-sm mb-8">Kelola role Anda dan akses ke berbagai workspace di SnapFit.</p>
+          <h3 class="text-2xl font-bold text-espresso mb-2">Workspace</h3>
+          <p class="text-muted text-sm mb-8">Kelola peran Anda dan akses ke berbagai workspace di SnapFit.</p>
           
           <RoleWorkspaceMenu />
         </div>
@@ -479,10 +479,12 @@ import { useRouter, useRoute } from 'vue-router';
 import Navbar from '@/pages/landing/partials/Navbar.vue';
 import RoleWorkspaceMenu from './RoleWorkspaceMenu.vue';
 import { useWishlistStore } from '@/stores/wishlistStore';
+import { useNotificationStore } from '@/stores/notificationStore';
 
 const router = useRouter();
 const route = useRoute();
 const wishlistStore = useWishlistStore();
+const notificationStore = useNotificationStore();
 const user = ref(null);
 const activeMenu = ref(route.query.tab || 'profile');
 
@@ -764,7 +766,7 @@ const menus = [
   },
   { 
     id: 'roles', 
-    label: 'Role & Workspace',
+    label: 'Workspace',
     icon: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" /></svg>`
   },
   { 
@@ -832,12 +834,12 @@ const updateProfile = async () => {
       const data = await res.json();
       user.value = data.user;
       localStorage.setItem('user', JSON.stringify(data.user));
-      alert('Profil berhasil diperbarui!');
+      notificationStore.success('Profil berhasil diperbarui!');
     } else {
-      alert('Gagal memperbarui profil.');
+      notificationStore.error('Gagal memperbarui profil.');
     }
   } catch (err) {
-    alert('Terjadi kesalahan jaringan.');
+    notificationStore.error('Terjadi kesalahan jaringan.');
   } finally {
     isSavingProfile.value = false;
   }

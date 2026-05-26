@@ -56,7 +56,7 @@
             class="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:opacity-50 text-white font-bold py-3 px-5 rounded-lg transition-all duration-200 active:scale-95 text-sm shadow-md shadow-green-500/30 flex items-center justify-center gap-2">
             <svg v-if="!isSwitchingRole" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
             <span v-if="isSwitchingRole">Memproses...</span>
-            <span v-else>Aktifkan & Buka Dashboard</span>
+            <span v-else>Buka Dashboard</span>
           </button>
           <button v-else 
             @click="goToDashboard(role.name)"
@@ -174,8 +174,10 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useNotificationStore } from '@/stores/notificationStore';
 
 const router = useRouter();
+const notificationStore = useNotificationStore();
 const roleMenu = ref(null);
 const isLoadingRoles = ref(false);
 const isSwitchingRole = ref(false);
@@ -250,10 +252,10 @@ const handleSwitchRole = async (roleName) => {
         router.push(dashboards[roleName]);
       }, 600);
     } else {
-      alert('Gagal mengubah role.');
+      notificationStore.error('Gagal mengubah role.');
     }
   } catch (err) {
-    alert('Terjadi kesalahan jaringan.');
+    notificationStore.error('Terjadi kesalahan jaringan.');
     console.error('Failed to switch role', err);
   } finally {
     isSwitchingRole.value = false;

@@ -93,8 +93,9 @@
               <div class="rounded-3xl bg-surface p-6 shadow-sm border border-borderSoft flex flex-col">
                 <h3 class="text-base font-bold tracking-tight text-espresso mb-4">Informasi Penjual</h3>
                 <div class="flex items-center gap-4 mb-5">
-                  <div class="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 overflow-hidden border border-borderSoft">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                  <div class="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 overflow-hidden border border-borderSoft flex-shrink-0">
+                    <img v-if="product?.seller?.avatar_url" :src="product.seller.avatar_url" :alt="product.seller.name" class="w-full h-full object-cover" />
+                    <img v-else :src="`https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(product?.seller?.name || 'UMKM')}`" alt="Seller Avatar" class="w-full h-full object-cover" />
                   </div>
                   <div>
                     <h4 class="font-bold text-espresso text-base">{{ product?.seller?.name }}</h4>
@@ -120,8 +121,8 @@
                 </div>
 
                 <div class="mt-auto grid gap-2">
-                  <button class="w-full py-2.5 rounded-xl border border-terracotta text-terracotta font-bold text-xs hover:bg-terracotta hover:text-white transition">Kunjungi Toko</button>
-                  <button class="w-full py-2.5 rounded-xl bg-[#2B1E16] text-white font-bold text-xs hover:bg-black transition">Ajak Kolaborasi</button>
+                  <button @click="visitShop" class="w-full py-2.5 rounded-xl border border-terracotta text-terracotta font-bold text-xs hover:bg-terracotta hover:text-white transition">Kunjungi Toko</button>
+                  <button @click="inviteCollaboration" class="w-full py-2.5 rounded-xl bg-[#2B1E16] text-white font-bold text-xs hover:bg-black transition">Ajak Kolaborasi</button>
                 </div>
               </div>
             </div>
@@ -158,8 +159,7 @@
           <div class="space-y-6">
             <div class="rounded-3xl bg-surface p-6 shadow-sm border border-borderSoft">
               <div class="mb-4">
-                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-terracotta">Marketplace</p>
-                <h1 class="mt-2 text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-[#2B1E16] leading-tight">{{ product?.name ?? 'Loading produk...' }}</h1>
+                <h1 class="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-[#2B1E16] leading-tight">{{ product?.name ?? 'Loading produk...' }}</h1>
                 
                 <!-- Badges -->
                 <div v-if="product?.badges?.length" class="mt-2.5 flex flex-wrap gap-1.5">
@@ -272,27 +272,7 @@
                   </div>
                 </button>
 
-                <!-- 3D Model Viewer Banner (for Crafts, Decor, Accessories) -->
-                <button
-                  v-else
-                  type="button"
-                  @click="open3dModal"
-                  class="w-full relative overflow-hidden rounded-xl bg-[#2B1E16] px-4 py-3.5 text-left transition hover:shadow-md hover:-translate-y-0.5 group mt-2"
-                >
-                  <div class="absolute right-0 top-0 bottom-0 w-32 bg-white/5 skew-x-12 -mr-10 group-hover:bg-white/10 transition"></div>
-                  <div class="flex items-center justify-between relative z-10">
-                    <div class="flex items-center gap-2.5">
-                      <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-[#D4AF37]">
-                        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                      </div>
-                      <div>
-                        <p class="text-white font-bold text-xs">Lihat Detail 3D</p>
-                        <p class="text-white/60 text-[9px] mt-0.5">Putar dan telusuri detail produk secara 3D interaktif</p>
-                      </div>
-                    </div>
-                    <svg class="w-4 h-4 text-white/50 group-hover:text-white transition group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
-                  </div>
-                </button>
+                <!-- 3D Model Viewer Banner (for Crafts, Decor, Accessories) - NONAKTIFKAN (DIPARKIR DULU) -->
               </div>
               
               <!-- Share Info -->
@@ -455,29 +435,7 @@
               </div>
             </button>
 
-            <!-- Glowing 3D banner on Mobile -->
-            <button
-              v-else
-              @click="open3dModal"
-              class="w-full relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#2B1E16] to-[#453124] p-4 text-left shadow-lg border border-amber-500/20 active:scale-[0.98] transition"
-            >
-              <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-amber-500/10 rounded-full blur-xl"></div>
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#D4AF37] to-[#F3E5AB] flex items-center justify-center text-espresso shadow">
-                    <svg class="w-5 h-5 text-[#2B1E16]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                  </div>
-                  <div>
-                    <h4 class="text-xs font-bold text-white flex items-center gap-1.5">
-                      Interactive 3D Detail
-                      <span class="inline-flex h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-                    </h4>
-                    <p class="text-[9px] text-white/60 mt-0.5">Putar dan lihat detail produk dari berbagai sudut</p>
-                  </div>
-                </div>
-                <svg class="w-4 h-4 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
-              </div>
-            </button>
+            <!-- Glowing 3D banner on Mobile - NONAKTIFKAN (DIPARKIR DULU) -->
 
             <!-- Variant selector -->
             <div v-if="variantOptions.length" class="pt-2">
@@ -556,8 +514,9 @@
                 <div v-show="activeAccordion === 'seller'" class="px-4 pb-4 pt-3.5 border-t border-slate-100/50 space-y-4">
                   <div class="flex items-center justify-between gap-2">
                     <div class="flex items-center gap-3">
-                      <div class="w-11 h-11 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 overflow-hidden border border-slate-300/40">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                      <div class="w-11 h-11 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 overflow-hidden border border-slate-300/40 flex-shrink-0">
+                        <img v-if="product?.seller?.avatar_url" :src="product.seller.avatar_url" :alt="product.seller.name" class="w-full h-full object-cover" />
+                        <img v-else :src="`https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(product?.seller?.name || 'UMKM')}`" alt="Seller Avatar" class="w-full h-full object-cover" />
                       </div>
                       <div>
                         <h4 class="font-bold text-espresso text-xs flex items-center gap-1">
@@ -570,7 +529,11 @@
                         </p>
                       </div>
                     </div>
-                    <button class="px-3.5 py-1.5 rounded-xl border border-terracotta text-terracotta font-bold text-[10px] active:bg-terracotta active:text-white transition">Kunjungi</button>
+                  </div>
+                  <!-- Mobile Buttons Grid -->
+                  <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-slate-100/50">
+                    <button @click="visitShop" class="w-full py-2 rounded-xl border border-terracotta text-terracotta font-bold text-[10px] active:bg-terracotta active:text-white transition text-center">Kunjungi Toko</button>
+                    <button @click="inviteCollaboration" class="w-full py-2 rounded-xl bg-[#2B1E16] text-white font-bold text-[10px] active:bg-black transition text-center">Ajak Kolaborasi</button>
                   </div>
                 </div>
               </div>
@@ -657,7 +620,7 @@
     </div>
 
     <div v-if="showArModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 overflow-y-auto">
-      <div class="w-full max-w-md rounded-[2rem] bg-surface shadow-2xl overflow-hidden flex flex-col p-6 relative">
+      <div class="w-full max-w-md rounded-[2rem] bg-surface shadow-2xl overflow-hidden flex flex-col p-6 relative border border-borderSoft/60 animate-fade-in">
         <!-- Close Button -->
         <button type="button" @click="closeArModal" class="absolute top-4 right-4 rounded-full bg-slate-100 p-2 text-espresso hover:bg-slate-200 transition z-30">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -665,11 +628,35 @@
 
         <div class="mb-4 pr-10">
           <h2 class="text-xl font-black text-[#2B1E16] leading-none">AI AR Try-On</h2>
-          <p class="text-muted text-xs mt-1.5 leading-relaxed">Posisikan tubuh Anda di depan kamera untuk melihat kemeja secara virtual.</p>
+          <p class="text-muted text-xs mt-1.5 leading-relaxed">
+            {{ activeArTab === 'live' ? 'Posisikan tubuh Anda di depan kamera untuk melihat kemeja secara virtual.' : 'Visualisasi realistis pakaian menyatu dengan tubuh menggunakan model AI.' }}
+          </p>
         </div>
 
-        <!-- Camera & AR Canvas -->
-        <div class="bg-slate-950 relative w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-inner">
+        <!-- Tab Controls -->
+        <div class="flex bg-slate-100/80 p-1 rounded-2xl mb-4 border border-slate-200/40">
+          <button 
+            type="button"
+            @click="activeArTab = 'live'; startCamera();"
+            class="flex-1 py-2 text-center text-xs font-bold rounded-xl transition duration-150 active:scale-95 flex items-center justify-center gap-1.5"
+            :class="activeArTab === 'live' ? 'bg-[#2B1E16] text-white shadow-sm' : 'text-slate-500 hover:text-espresso'"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+            Kamera Live (AR)
+          </button>
+          <button 
+            type="button"
+            @click="activeArTab = 'ai'; stopCamera();"
+            class="flex-1 py-2 text-center text-xs font-bold rounded-xl transition duration-150 active:scale-95 flex items-center justify-center gap-1.5"
+            :class="activeArTab === 'ai' ? 'bg-[#2B1E16] text-white shadow-sm' : 'text-slate-500 hover:text-espresso'"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 21m0-12V3m0 0l-3 3m3-3l3 3M3 14h18" /></svg>
+            AI Try-On (Realistis)
+          </button>
+        </div>
+
+        <!-- Tab 1: Live Camera / Upload Foto Canvas -->
+        <div v-show="activeArTab === 'live'" class="bg-slate-950 relative w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-inner">
           <!-- Video Feed (Hidden, used as source for MediaPipe) -->
           <video ref="videoElement" autoplay playsinline class="hidden"></video>
           
@@ -703,27 +690,55 @@
           </div>
         </div>
 
+        <!-- Tab 2: Realistic AI Preview -->
+        <div v-if="activeArTab === 'ai'" class="relative w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-inner bg-slate-50 border border-slate-200/30">
+          <img 
+            :src="getTryOnImageUrl(product)" 
+            class="w-full h-full object-cover transition-opacity duration-300 animate-fade-in"
+            @error="onTryOnImageError"
+          />
+          <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-4 flex flex-col justify-end text-white">
+            <span class="text-[9px] font-black uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+              AI try-on preview
+            </span>
+            <h3 class="text-sm font-black mt-1 line-clamp-1 text-white">{{ product?.name }}</h3>
+            <p class="text-[10px] text-white/80 mt-1 leading-snug">Foto pakaian menyatu sangat rapi & realistis ke lekuk badan model.</p>
+          </div>
+        </div>
+
         <!-- AR Action Footer / Fallback Controls -->
         <div class="mt-4 flex items-center justify-between gap-3">
-          <button 
-            v-if="!isUploadedPhotoActive"
-            type="button" 
-            @click="triggerArFileUpload" 
-            class="flex-1 py-3 px-4 rounded-xl border border-borderSoft text-espresso font-bold text-xs hover:bg-slate-50 transition active:scale-95 flex items-center justify-center gap-1.5 shadow-sm text-[#2B1E16] border-[#E8DCCB]"
-          >
-            <svg class="w-4 h-4 text-terracotta" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-            Upload Foto Fallback
-          </button>
-          
-          <button 
-            v-else
-            type="button" 
-            @click="resetArPhoto" 
-            class="flex-1 py-3 px-4 rounded-xl bg-terracotta text-white font-bold text-xs hover:bg-terracottaDark transition active:scale-95 flex items-center justify-center gap-1.5 shadow-md shadow-terracotta/20"
-          >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a5 5 0 015 5v2M3 10l4-4M3 10l4 4" /></svg>
-            Kembali ke Kamera Live
-          </button>
+          <template v-if="activeArTab === 'live'">
+            <button 
+              v-if="!isUploadedPhotoActive"
+              type="button" 
+              @click="triggerArFileUpload" 
+              class="flex-1 py-3 px-4 rounded-xl border border-borderSoft text-espresso font-bold text-xs hover:bg-slate-50 transition active:scale-95 flex items-center justify-center gap-1.5 shadow-sm text-[#2B1E16] border-[#E8DCCB]"
+            >
+              <svg class="w-4 h-4 text-terracotta" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+              Upload Foto Fallback
+            </button>
+            
+            <button 
+              v-else
+              type="button" 
+              @click="resetArPhoto" 
+              class="flex-1 py-3 px-4 rounded-xl bg-terracotta text-white font-bold text-xs hover:bg-terracottaDark transition active:scale-95 flex items-center justify-center gap-1.5 shadow-md shadow-terracotta/20"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a5 5 0 015 5v2M3 10l4-4M3 10l4 4" /></svg>
+              Kembali ke Kamera Live
+            </button>
+          </template>
+          <template v-else>
+            <button 
+              type="button" 
+              @click="activeArTab = 'live'; startCamera();" 
+              class="flex-1 py-3 px-4 rounded-xl bg-[#2B1E16] text-white font-bold text-xs hover:bg-black transition active:scale-95 flex items-center justify-center gap-1.5 shadow-md"
+            >
+              Coba Dengan Kamera Anda
+            </button>
+          </template>
         </div>
 
         <!-- Hidden input for file upload -->
@@ -1082,6 +1097,27 @@ const capturedImage = ref(null);
 const isAnalyzing = ref(false);
 const analysisResult = ref(null);
 const isInitializingAR = ref(false);
+const activeArTab = ref('live');
+
+const getTryOnImageUrl = (p) => {
+  if (!p) return '';
+  const primaryImage = p.images?.[0] || p.image_url;
+  if (!primaryImage) return '';
+  
+  if (primaryImage.includes('fallback')) {
+    return '/images/products/batik_madiun_tryon.png';
+  }
+  
+  const dotIndex = primaryImage.lastIndexOf('.');
+  if (dotIndex !== -1) {
+    return primaryImage.substring(0, dotIndex) + '_tryon' + primaryImage.substring(dotIndex);
+  }
+  return primaryImage + '_tryon.png';
+};
+
+const onTryOnImageError = (e) => {
+  e.target.src = '/images/products/batik_madiun_tryon.png';
+};
 
 // Review state
 const hoveredStar = ref(0);
@@ -1208,8 +1244,10 @@ const normalizeProduct = (raw) => {
     seller: {
       name: sellerName,
       location: sellerLocation,
-      rating: 4.9,
-      sold: item.sold ?? 120,
+      rating: item.owner?.rating ?? 4.9,
+      sold: item.owner?.sold ?? item.sold ?? 12,
+      avatar_url: item.owner?.profile?.avatar_url,
+      id: item.owner?.id,
     },
     cultural_story: culturalStory,
     motif_meaning: motifMeaning,
@@ -1260,9 +1298,8 @@ const loadProduct = async () => {
       };
     });
 
-    if (variantOptions.value.length) {
-      selectedVariantId.value = variantOptions.value[0].value;
-    }
+    // Do NOT auto-select a variant to force the user to choose their size/color
+    selectedVariantId.value = null;
 
     // Load reviews
     try {
@@ -1322,8 +1359,8 @@ const getProductLink = (item) => {
 
 const getAvatarUrl = (review) => {
   if (review.avatar) return review.avatar;
-  const name = encodeURIComponent(review.author || 'Pembeli');
-  return `https://api.dicebear.com/7.x/initials/svg?seed=${name}`;
+  const name = encodeURIComponent(review.author || review.user_name || 'Pembeli');
+  return `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`;
 };
 
 const galleryImages = computed(() => product.value?.images ?? []);
@@ -1372,10 +1409,14 @@ const addToCart = async () => {
     notificationStore.error('Produk tidak ditemukan');
     return;
   }
+  // Check if product has variants and user hasn't selected one
+  if (variantOptions.value.length && selectedVariantId.value === null) {
+    notificationStore.warning('Harap pilih varian/ukuran produk terlebih dahulu.');
+    return;
+  }
   const variant = selectedVariant.value?.label ?? null;
   const price = selectedVariant.value?.price ?? product.value.price;
   await cartStore.addItem(product.value, quantity.value, variant, price);
-  notificationStore.success('Berhasil menambahkan ke keranjang', 3000, 'Success');
 };
 
 const showBuyNowModal = ref(false);
@@ -1383,6 +1424,11 @@ const showBuyNowModal = ref(false);
 const buyNow = () => {
   if (!product.value) {
     notificationStore.error('Produk tidak ditemukan');
+    return;
+  }
+  // Check if product has variants and user hasn't selected one
+  if (variantOptions.value.length && selectedVariantId.value === null) {
+    notificationStore.warning('Harap pilih varian/ukuran produk terlebih dahulu.');
     return;
   }
   showBuyNowModal.value = true;
@@ -1446,11 +1492,145 @@ const shareProduct = async () => {
   }
 
   await navigator.clipboard.writeText(window.location.href);
-  window.alert('Link produk berhasil disalin ke clipboard.');
+  notificationStore.success('Link produk berhasil disalin ke clipboard.', 2000);
 };
 
 const refreshRelated = async () => {
   await loadProduct();
+};
+
+const visitShop = () => {
+  if (product.value?.seller?.id) {
+    router.push(`/shop/${product.value.seller.id}`);
+  } else if (product.value?.seller?.name) {
+    router.push({ path: '/', query: { search: product.value.seller.name } });
+  }
+};
+
+const inviteCollaboration = async () => {
+  const token = localStorage.getItem('token');
+  
+  if (!token || !user.value) {
+    notificationStore.warning('Silakan login terlebih dahulu untuk mengajak kolaborasi.', 4000);
+    return router.push('/login');
+  }
+
+  let activeRole = user.value.active_role;
+
+  // Jika active_role bukan UMKM atau Desainer, coba switch otomatis di latar belakang jika memiliki perannya
+  if (!['umkm', 'designer', 'desainer'].includes(activeRole)) {
+    const hasUmkm = user.value.is_umkm || user.value.owned_roles?.includes('umkm');
+    const hasDesigner = user.value.is_designer || user.value.owned_roles?.includes('designer') || user.value.owned_roles?.includes('desainer');
+
+    if (hasDesigner) {
+      try {
+        notificationStore.info('Mengaktifkan peran Desainer untuk kolaborasi...', 3000);
+        const switchRes = await fetch('/api/v1/profile/switch-role', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify({ role: 'designer' }),
+        });
+        if (switchRes.ok) {
+          const switchData = await switchRes.json();
+          localStorage.setItem('user', JSON.stringify(switchData.user));
+          user.value = switchData.user;
+          activeRole = 'designer';
+        } else {
+          notificationStore.error('Gagal mengaktifkan peran Desainer.');
+          return;
+        }
+      } catch (err) {
+        console.error('Failed to switch role:', err);
+        notificationStore.error('Gagal mengaktifkan peran Desainer.');
+        return;
+      }
+    } else if (hasUmkm) {
+      try {
+        notificationStore.info('Mengaktifkan peran UMKM untuk kolaborasi...', 3000);
+        const switchRes = await fetch('/api/v1/profile/switch-role', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify({ role: 'umkm' }),
+        });
+        if (switchRes.ok) {
+          const switchData = await switchRes.json();
+          localStorage.setItem('user', JSON.stringify(switchData.user));
+          user.value = switchData.user;
+          activeRole = 'umkm';
+        } else {
+          notificationStore.error('Gagal mengaktifkan peran UMKM.');
+          return;
+        }
+      } catch (err) {
+        console.error('Failed to switch role:', err);
+        notificationStore.error('Gagal mengaktifkan peran UMKM.');
+        return;
+      }
+    } else {
+      notificationStore.warning('Hanya akun UMKM atau Desainer yang dapat memulai kolaborasi Co-Create. Silakan daftarkan diri Anda di menu Profil.', 5000);
+      return;
+    }
+  }
+
+  // Don't collaborate with yourself
+  if (product.value?.seller?.id === user.value.id) {
+    notificationStore.warning('Anda tidak dapat memulai kolaborasi dengan diri sendiri.', 4000);
+    return;
+  }
+
+  try {
+    const sellerName = product.value?.seller?.name || 'UMKM';
+    const roomName = `Kolaborasi: Desain Produk dengan ${sellerName}`;
+    const description = `Ruang kerja kolaboratif untuk mendesain produk bersama ${sellerName} yang diinisiasi dari produk ${product.value?.name}.`;
+    const inviteUserId = product.value?.seller?.id;
+
+    const res = await fetch('/api/v1/cocreate/rooms', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        name: roomName,
+        description: description,
+        invite_user_id: inviteUserId
+      })
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.message || 'Gagal membuat ruang kolaborasi.');
+    }
+
+    const newRoom = data.data;
+    if (newRoom.status === 'pending') {
+      notificationStore.success('Permintaan kolaborasi berhasil dikirim! Menunggu persetujuan.', 5000);
+      if (activeRole === 'umkm') {
+        router.push('/umkm/cocreate');
+      } else {
+        router.push('/designer/cocreate');
+      }
+    } else {
+      notificationStore.success('Ruang Kolaborasi Co-Create Berhasil Dibuat!', 4000);
+      if (activeRole === 'umkm') {
+        router.push(`/umkm/cocreate/${newRoom.id}`);
+      } else {
+        router.push(`/designer/cocreate/${newRoom.id}`);
+      }
+    }
+  } catch (err) {
+    console.error('Co-Create error:', err);
+    notificationStore.error(err.message || 'Gagal men-generate ruang kolaborasi.');
+  }
 };
 
 /* ── Navigation ───────────────────────────────────────── */
@@ -1798,7 +1978,7 @@ const initProductImage = () => {
         // Test apakah bisa getImageData (CORS check)
         ctx.getImageData(0, 0, 1, 1);
 
-        // Berhasil — lakukan background removal menggunakan BFS flood fill untuk membersihkan background & bayangan luar tanpa melubangi baju
+        // Berhasil — lakukan background removal menggunakan BFS flood fill dengan toleransi saturasi ketat & penyaringan tepi (feathering) agar hasil sangat rapi
         const imageData = ctx.getImageData(0, 0, c.width, c.height);
         const d = imageData.data;
         const w = c.width;
@@ -1815,9 +1995,9 @@ const initProductImage = () => {
           const b = d[idx + 2];
           const brightness = (r + g + b) / 3;
           const saturation = Math.max(r, g, b) - Math.min(r, g, b);
-          // Pixel dianggap background/bayangan jika warnanya netral (saturasi rendah)
-          // dan tingkat kecerahannya di atas 55 (tidak terlalu gelap/hitam)
-          return saturation < 35 && brightness > 55;
+          // Batasi saturasi secara ketat (< 18) agar tidak bocor melubangi pola kemeja yang hangat (beige/cream)
+          // dan tingkat kecerahan di atas 50 untuk mencakup seluruh gradasi bayangan
+          return saturation < 18 && brightness > 50;
         };
 
         // Inisialisasi BFS dari semua pixel di tepi gambar (border)
@@ -1871,6 +2051,28 @@ const initProductImage = () => {
         for (let idx = 0; idx < w * h; idx++) {
           if (!visited[idx]) {
             d[idx * 4 + 3] = 255;
+          }
+        }
+
+        // Simpan salinan channel alpha yang sudah dibersihkan
+        const alphaCache = new Uint8Array(w * h);
+        for (let idx = 0; idx < w * h; idx++) {
+          alphaCache[idx] = d[idx * 4 + 3];
+        }
+
+        // Terapkan filter rata-rata 3x3 (feathering) pada channel alpha untuk memperlembut dan merapikan tepi kemeja
+        for (let y = 1; y < h - 1; y++) {
+          for (let x = 1; x < w - 1; x++) {
+            const idx = y * w + x;
+            if (alphaCache[idx] > 0) {
+              let sum = 0;
+              for (let ky = -1; ky <= 1; ky++) {
+                for (let kx = -1; kx <= 1; kx++) {
+                  sum += alphaCache[(y + ky) * w + (x + kx)];
+                }
+              }
+              d[idx * 4 + 3] = Math.round(sum / 9);
+            }
           }
         }
         ctx.putImageData(imageData, 0, 0);

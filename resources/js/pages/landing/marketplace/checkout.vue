@@ -670,7 +670,6 @@ const payNow = async () => {
           notificationStore.error('Pembayaran gagal dilakukan. Silakan coba lagi.');
         },
         onClose: () => {
-          notificationStore.warning('Anda menutup pembayaran. Detail pesanan Anda tersimpan.');
           if (source.value === 'cart') {
             cartStore.removeSelectedItems();
           } else {
