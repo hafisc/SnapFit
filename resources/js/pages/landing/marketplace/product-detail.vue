@@ -272,7 +272,7 @@
                   </div>
                 </button>
 
-                <!-- 3D Model Viewer Banner (for Crafts, Decor, Accessories) - NONAKTIFKAN (DIPARKIR DULU) -->
+
               </div>
               
               <!-- Share Info -->
@@ -435,7 +435,7 @@
               </div>
             </button>
 
-            <!-- Glowing 3D banner on Mobile - NONAKTIFKAN (DIPARKIR DULU) -->
+
 
             <!-- Variant selector -->
             <div v-if="variantOptions.length" class="pt-2">
@@ -629,34 +629,12 @@
         <div class="mb-4 pr-10">
           <h2 class="text-xl font-black text-[#2B1E16] leading-none">AI AR Try-On</h2>
           <p class="text-muted text-xs mt-1.5 leading-relaxed">
-            {{ activeArTab === 'live' ? 'Posisikan tubuh Anda di depan kamera untuk melihat kemeja secara virtual.' : 'Visualisasi realistis pakaian menyatu dengan tubuh menggunakan model AI.' }}
+            Posisikan tubuh Anda di depan kamera untuk melihat pakaian secara virtual.
           </p>
         </div>
 
-        <!-- Tab Controls -->
-        <div class="flex bg-slate-100/80 p-1 rounded-2xl mb-4 border border-slate-200/40">
-          <button 
-            type="button"
-            @click="activeArTab = 'live'; startCamera();"
-            class="flex-1 py-2 text-center text-xs font-bold rounded-xl transition duration-150 active:scale-95 flex items-center justify-center gap-1.5"
-            :class="activeArTab === 'live' ? 'bg-[#2B1E16] text-white shadow-sm' : 'text-slate-500 hover:text-espresso'"
-          >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-            Kamera Live (AR)
-          </button>
-          <button 
-            type="button"
-            @click="activeArTab = 'ai'; stopCamera();"
-            class="flex-1 py-2 text-center text-xs font-bold rounded-xl transition duration-150 active:scale-95 flex items-center justify-center gap-1.5"
-            :class="activeArTab === 'ai' ? 'bg-[#2B1E16] text-white shadow-sm' : 'text-slate-500 hover:text-espresso'"
-          >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 21m0-12V3m0 0l-3 3m3-3l3 3M3 14h18" /></svg>
-            AI Try-On (Realistis)
-          </button>
-        </div>
-
-        <!-- Tab 1: Live Camera / Upload Foto Canvas -->
-        <div v-show="activeArTab === 'live'" class="bg-slate-950 relative w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-inner">
+        <!-- Live Camera / Upload Foto Canvas -->
+        <div class="bg-slate-950 relative w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-inner">
           <!-- Video Feed (Hidden, used as source for MediaPipe) -->
           <video ref="videoElement" autoplay playsinline class="hidden"></video>
           
@@ -690,55 +668,27 @@
           </div>
         </div>
 
-        <!-- Tab 2: Realistic AI Preview -->
-        <div v-if="activeArTab === 'ai'" class="relative w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-inner bg-slate-50 border border-slate-200/30">
-          <img 
-            :src="getTryOnImageUrl(product)" 
-            class="w-full h-full object-cover transition-opacity duration-300 animate-fade-in"
-            @error="onTryOnImageError"
-          />
-          <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-4 flex flex-col justify-end text-white">
-            <span class="text-[9px] font-black uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-              <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-              AI try-on preview
-            </span>
-            <h3 class="text-sm font-black mt-1 line-clamp-1 text-white">{{ product?.name }}</h3>
-            <p class="text-[10px] text-white/80 mt-1 leading-snug">Foto pakaian menyatu sangat rapi & realistis ke lekuk badan model.</p>
-          </div>
-        </div>
-
         <!-- AR Action Footer / Fallback Controls -->
         <div class="mt-4 flex items-center justify-between gap-3">
-          <template v-if="activeArTab === 'live'">
-            <button 
-              v-if="!isUploadedPhotoActive"
-              type="button" 
-              @click="triggerArFileUpload" 
-              class="flex-1 py-3 px-4 rounded-xl border border-borderSoft text-espresso font-bold text-xs hover:bg-slate-50 transition active:scale-95 flex items-center justify-center gap-1.5 shadow-sm text-[#2B1E16] border-[#E8DCCB]"
-            >
-              <svg class="w-4 h-4 text-terracotta" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-              Upload Foto Fallback
-            </button>
-            
-            <button 
-              v-else
-              type="button" 
-              @click="resetArPhoto" 
-              class="flex-1 py-3 px-4 rounded-xl bg-terracotta text-white font-bold text-xs hover:bg-terracottaDark transition active:scale-95 flex items-center justify-center gap-1.5 shadow-md shadow-terracotta/20"
-            >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a5 5 0 015 5v2M3 10l4-4M3 10l4 4" /></svg>
-              Kembali ke Kamera Live
-            </button>
-          </template>
-          <template v-else>
-            <button 
-              type="button" 
-              @click="activeArTab = 'live'; startCamera();" 
-              class="flex-1 py-3 px-4 rounded-xl bg-[#2B1E16] text-white font-bold text-xs hover:bg-black transition active:scale-95 flex items-center justify-center gap-1.5 shadow-md"
-            >
-              Coba Dengan Kamera Anda
-            </button>
-          </template>
+          <button 
+            v-if="!isUploadedPhotoActive"
+            type="button" 
+            @click="triggerArFileUpload" 
+            class="flex-1 py-3 px-4 rounded-xl border border-borderSoft text-espresso font-bold text-xs hover:bg-slate-50 transition active:scale-95 flex items-center justify-center gap-1.5 shadow-sm text-[#2B1E16] border-[#E8DCCB]"
+          >
+            <svg class="w-4 h-4 text-terracotta" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+            Upload Foto Fallback
+          </button>
+          
+          <button 
+            v-else
+            type="button" 
+            @click="resetArPhoto" 
+            class="flex-1 py-3 px-4 rounded-xl bg-terracotta text-white font-bold text-xs hover:bg-terracottaDark transition active:scale-95 flex items-center justify-center gap-1.5 shadow-md shadow-terracotta/20"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h10a5 5 0 015 5v2M3 10l4-4M3 10l4 4" /></svg>
+            Kembali ke Kamera Live
+          </button>
         </div>
 
         <!-- Hidden input for file upload -->
@@ -860,76 +810,7 @@
     </div>
   </div>
 
-  <!-- 3D Model Modal -->
-  <div v-if="show3dModal" class="fixed inset-0 z-50 flex items-center justify-center bg-[#2B1E16]/40 backdrop-blur-md p-4 overflow-y-auto">
-    <div class="w-full max-w-2xl rounded-3xl bg-surface shadow-[0_25px_60px_-15px_rgba(43,30,22,0.25)] overflow-hidden flex flex-col p-6 relative border border-borderSoft/60 animate-fade-in">
-      <!-- Close Button -->
-      <button @click="close3dModal" type="button" class="absolute top-4 right-4 rounded-full flex items-center justify-center text-slate-400 hover:text-espresso hover:bg-slate-100 active:scale-95 transition-all duration-150 z-30">
-        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
 
-      <div class="mb-4 pr-10">
-        <h2 class="text-base font-black text-[#2B1E16] uppercase tracking-wider">Detail Produk 3D</h2>
-        <p class="text-muted text-xs mt-1.5 leading-relaxed">Geser untuk memutar produk, atau cubit untuk memperbesar/memperkecil detail kerajinan.</p>
-      </div>
-
-      <!-- 3D Model Viewer Canvas -->
-      <div class="bg-[#F8F1E7]/20 relative w-full aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden border border-borderSoft/40 shadow-inner flex items-center justify-center p-6">
-        
-        <!-- AI Generator Interface -->
-        <div v-if="isGenerating3d" class="w-full max-w-md flex flex-col items-center justify-center text-center p-8 bg-white/95 rounded-3xl border border-amber-100 shadow-[0_15px_30px_rgba(245,158,11,0.05)] animate-pulse-slow">
-          <!-- Animated AI Pulse Icon -->
-          <div class="relative w-20 h-20 mb-6 flex items-center justify-center">
-            <span class="absolute inline-flex h-full w-full rounded-full bg-terracotta/10 animate-ping"></span>
-            <span class="absolute inline-flex h-16 w-16 rounded-full bg-terracotta/20 animate-pulse"></span>
-            <div class="relative w-12 h-12 rounded-full bg-gradient-to-tr from-terracotta to-amber-500 flex items-center justify-center text-white shadow-lg">
-              <svg class="w-6 h-6 animate-spin-slow" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 9.172V5L8 4z"></path>
-              </svg>
-            </div>
-          </div>
-
-          <h3 class="text-espresso font-black text-sm mb-1 uppercase tracking-wider">AI 3D Model Generator</h3>
-          <p class="text-xs text-muted mb-6 leading-normal max-w-xs">Mengonversi foto produk menjadi model 3D interaktif secara otomatis menggunakan AI.</p>
-          
-          <!-- Progress Bar -->
-          <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden mb-3 border border-slate-200/50">
-            <div 
-              class="h-full bg-gradient-to-r from-terracotta to-amber-500 rounded-full transition-all duration-300 ease-out"
-              :style="{ width: `${generationProgress}%` }"
-            ></div>
-          </div>
-          
-          <div class="flex items-center justify-between w-full text-[10px] font-bold text-muted uppercase tracking-wider">
-            <span>{{ generationStatus }}</span>
-            <span class="text-terracotta">{{ generationProgress }}%</span>
-          </div>
-        </div>
-
-        <!-- 3D Model Viewer -->
-        <model-viewer
-          v-else-if="show3dModal && product?.ar_model_url"
-          :src="product.ar_model_url"
-          alt="Model 3D Produk"
-          shadow-intensity="1"
-          camera-controls
-          auto-rotate
-          ar
-          class="w-full h-full"
-          style="background-color: transparent;"
-        >
-          <div slot="poster" class="absolute inset-0 flex items-center justify-center bg-sand/30 backdrop-blur-sm">
-            <div class="flex flex-col items-center">
-              <svg class="w-10 h-10 animate-spin text-terracotta mb-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-              <p class="text-xs font-bold text-espresso">Memuat Model 3D...</p>
-            </div>
-          </div>
-        </model-viewer>
-      </div>
-    </div>
-  </div>
 
   <!-- Review Submission Modal -->
   <div v-if="showReviewModal" class="fixed inset-0 z-50 flex items-center justify-center bg-[#2B1E16]/40 backdrop-blur-md p-4 animate-fade-in">
@@ -1050,10 +931,6 @@ const error = ref('');
 const quantity = ref(1);
 const activeImageIndex = ref(0);
 const showArModal = ref(false);
-const show3dModal = ref(false);
-const isGenerating3d = ref(false);
-const generationProgress = ref(0);
-const generationStatus = ref('');
 const showReviewModal = ref(false);
 const relatedProducts = ref([]);
 const variantOptions = ref([]);
@@ -1092,32 +969,7 @@ const uploadedPhotoSrc = ref(null);
 const stream = ref(null);
 const isCameraReady = ref(false);
 const isCameraDenied = ref(false);
-const isCapturing = ref(false);
-const capturedImage = ref(null);
-const isAnalyzing = ref(false);
-const analysisResult = ref(null);
 const isInitializingAR = ref(false);
-const activeArTab = ref('live');
-
-const getTryOnImageUrl = (p) => {
-  if (!p) return '';
-  const primaryImage = p.images?.[0] || p.image_url;
-  if (!primaryImage) return '';
-  
-  if (primaryImage.includes('fallback')) {
-    return '/images/products/batik_madiun_tryon.png';
-  }
-  
-  const dotIndex = primaryImage.lastIndexOf('.');
-  if (dotIndex !== -1) {
-    return primaryImage.substring(0, dotIndex) + '_tryon' + primaryImage.substring(dotIndex);
-  }
-  return primaryImage + '_tryon.png';
-};
-
-const onTryOnImageError = (e) => {
-  e.target.src = '/images/products/batik_madiun_tryon.png';
-};
 
 // Review state
 const hoveredStar = ref(0);
@@ -1645,77 +1497,7 @@ const logout = () => {
   router.push('/');
 };
 
-// 3D Model Modal Functions
-const open3dModal = async () => {
-  show3dModal.value = true;
-  
-  if (!product.value?.ar_model_url) {
-    isGenerating3d.value = true;
-    generationProgress.value = 0;
-    generationStatus.value = 'Menginisialisasi AI Engine...';
-    
-    // Animate the progress bar simulation
-    const interval = setInterval(() => {
-      if (generationProgress.value < 95) {
-        generationProgress.value += Math.floor(Math.random() * 8) + 4;
-        if (generationProgress.value > 95) generationProgress.value = 95;
-        
-        // Update status text based on progress
-        if (generationProgress.value < 25) {
-          generationStatus.value = 'Menganalisis foto produk...';
-        } else if (generationProgress.value < 50) {
-          generationStatus.value = 'Mengekstrak geometri & tekstur warna...';
-        } else if (generationProgress.value < 75) {
-          generationStatus.value = 'Membangun model mesh 3D...';
-        } else {
-          generationStatus.value = 'Melakukan rendering detail & tekstur PBR...';
-        }
-      }
-    }, 200);
-    
-    try {
-      const id = product.value.id;
-      const token = localStorage.getItem('token');
-      const response = await fetch(`/api/v1/products/${id}/generate-3d`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || 'Gagal generate 3D');
-      }
-      
-      // Wait for progress simulation to finish
-      clearInterval(interval);
-      generationProgress.value = 100;
-      generationStatus.value = 'Menyimpan model 3D ke database!';
-      
-      // Let it sit at 100% for 500ms
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      // Save the generated URL back to our local product ref
-      product.value.ar_model_url = data.ar_model_url;
-      
-    } catch (err) {
-      console.error(err);
-      notificationStore.error(err.message || 'Gagal men-generate model 3D.');
-      clearInterval(interval);
-      show3dModal.value = false;
-    } finally {
-      isGenerating3d.value = false;
-    }
-  }
-};
 
-const close3dModal = () => {
-  show3dModal.value = false;
-  isGenerating3d.value = false;
-};
 
 // Review Modal Functions
 const openReviewModal = () => {
@@ -1851,9 +1633,6 @@ const openArModal = async () => {
 const closeArModal = () => {
   stopCamera();
   showArModal.value = false;
-  capturedImage.value = null;
-  analysisResult.value = null;
-  isAnalyzing.value = false;
   isInitializingAR.value = false;
   smoothedLandmarks = null;
   isUploadedPhotoActive.value = false;
@@ -1916,7 +1695,7 @@ const resetArPhoto = async () => {
 };
 
 const calculateVisibleBounds = (canvas) => {
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
   const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const data = imgData.data;
   
@@ -1970,7 +1749,7 @@ const initProductImage = () => {
         const croppedH = img.height - cropTop;
 
         const c = document.createElement('canvas');
-        const ctx = c.getContext('2d');
+        const ctx = c.getContext('2d', { willReadFrequently: true });
         c.width = img.width;
         c.height = croppedH;
         ctx.drawImage(img, 0, cropTop, img.width, croppedH, 0, 0, img.width, croppedH);
@@ -2138,7 +1917,7 @@ const loadMediaPipe = async () => {
 
 const onPoseResults = (results) => {
   const canvas = canvasElement.value;
-  if (!canvas || isCapturing.value || capturedImage.value) return;
+  if (!canvas) return;
   
   const ctx = canvas.getContext('2d');
   
@@ -2310,9 +2089,7 @@ const startCamera = async () => {
       
       camera = new window.Camera(video, {
         onFrame: async () => {
-          if (!isCapturing.value && !capturedImage.value) {
-            await pose.send({image: video});
-          }
+          await pose.send({image: video});
         },
         width: 640,
         height: 480,
@@ -2343,7 +2120,6 @@ const startCamera = async () => {
           
           // Simple loop to draw to canvas without AR if MediaPipe fails
           const drawFallback = () => {
-            if (isCapturing.value || capturedImage.value) return;
             const canvas = canvasElement.value;
             const ctx = canvas.getContext('2d');
             canvas.width = videoElement.value.videoWidth;
@@ -2382,67 +2158,7 @@ const stopCamera = () => {
   }
 };
 
-const retake = () => {
-  capturedImage.value = null;
-  analysisResult.value = null;
-  smoothedLandmarks = null;
-  startCamera();
-};
 
-const captureAndAnalyze = async () => {
-  if (!canvasElement.value) return;
-  
-  isCapturing.value = true;
-  const canvas = canvasElement.value;
-  
-  // Get base64 image (JPEG format)
-  const base64Image = canvas.toDataURL('image/jpeg', 0.8);
-  capturedImage.value = base64Image;
-  
-  // Stop camera feed to freeze image
-  stopCamera();
-  isCapturing.value = false;
-  
-  // Send to AI
-  await analyzeWithAI(base64Image);
-};
-
-const analyzeWithAI = async (base64Image) => {
-  isAnalyzing.value = true;
-  analysisResult.value = null;
-  
-  try {
-    const token = localStorage.getItem('token');
-    
-    const response = await fetch('/api/v1/ar-try-on/analyze', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        user_photo: base64Image,
-        product_name: product.value.name,
-        product_category: product.value.category,
-        product_description: product.value.description
-      })
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Terjadi kesalahan (${response.status})`);
-    }
-    
-    const resData = await response.json();
-    analysisResult.value = resData.analysis;
-    notificationStore.success('Analisis selesai!');
-  } catch (err) {
-    console.error('AR Try-On Analysis error:', err);
-    notificationStore.error('Gagal menganalisis gambar. Pastikan server AI berjalan.');
-  } finally {
-    isAnalyzing.value = false;
-  }
-};
 
 watch(
   () => route.params.id,

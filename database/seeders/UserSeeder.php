@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
             ],
             // User dengan role Pembeli, UMKM, dan Designer (sudah terverifikasi)
             [
-                'name'        => 'User SnapFit',
+                'name'        => 'Batavia',
                 'email'       => 'user@snapfit.id',
                 'password'    => Hash::make('password123'),
                 'active_role' => 'buyer',

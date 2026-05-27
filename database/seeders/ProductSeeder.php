@@ -110,7 +110,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.9,
                 'sold'        => 120,
                 'umkm_name'   => 'Sanggar Batik Laras',
-                'ar_model_url'=> null,
+                'ar_model_url'=> '/models/batik_parang.glb',
             ],
             [
                 'name'        => 'Batik Tulis Lasem',
@@ -122,7 +122,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.9,
                 'sold'        => 45,
                 'umkm_name'   => 'Batik Pusaka Lasem',
-                'ar_model_url'=> null,
+                'ar_model_url'=> '/models/batik_lasem.glb',
             ],
             [
                 'name'        => 'Batik Mega Mendung',
@@ -134,7 +134,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.7,
                 'sold'        => 88,
                 'umkm_name'   => 'Batik Trusmi Cirebon',
-                'ar_model_url'=> null,
+                'ar_model_url'=> '/models/batik_megamendung.glb',
             ],
             [
                 'name'        => 'Batik Sidomukti Solo',
@@ -146,7 +146,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 5.0,
                 'sold'        => 32,
                 'umkm_name'   => 'Batik Keraton Solo',
-                'ar_model_url'=> null,
+                'ar_model_url'=> '/models/batik_sidomukti.glb',
             ],
             [
                 'name'        => 'Batik Kawung Kencana',
@@ -158,7 +158,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.8,
                 'sold'        => 67,
                 'umkm_name'   => 'Omah Batik Kawung',
-                'ar_model_url'=> null,
+                'ar_model_url'=> '/models/batik_kawung.glb',
             ],
             [
                 'name'        => 'Kemeja Batik Slim Fit Modern',
@@ -170,7 +170,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.7,
                 'sold'        => 520,
                 'umkm_name'   => 'Batik Urban Studio',
-                'ar_model_url'=> null,
+                'ar_model_url'=> '/models/batik_parang.glb',
             ],
             [
                 'name'        => 'Kain Tenun Ikat Sumba',
@@ -182,7 +182,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.9,
                 'sold'        => 85,
                 'umkm_name'   => 'Rumah Tenun Marapu',
-                'ar_model_url'=> 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/Lantern/glTF-Binary/Lantern.glb',
+                'ar_model_url'=> '/models/tenun_ikat.glb',
             ],
             [
                 'name'        => 'Kain Songket Palembang Emas',
@@ -194,7 +194,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 5.0,
                 'sold'        => 12,
                 'umkm_name'   => 'Songket Sriwijaya',
-                'ar_model_url'=> 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/Lantern/glTF-Binary/Lantern.glb',
+                'ar_model_url'=> '/models/songket_palembang.glb',
             ],
             [
                 'name'        => 'Gelang Perak Motif Batik Celuk',
@@ -206,7 +206,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.8,
                 'sold'        => 150,
                 'umkm_name'   => 'Celuk Silver Art',
-                'ar_model_url'=> 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/ToyCar/glTF-Binary/ToyCar.glb',
+                'ar_model_url'=> '/models/gelang_perak.glb',
             ],
             [
                 'name'        => 'Bros Kebaya Batik Alpaka',
@@ -218,7 +218,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.8,
                 'sold'        => 280,
                 'umkm_name'   => 'Jogja Aksesoris Craft',
-                'ar_model_url'=> 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/ToyCar/glTF-Binary/ToyCar.glb',
+                'ar_model_url'=> '/models/bros_kebaya.glb',
             ],
             [
                 'name'        => 'Bantal Sofa Batik Parang',
@@ -230,7 +230,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.5,
                 'sold'        => 230,
                 'umkm_name'   => 'Batik Home Living',
-                'ar_model_url'=> 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/SheenChair/glTF-Binary/SheenChair.glb',
+                'ar_model_url'=> '/models/bantal_batik.glb',
             ],
             [
                 'name'        => 'Runner Meja Batik Mega Mendung',
@@ -242,7 +242,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.6,
                 'sold'        => 158,
                 'umkm_name'   => 'Cirebon Home Decor',
-                'ar_model_url'=> 'https://modelviewer.dev/shared-assets/models/glTF-Sample-Assets/Models/SheenChair/glTF-Binary/SheenChair.glb',
+                'ar_model_url'=> '/models/runner_meja.glb',
             ],
             [
                 'name'        => 'Batik Serat Jati Madiun',
@@ -254,7 +254,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.8,
                 'sold'        => 92,
                 'umkm_name'   => 'Batik Retno Dumilah',
-                'ar_model_url'=> null,
+                'ar_model_url'=> '/models/batik_madiun.glb',
             ],
             [
                 'name'        => 'Tenun Ikat Bandar Kediri',
@@ -266,7 +266,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.9,
                 'sold'        => 110,
                 'umkm_name'   => 'Tenun Bandar Lestari',
-                'ar_model_url'=> null,
+                'ar_model_url'=> '/models/tenun_kediri.glb',
             ],
             [
                 'name'        => 'Batik Papua Cendrawasih',
@@ -278,7 +278,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.9,
                 'sold'        => 75,
                 'umkm_name'   => 'Batik Papua Asli',
-                'ar_model_url'=> null,
+                'ar_model_url'=> '/models/batik_papua.glb',
             ],
             [
                 'name'        => 'Batik Gentongan Madura',
@@ -290,7 +290,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 5.0,
                 'sold'        => 18,
                 'umkm_name'   => 'Batik Gentong Madura',
-                'ar_model_url'=> null,
+                'ar_model_url'=> '/models/batik_madura.glb',
             ],
             [
                 'name'        => 'Kebaya Kutubaru Klasik Jawa',
@@ -302,7 +302,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.8,
                 'sold'        => 134,
                 'umkm_name'   => 'Kebaya Cantik Nusantara',
-                'ar_model_url'=> null,
+                'ar_model_url'=> '/models/kebaya_kutubaru.glb',
             ],
             [
                 'name'        => 'Surjan Lurik Tradisional',
@@ -314,7 +314,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.7,
                 'sold'        => 340,
                 'umkm_name'   => 'Lurik Klaten Indah',
-                'ar_model_url'=> null,
+                'ar_model_url'=> '/models/surjan_lurik.glb',
             ],
             [
                 'name'        => 'Kemeja Sasirangan Banjar',
@@ -326,7 +326,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 4.8,
                 'sold'        => 85,
                 'umkm_name'   => 'Sasirangan Lestari',
-                'ar_model_url'=> null,
+                'ar_model_url'=> '/models/sasirangan_banjar.glb',
             ],
             [
                 'name'        => 'Baju Kurung Basiba Minang',
@@ -338,7 +338,7 @@ class ProductSeeder extends Seeder
                 'rating'      => 5.0,
                 'sold'        => 40,
                 'umkm_name'   => 'Sulaman Minang Sakato',
-                'ar_model_url'=> null,
+                'ar_model_url'=> '/models/kurung_basiba.glb',
             ],
         ];
 
