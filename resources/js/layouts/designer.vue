@@ -32,22 +32,51 @@ const router = useRouter();
 const route = useRoute();
 const user = ref(null);
 
-onMounted(() => {
+const loadUser = () => {
   const d = localStorage.getItem('user');
   if (d) user.value = JSON.parse(d);
+};
+
+const refreshUser = async () => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    try {
+      const res = await fetch('/api/v1/auth/me', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json'
+        }
+      });
+      if (res.status === 401) {
+        logout();
+      } else if (res.ok) {
+        const data = await res.json();
+        localStorage.setItem('user', JSON.stringify(data.user));
+        loadUser();
+      }
+    } catch (e) {
+      console.error('Failed to verify session:', e);
+    }
+  }
+};
+
+onMounted(() => {
+  loadUser();
+  refreshUser();
+  window.addEventListener('profile-updated', refreshUser);
 });
 
 const pageMap = {
-  '/designer/dashboard': { title: 'Dashboard', desc: 'Ringkasan aktivitas & kolaborasi Anda' },
-  '/designer/cocreate': { title: 'Co-Create Room', desc: 'Kelola undangan & room kolaborasi bersama UMKM' },
-  '/designer/portfolio': { title: 'Portofolio Desain', desc: 'Showcase desain terbaik Anda' },
+  '/designer/dashboard': { title: 'Dasbor', desc: 'Ringkasan aktivitas & kolaborasi Anda' },
+  '/designer/cocreate': { title: 'Ruang Co-Create', desc: 'Kelola undangan & ruang kolaborasi bersama UMKM' },
+  '/designer/portfolio': { title: 'Portofolio Desain', desc: 'Galeri desain terbaik Anda' },
   '/designer/history': { title: 'Riwayat Kolaborasi', desc: 'Riwayat semua kolaborasi yang pernah Anda ikuti' },
   '/designer/settings': { title: 'Pengaturan Profil', desc: 'Kelola informasi akun dan preferensi' },
 };
 
 const currentPageTitle = computed(() => {
   const m = Object.entries(pageMap).find(([p]) => route.path.startsWith(p));
-  return m ? m[1].title : 'Designer Studio';
+  return m ? m[1].title : 'Studio Desainer';
 });
 
 const currentPageDesc = computed(() => {

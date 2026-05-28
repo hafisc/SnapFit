@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-[1400px] mx-auto space-y-5">
+  <div class="w-full space-y-5">
     <!-- Hero -->
     <div class="bg-gradient-to-br from-[#2B1E16] via-[#3D2B1F] to-[#4A3428] rounded-2xl p-7 text-white relative overflow-hidden">
       <div class="absolute -right-10 -top-10 w-48 h-48 bg-[#B85C38]/20 rounded-full blur-3xl pointer-events-none"></div>

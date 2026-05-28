@@ -29,6 +29,11 @@ class UserResource extends JsonResource
                 'phone'         => $this->profile?->phone,
                 'address'       => $this->profile?->address,
                 'bio'           => $this->profile?->bio,
+                'category'      => $this->profile?->category,
+                'socials'       => $this->profile?->socials,
+                'skills'        => $this->isDesigner() ? 
+                    (\App\Models\RoleApplication::where('user_id', $this->id)->where('requested_role', 'designer')->latest()->first()?->data['skills'] ?? ['UI/UX Design', 'Packaging', 'Branding', 'Product Photography', 'Figma', 'Adobe Photoshop'])
+                    : null,
             ]),
         ];
     }

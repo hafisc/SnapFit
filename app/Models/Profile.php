@@ -9,7 +9,11 @@ class Profile extends Model
 {
     protected $fillable = [
         'user_id', 'full_name', 'business_name', 'avatar_url',
-        'phone', 'address', 'bio',
+        'phone', 'address', 'bio', 'category', 'socials',
+    ];
+
+    protected $casts = [
+        'socials' => 'array',
     ];
 
     public function user(): BelongsTo

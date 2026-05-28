@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-[1400px] mx-auto space-y-6">
+  <div class="w-full space-y-6">
     <!-- Header -->
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-[#E8DCCB]/60">
       <div>
@@ -45,16 +45,16 @@
     </div>
 
     <!-- Product Grid -->
-    <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      <div v-for="product in products" :key="product.id" class="bg-white rounded-2xl border border-[#E8DCCB]/60 overflow-hidden group hover:shadow-lg hover:border-[#E8DCCB] transition-all duration-200">
+    <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+      <div v-for="product in products" :key="product.id" class="bg-white rounded-2xl border border-[#E8DCCB]/60 overflow-hidden group hover:shadow-lg hover:border-[#E8DCCB] transition-all duration-200 max-w-[220px] w-full">
         <!-- Image -->
-        <div class="relative h-48 w-full bg-[#F8F1E7] overflow-hidden">
+        <div class="relative aspect-[4/5] w-full bg-[#F8F1E7] overflow-hidden">
           <img :src="getProductImage(product)" :alt="product.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
           
           <!-- Actions overlay -->
           <div class="absolute top-3 right-3 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
             <button @click="togglePublish(product.id)" class="w-7 h-7 rounded-lg flex items-center justify-center shadow-md transition-colors"
-              :class="product.is_published ? 'bg-[#0F8A4B] text-white' : 'bg-white/90 text-[#8A7A6C]'" :title="product.is_published ? 'Unpublish' : 'Publish'">
+              :class="product.is_published ? 'bg-[#0F8A4B] text-white' : 'bg-white/90 text-[#8A7A6C]'" :title="product.is_published ? 'Batalkan Publikasi' : 'Publikasikan'">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
             </button>
             <router-link :to="`/umkm/products/edit/${product.id}`" class="w-7 h-7 rounded-lg bg-white/90 text-[#2B1E16] flex items-center justify-center shadow-md hover:bg-white transition-colors" title="Edit">
@@ -69,7 +69,7 @@
           <div class="absolute bottom-3 left-3">
             <span class="px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider rounded-lg shadow-sm"
               :class="product.is_published ? 'bg-[#0F8A4B]/90 text-white' : 'bg-white/90 text-[#8A7A6C]'">
-              {{ product.is_published ? 'Published' : 'Draft' }}
+              {{ product.is_published ? 'Dipublikasikan' : 'Draf' }}
             </span>
           </div>
         </div>

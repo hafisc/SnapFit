@@ -32,16 +32,45 @@ const router = useRouter();
 const route = useRoute();
 const user = ref(null);
 
-onMounted(() => {
+const loadUser = () => {
   const d = localStorage.getItem('user');
   if (d) user.value = JSON.parse(d);
+};
+
+const refreshUser = async () => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    try {
+      const res = await fetch('/api/v1/auth/me', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json'
+        }
+      });
+      if (res.status === 401) {
+        logout();
+      } else if (res.ok) {
+        const data = await res.json();
+        localStorage.setItem('user', JSON.stringify(data.user));
+        loadUser();
+      }
+    } catch (e) {
+      console.error('Failed to verify session:', e);
+    }
+  }
+};
+
+onMounted(() => {
+  loadUser();
+  refreshUser();
+  window.addEventListener('profile-updated', refreshUser);
 });
 
 const pageMap = {
-  '/umkm/dashboard': { title: 'Dashboard', desc: 'Ringkasan performa toko dan penjualan' },
-  '/umkm/studio': { title: 'AI Product Studio', desc: 'Generate foto produk, video 360°, dan caption AI' },
+  '/umkm/dashboard': { title: 'Dasbor', desc: 'Ringkasan performa toko dan penjualan' },
+  '/umkm/studio': { title: 'Studio Produk AI', desc: 'Buat foto produk, video 360°, dan deskripsi AI' },
   '/umkm/products': { title: 'Produk Saya', desc: 'Kelola semua produk di toko Anda' },
-  '/umkm/cocreate': { title: 'Co-Create Room', desc: 'Kolaborasi realtime dengan desainer' },
+  '/umkm/cocreate': { title: 'Ruang Co-Create', desc: 'Kolaborasi realtime dengan desainer' },
   '/umkm/orders': { title: 'Pesanan', desc: 'Kelola pesanan masuk dan pengiriman' },
   '/umkm/analytics': { title: 'Analitik & Insight', desc: 'Data penjualan dan performa produk' },
   '/umkm/settings': { title: 'Pengaturan', desc: 'Kelola profil toko dan preferensi akun' },
@@ -49,7 +78,7 @@ const pageMap = {
 
 const currentPageTitle = computed(() => {
   const m = Object.entries(pageMap).find(([p]) => route.path.startsWith(p));
-  return m ? m[1].title : 'Creator Hub';
+  return m ? m[1].title : 'Hub Kreator';
 });
 
 const currentPageDesc = computed(() => {

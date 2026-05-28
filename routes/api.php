@@ -29,6 +29,11 @@ use Illuminate\Support\Facades\Route;
 // ─── PUBLIC ROUTES ────────────────────────────────────────────────────────────
 Route::prefix('v1')->group(function () {
 
+    // Fallback login route to return 401 Unauthorized instead of throwing 500 when Route [login] is not defined
+    Route::get('login', function () {
+        return response()->json(['message' => 'Unauthenticated.'], 401);
+    })->name('login');
+
     // Auth
     Route::prefix('auth')->group(function () {
         Route::post('register',        [AuthController::class, 'register']);
@@ -136,8 +141,9 @@ Route::prefix('v1')->group(function () {
 
         // ─── UMKM ONLY ────────────────────────────────────────────────────────
         Route::middleware('role:umkm')->prefix('umkm')->group(function () {
-            // Dashboard
+            // Dashboard & Analytics
             Route::get('dashboard', [UmkmDashboardController::class, 'index']);
+            Route::get('analytics', [UmkmDashboardController::class, 'analytics']);
             
             Route::get('products',                         [ProductController::class, 'myProducts']);
             Route::post('products',                        [ProductController::class, 'store']);

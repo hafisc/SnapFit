@@ -22,7 +22,7 @@
     <nav class="flex-1 overflow-y-auto py-5 px-4 no-scrollbar">
       <!-- Overview -->
       <div class="mb-6">
-        <p class="px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-[#8A7A6C]/70 mb-2">Overview</p>
+        <p class="px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-[#8A7A6C]/70 mb-2">Ringkasan</p>
         <router-link
           v-for="item in overviewItems"
           :key="item.name"
@@ -39,7 +39,7 @@
 
       <!-- Creative Tools -->
       <div class="mb-6">
-        <p class="px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-[#8A7A6C]/70 mb-2">Creative Tools</p>
+        <p class="px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-[#8A7A6C]/70 mb-2">Alat Kreatif</p>
         <router-link
           v-for="item in creativeItems"
           :key="item.name"
@@ -57,7 +57,7 @@
 
       <!-- Commerce -->
       <div class="mb-6">
-        <p class="px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-[#8A7A6C]/70 mb-2">Commerce</p>
+        <p class="px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-[#8A7A6C]/70 mb-2">Pengelolaan Toko</p>
         <router-link
           v-for="item in commerceItems"
           :key="item.name"
@@ -89,7 +89,7 @@
 
       <!-- Account -->
       <div>
-        <p class="px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-[#8A7A6C]/70 mb-2">Account</p>
+        <p class="px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-[#8A7A6C]/70 mb-2">Akun</p>
         <router-link
           to="/umkm/settings"
           @click="$emit('close')"
@@ -117,11 +117,13 @@
     <!-- User Card -->
     <div class="p-4 border-t border-[#E8DCCB]/60 bg-[#FAF6F0]">
       <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/60 border border-[#E8DCCB]/50">
-        <div class="w-9 h-9 bg-gradient-to-br from-[#B85C38] to-[#D4845A] rounded-xl flex items-center justify-center text-white text-xs font-bold shadow-sm">
-          {{ user?.name ? user.name.charAt(0) : 'U' }}
+        <div class="w-9 h-9 rounded-xl flex items-center justify-center text-white text-xs font-bold shadow-sm overflow-hidden flex-shrink-0"
+          :class="user?.profile?.avatar_url ? 'bg-[#F8F1E7] border border-[#E8DCCB]' : 'bg-[#B85C38]'">
+          <img v-if="user?.profile?.avatar_url" :src="user.profile.avatar_url" class="w-full h-full object-cover" />
+          <span v-else>{{ user?.profile?.business_name ? user.profile.business_name.charAt(0).toUpperCase() : (user?.name ? user.name.charAt(0).toUpperCase() : 'U') }}</span>
         </div>
         <div class="flex-1 min-w-0">
-          <p class="text-[12px] font-bold text-[#2B1E16] truncate">{{ user?.name || 'UMKM Kreator' }}</p>
+          <p class="text-[12px] font-bold text-[#2B1E16] truncate">{{ user?.profile?.business_name || user?.name || 'UMKM Kreator' }}</p>
           <p class="text-[10px] text-[#8A7A6C] truncate">UMKM Aktif</p>
         </div>
         <button
@@ -184,12 +186,12 @@ const IconSettings = () => h('svg', { fill: 'none', stroke: 'currentColor', view
 ]);
 
 const overviewItems = [
-  { name: 'Dashboard', path: '/umkm/dashboard', icon: IconDashboard },
+  { name: 'Dasbor', path: '/umkm/dashboard', icon: IconDashboard },
 ];
 
 const creativeItems = [
-  { name: 'AI Product Studio', path: '/umkm/studio', icon: IconStudio },
-  { name: 'Co-Create Room', path: '/umkm/cocreate', icon: IconCoCreate, badge: '2' },
+  { name: 'Studio Produk AI', path: '/umkm/studio', icon: IconStudio },
+  { name: 'Ruang Co-Create', path: '/umkm/cocreate', icon: IconCoCreate, badge: '2' },
 ];
 
 const commerceItems = [

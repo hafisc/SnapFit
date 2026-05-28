@@ -32,23 +32,41 @@ const router = useRouter();
 const route = useRoute();
 const user = ref(null);
 
-onMounted(() => {
+onMounted(async () => {
   const d = localStorage.getItem('user');
   if (d) user.value = JSON.parse(d);
+
+  // Verifikasi token/sesi dengan backend
+  const token = localStorage.getItem('token');
+  if (token) {
+    try {
+      const res = await fetch('/api/v1/auth/me', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json'
+        }
+      });
+      if (res.status === 401) {
+        logout();
+      }
+    } catch (e) {
+      console.error('Failed to verify session:', e);
+    }
+  }
 });
 
 const pageMap = {
-  '/admin/dashboard': { title: 'Dashboard', desc: 'Ringkasan performa platform SnapFit' },
-  '/admin/users': { title: 'Kelola User', desc: 'Manajemen semua pengguna platform' },
+  '/admin/dashboard': { title: 'Dasbor', desc: 'Ringkasan performa platform SnapFit' },
+  '/admin/users': { title: 'Kelola Pengguna', desc: 'Manajemen semua pengguna platform' },
   '/admin/products': { title: 'Moderasi Produk', desc: 'Review dan moderasi produk UMKM' },
   '/admin/orders': { title: 'Kelola Pesanan', desc: 'Pantau seluruh transaksi marketplace' },
   '/admin/analytics': { title: 'Analitik Global', desc: 'Insight dan metrik performa platform' },
-  '/admin/roles': { title: 'Role & Permission', desc: 'Manajemen akses dan hak pengguna' },
+  '/admin/roles': { title: 'Peran & Izin', desc: 'Manajemen akses dan hak pengguna' },
 };
 
 const currentPageTitle = computed(() => {
   const m = Object.entries(pageMap).find(([p]) => route.path.startsWith(p));
-  return m ? m[1].title : 'Admin Console';
+  return m ? m[1].title : 'Konsol Admin';
 });
 
 const currentPageDesc = computed(() => {

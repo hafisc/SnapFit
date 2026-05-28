@@ -9,7 +9,7 @@
         <!-- Profile Card -->
         <div class="bg-surface rounded-2xl p-6 border border-borderSoft shadow-sm">
           <div class="flex items-center gap-4 mb-4">
-            <div class="w-14 h-14 bg-gradient-to-tr from-orange-600 to-amber-400 rounded-full flex items-center justify-center text-xl font-bold text-white shadow-lg shadow-terracotta/50/20 flex-shrink-0 overflow-hidden border border-terracotta/30">
+            <div class="w-14 h-14 bg-gradient-to-tr from-orange-600 to-amber-400 rounded-full flex items-center justify-center text-xl font-bold text-white shadow-lg shadow-terracotta/20 flex-shrink-0 overflow-hidden border border-terracotta/30">
               <img :src="userAvatar" alt="Avatar" class="w-full h-full object-cover" />
             </div>
             <div class="flex-1 min-w-0">
@@ -49,7 +49,7 @@
         <!-- Form Area (Profil Saya) -->
         <div v-if="activeMenu === 'profile'" class="bg-surface rounded-[2rem] p-6 sm:p-8 border border-borderSoft shadow-sm">
           <div class="flex flex-col items-center mb-10">
-            <div class="w-24 h-24 bg-gradient-to-tr from-orange-600 to-amber-400 rounded-full flex items-center justify-center text-4xl font-bold text-white shadow-xl shadow-terracotta/50/20 mb-4 relative group cursor-pointer border-4 border-white overflow-hidden">
+            <div class="w-24 h-24 bg-gradient-to-tr from-orange-600 to-amber-400 rounded-full flex items-center justify-center text-4xl font-bold text-white shadow-xl shadow-terracotta/20 mb-4 relative group cursor-pointer border-4 border-white overflow-hidden">
               <img :src="userAvatar" alt="Avatar" class="w-full h-full object-cover" />
               <div class="absolute inset-0 bg-slate-900/40 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

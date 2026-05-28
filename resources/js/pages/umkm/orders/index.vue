@@ -1,14 +1,14 @@
 <template>
-  <div class="max-w-[1400px] mx-auto space-y-5">
+  <div class="w-full mx-auto space-y-5">
     <!-- Header -->
     <div class="bg-white rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between border border-[#E8DCCB]/60 gap-4">
       <div>
         <h2 class="text-lg font-bold text-[#2B1E16]">Daftar Pesanan</h2>
         <p class="text-[11px] text-[#8A7A6C] mt-0.5">Pantau pesanan masuk, pengiriman, dan status pelanggan.</p>
       </div>
-      <button class="px-4 py-2.5 bg-[#F8F1E7] text-[#2B1E16] border border-[#E8DCCB] rounded-xl text-[12px] font-bold hover:bg-[#E8DCCB]/50 transition-colors flex items-center gap-1.5">
+      <button @click="exportCSV" class="px-4 py-2.5 bg-[#F8F1E7] text-[#2B1E16] border border-[#E8DCCB] rounded-xl text-[12px] font-bold hover:bg-[#E8DCCB]/50 transition-colors flex items-center gap-1.5 cursor-pointer">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-        Export CSV
+        Ekspor CSV
       </button>
     </div>
 
@@ -115,7 +115,7 @@ const fetchOrders = async () => {
         const statusMap = { pending: 'Menunggu', paid: 'Diproses', shipped: 'Dikirim', completed: 'Selesai', cancelled: 'Dibatalkan' };
         return {
           id: o.midtrans_order_id || `#ORD-${1000 + o.id}`,
-          customer_name: o.buyer?.profile?.full_name || o.buyer?.name || 'Customer',
+          customer_name: o.buyer?.profile?.full_name || o.buyer?.name || 'Pelanggan',
           product_name: o.items?.length > 1 ? `${firstItem?.product?.name || 'Produk'} (+${o.items.length - 1})` : (firstItem?.product?.name || 'Produk'),
           product_image: firstItem?.product?.image_url || null,
           qty: firstItem?.quantity || 1,
@@ -129,6 +129,43 @@ const fetchOrders = async () => {
 };
 
 onMounted(() => { fetchOrders(); });
+
+const exportCSV = () => {
+  if (filteredOrders.value.length === 0) {
+    alert('Tidak ada data pesanan untuk diekspor.');
+    return;
+  }
+
+  const headers = ['Order ID', 'Pelanggan', 'Produk', 'Tanggal', 'Status', 'Total (Rp)'];
+  const rows = filteredOrders.value.map(o => [
+    o.id,
+    o.customer_name,
+    o.product_name,
+    formatDate(o.created_at),
+    o.status,
+    o.total_price
+  ]);
+
+  const csvContent = [
+    headers.join(','),
+    ...rows.map(r => r.map(val => {
+      const stringVal = String(val).replace(/"/g, '""');
+      return stringVal.includes(',') || stringVal.includes('\n') || stringVal.includes('"') 
+        ? `"${stringVal}"` 
+        : stringVal;
+    }).join(','))
+  ].join('\n');
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.setAttribute('href', url);
+  link.setAttribute('download', `Daftar_Pesanan_SnapFit_${new Date().toISOString().slice(0, 10)}.csv`);
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
 
 const filteredOrders = computed(() => {
   let result = orders.value;

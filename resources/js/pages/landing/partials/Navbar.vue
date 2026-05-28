@@ -355,7 +355,7 @@
                           d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                       </svg>
                     </div>
-                    <span>Sign Out</span>
+                    <span>Keluar</span>
                   </button>
                 </div>
               </div>
@@ -367,13 +367,13 @@
           <!-- Desktop Sign In Button -->
           <button @click="goToLogin"
             class="hidden md:inline-flex group relative bg-espresso text-white px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-terracotta transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-terracotta/30 hover:-translate-y-0.5 items-center justify-center">
-            <span class="relative z-10">Sign In</span>
+            <span class="relative z-10">Masuk</span>
           </button>
 
           <!-- Mobile Sign In Icon Button -->
           <button @click="goToLogin"
             class="md:hidden p-1.5 rounded-lg hover:bg-sand transition-colors group flex items-center justify-center"
-            title="Sign In">
+            title="Masuk">
             <svg class="w-4 h-4 text-muted group-hover:text-terracotta transition-colors" fill="none"
               stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

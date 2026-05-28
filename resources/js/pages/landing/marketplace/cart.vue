@@ -54,7 +54,7 @@
                 @change="cartStore.selectAll($event.target.checked)"
                 class="w-5 h-5 text-terracotta bg-slate-100 border-slate-300 rounded focus:ring-orange-500 focus:ring-2"
               />
-              <span class="font-semibold text-espresso">Pilih Semua ({{ cartStore.itemCount }} item)</span>
+              <span class="font-semibold text-espresso">Pilih Semua ({{ cartStore.itemCount }} barang)</span>
             </label>
           </div>
 
@@ -137,7 +137,7 @@
 
             <div class="space-y-3 mb-6">
               <div class="flex justify-between text-sm">
-                <span class="text-muted">Total Item ({{ cartStore.selectedCount }})</span>
+                <span class="text-muted">Total Barang ({{ cartStore.selectedCount }})</span>
                 <span class="font-semibold text-espresso">{{ cartStore.formatCurrency(cartStore.selectedTotal) }}</span>
               </div>
               <div class="flex justify-between text-sm">

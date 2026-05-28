@@ -240,7 +240,10 @@ const fetchInvitations = async () => {
   try {
     const token = localStorage.getItem('token');
     const res = await fetch('/api/v1/cocreate/rooms/invitations', {
-      headers: { 'Authorization': `Bearer ${token}` }
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      }
     });
     if (res.ok) {
       const data = await res.json();
@@ -259,7 +262,10 @@ const fetchRooms = async () => {
     
     // Fetch active
     const activeRes = await fetch('/api/v1/cocreate/rooms?status=active', {
-      headers: { 'Authorization': `Bearer ${token}` }
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      }
     });
     if (activeRes.ok) {
       const activeData = await activeRes.json();
@@ -268,7 +274,10 @@ const fetchRooms = async () => {
 
     // Fetch completed
     const completedRes = await fetch('/api/v1/cocreate/rooms?status=completed', {
-      headers: { 'Authorization': `Bearer ${token}` }
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      }
     });
     if (completedRes.ok) {
       const completedData = await completedRes.json();
@@ -360,7 +369,10 @@ const joinRoom = async (roomId) => {
     const token = localStorage.getItem('token');
     await fetch(`/api/v1/cocreate/rooms/${roomId}/join`, {
       method: 'POST',
-      headers: { 'Authorization': `Bearer ${token}` }
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      }
     });
     router.push(`/umkm/cocreate/${roomId}`);
   } catch (error) {

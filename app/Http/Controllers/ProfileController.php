@@ -24,7 +24,20 @@ class ProfileController extends Controller
      */
     public function update(UpdateProfileRequest $request): JsonResponse
     {
-        $user    = $request->user();
+        $user = $request->user();
+
+        // Update user fields
+        $userFields = [];
+        if ($request->has('name')) {
+            $userFields['name'] = $request->name;
+        }
+        if ($request->has('email')) {
+            $userFields['email'] = $request->email;
+        }
+        if (!empty($userFields)) {
+            $user->update($userFields);
+        }
+
         $profile = $user->profile;
 
         if (!$profile) {
@@ -32,6 +45,28 @@ class ProfileController extends Controller
         }
 
         $profile->update($request->validated());
+
+        // Update designer skills if user is a designer and skills are provided
+        if ($request->has('skills') && $user->isDesigner()) {
+            $app = \App\Models\RoleApplication::where('user_id', $user->id)
+                ->where('requested_role', 'designer')
+                ->latest()
+                ->first();
+            if ($app) {
+                $data = $app->data ?? [];
+                $data['skills'] = $request->skills;
+                $app->update(['data' => $data]);
+            } else {
+                \App\Models\RoleApplication::create([
+                    'user_id' => $user->id,
+                    'requested_role' => 'designer',
+                    'status' => 'approved',
+                    'data' => ['skills' => $request->skills],
+                    'submitted_at' => now(),
+                    'reviewed_at' => now(),
+                ]);
+            }
+        }
 
         return response()->json([
             'message' => 'Profil berhasil diperbarui.',

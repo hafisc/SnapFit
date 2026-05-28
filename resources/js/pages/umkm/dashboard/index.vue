@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-[1400px] mx-auto space-y-6">
+  <div class="w-full space-y-6">
     <!-- Welcome Hero -->
     <div class="relative bg-gradient-to-br from-[#2B1E16] via-[#3D2B1F] to-[#4A3428] rounded-2xl p-7 sm:p-8 overflow-hidden">
       <div class="absolute inset-0 overflow-hidden pointer-events-none">
@@ -11,11 +11,11 @@
       <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
         <div>
           <div class="flex items-center gap-2 mb-3">
-            <span class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-[#B85C38]/20 text-[#F0A882] rounded-lg border border-[#B85C38]/30">UMKM Verified</span>
-            <span class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-[#C9A45C]/20 text-[#E8C97A] rounded-lg border border-[#C9A45C]/30">AI Enabled</span>
+            <span class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-[#B85C38]/20 text-[#F0A882] rounded-lg border border-[#B85C38]/30">UMKM Terverifikasi</span>
+            <span class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-[#C9A45C]/20 text-[#E8C97A] rounded-lg border border-[#C9A45C]/30">AI Aktif</span>
           </div>
           <h1 class="text-2xl sm:text-3xl font-bold text-white mb-1.5">Selamat datang, {{ user?.name || 'Kreator' }}</h1>
-          <p class="text-[#C4B5A6] text-sm max-w-lg">Kelola produk, visual katalog, pesanan, dan kolaborasi kreatif dari satu workspace.</p>
+          <p class="text-[#C4B5A6] text-sm max-w-lg">Kelola produk, visual katalog, pesanan, dan kolaborasi kreatif dari satu ruang kerja.</p>
         </div>
         <div class="flex flex-wrap gap-2.5">
           <router-link to="/umkm/products/create" class="px-5 py-2.5 bg-white text-[#2B1E16] rounded-xl font-semibold text-[13px] hover:shadow-lg hover:scale-[1.02] transition-all flex items-center gap-2">
@@ -67,10 +67,12 @@
         </div>
 
         <div class="mb-6">
-          <p class="text-3xl font-bold text-[#2B1E16]">Rp 12.500.000</p>
-          <p class="text-xs text-[#0F8A4B] font-semibold mt-1 flex items-center gap-1">
-            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd" /></svg>
-            +14% dari minggu lalu
+          <p class="text-3xl font-bold text-[#2B1E16]">{{ formatCurrencyFull(totalRevenue) }}</p>
+          <p class="text-xs font-semibold mt-1 flex items-center gap-1"
+            :class="revenueGrowth >= 0 ? 'text-[#0F8A4B]' : 'text-red-500'">
+            <svg v-if="revenueGrowth >= 0" class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd" /></svg>
+            <svg v-else class="w-3 h-3 rotate-180" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd" /></svg>
+            {{ revenueGrowth >= 0 ? '+' : '' }}{{ revenueGrowth }}% dari bulan lalu
           </p>
         </div>
 
@@ -80,9 +82,9 @@
             <div v-for="i in 4" :key="i" class="border-b border-dashed border-[#E8DCCB]/60"></div>
           </div>
           <div class="relative h-full flex items-end gap-2 sm:gap-3">
-            <div v-for="(bar, idx) in chartData" :key="idx" class="flex-1 group cursor-pointer"
+            <div v-for="(bar, idx) in chartData" :key="idx" class="h-full flex-1 flex flex-col justify-end group cursor-pointer"
               @mouseenter="hoveredBar = idx" @mouseleave="hoveredBar = null">
-              <div class="relative">
+              <div class="relative w-full h-[calc(100%-24px)] flex flex-col justify-end">
                 <div v-if="hoveredBar === idx" class="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#2B1E16] text-white px-2.5 py-1.5 rounded-lg text-[10px] font-bold whitespace-nowrap z-10">
                   Rp {{ bar.amount }}
                 </div>
@@ -158,6 +160,8 @@ import { ref, h, onMounted } from 'vue';
 const user = ref(JSON.parse(localStorage.getItem('user') || '{}'));
 const activePeriod = ref('7H');
 const hoveredBar = ref(null);
+const totalRevenue = ref(0);
+const revenueGrowth = ref(0);
 
 const IconBox = () => h('svg', { fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24', 'stroke-width': '1.8' }, [
   h('path', { 'stroke-linecap': 'round', 'stroke-linejoin': 'round', d: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4' })
@@ -184,7 +188,7 @@ const IconChart = () => h('svg', { fill: 'none', stroke: 'currentColor', viewBox
 const stats = ref([
   { label: 'Produk Aktif', value: '0', change: '+0', icon: IconBox, iconBg: 'bg-blue-50', iconColor: 'text-blue-600', badgeClass: 'bg-blue-50 text-blue-700' },
   { label: 'Pesanan Baru', value: '0', change: '+0', icon: IconShoppingBag, iconBg: 'bg-[#0F8A4B]/10', iconColor: 'text-[#0F8A4B]', badgeClass: 'bg-[#0F8A4B]/10 text-[#0F8A4B]' },
-  { label: 'Kolaborasi Aktif', value: '0', change: 'Live', icon: IconUsers, iconBg: 'bg-purple-50', iconColor: 'text-purple-600', badgeClass: 'bg-purple-50 text-purple-700' },
+  { label: 'Kolaborasi Aktif', value: '0', change: 'Aktif', icon: IconUsers, iconBg: 'bg-purple-50', iconColor: 'text-purple-600', badgeClass: 'bg-purple-50 text-purple-700' },
   { label: 'Pendapatan', value: 'Rp 0', change: '↑ 0%', icon: IconCash, iconBg: 'bg-[#B85C38]/10', iconColor: 'text-[#B85C38]', badgeClass: 'bg-[#0F8A4B]/10 text-[#0F8A4B]' },
 ]);
 
@@ -213,6 +217,10 @@ const formatCurrency = (value) => {
   return 'Rp ' + value;
 };
 
+const formatCurrencyFull = (value) => {
+  return 'Rp ' + Number(value ?? 0).toLocaleString('id-ID');
+};
+
 const fetchDashboardData = async () => {
   try {
     const token = localStorage.getItem('token');
@@ -234,22 +242,24 @@ const fetchDashboardData = async () => {
       const revenue = data.stats.total_revenue || 0;
       stats.value[3].value = revenue >= 1000000 ? `Rp ${(revenue / 1000000).toFixed(1)}M` : revenue >= 1000 ? `Rp ${(revenue / 1000).toFixed(0)}K` : `Rp ${revenue}`;
       stats.value[3].change = `↑ ${data.stats.revenue_growth || 0}%`;
+
+      totalRevenue.value = data.stats.total_revenue || 0;
+      revenueGrowth.value = data.stats.revenue_growth || 0;
     }
 
     if (data.recent_orders && Array.isArray(data.recent_orders)) {
       recentOrders.value = data.recent_orders.map(order => ({
         id: order.order_number || `#${order.id}`,
-        customer: order.customer_name || order.user?.name || 'Customer',
+        customer: order.customer_name || order.user?.name || 'Pelanggan',
         total: order.total_amount || 0,
         status: order.status === 'completed' ? 'Selesai' : order.status === 'paid' ? 'Dibayar' : 'Diproses'
       }));
     }
 
     if (data.revenue_chart && Array.isArray(data.revenue_chart)) {
-      const days = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
-      chartData.value = data.revenue_chart.map((item, idx) => ({
-        label: days[idx] || item.day,
-        value: item.percentage || 50,
+      chartData.value = data.revenue_chart.map((item) => ({
+        label: item.day,
+        value: item.percentage !== undefined ? item.percentage : 0,
         amount: item.amount >= 1000000 ? `${(item.amount / 1000000).toFixed(1)}M` : `${(item.amount / 1000).toFixed(0)}K`
       }));
     }

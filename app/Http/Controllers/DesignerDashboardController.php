@@ -100,25 +100,7 @@ class DesignerDashboardController extends Controller
                 ];
             });
 
-        // Fallback undangan mock agar UI terlihat penuh dan profesional
-        $mockInvitations = collect([
-            [
-                'id' => 999,
-                'umkmName' => 'Batik Sari Malang',
-                'projectName' => 'Redesign Label & Packaging Batik Tulis',
-                'status' => 'pending',
-                'avatarClass' => 'bg-gradient-to-br from-orange-400 to-red-400',
-            ],
-            [
-                'id' => 998,
-                'umkmName' => 'Rotan Craft Arjosari',
-                'projectName' => 'Branding Identity & Catalog Design',
-                'status' => 'pending',
-                'avatarClass' => 'bg-gradient-to-br from-emerald-400 to-teal-500',
-            ]
-        ]);
-
-        $invitations = $realInvitations->isEmpty() ? $mockInvitations : $realInvitations;
+        $invitations = $realInvitations;
 
         // ─── ACTIVE ROOMS ────────────────────────────────────────────────────
         $activeRooms = CocreateRoom::where('status', 'active')

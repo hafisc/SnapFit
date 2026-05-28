@@ -27,17 +27,17 @@
     <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
       <button v-for="cat in categories" :key="cat" @click="activeCategory = cat"
         class="px-4 py-2.5 text-[10px] font-bold uppercase tracking-wider rounded-xl transition-all whitespace-nowrap border"
-        :class="activeCategory === cat ? 'bg-terracotta text-white border-orange-500 shadow-sm shadow-terracotta/50/20' : 'bg-surface text-muted border-borderSoft hover:border-terracotta/30 hover:text-terracotta'">
+        :class="activeCategory === cat ? 'bg-terracotta text-white border-orange-500 shadow-sm shadow-terracotta/20' : 'bg-surface text-muted border-borderSoft hover:border-terracotta/30 hover:text-terracotta'">
         {{ cat }}
       </button>
     </div>
 
     <!-- Portfolio Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       <div v-for="item in filteredPortfolio" :key="item.id"
         class="bg-surface rounded-2xl border border-borderSoft/60 overflow-hidden group hover:shadow-lg transition-all duration-500 cursor-pointer">
         <!-- Image -->
-        <div class="relative h-56 bg-slate-100 overflow-hidden">
+        <div class="relative aspect-[4/3] bg-slate-100 overflow-hidden">
           <img :src="item.image" :alt="item.title" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
           <!-- Overlay on Hover -->
           <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-5">
@@ -132,12 +132,12 @@ const portfolioStats = [
 ];
 
 const portfolio = ref([
-  { id: 1, title: 'Packaging Batik Tulis Premium', description: 'Desain kemasan premium untuk Batik Sari Malang dengan sentuhan modern dan elegan.', category: 'Packaging', image: 'https://images.unsplash.com/photo-1636955816868-fcb881e57954?q=80&w=600&auto=format&fit=crop', views: 342, likes: 28, date: 'Mei 2026' },
-  { id: 2, title: 'Brand Identity Rotan Craft', description: 'Logo, color palette, dan panduan visual untuk brand kerajinan rotan artisanal.', category: 'Branding', image: 'https://images.unsplash.com/photo-1558655146-9f40138edfeb?q=80&w=600&auto=format&fit=crop', views: 267, likes: 31, date: 'Apr 2026' },
-  { id: 3, title: 'Instagram Kit Kopi Arjuno', description: 'Template visual untuk Instagram feed, story, dan carousel highlight brand kopi lokal.', category: 'Social Media', image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=600&auto=format&fit=crop', views: 456, likes: 42, date: 'Apr 2026' },
-  { id: 4, title: 'Logo Kampoeng Keramik', description: 'Redesign logo untuk sentra kerajinan keramik Dinoyo Malang.', category: 'Logo', image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=600&auto=format&fit=crop', views: 198, likes: 15, date: 'Mar 2026' },
-  { id: 5, title: 'Product Catalog Digital', description: 'Katalog produk digital interaktif untuk Anyaman Bamboo Batu.', category: 'Branding', image: 'https://images.unsplash.com/photo-1586717799252-bd134571b7e0?q=80&w=600&auto=format&fit=crop', views: 312, likes: 24, date: 'Mar 2026' },
-  { id: 6, title: 'Packaging Kripik Tempe', description: 'Kemasan standing pouch dengan desain vintage-modern untuk produk kripik tempe.', category: 'Packaging', image: 'https://images.unsplash.com/photo-1605000797499-95a51c5269ae?q=80&w=600&auto=format&fit=crop', views: 423, likes: 38, date: 'Feb 2026' },
+  { id: 1, title: 'Packaging Batik Tulis Premium', description: 'Desain kemasan premium untuk Batik Sari Malang dengan sentuhan modern dan elegan.', category: 'Packaging', image: '/images/products/batik_pekalongan.png', views: 342, likes: 28, date: 'Mei 2026' },
+  { id: 2, title: 'Brand Identity Rotan Craft', description: 'Logo, color palette, dan panduan visual untuk brand kerajinan rotan artisanal.', category: 'Branding', image: '/images/products/tas_goni.png', views: 267, likes: 31, date: 'Apr 2026' },
+  { id: 3, title: 'Instagram Kit Kopi Arjuno', description: 'Template visual untuk Instagram feed, story, dan carousel highlight brand kopi lokal.', category: 'Social Media', image: '/images/products/kopi_arjuno.png', views: 456, likes: 42, date: 'Apr 2026' },
+  { id: 4, title: 'Logo Kampoeng Keramik', description: 'Redesign logo untuk sentra kerajinan keramik Dinoyo Malang.', category: 'Logo', image: '/images/products/keramik_dinoyo.png', views: 198, likes: 15, date: 'Mar 2026' },
+  { id: 5, title: 'Product Catalog Digital', description: 'Katalog produk digital interaktif untuk Anyaman Bamboo Batu.', category: 'Branding', image: '/images/products/runner_meja.png', views: 312, likes: 24, date: 'Mar 2026' },
+  { id: 6, title: 'Packaging Kripik Tempe', description: 'Kemasan standing pouch dengan desain vintage-modern untuk produk kripik tempe.', category: 'Packaging', image: '/images/products/kripik_tempe.png', views: 423, likes: 38, date: 'Feb 2026' },
 ]);
 
 const filteredPortfolio = computed(() => {

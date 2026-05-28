@@ -20,8 +20,11 @@ class StoreProductRequest extends FormRequest
             'category'     => ['required', 'in:batik,fashion,kerajinan,makanan,aksesoris,dekorasi,minuman'],
             'images'       => ['nullable', 'array'],
             'images.*'     => ['url'],
-            'ar_model_url' => ['nullable', 'url'],
+            'ar_model_url' => ['nullable', 'string'],
             'is_published' => ['boolean'],
+            'origin'       => ['nullable', 'string', 'max:255'],
+            'badges'       => ['nullable', 'array'],
+            'badges.*'     => ['string', 'max:50'],
         ];
     }
 }

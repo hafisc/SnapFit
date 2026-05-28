@@ -33,10 +33,6 @@
                 <h4 class="font-black text-espresso text-sm uppercase tracking-widest">
                   {{ getRoleDisplayName(role.name) }}
                 </h4>
-                <div class="flex items-center gap-2 mt-1">
-                  <span class="inline-block w-2 h-2 bg-green-500 rounded-full"></span>
-                  <p class="text-[10px] font-bold text-green-700 uppercase tracking-widest">✓ Sudah Terdaftar</p>
-                </div>
               </div>
             </div>
           </div>
@@ -196,7 +192,7 @@ const getRoleDisplayName = (roleName) => {
   const names = {
     buyer: 'Pembeli',
     umkm: 'UMKM',
-    designer: 'Designer Profesional',
+    designer: 'Designer',
   };
   return names[roleName] || roleName;
 };

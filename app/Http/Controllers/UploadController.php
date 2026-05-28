@@ -66,8 +66,13 @@ class UploadController extends Controller
         $path     = $file->storeAs('avatars', $filename, 'public');
         $url      = Storage::url($path);
 
-        // Langsung update avatar_url di profil user
-        $request->user()->profile?->update(['avatar_url' => $url]);
+        // Pastikan profil user sudah dibuat sebelum diupdate
+        $user = $request->user();
+        $profile = $user->profile;
+        if (!$profile) {
+            $profile = $user->profile()->create(['full_name' => $user->name]);
+        }
+        $profile->update(['avatar_url' => $url]);
 
         return response()->json([
             'message'    => 'Avatar berhasil diupload.',

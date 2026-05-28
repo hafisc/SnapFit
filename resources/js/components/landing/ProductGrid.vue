@@ -95,7 +95,7 @@
             </svg>
           </div>
           <div>
-            <h3 class="text-[10px] sm:text-xs md:text-sm font-black text-espresso mb-0.5 leading-tight">AI Product Studio</h3>
+            <h3 class="text-[10px] sm:text-xs md:text-sm font-black text-espresso mb-0.5 leading-tight">Studio Produk AI</h3>
             <p class="hidden md:block text-[11px] text-muted leading-tight">Analisis tren & optimasi metadata otomatis untuk UMKM.</p>
           </div>
         </div>
@@ -127,7 +127,7 @@
             </svg>
           </div>
           <div>
-            <h3 class="text-[10px] sm:text-xs md:text-sm font-black text-espresso mb-0.5 leading-tight">Co-Create Room</h3>
+            <h3 class="text-[10px] sm:text-xs md:text-sm font-black text-espresso mb-0.5 leading-tight">Ruang Co-Create</h3>
             <p class="hidden md:block text-[11px] text-muted leading-tight">Kolaborasi desain custom langsung dengan pengrajin lokal.</p>
           </div>
         </div>

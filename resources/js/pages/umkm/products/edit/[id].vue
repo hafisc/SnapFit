@@ -51,6 +51,11 @@
             <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Stok Tersedia</label>
             <input v-model="form.stock" type="number" min="0" required class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-espresso outline-none focus:ring-2 focus:ring-orange-200 transition-all" />
           </div>
+
+          <div>
+            <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Asal Daerah</label>
+            <input v-model="form.origin" type="text" class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-espresso outline-none focus:ring-2 focus:ring-orange-200 transition-all" placeholder="Contoh: Malang, Yogyakarta, Solo" />
+          </div>
         </div>
 
         <!-- Kolom Kanan -->
@@ -63,6 +68,16 @@
           <div>
             <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">URL Gambar Produk</label>
             <input v-model="form.image_url" type="url" class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-espresso outline-none focus:ring-2 focus:ring-orange-200 transition-all" />
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Badges / Tag (Pisahkan dengan koma)</label>
+            <input v-model="form.badges_str" type="text" class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-espresso outline-none focus:ring-2 focus:ring-orange-200 transition-all" placeholder="Contoh: Batik Cap, AR Ready, Handmade" />
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2 ml-1">Path/URL Model 3D (.glb)</label>
+            <input v-model="form.ar_model_url" type="text" class="w-full bg-slate-50 border-none rounded-xl px-5 py-4 text-sm font-bold text-espresso outline-none focus:ring-2 focus:ring-orange-200 transition-all" placeholder="Contoh: /models/batik_parang.glb" />
           </div>
           
           <!-- Image Preview -->
@@ -81,7 +96,7 @@
           <span class="text-xs font-black uppercase tracking-widest" :class="form.is_published ? 'text-terracotta' : 'text-slate-400'">Published</span>
         </label>
         
-        <button type="submit" :disabled="loading" class="bg-terracotta hover:bg-terracotta text-white px-8 py-4 rounded-xl text-xs font-black tracking-widest uppercase transition-all shadow-lg shadow-terracotta/50/20 disabled:opacity-50">
+        <button type="submit" :disabled="loading" class="bg-terracotta hover:bg-terracotta text-white px-8 py-4 rounded-xl text-xs font-black tracking-widest uppercase transition-all shadow-lg shadow-terracotta/20 disabled:opacity-50">
           {{ loading ? 'Menyimpan...' : 'Perbarui Produk' }}
         </button>
       </div>
@@ -104,6 +119,9 @@ const form = ref({
   description: '',
   price: '',
   stock: '',
+  origin: '',
+  badges_str: '',
+  ar_model_url: '',
   category: 'fashion',
   image_url: '',
   is_published: false
@@ -124,9 +142,12 @@ const fetchProduct = async () => {
           name: p.name,
           description: p.description,
           price: p.price,
-          stock: p.stock,
+          stock: p.stock || 50,
+          origin: p.origin || '',
+          badges_str: Array.isArray(p.badges) ? p.badges.join(', ') : '',
+          ar_model_url: p.ar_model_url || '',
           category: p.category,
-          image_url: p.image_url,
+          image_url: (p.images && p.images.length > 0) ? p.images[0] : '',
           is_published: p.is_published
         };
       } else {
@@ -154,9 +175,15 @@ const submit = async () => {
         'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify({
-        ...form.value,
+        name: form.value.name,
+        description: form.value.description,
         price: Number(form.value.price),
-        stock: Number(form.value.stock)
+        category: form.value.category,
+        is_published: form.value.is_published,
+        origin: form.value.origin || null,
+        badges: form.value.badges_str ? form.value.badges_str.split(',').map(s => s.trim()).filter(Boolean) : [],
+        ar_model_url: form.value.ar_model_url || null,
+        images: form.value.image_url ? [form.value.image_url] : []
       })
     });
 
